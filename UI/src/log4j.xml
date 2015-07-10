@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+	<appender class="org.apache.log4j.RollingFileAppender" name="RulesExtraction">
+		<param value="D:\\Logs\\ExtractFlows.log" name="File"/>
+		<param value="10000KB" name="MaxFileSize"/>
+		<param value="10" name="MaxBackupIndex"/>
+		<layout class="org.apache.log4j.PatternLayout">
+		   <param value="%d-%m%n" name="ConversionPattern"/>
+            <!-- <param value="%d %p %t %c - %m%n" name="ConversionPattern"/> -->
+        </layout>
+	</appender>
+	<logger name="org.springframework.security">
+        <level value="INFO"/>
+        <appender-ref ref="RulesExtraction"/>
+    </logger>
+	<logger additivity="false" name="EXTRACT_LOG">
+		<level value="DEBUG"/>
+		<appender-ref ref="RulesExtraction"/>
+	</logger>
+	<root>
+		<level value="error"/>
+		<appender-ref ref="RulesExtraction"/>
+	</root>
+</log4j:configuration>
