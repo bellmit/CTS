@@ -1,0 +1,34 @@
+MEM6015.0002.01
+
+
+For Rule ID:MEM0737.0001.01
+
+
+==>Identify Screen using UC or Magic Demo and find corresponding JSP file.
+==>For rule "MEM0737.0001.01",jsp file is inc_addNursingFacility.jsp and "Validate" command button is clicked.
+Find the corresponding command button action method "getProviderSummary()" in the JSP file,which will be in the controllerbean "MemberNursingFacilitySpanControllerBean".
+==>In "getProviderSummary()" method,check the code for rule implementation.
+	In code,Provider information is retreived by moving layers:ProviderInformationDelegate==>ProviderInformationFacadeBean==>ProviderInformationManager==>ProviderDAOImpl.
+==>After retreiving,rule is implemented in controllerbean to check whether LTCprovider found or not.
+
+
+
+Identify Screen using UC or Magic Demo and find corresponding JSP file.
+Identify what action performed on the screen from the rule description and in Jsp find the controllerbean for the respective action.
+From Controllerbean verify the code for rule implementation.Rule can be implemented in different layers 
+Controllerbean==>Delegate==>Facade==>Manager==>DAO
+
+
+
+Rule defined across layers
+Rule defind in diff method==PRV0832.0001.01
+
+MEM0198.0007.01
+
+
+executeRID_MEM0105_0000_01
+
+CLM8000.0096.01
+
+
+

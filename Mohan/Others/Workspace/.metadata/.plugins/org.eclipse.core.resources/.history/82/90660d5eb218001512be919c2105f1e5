@@ -1,0 +1,34 @@
+package com.study.spring.core;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import com.study.spring.app.ConstructorMSG;
+import com.study.spring.app.Message;
+
+public class DependencyInj {
+	
+	public static void main(String args[])
+	{
+		@SuppressWarnings("resource")
+		ApplicationContext appContext=new ClassPathXmlApplicationContext("spring.xml");
+		
+		//SetterInjection
+		Message msg=(Message)appContext.getBean("message");
+		System.out.println("Setter Inject==>"+msg.printMessage());
+		
+		
+	}
+	
+	private void constructInjection()
+	{
+		//ConstructorInjection
+		ConstructorMSG conMsg=new ConstructorMSG("constructor");
+		System.out.println(conMsg.printMessage());
+		
+		//Argument Constructor Injection
+		conMsg=new ConstructorMSG("constructor1");
+		System.out.println(conMsg.printMessages());
+	}
+
+}

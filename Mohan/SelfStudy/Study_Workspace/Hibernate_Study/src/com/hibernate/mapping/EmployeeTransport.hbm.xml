@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping>
+	<class name="com.hibernate.javaBean.EmployeeTransport" table="employeetransport" lazy="true">
+		<id column="Id" name="empid" >
+			<generator class="identity" >
+				<param name="property" >employee</param>
+			</generator>
+		</id>
+		
+		<property name="vehicleId" column="vehicleId">
+		</property>
+		<property name="vehicleType" column="vehicleType">
+		</property>
+		<one-to-one name="id" constrained="true" ></one-to-one>
+		
+		
+		
+	</class>
+</hibernate-mapping>

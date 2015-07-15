@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy 2 packages to &apos;RuleMessageIdentifier/src&apos;&#x0D;&#x0A;- Original project: &apos;RulesExternalizer&apos;&#x0D;&#x0A;- Destination element: &apos;RuleMessageIdentifier/src&apos;&#x0D;&#x0A;- Original elements:&#x0D;&#x0A;     RulesExternalizer/src/main/java/com.cognizant.tool.main&#x0D;&#x0A;     RulesExternalizer/src/main/java/com.cognizant.tool.reader" description="Copy packages" destination="=RuleMessageIdentifier/src" element1="/src\/main\/java&lt;com.cognizant.tool.main" element2="/src\/main\/java&lt;com.cognizant.tool.reader" flags="589830" fragments="2" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyPackages" stamp="1411113411770" version="1.0"/>
+</session>

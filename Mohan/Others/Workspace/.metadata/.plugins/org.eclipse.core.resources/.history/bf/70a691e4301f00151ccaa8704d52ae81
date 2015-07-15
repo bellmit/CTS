@@ -1,0 +1,74 @@
+package com.xerox.enterprise.ghs.mmis.rif.rules.operations;
+
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
+import java.util.List;
+
+import com.xerox.enterprise.ghs.mmis.rif.common.exception.RIFPOJORulesException;
+import com.xerox.enterprise.ghs.mmis.rif.common.util.RIFConstants;
+import com.xerox.enterprise.ghs.mmis.rif.core.Rule;
+import com.xerox.enterprise.ghs.mmis.rif.core.RulesContext;
+import com.xerox.enterprise.ghs.mmis.rif.core.RulesResult;
+import com.acs.enterprise.common.program.administration.common.domain.ProcedureASCGroup;
+import com.acs.enterprise.common.util.rif.rules.helper.RulesConstants;
+
+/**
+ * POJO for the rule "CLM5002.0027.01"
+ * 
+ * @author $414774
+ * @source ASCClaimPricingManager 
+ * Description: 
+ * Procedure code's ASC group number row could not be found or the Procedure code's ASC group number row's
+ * span does not encompass the dates of service on the line item. ASC rate could not be found or the ASC rate
+ * row's pricing span does not encompass the dates of service on the line item.
+ */
+public class CLM5002_0027_01 extends Rule{
+
+	/*Static logger to log a message */
+	private static final Logger LOG = Logger.getLogger(CLM5002_0027_01.class);
+
+	/**
+	 * Execute method of the rule. This holds the rule conditions and actions.
+	 * The required objects are initialized through init() method.
+	 * return - execution result of rule either SUCCESS or FAILURE
+	 */
+	public static RulesResult execute(final RulesContext ctx, final String ruleId) throws RIFPOJORulesException {
+
+		//Construct rules result object
+		RulesResult rulesResult;
+		rulesResult = new RulesResult(ruleId);
+		ProcedureASCGroup procedureASCGroup = null;
+		if (ctx != RIFConstants.NULL) {
+			List<Object> inputObjs = ctx.getContextObject();
+			procedureASCGroup = (ProcedureASCGroup) inputObjs.get(0);
+		} else {
+			LOG.log(Level.ERROR,RulesConstants.INPUT_OBJECTNULL+ruleId);
+			throw new RIFPOJORulesException(RulesConstants.RULEOBJECTS_INIT_ERROR+ruleId);
+		}
+		LOG.log(Level.INFO,RulesConstants.RULE_EXECUTION + ruleId);
+		if (procedureASCGroup == RIFConstants.NULL)
+		{
+			rulesResult.setReturnBooleanValue(true);
+		}	
+		rulesResult.setRuleStatus(true);
+		return rulesResult;
+	}
+
+	/*
+	 * Method to initialize rule
+	 */
+	public static void initialize() throws RIFPOJORulesException {
+		// TODO Auto-generated method stub
+
+	}
+
+	/*
+	 * Method to shutdown rule
+	 */
+	public static void shutdown() throws RIFPOJORulesException {
+		// TODO Auto-generated method stub
+
+	}
+
+}

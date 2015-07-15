@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <title></title>
+</head>
+<body>
+
+
+        <script type="text/x-handlebars" data-template-name="application">
+            {{outlet}}
+        </script>
+
+
+        <!-- Just a link to the Search Page-->
+        <script type="text/x-handlebars" data-template-name="index">
+            {{#link-to 'memberSearch' }}
+            Load Member Search Page
+            {{/link-to}}
+
+        </script>
+
+
+
+        <!-- Handle Bar template to load the Search Criteria Section -->
+        <script type="text/x-handlebars" data-template-name="memberSearch">
+            <h2>Display Member Search</h2>
+            Provider First Name {{input valueBinding="model.providerFirstName"}}
+            Provider Last Name {{input valueBinding="model.providerLastName"}}
+            Provider Type {{input valueBinding="model.providerType"}}
+            <button {{action "submitAction" target="controller"}}>Search</button>
+            <p>
+                {{outlet}}
+            </p>
+
+        </script>
+
+
+        <script type="text/x-handlebars" data-template-name="sdfsdfresults">
+            Junk content.....
+        </script>
+
+
+        <!-- Handle Bar template to load the Search Results Section. This is a view -->
+
+        <script type="text/x-handlebars" data-template-name="results">
+            {{headerName}}
+            <table border = "2">
+                <tr>
+                    <th>Member Id</th>
+                    <th>Provider Last Name</th>
+                    <th>Provider First Name</th>
+                    <th>Provider Type</th>
+                </tr>
+                {{#each}}
+                <tr>
+                    <td> {{#link-to 'results.detail' memberId}} {{memberId}} {{/link-to}}</td>
+                    <td>{{providerLastName}}</td>
+                    <td>{{providerFirstName}}</td>
+                    <td>{{providerType}}</td>
+                </tr>
+                {{/each}}
+            </table>
+            <h6> details section start</h6>
+            {{outlet}}
+            <h6> details section End</h6>
+
+        </script>
+
+
+        <script type="text/x-handlebars" data-template-name="results/detail">
+            Welcome to details page Results section....
+
+            <p> Member Id : {{#link-to 'memberDetail' memberId}} {{memberId}} {{/link-to}}</p>
+
+
+        </script>
+
+        <script type="text/x-handlebars" data-template-name="memberDetail">
+            Welcome to details page
+            <p> Member Id : {{memberId}}</p>
+            <p> Member First Name : {{memberFirstName}}</p>
+            <p> Member Last name : {{memberLastName}}</p>
+        </script>
+
+
+
+
+    <script src="js/libs/jquery-1.10.2.js"></script>
+	<script src="js/libs/handlebars-1.1.2.js"></script>
+	<script src="js/libs/ember-1.4.0.js"></script>
+    <script src="http://emberjs.com.s3.amazonaws.com/getting-started/ember-data.js"></script>
+	<script src="js/app.js"></script>
+    <script src="js/model.js"></script>
+    <script src="js/router.js"></script>
+    <script src="js/controller.js"></script>
+    <script src="js/view.js"></script>
+    <link rel='stylesheet' href='css/style.css' />
+
+</body>
+</html>

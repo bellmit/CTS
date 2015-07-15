@@ -1,0 +1,9 @@
+package com.study.spring.app;
+
+public class SpringStaticFactory {
+
+	public SpringStaticFactory() {
+		// TODO Auto-generated constructor stub
+	}
+
+}

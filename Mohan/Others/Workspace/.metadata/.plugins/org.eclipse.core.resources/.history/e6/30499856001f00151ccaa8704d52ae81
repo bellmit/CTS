@@ -1,0 +1,18 @@
+package com.xerox.enterprise.ghs.mmis.rif.core.cache;
+
+import com.xerox.enterprise.ghs.mmis.rif.common.exception.RIFException;
+
+public class SAXParserUtility {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		RulesPropertyEHCache rif=new RulesPropertyEHCache();
+		try {
+			rif.initialize();
+		} catch (RIFException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+}

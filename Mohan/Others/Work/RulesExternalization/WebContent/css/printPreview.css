@@ -1,0 +1,12 @@
+body, table {font-family:arial; font-size:12px;}
+img, .formBtn, .infoActions, .searchResults {display:none;}
+A {text-decoration:none; color:#000000;}
+th, label, {font-family:arial; font-size:12px; font-weight:bold; padding:3 0 1 0;}
+th {text-align:left;}
+fieldset {padding:3 3 3 3; margin:10 0 0 0; }
+legend {font-family:arial; font-size:12px; font-weight:bold; padding:0 3 0 3;}
+select, input {margin:0 0 5 0; background-color:#FFFFFF; color:#000000}
+.infoTitle {font-family:arial; font-size:12px; font-weight:bold; padding:10 0 5 0;}
+#ppwContent {}
+#ppwButtons {text-align:center; padding:10 0 10 0;}
+#ppwPrintButton, #ppwCancelButton {background-color:#D3D3D3;}

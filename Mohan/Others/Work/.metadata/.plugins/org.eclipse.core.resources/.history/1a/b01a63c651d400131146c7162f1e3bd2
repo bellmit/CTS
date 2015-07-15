@@ -1,0 +1,339 @@
+package com.xerox.ghs.mmis.rif.core;
+
+import org.junit.*;
+import static org.junit.Assert.*;
+
+/**
+ * The class <code>RulesResultTest</code> contains tests for the class <code>{@link RulesResult}</code>.
+ *
+ * @generatedBy CodePro at 5/5/14 5:55 PM
+ * @author 396662
+ * @version $Revision: 1.0 $
+ */
+public class RulesResultTest {
+	/**
+	 * Run the RulesResult(String) constructor test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testRulesResult_1()
+		throws Exception {
+		String ruleName = "";
+
+		RulesResult result = new RulesResult(ruleName);
+
+		// add additional test code here
+		assertNotNull(result);
+		assertEquals(false, result.getRuleStatus());
+		assertEquals("", result.getRuleName());
+		assertEquals(null, result.getReturnValue());
+		assertEquals(null, result.getExceptionMsg());
+		assertEquals(false, result.isReturnBooleanValue());
+	}
+
+	/**
+	 * Run the String getExceptionMsg() method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testGetExceptionMsg_1()
+		throws Exception {
+		RulesResult fixture = new RulesResult("");
+		fixture.setRuleStatus(true);
+		fixture.setReturnBooleanValue(true);
+		fixture.setExceptionMsg("");
+		fixture.setReturnValue(new Object());
+
+		String result = fixture.getExceptionMsg();
+
+		// add additional test code here
+		assertEquals("", result);
+	}
+
+	/**
+	 * Run the Object getReturnValue() method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testGetReturnValue_1()
+		throws Exception {
+		RulesResult fixture = new RulesResult("");
+		fixture.setRuleStatus(true);
+		fixture.setReturnBooleanValue(true);
+		fixture.setExceptionMsg("");
+		fixture.setReturnValue(new Object());
+
+		Object result = fixture.getReturnValue();
+
+		// add additional test code here
+		assertNotNull(result);
+	}
+
+	/**
+	 * Run the String getRuleName() method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testGetRuleName_1()
+		throws Exception {
+		RulesResult fixture = new RulesResult("");
+		fixture.setRuleStatus(true);
+		fixture.setReturnBooleanValue(true);
+		fixture.setExceptionMsg("");
+		fixture.setReturnValue(new Object());
+
+		String result = fixture.getRuleName();
+
+		// add additional test code here
+		assertEquals("", result);
+	}
+
+	/**
+	 * Run the boolean getRuleStatus() method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testGetRuleStatus_1()
+		throws Exception {
+		RulesResult fixture = new RulesResult("");
+		fixture.setRuleStatus(true);
+		fixture.setReturnBooleanValue(true);
+		fixture.setExceptionMsg("");
+		fixture.setReturnValue(new Object());
+
+		boolean result = fixture.getRuleStatus();
+
+		// add additional test code here
+		assertEquals(true, result);
+	}
+
+	/**
+	 * Run the boolean getRuleStatus() method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testGetRuleStatus_2()
+		throws Exception {
+		RulesResult fixture = new RulesResult("");
+		fixture.setRuleStatus(false);
+		fixture.setReturnBooleanValue(true);
+		fixture.setExceptionMsg("");
+		fixture.setReturnValue(new Object());
+
+		boolean result = fixture.getRuleStatus();
+
+		// add additional test code here
+		assertEquals(false, result);
+	}
+
+	/**
+	 * Run the boolean isReturnBooleanValue() method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testIsReturnBooleanValue_1()
+		throws Exception {
+		RulesResult fixture = new RulesResult("");
+		fixture.setRuleStatus(true);
+		fixture.setReturnBooleanValue(true);
+		fixture.setExceptionMsg("");
+		fixture.setReturnValue(new Object());
+
+		boolean result = fixture.isReturnBooleanValue();
+
+		// add additional test code here
+		assertEquals(true, result);
+	}
+
+	/**
+	 * Run the boolean isReturnBooleanValue() method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testIsReturnBooleanValue_2()
+		throws Exception {
+		RulesResult fixture = new RulesResult("");
+		fixture.setRuleStatus(true);
+		fixture.setReturnBooleanValue(false);
+		fixture.setExceptionMsg("");
+		fixture.setReturnValue(new Object());
+
+		boolean result = fixture.isReturnBooleanValue();
+
+		// add additional test code here
+		assertEquals(false, result);
+	}
+
+	/**
+	 * Run the void setExceptionMsg(String) method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testSetExceptionMsg_1()
+		throws Exception {
+		RulesResult fixture = new RulesResult("");
+		fixture.setRuleStatus(true);
+		fixture.setReturnBooleanValue(true);
+		fixture.setExceptionMsg("");
+		fixture.setReturnValue(new Object());
+		String exceptionMsg = "";
+
+		fixture.setExceptionMsg(exceptionMsg);
+
+		// add additional test code here
+	}
+
+	/**
+	 * Run the void setReturnBooleanValue(boolean) method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testSetReturnBooleanValue_1()
+		throws Exception {
+		RulesResult fixture = new RulesResult("");
+		fixture.setRuleStatus(true);
+		fixture.setReturnBooleanValue(true);
+		fixture.setExceptionMsg("");
+		fixture.setReturnValue(new Object());
+		boolean returnBooleanValue = true;
+
+		fixture.setReturnBooleanValue(returnBooleanValue);
+
+		// add additional test code here
+	}
+
+	/**
+	 * Run the void setReturnValue(Object) method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testSetReturnValue_1()
+		throws Exception {
+		RulesResult fixture = new RulesResult("");
+		fixture.setRuleStatus(true);
+		fixture.setReturnBooleanValue(true);
+		fixture.setExceptionMsg("");
+		fixture.setReturnValue(new Object());
+		Object returnValue = new Object();
+
+		fixture.setReturnValue(returnValue);
+
+		// add additional test code here
+	}
+
+	/**
+	 * Run the void setRuleName(String) method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testSetRuleName_1()
+		throws Exception {
+		RulesResult fixture = new RulesResult("");
+		fixture.setRuleStatus(true);
+		fixture.setReturnBooleanValue(true);
+		fixture.setExceptionMsg("");
+		fixture.setReturnValue(new Object());
+		String ruleName = "";
+
+		fixture.setRuleName(ruleName);
+
+		// add additional test code here
+	}
+
+	/**
+	 * Run the void setRuleStatus(boolean) method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testSetRuleStatus_1()
+		throws Exception {
+		RulesResult fixture = new RulesResult("");
+		fixture.setRuleStatus(true);
+		fixture.setReturnBooleanValue(true);
+		fixture.setExceptionMsg("");
+		fixture.setReturnValue(new Object());
+		boolean ruleExecutionStatus = true;
+
+		fixture.setRuleStatus(ruleExecutionStatus);
+
+		// add additional test code here
+	}
+
+	/**
+	 * Perform pre-test initialization.
+	 *
+	 * @throws Exception
+	 *         if the initialization fails for some reason
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Before
+	public void setUp()
+		throws Exception {
+		// add additional set up code here
+	}
+
+	/**
+	 * Perform post-test clean-up.
+	 *
+	 * @throws Exception
+	 *         if the clean-up fails for some reason
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@After
+	public void tearDown()
+		throws Exception {
+		// Add additional tear down code here
+	}
+
+	/**
+	 * Launch the test.
+	 *
+	 * @param args the command line arguments
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	public static void main(String[] args) {
+		new org.junit.runner.JUnitCore().run(RulesResultTest.class);
+	}
+}

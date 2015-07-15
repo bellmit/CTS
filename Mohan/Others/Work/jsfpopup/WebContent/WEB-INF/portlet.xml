@@ -1,0 +1,2696 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<portlet-app xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
+	version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
+	id="contactmanagementportlet.ContactManagementPortlet.ef8808c451">
+
+	<!-- Maintain Category -->
+	<portlet>
+		<portlet-name>PGM_IN_ContactCategoryMaintenance</portlet-name>
+		<display-name>Maintain Category</display-name>
+		<display-name xml:lang="en">Maintain Category</display-name>
+		<display-name xml:lang="es">Maintain Category_es</display-name>
+		<portlet-class>
+			com.acs.enterprise.common.program.contactmanagement.view.portlet.MaintainancePortlet</portlet-class>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.view</name>
+			<value>/jsp/maintaincategory/maintainCategory.jsp</value>
+		</init-param>
+		<init-param>
+			<name>wps.markup</name>
+			<value>html</value>
+		</init-param>
+		<init-param>
+			<name>wps.enforce.redirect</name>
+			<value>true</value>
+		</init-param>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.help</name>
+			<value>/jsp/maintaincategory/maintainCategoryHelp.jsp</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+			<portlet-mode>help</portlet-mode>
+		</supports>
+		<supported-locale>en</supported-locale>
+		<supported-locale>es</supported-locale>
+		<resource-bundle>
+			com.acs.enterprise.common.program.contactmanagement.view.nl.PGM_IN_ContactCategoryMaintenance</resource-bundle>
+		<portlet-info>
+			<title>Maintain Category</title>
+		</portlet-info>
+	</portlet>
+
+	<!--  Maintain CallScript  -->
+	<portlet>
+		<portlet-name>PGM_IN_ContactCallScriptMaintenance</portlet-name>
+		<display-name>Maintain CallScript</display-name>
+		<display-name xml:lang="en">Maintain CallScript</display-name>
+		<display-name xml:lang="es">Maintain CallScript_es</display-name>
+
+		<portlet-class>
+			com.acs.enterprise.common.program.contactmanagement.view.portlet.MaintainancePortlet</portlet-class>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.view</name>
+			<value>/jsp/maintaincallscripts/maintainCallScripts.jsp</value>
+		</init-param>
+		<init-param>
+			<name>wps.markup</name>
+			<value>html</value>
+		</init-param>
+		<init-param>
+			<name>wps.enforce.redirect</name>
+			<value>true</value>
+		</init-param>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.help</name>
+			<value>/jsp/maintaincallscripts/maintainCallScriptsHelp.jsp</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+			<portlet-mode>help</portlet-mode>
+		</supports>
+		<supported-locale>en</supported-locale>
+		<supported-locale>es</supported-locale>
+
+		<resource-bundle>
+			com.acs.enterprise.common.program.contactmanagement.view.nl.PGM_IN_ContactCallScriptMaintenance</resource-bundle>
+
+		<portlet-info>
+			<title>Maintain CallScript</title>
+		</portlet-info>
+	</portlet>
+
+	<!-- Maintain Filter -->
+	<portlet>
+		<portlet-name>PGM_IN_ContactMaintainFilter</portlet-name>
+		<display-name>Maintain Filter</display-name>
+		<display-name xml:lang="en">Maintain Filter</display-name>
+		<display-name xml:lang="es">Maintain Filter_es</display-name>
+		<portlet-class>
+			com.acs.enterprise.common.program.contactmanagement.view.portlet.MaintainancePortlet</portlet-class>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.view</name>
+			<value>/jsp/maintainfilter/maintainFilter.jsp</value>
+		</init-param>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.help</name>
+			<value>/jsp/maintainfilter/maintainFilterHelp.jsp</value>
+		</init-param>
+		<init-param>
+			<name>wps.markup</name>
+			<value>html</value>
+		</init-param>
+		<init-param>
+			<name>wps.enforce.redirect</name>
+			<value>true</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+			<portlet-mode>help</portlet-mode>
+		</supports>
+		<supported-locale>en</supported-locale>
+		<supported-locale>es</supported-locale>
+		<resource-bundle>
+			com.acs.enterprise.common.program.contactmanagement.view.nl.PGM_IN_ContactMaintainFilter</resource-bundle>
+
+		<portlet-info>
+			<title>Maintain Filter</title>
+		</portlet-info>
+	</portlet>
+
+	<!-- EDMS Defaults -->
+	<portlet>
+		<portlet-name>PGM_IN_ContactEdmsDefaultsMaintenance</portlet-name>
+		<display-name>EDMS Defaults</display-name>
+		<display-name xml:lang="en">EDMS Defaults</display-name>
+		<display-name xml:lang="es">EDMS Defaults_es</display-name>
+		<portlet-class>
+			com.acs.enterprise.common.program.contactmanagement.view.portlet.MaintainancePortlet</portlet-class>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.view</name>
+			<value>/jsp/maintainedmsdefaults/maintainEdmsDefaults.jsp</value>
+		</init-param>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.help</name>
+			<value>/jsp/maintainedmsdefaults/edmsDefaults_Help.jsp</value>
+		</init-param>
+		<init-param>
+			<name>wps.markup</name>
+			<value>html</value>
+		</init-param>
+		<init-param>
+			<name>wps.enforce.redirect</name>
+			<value>true</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+			<portlet-mode>help</portlet-mode>
+		</supports>
+		<supported-locale>en</supported-locale>
+		<supported-locale>es</supported-locale>
+		<resource-bundle>
+			com.acs.enterprise.common.program.contactmanagement.view.nl.PGM_IN_ContactEdmsDefaultsMaintenance</resource-bundle>
+
+		<portlet-info>
+			<title>EDMS Defaults</title>
+		</portlet-info>
+	</portlet>
+
+	<!-- My Tasks -->
+
+	<portlet>
+		<portlet-name>PGM_IN_MyTasks</portlet-name>
+		<display-name>My Tasks</display-name>
+		<display-name xml:lang="en">My Tasks</display-name>
+		<display-name xml:lang="es">My Tasks_es</display-name>
+		<portlet-class>
+			com.acs.enterprise.common.program.contactmanagement.view.portlet.MaintainancePortlet</portlet-class>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.view</name>
+			<value>/jsp/mytask/mytasks.jsp</value>
+		</init-param>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.help</name>
+			<value>/jsp/mytask/mytask_Help.jsp</value>
+		</init-param>
+		<init-param>
+			<name>wps.markup</name>
+			<value>html</value>
+		</init-param>
+		<init-param>
+			<name>wps.enforce.redirect</name>
+			<value>true</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+			<portlet-mode>help</portlet-mode>
+		</supports>
+		<supported-locale>en</supported-locale>
+		<supported-locale>es</supported-locale>
+		<resource-bundle>
+			com.acs.enterprise.common.program.contactmanagement.view.nl.PGM_IN_MyTask</resource-bundle>
+
+		<portlet-info>
+			<title>My Tasks</title>
+		</portlet-info>
+		<portlet-preferences>
+			<preference>
+				<name>com.ibm.portal.pagecontext.enable</name>
+				<value>true</value>
+				<read-only>true</read-only>
+			</preference>
+		</portlet-preferences>
+		<supported-publishing-event>
+			<name>MyTasksMyCRsToLogCR</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>MyTasksMyCaseRecordsToLogCase</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>MyTasksGroupCRsToClaimLogCR</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>MyTasksGroupCaseRecordsToClaimLogCase</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>MyTasksAlertsToLetterGeneration</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>MyTasksAlertsToTPLRecovery</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>MyTasksAlertsToSA</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>MyTaskstoTPLMSQ</name>
+		</supported-publishing-event>
+      
+	</portlet>
+
+	<!-- Alert Dates -->
+
+	<portlet>
+		<portlet-name>PGM_IN_AlertDates</portlet-name>
+		<display-name>Alert Dates</display-name>
+		<display-name xml:lang="en">Alert Dates</display-name>
+		<display-name xml:lang="es">Alert Dates_es</display-name>
+		<portlet-class>
+			com.acs.enterprise.common.program.contactmanagement.view.portlet.MaintainancePortlet</portlet-class>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.view</name>
+			<value>/jsp/mytask/alertDates.jsp</value>
+
+		</init-param>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.help</name>
+			<value>/jsp/mytask/alertDates_Help.jsp</value>
+		</init-param>
+		<init-param>
+			<name>wps.markup</name>
+			<value>html</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+			<portlet-mode>help</portlet-mode>
+		</supports>
+		<supported-locale>en</supported-locale>
+		<supported-locale>es</supported-locale>
+		<resource-bundle>
+			com.acs.enterprise.common.program.contactmanagement.view.nl.PGM_IN_AlertDates</resource-bundle>
+		<portlet-info>
+			<title>Alert Dates</title>
+		</portlet-info>
+	</portlet>
+
+	<!-- Manage Contact Management Groups -->
+	<portlet>
+		<portlet-name>PGM_IN_ContactManageGroup</portlet-name>
+		<display-name>Manage Contact Management Groups</display-name>
+		<display-name xml:lang="en">Manage Contact Management Groups</display-name>
+		<display-name xml:lang="es">Manage Contact Management
+			Groups_es</display-name>
+		<portlet-class>
+			com.acs.enterprise.common.program.contactmanagement.view.portlet.MaintainancePortlet</portlet-class>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.view</name>
+			<value>/jsp/managegroups/editLob.jsp</value>
+		</init-param>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.help</name>
+			<value>/jsp/managegroups/manageGroupsHelp.jsp</value>
+		</init-param>
+
+		<init-param>
+			<name>wps.markup</name>
+			<value>html</value>
+		</init-param>
+		<init-param>
+			<name>wps.enforce.redirect</name>
+			<value>true</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+			<portlet-mode>help</portlet-mode>
+		</supports>
+		<supported-locale>en</supported-locale>
+		<supported-locale>es</supported-locale>
+		<resource-bundle>
+			com.acs.enterprise.common.program.contactmanagement.view.nl.PGM_IN_ContactManageGroup</resource-bundle>
+		<portlet-info>
+			<title>Manage Contact Management Groups</title>
+		</portlet-info>
+	</portlet>
+
+	<!-- Log Correspondence -->
+	<portlet>
+		<portlet-name>PGM_IN_ContactCorrespondenceLog</portlet-name>
+		<display-name>Log Correspondence</display-name>
+		<display-name xml:lang="en">Log Correspondence</display-name>
+		<display-name xml:lang="es">Log Correspondence_es</display-name>
+		<portlet-class>
+			com.acs.enterprise.common.program.contactmanagement.view.portlet.LogCorrespondencePortlet</portlet-class>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.view</name>
+			<value>/jsp/logcorrespondence/logCorrespondence.jsp</value>
+		</init-param>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.help</name>
+			<value>/jsp/logcorrespondence/logCorrespondenceHelp.jsp</value>
+		</init-param>
+		<init-param>
+			<name>wps.markup</name>
+			<value>html</value>
+		</init-param>
+		<init-param>
+			<name>receiveCorrespondenceEntity</name>
+			<value>receiveCorrespondenceEntity</value>
+		</init-param>
+		<init-param>
+			<name>correspondenceEntity</name>
+			<value>correspondenceEntity</value>
+		</init-param>
+		<init-param>
+			<name>wps.enforce.redirect</name>
+			<value>true</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+			<portlet-mode>help</portlet-mode>
+		</supports>
+		<supported-locale>en</supported-locale>
+		<supported-locale>es</supported-locale>
+		<resource-bundle>
+			com.acs.enterprise.common.program.contactmanagement.view.nl.PGM_IN_ContactCorrespondenceLog</resource-bundle>
+		<portlet-info>
+			<title>Log Correspondence</title>
+		</portlet-info>
+		<portlet-preferences>
+			<preference>
+				<name>com.ibm.portal.pagecontext.enable</name>
+				<value>true</value>
+				<read-only>true</read-only>
+			</preference>
+		</portlet-preferences>
+		<supported-processing-event>
+			<name>LogCorrespondenceFromEntity</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>LogCRFromCorrespondenceSearch</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>LogCRFromInqAbtEntitySearch</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>CRLogFromEntitySearch</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>CRLogFromMaintainEntity_Primary</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>CRLogFromMaintainEntity_Inquiry</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>LogCRFromMyTasksMyCRs</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>ClaimLogCRFromMyTaskGroupCR</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>CRLogFromLetterGen</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>CRLogFromDocRepository</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>LogCorrespondenceFromLogCase</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>TRGLetterGenerationToCorrespondenceSK</name>
+		</supported-processing-event>
+		<supported-publishing-event>
+			<name>LogCRToEntitySearch</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>LogCorrespondenceToDocRepository</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>LogCorrespondenceToLetGeneration_VO</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>LogCorrespondenceToLetGeneration_String</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>LogCorrespondenceToLogCase</name>
+		</supported-publishing-event>
+	</portlet>
+
+	<!-- Correspondence Entity Search -->
+	<portlet>
+		<portlet-name>PGM_IN_ContactCrspdEntitySearch</portlet-name>
+		<display-name>Entity Search</display-name>
+		<display-name xml:lang="en">Entity Search</display-name>
+		<portlet-class>
+			com.acs.enterprise.common.program.contactmanagement.view.portlet.CorrespondenceEntitySearchPortlet</portlet-class>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.view</name>
+			<value>
+				/jsp/searchcorrespondenceentity/searchCorrespondenceEntity.jsp</value>
+		</init-param>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.help</name>
+			<value>/jsp/searchentity/searchEntityHelp.jsp</value>
+		</init-param>
+		<init-param>
+			<name>wps.markup</name>
+			<value>html</value>
+		</init-param>
+		<init-param>
+			<name>wps.enforce.redirect</name>
+			<value>true</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+			<portlet-mode>help</portlet-mode>
+		</supports>
+		<supported-locale>en</supported-locale>
+		<resource-bundle>
+			com.acs.enterprise.common.program.contactmanagement.view.nl.PGM_IN_ContactCrspdEntitySearch</resource-bundle>
+		<portlet-info>
+			<title>Entity Search</title>
+		</portlet-info>
+		<supported-processing-event>
+			<name>CREntitySearchFromMaintainEntity</name>
+		</supported-processing-event>
+		<supported-publishing-event>
+			<name>EntityDetailsToLogCR</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>CREntitySearchToMaintainEntity</name>
+		</supported-publishing-event>
+		
+	</portlet>
+
+	<!-- Inquiry About Entity Search -->
+	<portlet>
+		<portlet-name>PGM_IN_InquiringAboutEntitySearch</portlet-name>
+		<display-name>Inquiring About Entity Search</display-name>
+		<display-name xml:lang="en">Inquiring About Entity Search</display-name>
+		<display-name xml:lang="es">Inquiring About Entity
+			Search_es</display-name>
+		<portlet-class>
+			com.acs.enterprise.common.program.contactmanagement.view.portlet.MaintainancePortlet</portlet-class>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.view</name>
+			<value>
+				/jsp/inquiringaboutentitysearch/inquiringAboutEntitySearch.jsp</value>
+		</init-param>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.help</name>
+			<value>/jsp/inquiringaboutentitysearch/inqAboutEntySearch_Help.jsp</value>
+		</init-param>
+		<init-param>
+			<name>wps.markup</name>
+			<value>html</value>
+		</init-param>
+		<init-param>
+			<name>wps.enforce.redirect</name>
+			<value>true</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+			<portlet-mode>help</portlet-mode>
+		</supports>
+		<supported-locale>en</supported-locale>
+		<supported-locale>es</supported-locale>
+		<resource-bundle>
+			com.acs.enterprise.common.program.contactmanagement.view.nl.PGM_IN_InquiringAboutEntitySearch</resource-bundle>
+		<portlet-info>
+			<title>Inquiring About Entity Search</title>
+		</portlet-info>
+		<supported-publishing-event>
+			<name>InqAbtEntitySearchToLogCR</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>InqAbtEntitySearchToMaintainEntity</name>
+		</supported-publishing-event>
+	</portlet>
+
+	<!-- PGM_IN_InquiringAboutCaseEntitySearch -->
+	<portlet>
+		<portlet-name>PGM_IN_InquiringAboutCaseEntitySearch</portlet-name>
+		<display-name>Inquiring About Entity Search</display-name>
+		<display-name xml:lang="en">Inquiring About Entity
+			Search</display-name>
+		<portlet-class>
+			com.acs.enterprise.common.program.contactmanagement.view.portlet.MaintainancePortlet</portlet-class>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.view</name>
+			<value>
+				/jsp/inquiringaboutCaseEntitySearch/inquiringAboutCaseEntitySearch.jsp</value>
+		</init-param>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.help</name>
+			<value>
+				/jsp/inquiringaboutCaseEntitySearch/inqAboutCaseEntySearch_Help.jsp</value>
+		</init-param>
+		<init-param>
+			<name>wps.markup</name>
+			<value>html</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+			<portlet-mode>help</portlet-mode>
+		</supports>
+		<supported-locale>en</supported-locale>
+		<resource-bundle>
+			com.acs.enterprise.common.program.contactmanagement.view.nl.PGM_IN_InquiringAboutCaseEntitySearch</resource-bundle>
+		<portlet-info>
+			<title>Inquiring About Entity Search</title>
+		</portlet-info>
+		<supported-publishing-event>
+			<name>LogCaseinqAbtCaseEntityDetailsDataType</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>InquiryAboutCaseEntityAddEntity</name>
+		</supported-publishing-event>
+	</portlet>
+
+	<!-- Search Correspondence -->
+	<portlet>
+		<portlet-name>PGM_IN_ContactCorrespondenceSearch</portlet-name>
+		<display-name>Search Correspondence</display-name>
+		<display-name xml:lang="en">Search Correspondence</display-name>
+		<display-name xml:lang="es">Search Correspondence_es</display-name>
+		<portlet-class>
+			com.acs.enterprise.common.program.contactmanagement.view.portlet.SearchCorrespondencePortlet</portlet-class>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.view</name>
+			<value>/jsp/searchcorrespondence/searchCorrespondence.jsp</value>
+		</init-param>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.help</name>
+			<value>/jsp/searchcorrespondence/searchCorrespondenceHelp.jsp</value>
+		</init-param>
+		<init-param>
+			<name>wps.markup</name>
+			<value>html</value>
+		</init-param>
+		<init-param>
+			<name>wps.enforce.redirect</name>
+			<value>true</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+			<portlet-mode>help</portlet-mode>
+		</supports>
+		<supported-locale>en</supported-locale>
+		<supported-locale>es</supported-locale>
+		<resource-bundle>
+			com.acs.enterprise.common.program.contactmanagement.view.nl.PGM_IN_ContactCorrespondenceSearch</resource-bundle>
+		<portlet-info>
+			<title>Search Correspondence</title>
+		</portlet-info>
+		<supported-processing-event>
+			<name>CRSearchFromEntitySearch</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>fromMemberDetailsMaintenanceToCorrespondence</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>CRSearchFromAddAppeals</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>CRSearchFromMemAppealInq</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>ProcessMemberCorrespondanceFromTPLEvent</name>
+		</supported-processing-event>
+		<supported-publishing-event>
+			<name>CorrespondenceSearchToLogCR</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>CRSearchToEntitySearch</name>
+		</supported-publishing-event>
+	</portlet>
+
+	<!-- Search Entity -->
+	<portlet>
+		<portlet-name>PGM_IN_ContactEntitySearch</portlet-name>
+		<display-name>Search Entity</display-name>
+		<display-name xml:lang="en">Search Entity</display-name>
+		<display-name xml:lang="es">Search Entity_es</display-name>
+
+		<portlet-class>
+			com.acs.enterprise.common.program.contactmanagement.view.portlet.SearchEntityPortlet</portlet-class>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.view</name>
+			<value>/jsp/searchentity/searchEntity.jsp</value>
+		</init-param>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.help</name>
+			<value>/jsp/searchentity/searchEntityHelp.jsp</value>
+		</init-param>
+		<init-param>
+			<name>wps.markup</name>
+			<value>html</value>
+		</init-param>
+		<init-param>
+			<name>wps.enforce.redirect</name>
+			<value>true</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+			<portlet-mode>help</portlet-mode>
+		</supports>
+		<supported-locale>en</supported-locale>
+		<supported-locale>es</supported-locale>
+
+		<resource-bundle>
+			com.acs.enterprise.common.program.contactmanagement.view.nl.PGM_IN_CMSearchEntity</resource-bundle>
+
+		<portlet-info>
+			<title>Search Entity</title>
+		</portlet-info>
+		<portlet-preferences>
+			<preference>
+				<name>com.ibm.portal.pagecontext.enable</name>
+				<value>true</value>
+				<read-only>true</read-only>
+			</preference>
+		</portlet-preferences>
+		<supported-processing-event>
+			<name>EntitySearchFromReassignCR</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>EntitySearchFromCRSearch</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>EntitySearchFromCaseDetails</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>EntitySearchFromLogCase</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>EntitySearchFromLogCR</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>EntitySearchFromMaintainEntity</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>EntitySearchFromCRSearch</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>ProcessMyDatatype</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>EntitySearchFromReassignCR</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>FromLogCaseToEntitySearch</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>FromSearchDocumentRepositoryToContactEntitySearch</name>
+		</supported-processing-event>
+			<supported-processing-event>
+			<name>CaseEntitySearchFromcaseDetails</name>
+		</supported-processing-event>
+		<supported-publishing-event>
+			<name>CaseEntitySearchToSearchCase</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>FromEntitySearchToLogCase</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>ContactEntitySearchEntityMemDetailsToMemInfMnts</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>ContactEntitySearchToSearchDocumentRepositoryEvent</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>ContactEntitySearchToTradingPartnerMaintenance</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>ContactEntitySearchToTradingPartnerEnrollmentApplication</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>ContactEntitySearchToProviderEnrollmentApplication</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>ContactEntitySearchtoTPLPolicyDetail</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>ContactEntitySearchToProviderMnt</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>EntitySearchToCRLog</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>EntitySearchToCRSearch</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>EntitySearchToSearchCase</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>EntitySearchToLogCase</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>EntitySearchToMaintainEntity</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>EntitySearchToTPLCarrierDetails</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>EntitySearchToProviderMnts</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>EntitySearchToMemberDetails</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>PublishEntitySearchToSearchCase</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>ContactEntitysearchToTPEnrollment</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>SRCSearchEntityReassignCR</name>
+		</supported-publishing-event>
+		<!--<supported-publishing-event>
+			<name>EntitySearchToPrvEnrollmentPortlet</name>
+		</supported-publishing-event>-->
+		<!-- Publishing event from entity page to Log case for Correspondence search -->
+		<supported-publishing-event>
+			<name>EntitySearchToCRLogcaseSearch</name>
+		</supported-publishing-event>
+		<!-- ends -->
+	</portlet>
+
+	<!-- Maintain Entity -->
+	<portlet>
+		<portlet-name>PGM_IN_ContactMaintainEntity</portlet-name>
+		<display-name>Maintain Entity</display-name>
+		<display-name xml:lang="en">Maintain Entity</display-name>
+		<display-name xml:lang="es">Maintain Entity_es</display-name>
+
+		<portlet-class>
+			com.acs.enterprise.common.program.contactmanagement.view.portlet.MaintainEntityPortlet</portlet-class>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.view</name>
+			<value>/jsp/maintainentity/maintainEntity.jsp</value>
+		</init-param>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.help</name>
+			<value>/jsp/maintainentity/maintainEntityHelp.jsp</value>
+		</init-param>
+		<init-param>
+			<name>wps.markup</name>
+			<value>html</value>
+		</init-param>
+		<init-param>
+			<name>maintainEntityId</name>
+			<value>maintainEntityId</value>
+		</init-param>
+		<init-param>
+			<name>receiveMaintainEntityId</name>
+			<value>receiveMaintainEntityId</value>
+		</init-param>
+		<init-param>
+			<name>wps.enforce.redirect</name>
+			<value>true</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+			<portlet-mode>help</portlet-mode>
+		</supports>
+		<supported-locale>en</supported-locale>
+		<supported-locale>es</supported-locale>
+
+		<resource-bundle>
+			com.acs.enterprise.common.program.contactmanagement.view.nl.PGM_IN_CMMaintainEntity</resource-bundle>
+
+		<portlet-info>
+			<title>Maintain Entity</title>
+		</portlet-info>
+
+		<supported-processing-event>
+			<name>MaintainEntityFromInqAbtEntitySearch</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>MaintainEntityFromCREntitySearch</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>MaintainEntityFromEntitySearch</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>MaintainEntityFromCaseEntitySearch</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>MaintainEntityFromInqAbtCaseEntitySearch</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>MaintainEntityFromTPLHIPP</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>ContactMaintainEntityFromSearchCountyBilling</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>FromTPLRecoveryToContactMaintainEntity</name>
+		</supported-processing-event>
+		<supported-publishing-event>
+			<name>MaintainEntityToCRLog_Primary</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>MaintainEntityToCRLog_Inquiry</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>MaintainEntityToEntitySearch</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>MaintainEntityToLogCase</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>MaintainEntityToInquiryLogCase</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>MaintainEntityToCREntitySearch</name>
+		</supported-publishing-event>
+	</portlet>
+
+	<!-- Search Case Entity -->
+	<portlet>
+		<portlet-name>PGM_IN_ContactCaseEntitySearch</portlet-name>
+		<display-name>Entity Search</display-name>
+		<display-name xml:lang="en">Entity Search</display-name>
+		<portlet-class>
+			com.acs.enterprise.common.program.contactmanagement.view.portlet.MaintainancePortlet</portlet-class>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.view</name>
+			<value>/jsp/searchCaseEntity/searchCaseEntity.jsp</value>
+		</init-param>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.help</name>
+			<value>/jsp/searchCaseEntity/searchCaseEntity_Help.jsp</value>
+		</init-param>
+		<init-param>
+			<name>wps.markup</name>
+			<value>html</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+			<portlet-mode>help</portlet-mode>
+		</supports>
+		<supported-locale>en</supported-locale>
+		<resource-bundle>
+			com.acs.enterprise.common.program.contactmanagement.view.nl.PGM_IN_CMLogCaseEntitySearch</resource-bundle>
+
+		<portlet-info>
+			<title>Entity Search</title>
+		</portlet-info>
+		<supported-publishing-event>
+			<name>EntityToCaseEntityDetails</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>CaseEntitySearchToMaintainEntity</name>
+		</supported-publishing-event>
+	</portlet>
+
+	<!-- Log Case Portlet -->
+	<portlet>
+		<portlet-name>PGM_IN_LogCase</portlet-name>
+		<display-name>Log Case</display-name>
+		<display-name xml:lang="en">Log Case</display-name>
+		<portlet-class>
+			com.acs.enterprise.common.program.contactmanagement.view.portlet.LogCasePortlet</portlet-class>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.view</name>
+			<value>/jsp/LogCase/LogCase.jsp</value>
+		</init-param>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.help</name>
+			<value>/jsp/LogCase/log_case_Help.jsp</value>
+		</init-param>
+		<init-param>
+			<name>wps.markup</name>
+			<value>html</value>
+		</init-param>
+		<init-param>
+			<name>sendEDMSSearchResultsAction</name>
+			<value>sendEDMSSearchResultsAction</value>
+		</init-param>
+
+		<init-param>
+			<name>logCaseEDMSSearchResultsList</name>
+			<value>logCaseEDMSSearchResultsList</value>
+		</init-param>
+		<init-param>
+			<name>CaseDetails</name>
+			<value>CaseDetails</value>
+		</init-param>
+		<init-param>
+			<name>receiveCaseDetailsAction</name>
+			<value>receiveCaseDetailsAction</value>
+		</init-param>
+		<init-param>
+			<name>receiveCaseEntityDetails</name>
+			<value>receiveCaseEntityDetails</value>
+		</init-param>
+		<init-param>
+			<name>CaseEntityDetails</name>
+			<value>CaseEntityDetails</value>
+		</init-param>
+		<init-param>
+			<name>receiveInqAbtCaseEntityDetailsAction</name>
+			<value>receiveInqAbtCaseEntityDetailsAction</value>
+		</init-param>
+		<init-param>
+			<name>inqAbtCaseEntityDetails</name>
+			<value>inqAbtCaseEntityDetails</value>
+		</init-param>
+		<init-param>
+			<name>receiveGlobalCaseSearchResults</name>
+			<value>receiveGlobalCaseSearchResults</value>
+		</init-param>
+		<init-param>
+			<name>GlobalCaseSearchResult</name>
+			<value>GlobalCaseSearchResult</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+			<portlet-mode>help</portlet-mode>
+		</supports>
+		<supported-locale>en</supported-locale>
+		<resource-bundle>
+			com.acs.enterprise.common.program.contactmanagement.view.nl.PGM_IN_CMContactManagementCase</resource-bundle>
+		<portlet-info>
+			<title>Log Case</title>
+		</portlet-info>
+		<portlet-preferences>
+			<preference>
+				<name>com.ibm.portal.pagecontext.enable</name>
+				<value>true</value>
+				<read-only>true</read-only>
+			</preference>
+		</portlet-preferences>
+		<supported-processing-event>
+			<name>LogCaseMaintainInquirySearchId</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>CMCaseSearchDataType</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>CaseEntityDetails</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>inqAbtCaseEntityDetailsDataType</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>LogCasePage</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>CaseSk</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>EntSrchtoLogCaseDataType</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>EntitySearchToLogCase</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>ContactMaintainEntityToLogCase</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>EDMSToLogCase</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>LetterGenerationToLogCase</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>MytaskToLogCase</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>MyTasksGroupCaseRecordsToLogCase</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>GlobalCasetoLogCase</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>CorrespondenceLogToLogCase</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>fromPGM_IN_PAInquirytoPGM_IN_LogCaseProcessEvent</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>LogCaseFromEntitysearch</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>LetterGenToNewLogCase</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>TRGMaintainEntityToInquiryLogCase</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>TRGLogCaseCMCaseSearchDataType</name>
+		</supported-processing-event>		
+		<!-- processing event from entity page to Logacase for Correspondence search -->
+		<supported-processing-event>
+			<name>EntitySearchToLogCaseAssociatedCR</name>
+		</supported-processing-event>	
+		<!-- ends -->
+		<supported-publishing-event>
+			<name>LogCaseToEntitySearch</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>LogCaseToLetterGenerationVO</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>LogCaseToAddAppeals</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>LogCaseToLogCorrespondence</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>LogCaseToLetterGenerationCaseData</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>LogCaseToEDMS</name>
+		</supported-publishing-event>
+		<!-- Publishing event from Log case to Entity Portlet for Correspondence search -->
+		<supported-publishing-event>
+			<name>CRSearchToEntitySearch</name>
+		</supported-publishing-event>
+		<!-- ends -->
+	</portlet>
+
+	<!-- Case Search -->
+	<portlet>
+		<portlet-name>PGM_IN_ContactCaseDetails</portlet-name>
+		<display-name>Search Case</display-name>
+		<display-name xml:lang="en">Search Case</display-name>
+		<portlet-class>
+			com.acs.enterprise.common.program.contactmanagement.view.portlet.SearchCasePortlet</portlet-class>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.view</name>
+			<value>/jsp/casesearch/mainCaseSearch.jsp</value>
+		</init-param>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.help</name>
+			<value>/jsp/casesearch/case_Details_Help.jsp</value>
+		</init-param>
+		<init-param>
+			<name>wps.markup</name>
+			<value>html</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+			<portlet-mode>help</portlet-mode>
+		</supports>
+		<supported-locale>en</supported-locale>
+		<resource-bundle>
+			com.acs.enterprise.common.program.contactmanagement.view.nl.PGM_IN_CMSearchCase</resource-bundle>
+		<portlet-info>
+			<title>Search Case</title>
+		</portlet-info>
+		<supported-processing-event>
+			<name>MemberLogCase</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>fromMemberDetailsMaintenanceToCase</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>CaseTrackingDatatype</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>SearchCaseCaseTrackingAppealDatatype</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>ProcessEntitySearchToSearchCase</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>FromTPLMSQToContactCaseDetails</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>TRGAddAppealToSearchCase</name>
+		</supported-processing-event>
+		<supported-publishing-event>
+			<name>SearchCaseCMCaseSearchDataType</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>CaseDetailsToCaseEntitySearch</name>
+		</supported-publishing-event>
+	</portlet>
+
+	<!-- Maintain Custom Fields Portlet -->
+	<portlet>
+		<portlet-name>PGM_IN_ContactCustomerFieldsMaintenance</portlet-name>
+		<display-name>Maintain Custom Fields</display-name>
+		<display-name xml:lang="en">Maintain Custom Field</display-name>
+		<portlet-class>
+			com.acs.enterprise.common.program.contactmanagement.view.portlet.MaintainancePortlet</portlet-class>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.view</name>
+			<value>/jsp/maintaincustomfields/maintainCustomFields.jsp</value>
+		</init-param>
+		<init-param>
+			<name>wps.markup</name>
+			<value>html</value>
+		</init-param>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.help</name>
+			<value>/jsp/maintaincustomfields/maintain_Custom_Fields_Help.jsp</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+			<portlet-mode>help</portlet-mode>
+		</supports>
+		<supported-locale>en</supported-locale>
+		<resource-bundle>
+			com.acs.enterprise.common.program.contactmanagement.view.nl.PGM_IN_ContactCustomFieldsMaintenance</resource-bundle>
+		<portlet-info>
+			<title>Maintain Custom Field</title>
+		</portlet-info>
+	</portlet>
+
+	<!-- Add Appeals -->
+
+	<portlet>
+		<portlet-name>PGM_IN_AddAppeals</portlet-name>
+		<display-name>Add Appeals</display-name>
+		<display-name xml:lang="en">Add Appeals</display-name>
+		<portlet-class>
+			com.acs.enterprise.common.program.contactmanagement.view.portlet.AddAppealsPortlet</portlet-class>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.view</name>
+			<value>/jsp/appeals/appealDetails.jsp</value>
+		</init-param>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.help</name>
+			<value>/jsp/appeals/Add_Appeals_Help.jsp</value>
+		</init-param>
+		<init-param>
+			<name>wps.markup</name>
+			<value>html</value>
+		</init-param>
+		<init-param>
+			<name>AddAppealDetails</name>
+			<value>AddAppealDetails</value>
+		</init-param>
+		<init-param>
+			<name>receiveAddAppealDetailsAction</name>
+			<value>receiveAddAppealDetailsAction</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+			<portlet-mode>help</portlet-mode>
+		</supports>
+		<supported-locale>en</supported-locale>
+		<resource-bundle>
+			com.acs.enterprise.common.program.contactmanagement.view.nl.PGM_IN_ContactAppealsMaintenance</resource-bundle>
+		<portlet-info>
+			<title>Add Appeals</title>
+		</portlet-info>
+		<portlet-preferences>
+			<preference>
+				<name>com.ibm.portal.pagecontext.enable</name>
+				<value>true</value>
+				<read-only>true</read-only>
+			</preference>
+		</portlet-preferences>
+		<supported-processing-event>
+			<name>LogCaseAddAppealDetailsDataType</name>
+		</supported-processing-event>
+		<supported-publishing-event>
+			<name>LogCaseCMCaseSearchDataType</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>AddAppealsToServiceAuthDetail</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>AddAppealToCorrespondSK</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>AddAppealToSearchCase</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>AddAppealToInstitonalClaims</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>AddAppealToDentalClaim</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>AddAppealToServicsAuthInquiry</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>AddAppealsToVoidReplaceTcn</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>AddAppealsToProfessionalTcn</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>AddAppealsToCRSearch</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>AddAppealstoServiceAuthorizationDetail</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>AppealToClaimInquirySearch</name>
+		</supported-publishing-event>
+
+	</portlet>
+
+	<!-- Member Appeals Inquiry -->
+
+	<portlet>
+		<portlet-name>PGM_IN_MemberAppealsInquiry</portlet-name>
+		<display-name>MemberAppeals</display-name>
+		<display-name xml:lang="en">Member Appeals</display-name>
+		<portlet-class>
+			com.acs.enterprise.common.program.contactmanagement.view.portlet.MemberAppealsPortlet</portlet-class>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.view</name>
+			<value>/jsp/blank.jsp</value>
+		</init-param>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.help</name>
+			<value>/jsp/appeals/Member_Appeals_Help.jsp</value>
+		</init-param>
+		<init-param>
+			<name>wps.markup</name>
+			<value>html</value>
+		</init-param>
+		<init-param>
+			<name>MemberAppealsSearch</name>
+			<value>MemberAppealsSearch</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+			<portlet-mode>help</portlet-mode>
+		</supports>
+		<supported-locale>en</supported-locale>
+		<resource-bundle>
+			com.acs.enterprise.common.program.contactmanagement.view.nl.PGM_IN_ContactMemberAppealsInquiry</resource-bundle>
+		<portlet-info>
+			<title>Member Appeals</title>
+		</portlet-info>
+		<portlet-preferences>
+			<preference>
+				<name>com.ibm.portal.pagecontext.enable</name>
+				<value>true</value>
+				<read-only>true</read-only>
+			</preference>
+		</portlet-preferences>
+		<supported-processing-event>
+			<name>MemberAppealsSearchType</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>fromMemberDetailsMaintenanceToMemAppealsInq</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>MSQResetType</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>ProcessEventFromMemberSearch</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>ProcessMSQResetSearchFromMemSearchEvent</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>
+				fromServiceAuthorizationDetailToMemberAppealsInquiryProcessEvent</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>TPLMSQToMemberAppealsInquiry</name>
+		</supported-processing-event>
+		<supported-publishing-event>
+			<name>MemberAppealsCMCaseSearchDataType</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>DentalTcnInfo</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>InstitutionalTcnInfo</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>ProfessionalTcnInfo</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>VoidReplaceTcnInfo</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>CMMemberSummaryType</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>CaseTrackingAppealDatatype</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>MemberAppealsServiceAuthInquiry</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>MemAppealInqTOCRSearch</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>MemberAppealsInquirytoServiceAuthorizationDetail</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>MemberAppealsToClaimsInquirySearch</name>
+		</supported-publishing-event>
+	</portlet> 
+	
+	<!-- Provider Appeals Inquiry -->
+
+	<portlet>
+		<portlet-name>PGM_IN_ProviderAppealsInquiry</portlet-name>
+		<display-name>Provider Appeals</display-name>
+		<display-name xml:lang="en">Provider Appeals</display-name>
+		<portlet-class>
+			com.acs.enterprise.common.program.contactmanagement.view.portlet.ProviderAppealsPortlet</portlet-class>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.view</name>
+			<value>/jsp/blank.jsp</value>
+		</init-param>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.help</name>
+			<value>/jsp/appeals/Provider_Appeals_Help.jsp</value>
+		</init-param>
+		<init-param>
+			<name>wps.markup</name>
+			<value>html</value>
+		</init-param>
+		<init-param>
+			<name>ProviderAppeals</name>
+			<value>ProviderAppeals</value>
+		</init-param>
+		<init-param>
+			<name>receiveProviderAppealsAction</name>
+			<value>receiveProviderAppealsAction</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+			<portlet-mode>help</portlet-mode>
+		</supports>
+		<supported-locale>en</supported-locale>
+		<resource-bundle>
+			com.acs.enterprise.common.program.contactmanagement.view.nl.PGM_IN_ContactProviderAppealsInquiry</resource-bundle>
+		<portlet-info>
+			<title>Provider Appeals</title>
+		</portlet-info>
+		<supported-processing-event>
+			<name>ProviderAppealsDatatype</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>fromProviderInquiryToProviderAppealsInquiryProcessEvent</name>
+		</supported-processing-event>
+		<supported-processing-event>
+			<name>LogCaseToProviderAppeals</name>
+		</supported-processing-event>
+		<supported-publishing-event>
+			<name>ProviderAppealsDentalTcnInfo</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>ProviderAppealsInstitutionalTcnInfo</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>ProviderAppealsProfessionalTcnInfo</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>ProviderAppealsVoidReplaceTcnInfo</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>ProviderAppealsServiceAuthInquiry</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>ProviderAppealsInquirytoServiceAuthorizationDetail</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>PGM_IN_PAInquirytoPGM_IN_LogCasePublishEvent</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>ProviderAppealsToClaimInquirySearch</name>
+		</supported-publishing-event>
+	</portlet>
+
+	<!-- Maintain Case Types -->
+
+
+	<portlet>
+		<portlet-name>PGM_IN_ContactCaseTypeMaintenance</portlet-name>
+		<display-name>Maintain Case Type</display-name>
+		<display-name xml:lang="en">Maintain Case Type</display-name>
+		<portlet-class>
+			com.acs.enterprise.common.program.contactmanagement.view.portlet.MaintainancePortlet</portlet-class>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.view</name>
+			<value>/jsp/maintaincasetypes/maintaincasetypes.jsp</value>
+		</init-param>
+		<init-param>
+			<name>wps.markup</name>
+			<value>html</value>
+		</init-param>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.help</name>
+			<value>/jsp/maintaincasetypes/Maintain_Case_Type_Help.jsp</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+			<portlet-mode>help</portlet-mode>
+		</supports>
+		<supported-locale>en</supported-locale>
+		<resource-bundle>
+			com.acs.enterprise.common.program.contactmanagement.view.nl.PGM_IN_ContactCaseTypeMaintenance</resource-bundle>
+		<portlet-info>
+			<title>Maintain Case Type</title>
+		</portlet-info>
+	</portlet>
+
+	<!-- Global Case Search -->
+	<portlet>
+		<portlet-name>PGM_IN_GlobalCaseSearch</portlet-name>
+		<display-name>Global Search Case</display-name>
+		<display-name xml:lang="en">Global Search Case</display-name>
+		<portlet-class>
+			com.acs.enterprise.common.program.contactmanagement.view.portlet.MaintainancePortlet</portlet-class>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.view</name>
+			<value>/jsp/globalCaseSearch/globalCaseSearch.jsp</value>
+		</init-param>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.help</name>
+			<value>/jsp/globalCaseSearch/global_Case_Search_Help.jsp</value>
+		</init-param>
+		<init-param>
+			<name>wps.markup</name>
+			<value>html</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+			<portlet-mode>help</portlet-mode>
+		</supports>
+		<supported-locale>en</supported-locale>
+		<resource-bundle>
+			com.acs.enterprise.common.program.contactmanagement.view.nl.PGM_IN_SearchGlobalCase</resource-bundle>
+		<portlet-info>
+			<title>Global Search Case</title>
+		</portlet-info>
+		<portlet-preferences>
+			<preference>
+				<name>com.ibm.portal.pagecontext.enable</name>
+				<value>true</value>
+				<read-only>true</read-only>
+			</preference>
+		</portlet-preferences>
+		<supported-publishing-event>
+			<name>GlobalCaseSearchToLogCase</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>GlobalCaseSearchtoTPLHIPPDetails</name>
+		</supported-publishing-event>
+		<supported-publishing-event>
+			<name>GlobalCaseSearchtoTPLRecoveryCaseDetails</name>
+		</supported-publishing-event>
+	</portlet>
+
+	<!--Reassign Case -->
+
+	<portlet>
+		<portlet-name>PGM_IN_ContactCaseReassign</portlet-name>
+		<display-name>Reassign Case</display-name>
+		<display-name xml:lang="en">Reassign Case</display-name>
+		<portlet-class>com.ibm.faces20.portlet.FacesPortlet</portlet-class>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.view</name>
+			<value>/jsp/reassignCaseRecord/reassignCaseRecords.jsp</value>
+		</init-param>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.help</name>
+			<value>/jsp/reassignCaseRecord/reassignCase_Help.jsp</value>
+		</init-param>
+		<init-param>
+			<name>wps.markup</name>
+			<value>html</value>
+		</init-param>
+		<init-param>
+			<name>wps.enforce.redirect</name>
+			<value>true</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+			<portlet-mode>help</portlet-mode>
+		</supports>
+		<supported-locale>en</supported-locale>
+		<resource-bundle>
+			com.acs.enterprise.common.program.contactmanagement.view.nl.PGM_IN_ReassignCaseRecords</resource-bundle>
+		<portlet-info>
+			<title>Reassign Case</title>
+		</portlet-info>
+		<portlet-preferences>
+			<preference>
+				<name>com.ibm.portal.pagecontext.enable</name>
+				<value>true</value>
+				<read-only>true</read-only>
+			</preference>
+		</portlet-preferences>
+	</portlet>
+
+	<!--Reassign Correspondence -->
+	<portlet>
+		<portlet-name>PGM_IN_ContactCorrespondenceReassign</portlet-name>
+		<display-name>Reassign Correspondence</display-name>
+		<display-name xml:lang="en">Reassign Correspondence</display-name>
+		<portlet-class>
+			com.acs.enterprise.common.program.contactmanagement.view.portlet.ReassignCorrespondencePortlet</portlet-class>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.view</name>
+			<value>/jsp/reassignCorrespondence/reassignCorrespondence.jsp</value>
+		</init-param>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.help</name>
+			<value>/jsp/reassignCorrespondence/reassignCorrespondenceHelp.jsp</value>
+		</init-param>
+		<init-param>
+			<name>wps.markup</name>
+			<value>html</value>
+		</init-param>
+		<init-param>
+			<name>wps.enforce.redirect</name>
+			<value>true</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+			<portlet-mode>help</portlet-mode>
+		</supports>
+		<supported-locale>en</supported-locale>
+		<resource-bundle>
+			com.acs.enterprise.common.program.contactmanagement.view.nl.PGM_IN_ContactCorrespondenceReassign</resource-bundle>
+		<portlet-info>
+			<title>Reassign Correspondence</title>
+		</portlet-info>
+		<portlet-preferences>
+			<preference>
+				<name>com.ibm.portal.pagecontext.enable</name>
+				<value>true</value>
+				<read-only>true</read-only>
+			</preference>
+		</portlet-preferences>
+		<supported-processing-event>
+			<name>TRGSearchEntityReassignCR</name>
+		</supported-processing-event>
+		<supported-publishing-event>
+			<name>ReassignCRToEntitySearch</name>
+		</supported-publishing-event>
+	</portlet>
+
+	<!-- Maintain Letter Templates -->
+	<portlet>
+		<portlet-name>PGM_IN_LetterTemplateMaintenance</portlet-name>
+		<display-name>Maintain Templates</display-name>
+		<display-name xml:lang="en">Maintain Letter Template</display-name>
+		<display-name xml:lang="es">Maintain Letter
+			Template_es</display-name>
+
+		<portlet-class>com.ibm.faces20.portlet.FacesPortlet</portlet-class>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.view</name>
+			<value>/jsp/maintainlettertemplate/maintainLetterTemplate.jsp</value>
+		</init-param>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.help</name>
+			<value>/jsp/maintainlettertemplate/letterTemplate_Help.jsp</value>
+		</init-param>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+			<portlet-mode>help</portlet-mode>
+		</supports>
+		<supported-locale>en</supported-locale>
+		<supported-locale>es</supported-locale>
+		<resource-bundle>
+			com.acs.enterprise.common.program.contactmanagement.view.nl.PGM_IN_LetterTemplateMaintenance</resource-bundle>
+		<portlet-info>
+			<title>Maintain Templates</title>
+		</portlet-info>
+	</portlet>
+	<!-- Maintain Letter Keywords -->
+
+	<portlet>
+		<portlet-name>PGM_IN_LetterKeywordsMaintenance</portlet-name>
+		<display-name>Maintain Letter Keywords</display-name>
+		<display-name xml:lang="en">Maintain Letter Keywords</display-name>
+		<display-name xml:lang="es">Maintain Letter
+			Keywords_es</display-name>
+		<portlet-class>
+			com.acs.enterprise.common.program.contactmanagement.view.portlet.MaintainLetterKeywordPortlet</portlet-class>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.view</name>
+			<value>/jsp/maintainletterkeywords/maintainLetterKeywords.jsp</value>
+		</init-param>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.help</name>
+			<value>/jsp/maintainletterkeywords/letterKeywords_Help.jsp</value>
+		</init-param>
+		<init-param>
+			<name>wps.markup</name>
+			<value>html</value>
+		</init-param>
+		<init-param>
+			<name>wps.enforce.redirect</name>
+			<value>true</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+			<portlet-mode>help</portlet-mode>
+		</supports>
+		<supported-locale>en</supported-locale>
+		<supported-locale>es</supported-locale>
+		<resource-bundle>
+			com.acs.enterprise.common.program.contactmanagement.view.nl.PGM_IN_LetterKeywordsMaintenance</resource-bundle>
+		<portlet-info>
+			<title>Maintain Letter Keyword</title>
+		</portlet-info>
+	</portlet>
+
+	<!-- Common notes Portlet -->
+
+	<portlet>
+		<portlet-name>PGM_IN_SearchNotes</portlet-name>
+		<display-name>Search Notes</display-name>
+		<display-name xml:lang="en">Search Notes</display-name>
+		<display-name xml:lang="es">Search Notes</display-name>
+		<portlet-class>com.acs.enterprise.common.program.contactmanagement.view.portlet.SearchNotesPortlet</portlet-class>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.view</name>
+			<value>/jsp/searchnotes/searchNotes.jsp</value>
+		</init-param>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.help</name>
+			<value>/jsp/searchnotes/searchNotesHelp.jsp</value>
+		</init-param>
+		<init-param>
+			<name>wps.markup</name>
+			<value>html</value>
+		</init-param>
+		<init-param>
+			<name>wps.enforce.redirect</name>
+			<value>true</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>
+			<portlet-mode>help</portlet-mode>
+		</supports>
+		<supported-locale>en</supported-locale>
+		<supported-locale>es</supported-locale>
+		<resource-bundle>
+			com.acs.enterprise.common.program.contactmanagement.view.nl.PGM_IN_GlobalCommonNotes</resource-bundle>
+		<portlet-info>
+			<title>Search Notes</title>
+		</portlet-info>
+	</portlet>
+
+
+	<default-namespace>
+		http://com.acs.enterprise.common.program.contactmanagement/</default-namespace>
+
+	<event-definition>
+		<name>EntityDetailsToLogCR</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:EntityDetailsToLogCR</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>LogCorrespondenceFromEntity</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:EntityDetailsToLogCR</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>CorrespondenceSearchToLogCR</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:CorrespondenceSearchToLogCR</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>LogCRFromCorrespondenceSearch</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:CorrespondenceSearchToLogCR</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>InqAbtEntitySearchToLogCR</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:InqAbtEntitySearchToLogCR</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>LogCRFromInqAbtEntitySearch</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:InqAbtEntitySearchToLogCR</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>InqAbtEntitySearchToMaintainEntity</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">
+			customns:InqAbtEntitySearchToMaintainEntity</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>MaintainEntityFromInqAbtEntitySearch</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">
+			customns:InqAbtEntitySearchToMaintainEntity</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>ReassignCRToEntitySearch</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:ReassignCRToEntitySearch</alias>
+		<value-type>
+			com.acs.enterprise.common.program.contactmanagement.common.vo.CorrespondenceSearchCriteriaVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>EntitySearchFromReassignCR</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:ReassignCRToEntitySearch</alias>
+		<value-type>
+			com.acs.enterprise.common.program.contactmanagement.common.vo.CorrespondenceSearchCriteriaVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>CREntitySearchToMaintainEntity</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:CREntitySearchToMaintainEntity</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>MaintainEntityFromCREntitySearch</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:CREntitySearchToMaintainEntity</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>CRSearchToEntitySearch</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:CRSearchToEntitySearch</alias>
+		<value-type>
+			com.acs.enterprise.common.program.contactmanagement.common.vo.CorrespondenceSearchCriteriaVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>EntitySearchFromCRSearch</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:CRSearchToEntitySearch</alias>
+		<value-type>
+			com.acs.enterprise.common.program.contactmanagement.common.vo.CorrespondenceSearchCriteriaVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>EntitySearchToCRLog</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:EntitySearchToCRLog</alias>
+		<value-type>com.acs.enterprise.common.view.vo.WireEventDataCarrierVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>CRLogFromEntitySearch</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:EntitySearchToCRLog</alias>
+		<value-type>com.acs.enterprise.common.view.vo.WireEventDataCarrierVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>EntitySearchToCRSearch</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:EntitySearchToCRSearch</alias>
+		<value-type>com.acs.enterprise.common.view.vo.WireEventDataCarrierVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>CRSearchFromEntitySearch</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:EntitySearchToCRSearch</alias>
+		<value-type>com.acs.enterprise.common.view.vo.WireEventDataCarrierVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>MaintainEntityToCRLog_Primary</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:MaintainEntityToCRLog_Primary</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>CRLogFromMaintainEntity_Primary</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:MaintainEntityToCRLog_Primary</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>MaintainEntityToCRLog_Inquiry</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:MaintainEntityToCRLog_Inquiry</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>CRLogFromMaintainEntity_Inquiry</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:MaintainEntityToCRLog_Inquiry</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>LogCRFromMyTasksMyCRs</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:MyTaskToCrSK</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>ClaimLogCRFromMyTaskGroupCR</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:MyTaskGroupCRToClaimLogCR</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>MyTasksMyCRsToLogCR</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:MyTaskToCrSK</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>MyTasksMyCaseRecordsToLogCase</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:MyTaskToCaseSK</alias>
+		<value-type>com.acs.enterprise.common.view.vo.CommonCMCaseDetailsVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>MyTasksGroupCRsToClaimLogCR</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:MyTaskGroupCRToClaimLogCR</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>MyTasksGroupCaseRecordsToClaimLogCase</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">
+			customns:MyTasksGroupCaseRecordToClaimLogCase</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>MyTasksAlertsToLetterGeneration</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:MyTasksAlertsToLetterGeneration</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>MyTasksAlertsToTPLRecovery</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:MyTasksAlertsToTPLRecovery</alias>
+		<value-type>
+			com.acs.enterprise.mmis.operations.tpladministration.common.vo.TPLRecoverySearchResultVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>MyTasksAlertsToSA</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:MyTasksAlertsToSA</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>GlobalCaseSearchToLogCase</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:GlobalCaseSearchToLogCase</alias>
+		<value-type>com.acs.enterprise.common.view.vo.CommonCMCaseDetailsVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>MaintainEntityToEntitySearch</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:MaintainEntityToEntitySearch</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>MaintainEntityFromEntitySearch</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:EntitySearchToMaintainEntity</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>MaintainEntityFromCaseEntitySearch</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">
+			customns:CaseEntitySearchToMaintainEntity</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>MaintainEntityFromInqAbtCaseEntitySearch</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">
+			customns:MaintainEntityFromInqAbtCaseEntitySearch</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>MaintainEntityFromTPLHIPP</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:TPLHIPPToMaintainEntity</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>MaintainEntityToLogCase</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:MaintainEntityToLogCase</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>MaintainEntityToInquiryLogCase</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:MaintainEntityToInquiryLogCase</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>MaintainEntityToCREntitySearch</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:MaintainEntityToCREntitySearch</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>ProcessEntitySearchToSearchCase</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:EntitySearchToSearchCase</alias>
+		<value-type>com.acs.enterprise.common.program.contactmanagement.common.vo.EntitySearchCriteriaVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>EntitySearchToLogCase</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:EntitySearchToLogCase</alias>
+		<value-type>com.acs.enterprise.common.program.contactmanagement.common.vo.EntitySearchCriteriaVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>FromEntitySearchToLogCase</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:EntitySearchToLogCase</alias>
+		<value-type>java.util.Map</value-type>
+	</event-definition>
+	<event-definition>
+		<name>EntitySearchFromCaseDetails</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:CaseDetailsToEntitySearch</alias>
+		<value-type>
+			com.acs.enterprise.common.program.contactmanagement.common.vo.CaseRecordSearchCriteriaVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>EntitySearchFromLogCase</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:LogCaseToEntitySearch</alias>
+		<value-type>
+			com.acs.enterprise.common.program.contactmanagement.common.vo.CaseRecordSearchCriteriaVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>LogCRToEntitySearch</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:LogCRToEntitySearch</alias>
+		<value-type>
+			com.acs.enterprise.common.program.contactmanagement.common.vo.CorrespondenceSearchCriteriaVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>EntitySearchFromLogCR</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:LogCRToEntitySearch</alias>
+		<value-type>
+			com.acs.enterprise.common.program.contactmanagement.common.vo.CorrespondenceSearchCriteriaVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>EntitySearchFromMaintainEntity</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:MaintainEntityToEntitySearch</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>EntitySearchToMaintainEntity</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">
+			customns:EntitySearchToMaintainEntity</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>EntitySearchToTPLCarrierDetails</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:EntitySearchToTPLCarrierDetails</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>EntitySearchToProviderMnts</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:EntitySearchToProviderMnts</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>EntitySearchToMemberDetails</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:EntitySearchToMemberDetails</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>CRSearchFromAddAppeals</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:AddAppealsToCRSearch</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>CRSearchFromMemAppealInq</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:MemAppealInqToCRSearch</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>CRLogFromLetterGen</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:LetterGenToCRLog</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>CRLogFromDocRepository</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:DocRepositoryToCRLog</alias>
+		<value-type>
+			com.acs.enterprise.common.cots.edms.application.common.vo.EnterpriseEDMSSearchResultsVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>LogCorrespondenceFromLogCase</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:LogCaseToLogCorrespondence</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>LogCorrespondenceToDocRepository</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:LogCorrespondenceToDocRepository</alias>
+		<value-type>
+			com.acs.enterprise.common.cots.edms.application.common.vo.EnterpriseEDMSSearchCriteriaVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>LogCorrespondenceToLetGeneration_VO</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">
+			customns:LogCorrespondenceToLetGeneration_VO</alias>
+		<value-type>
+			com.acs.enterprise.common.cots.lettergeneration.vo.CommonLetterInputVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>LogCorrespondenceToLetGeneration_String</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">
+			customns:LogCorrespondenceToLetGeneration_String</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>LogCorrespondenceToLogCase</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:LogCorrespondenceToLogCase</alias>
+		<value-type>
+			com.acs.enterprise.common.program.contactmanagement.view.vo.CorrespondenceRecordVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>CREntitySearchFromMaintainEntity</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:MaintainEntityToCREntitySearch</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<description>Inquire about Appeals for the Member passed in on
+			the event</description>
+		<name>InquireMemberAppeals</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common.view.vo">customns:CommonMemberDetailsVO</alias>
+		<value-type>com.acs.enterprise.common.view.vo.CommonMemberDetailsVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>MaintainEntity</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:entityDetails</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>MaintainEntityID</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:MaintainEntityID</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>LogCaseMaintainInquirySearchId</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:LogCaseMaintainInquirySearchId</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>CMCaseSearchDataType</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:CMCaseSearchDataType</alias>
+		<value-type>com.acs.enterprise.common.view.vo.CommonCMCaseDetailsVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>CaseEntityDetails</name>
+		<alias xmlns:customns="http://coma.acs.enterprise.common">customns:CaseEntityDetails</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>inqAbtCaseEntityDetailsDataType</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:inqAbtCaseEntityDetailsDataType</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>LogCasePage</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:LogCasePage</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>CaseSk</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:CaseSk</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>EntSrchtoLogCaseDataType</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:EntSrchtoLogCaseDataType</alias>
+		<value-type>java.util.Map</value-type>
+	</event-definition>
+	<event-definition>
+		<name>MemberAppealsCMCaseSearchDataType</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:CMCaseSearchDataType</alias>
+		<value-type>com.acs.enterprise.common.view.vo.CommonCMCaseDetailsVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>DentalTcnInfo</name>
+		<alias xmlns:customns="http://com.acs.enterprise.mmis">
+		customns:ClaimEntryToClaimCorrDent_List</alias>
+		<value-type>com.acs.enterprise.common.view.vo.WireEventDataCarrierVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>InstitutionalTcnInfo</name>
+		<alias xmlns:customns="http://com.acs.enterprise.mmis">
+		customns:ClaimEntryToClaimCorrInst_List</alias>
+		<value-type>com.acs.enterprise.common.view.vo.WireEventDataCarrierVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>ProfessionalTcnInfo</name>
+		<alias xmlns:customns="http://com.acs.enterprise.mmis">
+		customns:ClaimEntryToClaimCorrProf_List</alias>
+		<value-type>com.acs.enterprise.common.view.vo.WireEventDataCarrierVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>VoidReplaceTcnInfo</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:VoidReplaceTcnInfo</alias>
+		<value-type>com.acs.enterprise.common.view.vo.WireEventDataCarrierVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>CMMemberSummaryType</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:CMMemberSummaryType</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>CaseTrackingAppealDatatype</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:CaseTrackingAppealDatatype</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>MemberAppealsServiceAuthInquiry</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:MemberAppealsServiceAuthInquiry</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>LogCaseinqAbtCaseEntityDetailsDataType</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:inqAbtCaseEntityDetailsDataType</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>InquiryAboutCaseEntityAddEntity</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">
+			customns:MaintainEntityFromInqAbtCaseEntitySearch</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>SearchCaseCMCaseSearchDataType</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:CMCaseSearchDataType</alias>
+		<value-type>com.acs.enterprise.common.view.vo.CommonCMCaseDetailsVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>MemberLogCase</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:MemberLogCase</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>CaseTrackingDatatype</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:CaseTrackingDatatype</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>SearchCaseCaseTrackingAppealDatatype</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:CaseTrackingAppealDatatype</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>ProviderAppealsDentalTcnInfo</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:DentalTcnInfo</alias>
+		<value-type>com.acs.enterprise.common.view.vo.WireEventDataCarrierVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>ProviderAppealsInstitutionalTcnInfo</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:InstitutionalTcnInfo</alias>
+		<value-type>com.acs.enterprise.common.view.vo.WireEventDataCarrierVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>ProviderAppealsProfessionalTcnInfo</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:ProfessionalTcnInfo</alias>
+		<value-type>com.acs.enterprise.common.view.vo.WireEventDataCarrierVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>ProviderAppealsVoidReplaceTcnInfo</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:VoidReplaceTcnInfo</alias>
+		<value-type>com.acs.enterprise.common.view.vo.WireEventDataCarrierVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>ProviderAppealsDatatype</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:ProviderAppealsDatatype</alias>
+		<value-type>com.acs.enterprise.common.view.vo.CommonProviderDetailsVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>ProviderAppealsServiceAuthInquiry</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:ServiceAuthInquiry</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>LogCaseAddAppealDetailsDataType</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:AddAppealDetailsDataType</alias>
+		<value-type>com.acs.enterprise.common.view.vo.CommonCMCaseDetailsVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>LogCaseCMCaseSearchDataType</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:CMCaseSearchDataType</alias>
+		<value-type>com.acs.enterprise.common.view.vo.CommonCMCaseDetailsVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>EntityToCaseEntityDetails</name>
+		<alias xmlns:customns="http://coma.acs.enterprise.common">customns:CaseEntityDetails</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>ProcessMyDatatype</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:MyDatatype</alias>
+		<value-type>
+			com.acs.enterprise.common.program.contactmanagement.common.vo.CaseRecordSearchCriteriaVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>EntitySearchToMaintain</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:AddEntity</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>EntitySearchToSearchCase</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:CaseEntitySearchToSearchCase</alias>
+		<value-type>
+			com.acs.enterprise.common.program.contactmanagement.common.vo.EntitySearchCriteriaVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>CaseEntitySearchToSearchCase</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:CaseEntitySearchToSearchCase</alias>
+		<value-type>
+			com.acs.enterprise.common.program.contactmanagement.common.vo.EntitySearchCriteriaVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>LogCaseToEntitySearch</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:LogCaseToEntitySearch</alias>
+		<value-type>
+			com.acs.enterprise.common.program.contactmanagement.common.vo.CaseRecordSearchCriteriaVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>FromLogCaseToEntitySearch</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:LogCaseToEntitySearch</alias>
+		<value-type>
+			com.acs.enterprise.common.program.contactmanagement.common.vo.CaseRecordSearchCriteriaVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>EntitySearchToLogCase</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:CaseEntitySearchToSearchCase</alias>
+		<value-type>
+			com.acs.enterprise.common.program.contactmanagement.common.vo.EntitySearchCriteriaVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>AddAppealsToServiceAuthDetail</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:ServiceAuthID</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>AddAppealToCorrespondSK</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:AppealToCorrespondenceSK</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>AddAppealToSearchCase</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:appealToSearchCase</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>AddAppealToInstitonalClaims</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:AddAppealToInstitonalClaims</alias>
+		<value-type>com.acs.enterprise.common.view.vo.WireEventDataCarrierVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>AddAppealToDentalClaim</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:AppealToDentailClaim</alias>
+		<value-type>com.acs.enterprise.common.view.vo.WireEventDataCarrierVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>AddAppealToServicsAuthInquiry</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:AppealsToServiceAuthInquiry</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>AddAppealsToVoidReplaceTcn</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:AppealsToVoidReplaceTcn</alias>
+		<value-type>com.acs.enterprise.common.view.vo.WireEventDataCarrierVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>AddAppealsToProfessionalTcn</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:AppealsToProfessionalTcn</alias>
+		<value-type>com.acs.enterprise.common.view.vo.WireEventDataCarrierVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>LogCaseToLetterGenerationVO</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:LogCaseToLetterGenerationVO</alias>
+		<value-type>
+			com.acs.enterprise.common.cots.lettergeneration.vo.CommonLetterInputVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>LogCaseToAddAppeals</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:AddAppealDetailsDataType</alias>
+		<value-type>com.acs.enterprise.common.view.vo.CommonCMCaseDetailsVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>LogCaseToLogCorrespondence</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:LogCaseToLogCorrespondence</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>LogCaseToLetterGenerationCaseData</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:LetterGenerationCaseData</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>LogCaseToEDMS</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:logCaseEDMSSearchResultsDataType</alias>
+		<value-type>
+			com.acs.enterprise.common.cots.edms.application.common.vo.EnterpriseEDMSSearchCriteriaVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>ContactMaintainEntityToLogCase</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:MaintainEntityToLogCase</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>EDMSToLogCase</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:EDMSToLogCase</alias>
+		<value-type>
+			com.acs.enterprise.common.cots.edms.application.common.vo.EnterpriseEDMSSearchResultsVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>LetterGenerationToLogCase</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:LetterGenerationToLogCase</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>MytaskToLogCase</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:MyTaskToCaseSK</alias>
+		<value-type>com.acs.enterprise.common.view.vo.CommonCMCaseDetailsVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>MyTasksGroupCaseRecordsToLogCase</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">
+			customns:MyTasksGroupCaseRecordToClaimLogCase</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>GlobalCasetoLogCase</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:GlobalCaseSearchToLogCase</alias>
+		<value-type>com.acs.enterprise.common.view.vo.CommonCMCaseDetailsVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>CorrespondenceLogToLogCase</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:LogCorrespondenceToLogCase</alias>
+		<value-type>
+			com.acs.enterprise.common.program.contactmanagement.view.vo.CorrespondenceRecordVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>MemberAppealsSearchType</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:MemberAppealsSearchType</alias>
+		<value-type>com.acs.enterprise.common.view.vo.CommonMemberDetailsVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>MSQResetType</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:MSQResetType</alias>
+		<value-type>com.acs.enterprise.common.view.vo.CommonMemberDetailsVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>LogCaseToProviderAppeals</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:LogCaseToAddAppeal</alias>
+		<value-type>com.acs.enterprise.common.view.vo.CommonCMCaseDetailsVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>MemAppealInqTOCRSearch</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:MemAppealInqToCRSearch</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>AddAppealsToCRSearch</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:AddAppealsToCRSearch</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<description>This is the target portlet and source is MemberSearch</description>
+		<name>ProcessEventFromMemberSearch</name>
+		<alias xmlns:customns="http://com.acs.enterprise.member">
+			customns:sendMemberSearchToContMgmtMemberAppealsInquiryToEvent</alias>
+		<value-type>com.acs.enterprise.common.view.vo.CommonMemberDetailsVO</value-type>
+	</event-definition>
+	<event-definition>
+		<description>this is source and its target is Member Details
+			Maintenance</description>
+		<name>ContactEntitySearchEntityMemDetailsToMemInfMnts</name>
+		<alias xmlns:customns="http://com.acs.enterprise.member">
+			customns:contactEntitySearchEntityMemDetailsToMemInfMnts</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>fromMemberDetailsMaintenanceToCase</name>
+		<alias xmlns:customns="http://com.acs.enterprise.member">customns:MemberDetailsMaintenanceToCase</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>fromMemberDetailsMaintenanceToCorrespondence</name>
+		<alias xmlns:customns="http://com.acs.enterprise.member">
+			customns:MemberDetailsMaintenanceToCorrespondence</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>fromMemberDetailsMaintenanceToMemAppealsInq</name>
+		<alias xmlns:customns="http://com.acs.enterprise.member">
+			customns:MemberDetailsMaintenanceToMemAppealsInq</alias>
+		<value-type>com.acs.enterprise.common.view.vo.CommonMemberDetailsVO</value-type>
+	</event-definition>
+	<event-definition>
+		<description>this is the target portlet MSQResetSearch from Mem
+			Search</description>
+		<name>ProcessMSQResetSearchFromMemSearchEvent</name>
+		<alias xmlns:customns="http://com.acs.enterprise.member">
+			customns:sendMemberSearchToContactManagementMemberAppealInquiryEvent</alias>
+		<value-type>com.acs.enterprise.common.view.vo.CommonMemberDetailsVO</value-type>
+	</event-definition>
+	<event-definition>
+		<description>Event Information is defined For
+			fromSearchDocumentRepositoryToContactEntitySearch</description>
+		<name>FromSearchDocumentRepositoryToContactEntitySearch</name>
+		<alias xmlns:customns="http://com.acs.enterprise.enterprisecommon">
+			customns:SearchDocumentRepositoryToContactEntitySearch</alias>
+		<value-type>
+			com.acs.enterprise.common.program.contactmanagement.common.vo.CorrespondenceSearchCriteriaVO</value-type>
+	</event-definition>
+	<event-definition>
+		<description>Event Information is defined For
+			contactEntitySearchToSearchDocumentRepositoryEvent</description>
+		<name>ContactEntitySearchToSearchDocumentRepositoryEvent</name>
+		<alias xmlns:customns="http://com.acs.enterprise.enterprisecommon">
+			customns:contactEntitySearchToSearchDocumentRepository</alias>
+		<value-type>com.acs.enterprise.common.view.vo.WireEventDataCarrierVO</value-type>
+	</event-definition>
+	<event-definition>
+		<description>source is CM and target is SA</description>
+		<name>ProviderAppealsInquirytoServiceAuthorizationDetail</name>
+		<alias xmlns:customns="http://com.acs.enterprise.mmis.operations">
+			customns:FromServiceAuthorizationDetailtoProviderAppealsInquiry</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<description>source is CM and target is SA</description>
+		<name>MemberAppealsInquirytoServiceAuthorizationDetail</name>
+		<alias xmlns:customns="http://com.acs.enterprise.mmis.operations">
+			customns:FromServiceAuthorizationDetailtoMemberAppealsInquiry</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<description>source is CM Add Appeals and target is SA Detail</description>
+		<name>AddAppealstoServiceAuthorizationDetail</name>
+		<alias xmlns:customns="http://com.acs.enterprise.mmis.operations">
+			customns:FromServiceAuthorizationDetailtoAddAppeals</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<description>source is CM and target is TPL Administration</description>
+		<name>GlobalCaseSearchtoTPLHIPPDetails</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common.program.contactmanagement">customns:GlobalCaseSearchtoTPLHIPPDetails</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<description>source is CM and target is TPLCasDetails</description>
+		<name>GlobalCaseSearchtoTPLRecoveryCaseDetails</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common.program.contactmanagement">
+			customns:GlobalCaseSearchtoTPLRecoveryCaseDetails</alias>
+		<value-type>com.acs.enterprise.mmis.operations.tpladministration.common.vo.TPLRecoverySearchResultVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>PGM_IN_PAInquirytoPGM_IN_LogCasePublishEvent</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">
+			customns:fromPGM_IN_PAInquirytoPGM_IN_LogCase</alias>
+		<value-type>com.acs.enterprise.common.view.vo.CommonCMCaseDetailsVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>fromPGM_IN_PAInquirytoPGM_IN_LogCaseProcessEvent</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">
+			customns:fromPGM_IN_PAInquirytoPGM_IN_LogCase</alias>
+		<value-type>com.acs.enterprise.common.view.vo.CommonCMCaseDetailsVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>
+			fromServiceAuthorizationDetailToMemberAppealsInquiryProcessEvent</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common.program">
+			customns:ServiceAuthorizationDetailToMemberAppealsInquiry</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>fromProviderInquiryToProviderAppealsInquiryProcessEvent</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common.program">
+			customns:fromProviderInquiryToProviderAppealsInquiry</alias>
+		<value-type>com.acs.enterprise.common.view.vo.CommonProviderDetailsVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>ContactMaintainEntityFromSearchCountyBilling</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common.program.contactmanagement">
+			customns:ContactMaintainEntityFromSearchCountyBilling</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>ContactEntitySearchToTradingPartnerMaintenance</name>
+		<alias xmlns:customns="http://com.acs.enterprise.mmis.provider.information">
+		customns:tradingPartnerMID</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>ContactEntitySearchToTradingPartnerEnrollmentApplication</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common.program.contactmanagement">
+			customns:ContactEntitySearchToTradingPartnerEnrollmentApplication</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>ContactEntitySearchToProviderEnrollmentApplication</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common.program.contactmanagement">
+			customns:ContactEntitySearchToProviderEnrollmentApplication</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<description>Event details are defined for
+			fromTPLRecoveryToContactMaintainEntity</description>
+		<name>FromTPLRecoveryToContactMaintainEntity</name>
+		<alias xmlns:customns="http://com.acs.enterprise.mmis.operations">
+			customns:fromTPLRecoveryToContactMaintainEntity</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<description>Events are defined For tplMSQToMemberAppealsInquiry</description>
+		<name>TPLMSQToMemberAppealsInquiry</name>
+		<alias xmlns:customns="http://com.acs.enterprise.mmis.operations">customns:tplMSQToMemberAppealsInquiry</alias>
+		<value-type>com.acs.enterprise.common.view.vo.CommonMemberDetailsVO</value-type>
+	</event-definition>
+	<event-definition>
+		<description>Events are defined For
+			fromTPLMSQToContactCaseDetails</description>
+		<name>FromTPLMSQToContactCaseDetails</name>
+		<alias xmlns:customns="http://com.acs.enterprise.mmis.operations">customns:fromTPLMSQToContactCaseDetails</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<description>source is CM and target is TPLMSQ</description>
+		<name>MyTaskstoTPLMSQ</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common.program.contactmanagement">customns:MyTaskstoTPLMSQ</alias>
+		<value-type>com.acs.enterprise.common.view.vo.CommonMemberDetailsVO</value-type>
+	</event-definition>
+	<event-definition>
+		<description>source is CM and target is TPLPolicyDetail</description>
+		<name>ContactEntitySearchtoTPLPolicyDetail</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common.program.contactmanagement">
+			customns:ContactEntitySearchtoTPLPolicyDetail</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<description>Events are defined For
+			ContactEntitySearchToProviderMnt</description>
+		<name>ContactEntitySearchToProviderMnt</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common.program.contactmanagement">customns:contactEntitySearchToProviderMnt</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<description>Events are defined For LetterGenToNewLogCase</description>
+		<name>LetterGenToNewLogCase</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:fromLetterGenerationToLogCase</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>TRGMaintainEntityToInquiryLogCase</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:MaintainEntityToInquiryLogCase</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>TRGAddAppealToSearchCase</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">
+		customns:appealToSearchCase</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>CaseDetailsToCaseEntitySearch</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:CaseDetailsToCaseEntitySearch</alias>
+		<value-type>
+			 com.acs.enterprise.common.program.contactmanagement.common.vo.CaseRecordSearchCriteriaVO
+		</value-type>
+	</event-definition>
+	<event-definition>
+		<name>CaseEntitySearchFromcaseDetails</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:CaseDetailsToCaseEntitySearch</alias>
+		<value-type>
+			com.acs.enterprise.common.program.contactmanagement.common.vo.CaseRecordSearchCriteriaVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>CaseEntitySearchToMaintainEntity</name>
+		<alias xmlns:customns="http://coma.acs.enterprise.common">customns:CaseEntitySearchToMaintainEntity</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+	<event-definition>
+		<name>LogCaseFromEntitysearch</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:EntitySearchToLogCase</alias>
+		<value-type>com.acs.enterprise.common.program.contactmanagement.common.vo.EntitySearchCriteriaVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>PublishEntitySearchToSearchCase</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">customns:EntitySearchToSearchCase</alias>
+		<value-type>com.acs.enterprise.common.program.contactmanagement.common.vo.EntitySearchCriteriaVO</value-type>
+	</event-definition>
+	<event-definition>
+		<name>ContactEntitysearchToTPEnrollment</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">
+			customns:ContactEntitysearchToTPEnrollment</alias>
+		<value-type>java.lang.String</value-type>
+	</event-definition>
+		<event-definition>
+		<name>TRGLogCaseCMCaseSearchDataType</name>
+		<alias xmlns:customns="http://com.acs.enterprise.common">
+		customns:CMCaseSearchDataType</alias>
+		<value-type>com.acs.enterprise.common.view.vo.CommonCMCaseDetailsVO</value-type>
+	</event-definition>
+		<event-definition>
+			<description>Target portlet that processes memberCorrespondance from TPL</description>
+			<name>ProcessMemberCorrespondanceFromTPLEvent</name>
+			<alias xmlns:customns="http://com.acs.enterprise.mmis.operations.tpladministration">
+			customns:publishMemberCorrespondenceToContactMgmtEvent</alias>
+			<value-type>java.lang.String</value-type>
+		</event-definition>
+		<event-definition>
+			<name>AppealToClaimInquirySearch</name>
+			<alias xmlns:customns="http://com.acs.enterprise.contactmanagement">
+			customns:AppealToClaimInquirySearch</alias>
+			<value-type>com.acs.enterprise.mmis.operations.common.vo.ClaimInquirySearchResultsVO</value-type>
+		</event-definition>
+		<event-definition>
+			<name>MemberAppealsToClaimsInquirySearch</name>
+			<alias xmlns:customns="http://com.acs.enterprise.contactmanagement">
+			customns:AppealToClaimInquirySearch</alias>
+			<value-type>com.acs.enterprise.mmis.operations.common.vo.ClaimInquirySearchResultsVO</value-type>
+		</event-definition>
+		<event-definition>
+			<name>ProviderAppealsToClaimInquirySearch</name>
+			<alias xmlns:customns="http://com.acs.enterprise.contactmanagement">
+			customns:AppealToClaimInquirySearch</alias>
+			<value-type>com.acs.enterprise.mmis.operations.common.vo.ClaimInquirySearchResultsVO</value-type>
+		</event-definition>
+		<event-definition>
+			<name>TRGLetterGenerationToCorrespondenceSK</name>
+			<alias xmlns:customns="http://com.acs.enterprise.enterprisecommon">
+			customns:LetterGenerationToAddCorrespondence</alias>
+			<value-type>java.lang.String</value-type>
+		</event-definition>
+		<event-definition>
+			<name>SRCSearchEntityReassignCR</name>
+			<alias xmlns:customns="http://com.acs.enterprise.contactmanagement">
+			customns:SearchEntityReassignCR</alias>
+			<value-type>com.acs.enterprise.common.view.vo.WireEventDataCarrierVO</value-type>
+		</event-definition>
+		<event-definition>
+			<name>TRGSearchEntityReassignCR</name>
+			<alias xmlns:customns="http://com.acs.enterprise.contactmanagement">
+			customns:SearchEntityReassignCR</alias>
+			<value-type>com.acs.enterprise.common.view.vo.WireEventDataCarrierVO</value-type>
+		</event-definition>
+		<!--<event-definition>
+			<name>EntitySearchToPrvEnrollmentPortlet</name>
+			<alias xmlns:customns="http://com.acs.enterprise.common.program.contactManagement">
+			customns:EntitySearchToPrvEnrollmentPortlet</alias>
+			<value-type>java.lang.String</value-type>
+		</event-definition>-->
+		<!-- for defect ESPRD00802462 -->
+		<event-definition>
+			<name>EntitySearchToCRLogcaseSearch</name>
+			<alias xmlns:customns="http://com.acs.enterprise.common">customns:EntitySearchToCRLOGSearch</alias>
+			<value-type>com.acs.enterprise.common.view.vo.WireEventDataCarrierVO</value-type>
+		</event-definition>
+		<event-definition>
+			<name>EntitySearchToLogCaseAssociatedCR</name>
+			<alias xmlns:customns="http://com.acs.enterprise.common">customns:EntitySearchToCRLOGSearch</alias>
+			<value-type>com.acs.enterprise.common.view.vo.WireEventDataCarrierVO</value-type>
+		</event-definition>
+</portlet-app>

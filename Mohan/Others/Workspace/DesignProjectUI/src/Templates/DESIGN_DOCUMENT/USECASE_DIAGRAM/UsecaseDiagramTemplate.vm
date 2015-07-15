@@ -1,0 +1,20 @@
+@startuml
+	title <size:20><b><u>$SequenceDO.sequenceName</u></b></size>
+	
+    	actor User
+    #if("$!SequenceDO.defaultWebCase" != "")
+		#foreach($sourceEC in $SequenceDO.defaultWebCase.split(","))
+    	User -> ($sourceEC) : HomePage
+		#end
+	#else
+    	User -> ($SequenceDO.messageLinesDOList.get(0).lineFrom) : HomePage
+    #end
+    
+    #set($i = 0)
+    #foreach($methodCall in $SequenceDO.messageLinesDOList)
+    	($methodCall.lineFrom) #printHyphenIncrementally($i)> ($methodCall.lineTo)
+    	#set($i = $i + 1)
+    #end
+@enduml
+
+#macro(printHyphenIncrementally $i)#set($h=$i/2)#if($h>0)#foreach($a in [0..$h])-#end#else-#end#end

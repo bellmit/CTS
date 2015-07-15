@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.8.4
+Created-By: pwi3260_26sr2ifx-20120419_02 (SR2) (IBM Corporation)
+

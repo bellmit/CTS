@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<faces-config
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
+   version="2.0">
+	
+		
+	<managed-bean>
+		<managed-bean-name>CategoryControllerBean</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.bean.CategoryControllerBean
+		</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>				
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>CategoryDataBean</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.bean.CategoryDataBean
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+		<managed-property>
+			<property-name>categoryVO</property-name>
+			<value>#{CategoryVO}</value>
+		</managed-property>				
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>CategoryVO</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.vo.CategoryVO
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<navigation-rule>
+		<from-view-id>/jsp/maintaincategory/maintainCategory.jsp</from-view-id>
+		<navigation-case>
+			<from-action>#{CategoryControllerBean.addCategory}</from-action>
+			<from-outcome>rendersuccess</from-outcome>
+			<to-view-id>/jsp/maintaincategory/maintainCategory.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{CategoryControllerBean.getCategoryDetails}</from-action>
+			<from-outcome>rendersuccess</from-outcome>
+			<to-view-id>/jsp/maintaincategory/maintainCategory.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{CategoryControllerBean.createCategory}</from-action>
+			<from-outcome>rendersuccess</from-outcome>
+			<to-view-id>/jsp/maintaincategory/maintainCategory.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{CategoryControllerBean.updateCategory}</from-action>
+			<from-outcome>rendersuccess</from-outcome>
+			<to-view-id>/jsp/maintaincategory/maintainCategory.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{CategoryControllerBean.deleteCategory}</from-action>
+			<from-outcome>rendersuccess</from-outcome>
+			<to-view-id>/jsp/maintaincategory/maintainCategory.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{CategoryControllerBean.cancelCategory}</from-action>
+			<from-outcome>rendersuccess</from-outcome>
+			<to-view-id>/jsp/maintaincategory/maintainCategory.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{CategoryControllerBean.resetCategory}</from-action>
+			<from-outcome>rendersuccess</from-outcome>
+			<to-view-id>/jsp/maintaincategory/maintainCategory.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{CategoryControllerBean.resetEditedCategory}</from-action>
+			<from-outcome>rendersuccess</from-outcome>
+			<to-view-id>/jsp/maintaincategory/maintainCategory.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<application>
+		
+		<locale-config>
+
+			<default-locale>en</default-locale>
+
+			<supported-locale>es</supported-locale>
+
+		</locale-config>
+
+		<message-bundle>com.acs.enterprise.common.program.contactmanagement.view.nl.PGM_IN_ContactCategoryMaintenance</message-bundle>
+
+	</application>
+	
+</faces-config>

@@ -1,0 +1,157 @@
+/**
+ * Copyright (c) 2006 Affiliated Computer Services, Inc.
+ */
+
+package com.acs.enterprise.common.rules.delegate;
+
+import java.rmi.RemoteException;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.ejb.CreateException;
+
+import com.acs.enterprise.common.base.common.delegate.EnterpriseBaseDelegate;
+import com.acs.enterprise.common.rules.exception.EnterpriseRulesException;
+import com.acs.enterprise.common.rules.service.EnterpriseRuleService;
+import com.acs.enterprise.common.rules.service.EnterpriseRuleServiceHome;
+import com.acs.enterprise.common.util.helper.EnterpriseMessageConstants;
+import com.acs.enterprise.common.util.logger.EnterpriseLogFactory;
+import com.acs.enterprise.common.util.logger.EnterpriseLogger;
+import com.acs.timing.TraceToken;
+import com.xerox.enterprise.ghs.mmis.rif.common.exception.RIFException;
+import com.xerox.enterprise.ghs.mmis.rif.core.RulesContext;
+import com.xerox.enterprise.ghs.mmis.rif.core.RulesResult;
+import com.xerox.enterprise.ghs.mmis.rif.core.api.RulesManager;
+
+/**
+ * This class extends the EnterpriseBaseDelegate to hide the underlying
+ * implementation details of the business service.
+ *
+ * @author Wipro
+ */
+public class EnterpriseRuleDelegate
+        extends EnterpriseBaseDelegate
+{
+
+    /**
+     * Holds EnterpriseLogger Instance.
+     */
+    private static final EnterpriseLogger LOG = EnterpriseLogFactory
+            .getLogger(EnterpriseRuleDelegate.class);
+
+    /**
+     * Holds Rules JNDI name.
+     */
+    private static final String RULES_JNDI_REFERENCENAME = "EnterpriseRuleService";
+
+    /*
+     * Holds RIF calling Invocation points.
+     */
+    private static final Set<String> RULES_INVOCATION_LIST ;
+    
+    /*
+     * Static block to add RIF invocation entry
+     * to List
+     */
+    static
+    {
+    	RULES_INVOCATION_LIST=new HashSet<String>();
+    	RULES_INVOCATION_LIST.add("invokeGetSAEditsFn");
+    	RULES_INVOCATION_LIST.add("invokePrvMntRulesInvokeFn");
+    	RULES_INVOCATION_LIST.add("PrvEnrRulesInvokeFn");    	
+    	RULES_INVOCATION_LIST.add("invokeOprClmAdjDataValAllRulesInvokeFn");
+    }
+    /**
+     * This method is invocation point for the rule engine.First parameter is
+     * the array of Objects which contains XML Documents.
+     *
+     * @param arguments :
+     *            This parameter contains array of XML Documents.
+     * @param invocationPoint :
+     *            This parameter contains the invocationPoint of rule engine.
+     * @param context :
+     *            This parameter specifies the context of the rule.
+     * @param subsystemID :
+     *            It specifies is it MMIS,EB or POS.
+     * @return Object : It contains the RulesResult object.
+     * @throws EnterpriseRulesException : Exception captures the errorCode and
+     * 			  error message.
+     */
+    public Object invokeRules(final Object[] arguments,final String invocationPoint,
+            final String context,final int subsystemID)
+            throws EnterpriseRulesException
+    {
+        LOG.info("Entry in EnterpriseRuleDelegate");
+        TraceToken tt = null;
+     //   tt = TraceTimeManager.startMethod(invocationPoint);
+
+        long entryTime = System.currentTimeMillis();
+        EnterpriseRuleService _server = null;
+        EnterpriseRuleServiceHome serverHome = null;
+        Object returnValue = null;
+        
+        if(RULES_INVOCATION_LIST.contains(invocationPoint))
+        {
+        	LOG.info("Blaze Rule call via RIF" );
+        	RulesContext ric = new RulesContext();
+        	ric.addObject(arguments);
+    		ric.addObject(context);
+    		ric.addObject(subsystemID);
+    		ric.addObject(invocationPoint);
+    		ric.addObject(RULES_JNDI_REFERENCENAME);
+    		RulesResult rulesResult = null;
+
+    		try {
+    			RulesManager rulesManager = RulesManager.getRIFInstance();
+    			rulesResult = rulesManager.execute(invocationPoint, ric);
+    			returnValue = rulesResult.getReturnValue();
+    		} catch (RIFException re) {
+    			LOG.error("Exception in RIF:"+re.getErrorCode() ,re);	
+	            throw new EnterpriseRulesException(re.getErrorCode(), re.getMessage());
+    		}
+    		LOG.debug("After Blaze call" );
+        }
+        else
+        {
+        	LOG.info("Blaze Rule called directly" );
+	        try
+	        {
+	        	//Added comment for Jupiter code review analysis
+	            serverHome = (EnterpriseRuleServiceHome) getServiceHome(
+	                    RULES_JNDI_REFERENCENAME, EnterpriseRuleServiceHome.class);
+	            _server = (EnterpriseRuleService) serverHome.create();
+	            returnValue = _server.invokeRulesService(arguments,
+	                    invocationPoint, context, subsystemID);
+	        }
+	        catch (EnterpriseRulesException e)
+	        {
+	            LOG.error("Exception in Service creation" ,e);
+	            throw new EnterpriseRulesException(e.getErrorCode(), e.getMessage());
+	        }
+	        catch (RemoteException e)
+	        {
+	            LOG.error("Exception in Service creation",e);
+	            throw new EnterpriseRulesException(
+	                    EnterpriseMessageConstants.ERR_SW_SEVERE_FAILURE, e
+	                            .getMessage());
+	        }
+	        catch (CreateException e)
+	        {
+	            LOG.error("Exception in Service creation",e);
+	            throw new EnterpriseRulesException(
+	                    EnterpriseMessageConstants.ERR_SW_SEVERE_FAILURE, e
+	                            .getMessage());
+	        }
+        }
+        long exitTime = System.currentTimeMillis();
+
+         // TraceTimeManager.endMethod(tt);
+        if(LOG.isDebugEnabled())
+        {
+	        LOG.debug("EnterpriseRuleDelegate" + "#" + " invokeRules " + invocationPoint +
+	                + (exitTime - entryTime));
+	        LOG.info("Exit in EnterpriseRuleDelegate");
+        }
+        return returnValue;
+    }
+}

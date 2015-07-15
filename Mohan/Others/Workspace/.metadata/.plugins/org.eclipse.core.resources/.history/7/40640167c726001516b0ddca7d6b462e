@@ -1,0 +1,61 @@
+package com.xerox.enterprise.ghs.mmis.rif.core;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
+public class SAXConfigHandler extends DefaultHandler {
+	public void startElement(String uri, String localName,String qName, 
+            Attributes attributes) throws SAXException {
+
+	String ruleId = null;
+	boolean name = false;
+	boolean type = false;
+	boolean implement = false;
+	boolean effStartDate = false;
+	boolean effEndDate = false;
+	boolean MITAMapping = false;
+	boolean redThresInms = false;
+	boolean amberThresInms = false;
+		
+	System.out.println("Start Element :" + qName);
+	if ("Rule".equalsIgnoreCase(qName)) {            
+        ruleId = attributes.getValue("id");            
+       
+    } else if (RIFConstants.RULE_NAME_ATTR.equalsIgnoreCase(qName)) {            
+        name = true;
+    } else if (RIFConstants.RULE_TYPE_ATTR.equalsIgnoreCase(qName)) {
+        type = true;
+    } else if (RIFConstants.RULE_IMPLEMENT_ATTR.equalsIgnoreCase(qName)) {
+        implement = true;
+    } else if (RIFConstants.RULE_EFFSTARTDATE_ATTR.equalsIgnoreCase(qName)) {
+    	effStartDate = true;
+    } else if (RIFConstants.RULE_EFFENDDATE_ATTR.equalsIgnoreCase(qName)) {
+		
+		effEndDate = true;
+	} else if (RIFConstants.RULE_MITAMAPPING_ATTR.equalsIgnoreCase(qName)) {
+		MITAMapping = true;
+	} else if (RIFConstants.RULE_REDTHRES_ATTR.equalsIgnoreCase(qName)) {
+		redThresInms = true;
+	} else if (RIFConstants.RULE_AMBERTHRES_ATTR.equalsIgnoreCase(qName)) {
+		amberThresInms = true;
+	}
+
+	
+}
+
+public void endElement(String uri, String localName,
+	String qName) throws SAXException {
+
+	System.out.println("End Element :" + qName);
+
+}
+
+public void characters(char ch[], int start, int length) throws SAXException {
+
+	
+		System.out.println("Char : " + new String(ch, start, length));
+	
+}
+
+}

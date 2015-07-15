@@ -1,0 +1,25 @@
+@startuml
+	title <size:20><b>Component Diagram for <u>$SequenceDO.sequenceName</u> webcase</b></size>
+	
+    #foreach($methodCall in $SequenceDO.messageLinesDOList)
+		
+		#if($methodCall.typeOfFrom == "Screen")
+			cloud $methodCall.lineFrom
+		#elseif($methodCall.typeOfFrom.contains("WebCase"))
+			node $methodCall.lineFrom
+		#end
+		
+		#if($methodCall.typeOfTo.contains("DataService"))
+			database $methodCall.lineTo
+		#elseif($methodCall.typeOfTo == "Screen")
+			cloud $methodCall.lineTo
+		#elseif($methodCall.typeOfTo.contains("WebCase"))
+			node $methodCall.lineTo
+		#end
+		
+    	[$methodCall.lineFrom] #printHyphens($methodCall.typeOfFrom $methodCall.typeOfTo)> [$methodCall.lineTo]
+    #end
+
+@enduml
+
+#macro(printHyphens $sourceType $targetType)#if($sourceType=="Screen"||$sourceType.contains("WebCase")||$targetType=="Screen"||$targetType.contains("WebCase"))-#end-#end

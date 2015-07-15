@@ -1,0 +1,66 @@
+package com.xerox.enterprise.ghs.mmis.rif.common.util;
+
+import java.io.IOException;
+import java.io.InputStream;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.xml.sax.SAXException;
+
+import com.xerox.enterprise.ghs.mmis.rif.common.exception.RIFException;
+
+
+public class RuleTurnOnOffUtility {
+
+	private static RulesXMLConfigReader configReader;
+	private static SAXParserFactory saxParserFactory;
+	
+	private static SAXParser saxParser;
+	
+	
+	public RuleTurnOnOffUtility() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		System.out.println("RuleId:"+args[0]);
+		configReader = new RulesXMLConfigReader();
+		saxParser = getSaxParser(); 
+		loadRulesConfigfromXML();	
+	}
+
+private static SAXParser getSaxParser() {
+	saxParserFactory = SAXParserFactory.newInstance();
+		// TODO Auto-generated method stub
+		try {
+			saxParser= saxParserFactory.newSAXParser();
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		};
+		return saxParser;
+	}
+
+private static void loadRulesConfigfromXML()throws RIFException {
+		
+        try {
+        	System.out.println("Xml Path:"+Thread.currentThread().getContextClassLoader().
+        			getResource("Rules-Metadata.xml").getFile());
+        	InputStream is=Thread.currentThread().getContextClassLoader().
+        			getResource("Rules-Metadata.xml").openStream();       	
+        	saxParser.parse(is, configReader);
+		} catch (SAXException e) {			
+			System.out.println("SAX configuration exception occured while parsing Rules Metadata file"+ e);
+			throw new RIFException(e);
+		} catch (IOException ioe) {			
+			LOG.error("IO exception occured while parsing Rules Metadata file", ioe);
+			throw new RIFException(ioe);
+		}
+	}
+}

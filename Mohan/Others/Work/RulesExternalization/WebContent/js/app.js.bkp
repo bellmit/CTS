@@ -1,0 +1,180 @@
+App = Ember.Application.create({
+	    LOG_TRANSITIONS: true
+});
+
+
+App.Router.map( function() {
+    this.resource( 'index', { path: '/' } );
+    this.resource('about', { path: '/about' });
+    this.resource('fav', { path: '/fav' });
+    this.resource('memberSearch', { path: '/memberSearch' });    
+    
+    
+});
+
+
+App.Person = Ember.Object.extend({
+    firstName: null,
+    lastName: null,
+    init: function() {
+        var firstName = this.get('firstName');
+        var lastName = this.get('lastName');
+        //alert(firstName + ', '+lastName);
+    },
+    fullName: function() {
+        return this.get('firstName') + ' ' + this.get('lastName');
+    }.property('firstName', 'lastName')
+});
+
+var ironMan = App.Person.create({
+    firstName: "Tony",
+    lastName:  "Stark"
+});
+
+console.log(' Test Value '+ironMan.get('fullName')); // "Tony Stark"
+
+
+
+
+App.FavRoute = Ember.Route.extend({
+
+    model: function(){
+        var people = App.Person.create({
+            firstName: "Ramkumar",
+            lastName:  "Solaiyan"
+        });
+        return people;
+    }
+
+});
+
+App.AboutRoute = Ember.Route.extend({
+
+});
+
+App.AboutController = Ember.ObjectController.extend({
+    fullPersonName: function() {
+
+        var people = App.Person.create({
+                firstName: "Ramkumar",
+                lastName: "Solaiyan"
+            });
+        return people.get('fullName');
+
+    }.property('model.fullName')
+
+});
+
+App.Item = Ember.Object.extend();
+
+
+
+
+App.Item.reopenClass({
+    all: function() {
+        return $.getJSON("http://api.ihackernews.com/page?format=jsonp&callback=?").then(function(response) {
+            var items = [];
+            response.items.forEach(
+                function (item) {
+                    items.push( App.Item.create(item) );
+                });
+            return items;
+        });
+    }
+});
+
+App.IndexRoute = Ember.Route.extend({
+    model: function() {
+        return App.Item.all();
+    }
+});
+
+App.IndexController = Ember.ArrayController.extend({
+    headerName: 'Welcome ...',
+    appVersion:  2.1
+});
+
+
+
+
+//memberSearch
+
+App.MemberSearchResultDO = Ember.Object.extend({
+        claimNumber:''
+    }
+);
+
+App.MemberSearchResultDO.reopenClass({
+
+    all: function() {
+        return new this,$.getJSON("http://localhost:8080/MemberSupportPortalSpring/MemberSupportServices/1").then(function(response) {
+            console.log(' return of the REST call ');
+            var items = [];
+            items.push(App.MemberSearchResultDO.create({claimNumber:"Title1"}));
+            items.push(App.MemberSearchResultDO.create({claimNumber:"Title2"}));
+//            items.push(App.MemberSearchResultDO.create({claimNumber:"Title3"}));
+//            items.push(App.MemberSearchResultDO.create({claimNumber:"Title4"}));
+//            items.push(App.MemberSearchResultDO.create({claimNumber:"Title5"}));
+//            items.push(App.MemberSearchResultDO.create({claimNumber:"Title6"}));
+//            items.push(App.MemberSearchResultDO.create({claimNumber:"Title7"}));
+//          response.spanList.forEach(
+//                function (memberSearchResultDO) {
+//                    console.log(' dfgdfgdfgdfgdf ');
+//                    console.log('memberSearchResultDO  '+memberSearchResultDO);
+//                    console.log('memberSearchResultDO  claimNumber : '+memberSearchResultDO.get('claimNumber'));
+//
+//                    items.push( App.MemberSearchResultDO.create(memberSearchResultDO) );
+//                });
+            return items;
+        });
+    }
+});
+
+
+App.MemberSearchRoute = Ember.Route.extend({
+    model: function() {
+    	//var d = Ember.RSVP.defer();
+       // Ember.run.later(null, d.resolve, App.MemberSearchResultDO.all(), 3000);
+       // return d.promise;
+       return App.MemberSearchResultDO.all();
+    },
+    actions: {
+    	loading: function() {
+    		var view = this.container.lookup('view:loading').append();
+    	      this.router.one('didTransition', view, 'destroy');
+
+    		
+    		return true;
+        }
+    }
+});
+
+App.MemberSearchController = Ember.ArrayController.extend({
+    headerName: 'Welcome sdfsdfsdfd...',
+    appVersion:  2.1
+});
+
+
+
+//
+//App.LoadingRoute = Ember.Route.extend({
+//    model: function() {
+//       console.log('  loading the json....into LoadingRoute');
+//       //return App.MemberSearchResultDO.all();
+//    },
+//    actions: {
+//    	loading: function(transition, originRoute) {
+//    		console.log('  loading the json....'+transition);
+//    		console.log('  loading the json....'+originRoute);
+//    		
+//    		return true;
+//        }
+//    }
+//});
+
+
+App.LoadingView = Ember.View.extend({
+	  templateName: 'global-loading',
+	  elementId: 'global-loading'
+});
+

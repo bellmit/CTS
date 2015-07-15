@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?><definitions name="SearchCorrespondence_Service" targetNamespace="http://enterprise.ipc" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:portlet="http://www.ibm.com/wps/c2a" xmlns:tns="http://enterprise.ipc" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<types>
+		<xsd:schema targetNamespace="http://enterprise.ipc">
+			<xsd:simpleType name="CorrespondenceSk">
+				<xsd:restriction base="xsd:string"/>
+			</xsd:simpleType>
+			<xsd:simpleType name="MemberCorrespondence">
+				<xsd:restriction base="xsd:string"/>
+			</xsd:simpleType>
+			<xsd:simpleType name="CrspdGenAppealDatatype">
+				<xsd:restriction base="xsd:string"/>
+			</xsd:simpleType>
+			<xsd:complexType name="MyDatatype">
+
+			</xsd:complexType>
+            <xsd:complexType name="EntSrchCrsSrchDataType">
+			</xsd:complexType>			
+			
+            <xsd:complexType name="EntSrchRACrsSrchDataType"/>
+        </xsd:schema>
+	</types>
+	<message name="CorrespondenceSk_Response">
+		<part name="CorrespondenceSk_Output" type="tns:CorrespondenceSk"/>
+		<part name="MyDatatype_Output" type="tns:MyDatatype"/>
+	</message>
+	<message name="MemberCorrespondence_Request">
+		<part name="MemberCorrespondence_Input" type="tns:MemberCorrespondence"/>
+	</message>
+	<message name="CrspdGenAppealDatatype_Request">
+		<part name="CrspdGenAppealDatatype_Input" type="tns:CrspdGenAppealDatatype"/>
+	</message>
+	<message name="EntSrchCrsSrchDataType_Request">		
+		<part name="EntSrchCrsSrchDataType_Input" type="tns:EntSrchCrsSrchDataType"/>	
+	</message>
+    <message name="EntSrchRACrsSrchDataType_Request">
+    <part name="EntSrchRACrsSrchDataType_Input" type="tns:EntSrchRACrsSrchDataType"/>
+  </message>
+    <portType name="SearchCorrespondence_Service">
+		<operation name="SearchCorrespondence">
+			<output message="tns:CorrespondenceSk_Response"/>
+		</operation>
+		<operation name="MemberCorrespondence">
+			<input message="tns:MemberCorrespondence_Request"/>
+		</operation>
+		<operation name="CrspdGenAppeal">
+			<input message="tns:CrspdGenAppealDatatype_Request"/>
+		</operation>
+		<operation name="SearchCorrespondence0">
+			<input message="tns:EntSrchCrsSrchDataType_Request"/>
+		</operation>
+        <operation name="SearchCorrespondence1">
+      <input message="tns:EntSrchRACrsSrchDataType_Request"/>
+    </operation>
+    </portType>
+	<binding name="SearchCorrespondence_Binding" type="tns:SearchCorrespondence_Service">
+		<portlet:binding/>
+		<operation name="SearchCorrespondence">
+			<portlet:action actionNameParameter="SrchCREntSrch_ACTION" name="SrchCREntSrch_SOURCE_ACTION" type="standard"/>
+			<output>
+				<portlet:param boundTo="request-attribute" caption="send.correspondence.sk" name="correspondenceSk" partname="CorrespondenceSk_Output"/>
+				<portlet:param boundTo="request-attribute" class="com.acs.enterprise.common.program.contactmanagement.common.vo.CorrespondenceSearchCriteriaVO" name="CrsSearchCrtVO" partname="MyDatatype_Output"/>
+			</output>
+		</operation>
+		<operation name="MemberCorrespondence">
+			<portlet:action name="receiveMemberCorrespondenceAction" type="standard"/>
+			<input>
+				<portlet:param caption="MemberCorrespondence.Type" name="MemberCorrespondence" partname="MemberCorrespondence_Input"/>
+			</input>
+		</operation>
+		<operation name="CrspdGenAppeal">
+			<portlet:action actionNameParameter="recieve.CrspdGen.AppealSk" name="recieveCrspdGenAppealSk" type="standard"/>
+			<input>
+				<portlet:param boundTo="request-attribute" caption="recieve.crspdgen.appealcaseSk" name="CrspdGenAppealSK" partname="CrspdGenAppealDatatype_Input"/>
+			</input>
+		</operation>
+		<operation name="SearchCorrespondence0">
+			<portlet:action actionNameParameter="EntSrchCrsSrch_ACTION" caption="EntSrchToCrsSrch" description="EntSrchToCrsSrch" name="EntSrchCrsSrch_TARGET_ACTION" type="standard"/>
+			<input>				
+				<portlet:param boundTo="request-attribute" class="java.util.Map" name="entitySearchMap" partname="EntSrchCrsSrchDataType_Input"/>
+			</input>
+		</operation>
+        <operation name="SearchCorrespondence1">
+      <portlet:action actionNameParameter="EntSrchRACrsSrch_ACTION" caption="EntSrchToRACrsSrch" description="EntSrchToRACrsSrch" name="EntSrchRACrsSrch_TARGET_ACTION" type="standard"/>
+      <input>
+        <portlet:param boundTo="request-attribute" class="java.util.Map" name="EntitySearchMap4" partname="EntSrchRACrsSrchDataType_Input"/>
+      </input>
+    </operation>
+    </binding>
+</definitions>

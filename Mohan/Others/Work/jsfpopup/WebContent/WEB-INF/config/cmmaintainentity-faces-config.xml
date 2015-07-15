@@ -1,0 +1,148 @@
+<?xml version="1.0"?>
+<faces-config
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
+   version="2.0">
+	
+
+	<managed-bean>
+		<managed-bean-name>CMEntityMaintainDataBean</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.bean.CMEntityMaintainDataBean
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+
+
+		<managed-property>
+			<property-name>cmEnityDetailVO</property-name>
+			<value>#{cmEnityDetailVO}</value>
+		</managed-property>
+
+
+		<managed-property>
+			<property-name>duplicateCMEnityDetailVO</property-name>
+			<value>#{duplicateCMEnityDetailVO}</value>
+		</managed-property>
+	</managed-bean>
+
+
+
+	<managed-bean>
+		<managed-bean-name>cmEnityDetailVO</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.vo.CMEntityDetailVO
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+
+		<managed-property>
+			<property-name>nameVO</property-name>
+			<value>#{nameVO}</value>
+		</managed-property>
+	</managed-bean>
+
+
+ <managed-bean>
+		<managed-bean-name>duplicateCMEnityDetailVO</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.vo.CMEntityDetailVO
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+
+		<managed-property>
+			<property-name>nameVO</property-name>
+			<value>#{nameVO}</value>
+		</managed-property>
+	</managed-bean>
+
+	
+
+	<managed-bean>
+		<managed-bean-name>
+			CMEntityMaintainControllerBean
+		</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.bean.CMEntityMaintainControllerBean
+		</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+
+
+	</managed-bean>
+
+	<navigation-rule>
+		<from-view-id>
+			/jsp/maintainentity/maintainEntity.jsp
+		</from-view-id>
+		
+		<navigation-case>
+			<from-outcome>rendersuccess</from-outcome>
+			<to-view-id>
+				/jsp/maintainentity/maintainEntity.jsp
+			</to-view-id>
+		</navigation-case>
+		
+		<navigation-case>
+			<from-action>#{CMEntityMaintainControllerBean.getDuplicateEntities}</from-action>
+			<from-outcome>goToViewEntity</from-outcome>
+			<to-view-id>/jsp/maintainentity/viewEntity.jsp</to-view-id>
+		</navigation-case>
+
+		<navigation-case>
+			<from-action>#{CMEntityMaintainControllerBean.resetMaintainEntity}</from-action>
+			<from-outcome>rendersuccess</from-outcome>
+			<to-view-id>
+				/jsp/maintainentity/maintainEntity.jsp
+			</to-view-id>
+		</navigation-case>
+		
+		    <!--Note:Added for Maintain Entity Page -->
+			<navigation-case>
+				<from-outcome>rendersuccess</from-outcome>
+			<to-view-id>/jsp/maintainentity/maintainEntity.jsp</to-view-id>
+		</navigation-case>
+		
+		
+	</navigation-rule>
+
+	<navigation-rule>
+		<from-view-id>/jsp/maintainentity/viewEntity.jsp</from-view-id>
+
+		<navigation-case>
+			<from-action>#{CMEntityMaintainControllerBean.continueWithADD}</from-action>
+			<from-outcome>gotoMaintainEnity</from-outcome>
+			<to-view-id>
+				/jsp/maintainentity/maintainEntity.jsp
+			</to-view-id>
+		</navigation-case>
+
+		<navigation-case>
+			<from-action>#{CMEntityMaintainControllerBean.continueWithRecord}</from-action>
+			<from-outcome>gotoMaintainEnity</from-outcome>
+			<to-view-id>
+				/jsp/maintainentity/maintainEntity.jsp
+			</to-view-id>
+		</navigation-case>
+		
+	</navigation-rule>
+
+
+	<application>
+		
+
+		<!--<locale-config>
+
+			<default-locale>en</default-locale>
+
+			<supported-locale>es</supported-locale>
+
+		</locale-config>
+
+
+
+		--><message-bundle>com.acs.enterprise.common.program.contactmanagement.view.nl.PGM_IN_CMMaintainEntity</message-bundle>
+
+	</application>
+
+
+
+</faces-config>

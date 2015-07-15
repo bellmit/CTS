@@ -1,0 +1,110 @@
+<?xml version="1.0"?>
+<faces-config
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
+   version="2.0">
+	
+
+	<managed-bean>
+		<managed-bean-name>LettersAndResponsesControllerBean</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.cots.CommonLetter.view.bean.LettersAndResponsesControllerBean
+		</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+		
+	<managed-bean>
+		<managed-bean-name>LettersAndResponsesDataBean</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.cots.CommonLetter.view.bean.LettersAndResponsesDataBean
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+		
+		<managed-property>
+			<property-name>letterGenerationInputVO</property-name>
+			<value>#{LetterGenerationInputVO}</value>
+		</managed-property> 	
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>LetterGenerationInputVO</managed-bean-name>
+		<managed-bean-class>com.acs.enterprise.common.cots.lettergeneration.vo.LetterGenerationInputVO</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	 <navigation-rule>
+		<from-view-id>
+			/jsp/lettersandresponses/inc_lettersAndResponses.jsp
+		</from-view-id>
+		<navigation-case>
+			<from-action>#{LettersAndResponsesControllerBean.getAssociatedLetterGenerationRequests}</from-action>
+			<from-outcome>rendersuccess</from-outcome>
+			<to-view-id>
+				/jsp/lettersandresponses/inc_lettersAndResponses.jsp
+			</to-view-id>
+		</navigation-case>
+		
+		<navigation-case>
+			<from-action>#{LettersAndResponsesControllerBean.openLetterRequestInEditMode}</from-action>
+			<from-outcome>rendersuccess</from-outcome>
+			<to-view-id>
+				/jsp/lettersandresponses/inc_lettersAndResponses.jsp
+			</to-view-id>
+		</navigation-case>
+		
+		<navigation-case>
+			<from-action>#{LettersAndResponsesControllerBean.saveLetterRequest}</from-action>
+			<from-outcome>rendersuccess</from-outcome>
+			<to-view-id>
+				/jsp/lettersandresponses/inc_lettersAndResponses.jsp
+			</to-view-id>
+		</navigation-case>
+		
+		<navigation-case>
+			<from-action>#{LettersAndResponsesControllerBean.resetLetterRequestDetails}</from-action>
+			<from-outcome>rendersuccess</from-outcome>
+			<to-view-id>
+				/jsp/lettersandresponses/inc_lettersAndResponses.jsp
+			</to-view-id>
+		</navigation-case>
+		
+		<navigation-case>
+			<from-action>#{LettersAndResponsesControllerBean.cancelLetterRequestDetails}</from-action>
+			<from-outcome>rendersuccess</from-outcome>
+			<to-view-id>
+				/jsp/lettersandresponses/inc_lettersAndResponses.jsp
+			</to-view-id>
+		</navigation-case>		
+		
+			<navigation-case>
+			<from-action>#{LettersAndResponsesControllerBean.cancelLetterRequestDetails}</from-action>
+			<from-outcome>rendersuccess</from-outcome>
+			<to-view-id>
+				/jsp/lettersandresponses/inc_lettersAndResponses.jsp
+			</to-view-id>
+		</navigation-case>	
+		
+		<navigation-case>
+			<from-action>#{LettersAndResponsesControllerBean.invokeCreateLetter}</from-action>
+			<from-outcome>rendersuccess</from-outcome>
+			<to-view-id>
+				/jsp/letter/letterGeneration.jsp
+			</to-view-id>
+		</navigation-case>
+	
+     </navigation-rule> 	
+  		
+	<lifecycle>
+		<phase-listener>com.ibm.faces.webapp.ValueResourcePhaseListener</phase-listener>
+	</lifecycle>
+	
+	<!-- variable/property resolver registration -->
+	<application>
+		
+		<locale-config>
+			<default-locale>en</default-locale>
+		</locale-config>
+		<message-bundle>com.acs.mmis.common.enterprise.lettergeneration.nl.GLB_IN_LetterAndResponses</message-bundle>		
+	</application>	
+</faces-config>

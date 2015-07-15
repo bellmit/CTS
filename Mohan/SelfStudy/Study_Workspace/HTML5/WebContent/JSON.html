@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>JSON</title>
+</head>
+<script type="text/javascript">
+var jsonVar={"Name":"Mohan","Age":25,"City":"Chennai","Company":"CTS"};
+function callJSON()
+{
+	//alert('json call');
+	//var jsonVar={"Name":"Mohan","Age":25,"City":"Chennai","Company":"CTS"}
+	document.getElementById("Name").innerHTML=jsonVar.Name;
+	document.getElementById("Age").innerHTML=jsonVar.Age;
+	document.getElementById("City").innerHTML=jsonVar.City;
+	document.getElementById("Company").innerHTML=jsonVar.Company;
+}
+
+function showYear()
+{
+	var age=jsonVar.Age;
+	var today=new Date();
+	//alert(today.getFullYear()-age);
+	var year=today.getFullYear()-age;
+	document.getElementById("Year").innerHTML="~"+year;
+}
+function dismissYear()
+{
+	document.getElementById("Year").innerHTML="";
+}
+</script>
+
+
+<body>
+<a onclick="callJSON();return false" href="">Click to display details</a>
+<table>
+	<tr>
+		<td>Name:</td>
+		<td><div id="Name"></div></td>
+	</tr>
+	<tr>
+		<td>Age:</td>
+		<td><div id="Age"></div></td>
+	</tr>
+	<tr>
+		<td>City:</td>
+		<td><div id="City"></div></td>
+	</tr>
+	<tr>
+		<td>YearOfBirth:</td>
+		<td>
+			<div id="Year"></div>
+		</td>
+		<td><button value="showYear" onmouseover="showYear();" onmouseout="dismissYear();">showYear</button></td>
+	</tr>
+	<tr>
+		<td>Company:</td>
+		<td><div id="Company"></div></td>
+	</tr>
+	<tr>
+		<td><button onclick="callAjaxtoget();return false;"></button></td>
+	</tr>
+</table>
+
+
+</body>
+</html>

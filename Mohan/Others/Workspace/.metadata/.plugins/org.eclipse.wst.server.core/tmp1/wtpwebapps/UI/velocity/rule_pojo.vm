@@ -1,0 +1,85 @@
+#set ($rulePackageName = $ruleDescriptor.getRulePackageName())
+package $rulePackageName;
+
+
+import java.util.Date;
+import java.util.List;
+import org.apache.log4j.Logger;
+import com.xerox.enterprise.ghs.mmis.rif.common.exception.RIFPOJORulesException;
+import com.xerox.enterprise.ghs.mmis.rif.core.Rule;
+import com.xerox.enterprise.ghs.mmis.rif.core.RulesContext;
+import com.xerox.enterprise.ghs.mmis.rif.core.RulesResult;
+
+#foreach ($importName in $ruleDescriptor.getImportsList())
+import $importName;
+#end
+
+#set ($ruleClassName = $ruleDescriptor.getRuleClassName())
+#set ($classExt = ".class")
+#set ($methodexist = $ruleDescriptor.getRuleMethods().size())
+/**
+ * Ruleclass of the rule "$ruleDescriptor.getRuleName()"
+ * @author
+ * POJO extracted from Class:$ruleDescriptor.getRuleExtractClassName()
+ */
+public class $ruleClassName extends Rule{
+	
+	/*Static logger to log a message */
+	private static final Logger log = Logger.getLogger($ruleClassName$classExt);
+	
+	
+	
+	/**
+	 * Execute method of the rule. This holds the rule conditions and actions.
+	 * The required objects are initialized through init() method.
+	 * return - execution result of rule either SUCCESS or FAILURE
+	 */
+	public static RulesResult execute(RulesContext ctx, String ruleId) throws RIFPOJORulesException {
+	
+			
+		//Construct rules result object
+		RulesResult rulesResult = new RulesResult(ruleId);
+		$ruleTempUtility.getLocalVariableDeclarations($ruleDescriptor.getRuleContextParams())
+		if (ctx != null) {
+				
+			List<Object> inputObjs = ctx.getContextObject();
+
+			$ruleTempUtility.getAssignmentStatementsFromContext($ruleDescriptor.getRuleContextParams(),"inputObjs")
+						
+		} else {
+			log.error("Input Context Object is null during intialization for the rule "+ruleId);
+			throw new RIFPOJORulesException("Unable to initialize the required rules objects for rule "+ruleId);
+		}
+		log.info("Executing the actions for the rule "+ruleId);
+		$ruleDescriptor.getRuleText()
+		
+		#if($ruleDescriptor.getRuleReturnField())
+		rulesResult.setReturnBooleanValue($ruleDescriptor.getRuleReturnField());
+		#end
+		rulesResult.setRuleStatus(true);
+		return rulesResult;
+		
+	}
+	
+	
+	public static void initialize() throws RIFPOJORulesException {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	
+	public static void shutdown() throws RIFPOJORulesException {
+
+		System.out.println("shutdown called");
+		
+	}
+	
+	#if($methodexist > 0)
+		
+	#foreach ($methodName in  $ruleDescriptor.getRuleMethods())
+	private static $methodName
+	#end
+		
+	#end
+}

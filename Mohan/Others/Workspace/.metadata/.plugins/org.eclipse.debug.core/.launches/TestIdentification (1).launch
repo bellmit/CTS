@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+<listEntry value="/DPForZerox/src/com/cognizant/designproject/main/TestIdentification.java"/>
+</listAttribute>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+<listEntry value="1"/>
+</listAttribute>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.cognizant.designproject.main.TestIdentification"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="D:\ClearCase_Source\396662_CTS_MNT_FIX_Dev_2\operations\tpladministration\TPLAdministrationPortlet D:\DesignProjectForZerox\Output"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="DPForZerox"/>
+</launchConfiguration>

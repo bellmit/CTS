@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pageflow:Pageflow xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pageflow="http://www.sybase.com/suade/pageflow" id="pf13857217530720" configfile="/JSFWithHibernate/WebContent/WEB-INF/faces-config.xml">
+  <nodes xsi:type="pageflow:PFPage" name="Employee Search" x="122" y="562" id="pf13857219573651" referenceLink="//@navigationRule.0/@fromViewId|" outlinks="pf13857219573652 pf13866527604570" path="/jsp/index.jsp"/>
+  <nodes xsi:type="pageflow:PFPage" name="Employee Details" x="338" y="178" id="pf13857219573653" referenceLink="//@navigationRule.1/@fromViewId|" outlinks="pf13860702773400 pf13866527604571" inlinks="pf13857219573652 pf13860702773400" path="/jsp/employee/employee.jsp"/>
+  <nodes xsi:type="pageflow:PFPage" name="jsp/employee/employeeDetails" x="554" y="370" id="pf13866527604572" referenceLink="//@navigationRule.3/@navigationCase.0/@toViewId|" inlinks="pf13866527604571 pf13869256233160" path="/jsp/employee/employeeDetails.jsp"/>
+  <nodes xsi:type="pageflow:PFPage" name="Employee Register" x="338" y="946" id="pf13866527604573" referenceLink="//@navigationRule.2/@fromViewId|" outlinks="pf13869256233161" inlinks="pf13866527604570" path="/jsp/employee/employeeNew.jsp"/>
+  <nodes xsi:type="pageflow:PFPage" name="jsp/employee/employeeConfirmation" x="554" y="946" id="pf13869256233162" referenceLink="//@navigationRule.2/@navigationCase.0/@toViewId|" inlinks="pf13869256233161" path="/jsp/employee/employeeConfirmation.jsp"/>
+  <nodes xsi:type="pageflow:PFPage" name="Employee Update" x="338" y="562" id="pf13869256233163" outlinks="pf13869256233160" path="*"/>
+  <links id="pf13857219573652" target="pf13857219573653" source="pf13857219573651" outcome="employeeSearch"/>
+  <links id="pf13866527604571" target="pf13866527604572" source="pf13857219573653" outcome="update" fromaction="#{employeeDetails.updateEmployee}"/>
+  <links id="pf13866527604570" target="pf13866527604573" source="pf13857219573651" outcome="employeeRegister"/>
+  <links id="pf13869256233161" target="pf13869256233162" source="pf13866527604573" outcome="success" fromaction="#{employeeDetails.registerEmployee}"/>
+  <links id="pf13869256233160" target="pf13866527604572" source="pf13869256233163" outcome="update" fromaction="#{employeeDetails.updateEmployee}"/>
+  <links id="pf13860702773400" target="pf13857219573653" source="pf13857219573653" outcome="search" fromaction="#{employeeDetails.getEmployee}">
+    <bendPoints d1Height="-36" d2Height="-36"/>
+    <bendPoints d1Width="-64" d1Height="-36" d2Width="-64" d2Height="-36"/>
+    <bendPoints d1Width="-64" d2Width="-64"/>
+  </links>
+</pageflow:Pageflow>

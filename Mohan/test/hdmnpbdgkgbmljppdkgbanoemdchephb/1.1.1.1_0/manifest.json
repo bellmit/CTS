@@ -1,0 +1,26 @@
+﻿{
+   "browser_action": {
+      "default_icon": "icon.png",
+      "default_popup": "popup.html",
+      "default_title": "GeeksforGeeks meter"
+   },
+   "content_scripts": [ {
+      "all_frames": true,
+      "css": [ "style.css" ],
+      "js": [ "main.js" ],
+      "matches": [ "*://www.geeksforgeeks.org/*", "*://geeksquiz.com/*" ]
+   } ],
+   "description": "Ease your experience by crossing done questions",
+   "icons": {
+      "128": "icon_128x128.png",
+      "48": "icon_48x48.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAphrBBX+Cif1z/9J0Ni6v0BQ5zrGPrdFs4wShFBG2ASItzub6hTmhJYubH2OIoo16Svr7Hv+kckhCpM2trgwatfaxEyaVxxImwOxNsGxESSPurMteFOrUwyKYTvwfsmAVtUmwigfQTlWBDhKoI/4cM5uSbH8lShjTDm54pupGdC7HCdZ47JPgZZmXI7p7/MzZayYZeB8zLTxZWqFq/ZLyMURDJj9dYYypLujHGIJLV5groC3oKtHrmgdzBQOW0htdwueT6iNBMTa7vFk0ju3Fda+sC0osLObsxXZ3XmIc02gow1vV00yUSRc3zpPNzHH3jCgabbdwAqHaVM1tLrN32QIDAQAB",
+   "manifest_version": 2,
+   "name": "Geekometer",
+   "permissions": [ "activeTab", "tabs" ],
+   "short_name": "geekometer",
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "1.1.1.1",
+   "web_accessible_resources": [ "funcs.js", "jquery.js", "jquery-ui.js" ]
+}

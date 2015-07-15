@@ -1,0 +1,316 @@
+<?xml version="1.0"?>
+<faces-config
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
+   version="2.0">
+
+	
+		
+	<managed-bean>
+		<managed-bean-name>lobHierarchyControlBean</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.bean.LobHierarchyControlBean
+		</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>				
+	</managed-bean>
+	
+		
+	<managed-bean>
+		<managed-bean-name>lobHierarchyDataBean</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.bean.LobHierarchyDataBean
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+		<managed-property>
+			<property-name>lobHieracVO</property-name>
+			<value>#{LobHierarchyVO}</value>
+		</managed-property>				
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>lobHieracVO</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.vo.LobHierarchyVO
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>lobHierarchyPlanTree</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.bean.LobHierarchyPlanTree
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>				
+	</managed-bean>
+	
+	<navigation-rule>
+		<from-view-id>/jsp/managegroups/editLob.jsp</from-view-id>
+		<navigation-case>
+			<from-action>#{lobHierarchyControlBean.addReport}</from-action>
+			<from-outcome>EditLobPage</from-outcome>
+			<to-view-id>/jsp/managegroups/editLob.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{lobHierarchyControlBean.editReport}</from-action>
+			<from-outcome>EditReportUnitPage</from-outcome>
+			<to-view-id>/jsp/managegroups/editReportUnit.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{lobHierarchyControlBean.editBusiness}</from-action>
+			<from-outcome>EditBusinessUnitPage</from-outcome>
+			<to-view-id>/jsp/managegroups/editBusinessUnit.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{lobHierarchyControlBean.editDepart}</from-action>
+			<from-outcome>EditDepartPage</from-outcome>
+			<to-view-id>/jsp/managegroups/editDepartMent.jsp</to-view-id>
+		</navigation-case>
+		
+		<navigation-case>
+		    <from-action>#{lobHierarchyControlBean.addReportPage}</from-action>	  
+			<from-outcome>passAddReportUnitPage</from-outcome>
+			<to-view-id>/jsp/managegroups/addReportUnit.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+		    <from-action>#{lobHierarchyControlBean.cancel}</from-action>
+		     <from-outcome>Success</from-outcome>		 	 	
+			<to-view-id>/jsp/managegroups/editLob.jsp</to-view-id>
+		</navigation-case>
+		
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>/jsp/managegroups/editReportUnit.jsp</from-view-id>
+		<navigation-case>
+			<from-action>#{lobHierarchyControlBean.addReport}</from-action>
+			<from-outcome>EditLobPage</from-outcome>
+			<to-view-id>/jsp/managegroups/editLob.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{lobHierarchyControlBean.editReport}</from-action>
+			<from-outcome>EditReportUnitPage</from-outcome>
+			<to-view-id>/jsp/managegroups/editReportUnit.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{lobHierarchyControlBean.editBusiness}</from-action>
+			<from-outcome>EditBusinessUnitPage</from-outcome>
+			<to-view-id>/jsp/managegroups/editBusinessUnit.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{lobHierarchyControlBean.editDepart}</from-action>
+			<from-outcome>EditDepartPage</from-outcome>
+			<to-view-id>/jsp/managegroups/editDepartMent.jsp</to-view-id>
+		</navigation-case>
+		
+		 <navigation-case>
+		    <from-action>#{lobHierarchyControlBean.addBusinessPage}</from-action>	
+			<from-outcome>passAddBusinessUnit</from-outcome>
+			<to-view-id>/jsp/managegroups/addBusinessUnit.jsp</to-view-id>			
+		</navigation-case>	
+		
+		<navigation-case>
+		    <from-action>#{lobHierarchyControlBean.cancel}</from-action>	
+		     <from-outcome>Success</from-outcome>		  	
+			<to-view-id>/jsp/managegroups/editReportUnit.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	
+		
+	<navigation-rule>
+		<from-view-id>/jsp/managegroups/editBusinessUnit.jsp</from-view-id>
+		<navigation-case>
+			<from-action>#{lobHierarchyControlBean.addReport}</from-action>
+			<from-outcome>EditLobPage</from-outcome>
+			<to-view-id>/jsp/managegroups/editLob.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{lobHierarchyControlBean.editReport}</from-action>
+			<from-outcome>EditReportUnitPage</from-outcome>
+			<to-view-id>/jsp/managegroups/editReportUnit.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{lobHierarchyControlBean.editBusiness}</from-action>
+			<from-outcome>EditBusinessUnitPage</from-outcome>
+			<to-view-id>/jsp/managegroups/editBusinessUnit.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{lobHierarchyControlBean.editDepart}</from-action>
+			<from-outcome>EditDepartPage</from-outcome>
+			<to-view-id>/jsp/managegroups/editDepartMent.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+		    <from-action>#{lobHierarchyControlBean.addDepartPage}</from-action>	 	
+			<from-outcome>passAddDepartMentPage</from-outcome>
+			<to-view-id>/jsp/managegroups/addDepartMent.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+		    <from-action>#{lobHierarchyControlBean.cancel}</from-action>
+		     <from-outcome>Success</from-outcome>		 	 	
+			<to-view-id>/jsp/managegroups/editBusinessUnit.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	
+   
+   
+	<navigation-rule>
+		<from-view-id>/jsp/managegroups/editDepartMent.jsp</from-view-id>
+		<navigation-case>
+			<from-action>#{lobHierarchyControlBean.addReport}</from-action>
+			<from-outcome>EditLobPage</from-outcome>
+			<to-view-id>/jsp/managegroups/editLob.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{lobHierarchyControlBean.editReport}</from-action>
+			<from-outcome>EditReportUnitPage</from-outcome>
+			<to-view-id>/jsp/managegroups/editReportUnit.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{lobHierarchyControlBean.editBusiness}</from-action>
+			<from-outcome>EditBusinessUnitPage</from-outcome>
+			<to-view-id>/jsp/managegroups/editBusinessUnit.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{lobHierarchyControlBean.editDepart}</from-action>
+			<from-outcome>EditDepartPage</from-outcome>
+			<to-view-id>/jsp/managegroups/editDepartMent.jsp</to-view-id>
+		</navigation-case>		
+		<navigation-case>
+		    <from-action>#{lobHierarchyControlBean.cancel}</from-action>
+		     <from-outcome>Success</from-outcome>		 	 	
+			<to-view-id>/jsp/managegroups/editDepartMent.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+	<from-view-id>/jsp/managegroups/addReportUnit.jsp</from-view-id>
+	<navigation-case>
+		    <from-action>#{lobHierarchyControlBean.cancel}</from-action>
+		    <from-outcome>Success</from-outcome>	 	
+			<to-view-id>/jsp/managegroups/editLob.jsp</to-view-id>
+		</navigation-case>	
+		<navigation-case>
+		    <from-action>#{lobHierarchyControlBean.addDepartPage}</from-action>	 	
+			<from-outcome>passAddDepartMentPage</from-outcome>
+			<to-view-id>/jsp/managegroups/addDepartMent.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{lobHierarchyControlBean.addReport}</from-action>
+			<from-outcome>EditLobPage</from-outcome>
+			<to-view-id>/jsp/managegroups/editLob.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{lobHierarchyControlBean.editReport}</from-action>
+			<from-outcome>EditReportUnitPage</from-outcome>
+			<to-view-id>/jsp/managegroups/editReportUnit.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{lobHierarchyControlBean.editBusiness}</from-action>
+			<from-outcome>EditBusinessUnitPage</from-outcome>
+			<to-view-id>/jsp/managegroups/editBusinessUnit.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{lobHierarchyControlBean.editDepart}</from-action>
+			<from-outcome>EditDepartPage</from-outcome>
+			<to-view-id>/jsp/managegroups/editDepartMent.jsp</to-view-id>
+		</navigation-case>	
+		 <navigation-case>
+		    <from-action>#{lobHierarchyControlBean.addBusinessPage}</from-action>	
+			<from-outcome>passAddBusinessUnit</from-outcome>
+			<to-view-id>/jsp/managegroups/addBusinessUnit.jsp</to-view-id>			
+		</navigation-case>	
+    </navigation-rule>
+	
+	
+	<navigation-rule>
+	<from-view-id>/jsp/managegroups/addBusinessUnit.jsp</from-view-id>
+	<navigation-case>
+		    <from-action>#{lobHierarchyControlBean.cancel}</from-action>	
+		    <from-outcome>Success</from-outcome>	 	
+			<to-view-id>/jsp/managegroups/editReportUnit.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+		    <from-action>#{lobHierarchyControlBean.addReportPage}</from-action>	  
+			<from-outcome>passAddReportUnitPage</from-outcome>
+			<to-view-id>/jsp/managegroups/addReportUnit.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{lobHierarchyControlBean.addReport}</from-action>
+			<from-outcome>EditLobPage</from-outcome>
+			<to-view-id>/jsp/managegroups/editLob.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{lobHierarchyControlBean.editReport}</from-action>
+			<from-outcome>EditReportUnitPage</from-outcome>
+			<to-view-id>/jsp/managegroups/editReportUnit.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{lobHierarchyControlBean.editBusiness}</from-action>
+			<from-outcome>EditBusinessUnitPage</from-outcome>
+			<to-view-id>/jsp/managegroups/editBusinessUnit.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{lobHierarchyControlBean.editDepart}</from-action>
+			<from-outcome>EditDepartPage</from-outcome>
+			<to-view-id>/jsp/managegroups/editDepartMent.jsp</to-view-id>
+		</navigation-case>	
+		<navigation-case>
+		    <from-action>#{lobHierarchyControlBean.addDepartPage}</from-action>	 	
+			<from-outcome>passAddDepartMentPage</from-outcome>
+			<to-view-id>/jsp/managegroups/addDepartMent.jsp</to-view-id>
+		</navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+	<from-view-id>/jsp/managegroups/addDepartMent.jsp</from-view-id>
+	<navigation-case>
+		    <from-action>#{lobHierarchyControlBean.cancel}</from-action>
+		       <from-outcome>Success</from-outcome>		 	
+			<to-view-id>/jsp/managegroups/editBusinessUnit.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+		    <from-action>#{lobHierarchyControlBean.addReportPage}</from-action>	  
+			<from-outcome>passAddReportUnitPage</from-outcome>
+			<to-view-id>/jsp/managegroups/addReportUnit.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{lobHierarchyControlBean.addReport}</from-action>
+			<from-outcome>EditLobPage</from-outcome>
+			<to-view-id>/jsp/managegroups/editLob.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{lobHierarchyControlBean.editReport}</from-action>
+			<from-outcome>EditReportUnitPage</from-outcome>
+			<to-view-id>/jsp/managegroups/editReportUnit.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{lobHierarchyControlBean.editBusiness}</from-action>
+			<from-outcome>EditBusinessUnitPage</from-outcome>
+			<to-view-id>/jsp/managegroups/editBusinessUnit.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{lobHierarchyControlBean.editDepart}</from-action>
+			<from-outcome>EditDepartPage</from-outcome>
+			<to-view-id>/jsp/managegroups/editDepartMent.jsp</to-view-id>
+		</navigation-case>	
+		 <navigation-case>
+		    <from-action>#{lobHierarchyControlBean.addBusinessPage}</from-action>	
+			<from-outcome>passAddBusinessUnit</from-outcome>
+			<to-view-id>/jsp/managegroups/addBusinessUnit.jsp</to-view-id>			
+		</navigation-case>	
+    </navigation-rule>
+    
+	
+	
+	<application>
+	    
+		<locale-config>
+			<default-locale>en</default-locale>
+			<supported-locale>es</supported-locale>
+		</locale-config>
+		<message-bundle>com.acs.enterprise.common.program.contactmanagement.view.nl.PGM_IN_ContactManageGroup</message-bundle>
+	</application>
+	
+</faces-config>

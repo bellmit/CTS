@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+          "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+          "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+          <hibernate-mapping>
+          <class name="com.javatpoint.Employee" table="employee">
+	          <cache usage="read-only" />
+	          <id name="id" column="EMP_ID">
+	          <generator class="native"></generator>
+	          </id>
+	          <property name="name" column="EMP_NAME"></property>
+	          <property name="designation" column="EMP_DESGN"></property>
+	          
+          </class>
+          <query name="employee.select" cacheable="true">
+          	<query-param name="id" type="java.lang.Integer"/>														
+				<![CDATA[from Employee emp WHERE emp.id = :id]]>
+          </query>
+          </hibernate-mapping>

@@ -1,0 +1,8 @@
+package com.xerox.enterprise.ghs.mmis.rif.core;
+
+import org.xml.sax.helpers.DefaultHandler;
+
+public class SAXConfigHandler extends DefaultHandler {
+	
+
+}

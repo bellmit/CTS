@@ -1,0 +1,16 @@
+package com.test.Properties;
+
+import java.util.Properties;
+
+public class PropertiesHandler {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+		Properties prop;
+		prop.load(reader);
+		
+		
+	}
+
+}

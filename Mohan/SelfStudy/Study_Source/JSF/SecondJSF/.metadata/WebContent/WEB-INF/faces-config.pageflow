@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pageflow:Pageflow xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pageflow="http://www.sybase.com/suade/pageflow" id="pf13825246426830" configfile="/SecondJSF/WebContent/WEB-INF/faces-config.xml">
+  <nodes xsi:type="pageflow:PFPage" name="pages/actionlist/Page1" x="122" y="178" id="pf13826195768450" referenceLink="//@navigationRule.0/@fromViewId|" outlinks="pf13826195768451" path="/pages/actionlist/Page1.jsp"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/actionlist/Page2" x="338" y="178" id="pf13826195768552" referenceLink="//@navigationRule.0/@navigationCase.0/@toViewId|" inlinks="pf13826195768451" path="/pages/actionlist/Page2.jsp"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/actionlist/login" id="pf13826200119893" referenceLink="//@navigationRule.1/@fromViewId|" outlinks="pf13826200119894 pf13826200653567" path="/pages/actionlist/login.jsp"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/actionlist/welcome" id="pf13826200119895" referenceLink="//@navigationRule.1/@navigationCase.1/@toViewId|" inlinks="pf13826200119894" path="/pages/actionlist/welcome.jsp"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/actionlist/bye" id="pf13826200653568" referenceLink="//@navigationRule.1/@navigationCase.1/@toViewId|" inlinks="pf13826200653567" path="/pages/actionlist/bye.jsp"/>
+  <links id="pf13826195768451" target="pf13826195768552" source="pf13826195768450" outcome="success"/>
+  <links id="pf13826200119894" target="pf13826200119895" source="pf13826200119893" fromaction="#{login.processLogin}"/>
+  <links id="pf13826200653567" target="pf13826200653568" source="pf13826200119893" fromaction="#{login.cancelLogin}"/>
+</pageflow:Pageflow>

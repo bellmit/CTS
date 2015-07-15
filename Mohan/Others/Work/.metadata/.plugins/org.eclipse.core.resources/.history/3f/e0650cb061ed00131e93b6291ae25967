@@ -1,0 +1,42 @@
+/**
+ * 
+ */
+ $(function() {
+    $( "#tabs" ).tabs();
+  });
+ 
+ 
+ $(document).ready(function()
+ {
+	 $("#search").click(function()
+			 {
+		 		//alert('keypressed');
+		 		//alert('/MySpringMVC'+'/getAjaxData');
+		 		$.get('/MySpringMVC'+'/getAjaxData',function(data,status){
+		 			alert('ajaxcall');
+		 			var datalist=data.name;
+		 			displyGridList(data);
+		 			/*$.each(datalist,function(index,value)
+		 					{
+		 						alert(value);
+		 					});*/
+		 		});
+			 });
+ });
+ 
+ 
+ 
+ function displyGridList(gridData){
+		alert(gridData.name);
+		$('#suggestname').jdataTable({
+				jsondata:gridData.name,
+				itemsPerPage:20,
+				header:{
+					by:['userName'],
+					titles:['Name'],
+					sort:['string']
+				},
+			pagination:false
+		});	
+		
+	}

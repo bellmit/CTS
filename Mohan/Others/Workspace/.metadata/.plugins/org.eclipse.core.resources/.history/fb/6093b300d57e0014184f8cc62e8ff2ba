@@ -1,0 +1,67 @@
+package com.general.example;
+
+public class TTT {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		int table[][]=new int[4][3];
+		System.out.println(table.length);
+		System.out.println(table[0].length);
+		
+		
+	}
+	
+	public static boolean isTTTWon(int[][] table,int player)
+	{
+		boolean isWon=false;
+		isWon=checkHorizontal(table,player);
+		if(isWon)
+			return isWon;
+		isWon=checkVertical(table,player);
+		if(isWon)
+			return isWon;
+		isWon=checkDiagonal(table,player);
+		if(isWon)
+			return isWon;
+		isWon=checkReverseDiagonal(table,player);
+		
+		
+		return isWon;
+	}
+
+	private static boolean checkReverseDiagonal(int[][] table, int player) {
+		// TODO Auto-generated method stub
+		boolean isWon=true;
+		for(int i=0;i<table.length;i++)
+		{
+			for(int j=0;j<table[i].length;j++)
+			{
+				if(table[i][j]!=player)
+				{
+					isWon=false;
+					break;
+				}
+			}
+			if(isWon)
+				return isWon;
+		}
+		return false;
+	}
+
+	private static boolean checkDiagonal(int[][] table, int player) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	private static boolean checkVertical(int[][] table, int player) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	private static boolean checkHorizontal(int[][] table, int player) {
+		// TODO Auto-generated method stub
+		
+		return false;
+	}
+
+}

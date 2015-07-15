@@ -1,0 +1,19 @@
+package com.spring.controller;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+public class JqueryController {
+
+	@RequestMapping(value="/getAjaxData")
+	public Map<String,String> getAjaxCall()
+	{
+		Map<String,String> mp=new HashMap<String, String>();
+		mp.put("Name", "Mohan");
+		return mp;
+	}
+}

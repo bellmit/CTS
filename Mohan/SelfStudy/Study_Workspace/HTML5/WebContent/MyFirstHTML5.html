@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>First HTML5</title>
+</head>
+<script>
+function changeColor()
+{
+	var c=document.getElementById("canvas1");
+	var ctx=c.getContext("2d");
+	ctx.fillStyle="#FF0000";
+	ctx.fillRect(0,0,100,100);
+}
+</script>
+<body>
+TEST
+<canvas draggable="true" contenteditable="true" height="100" width="100" id="canvas1" style="border:1px solid #000000;"
+		onmouseover="changeColor();"></canvas>
+		
+		<input list="name">
+		<datalist id="name">
+			<option value="mohan">
+			<option value="madhan">
+			<option value="manoj">
+			<option value="test">
+			<option value="Theory">
+			
+		
+		</datalist>
+</body>
+
+<script>
+var c=document.getElementById("canvas1");
+var ctx=c.getContext("2d");
+ctx.fillStyle="#FF0000";
+ctx.fillRect(0,0,150,75);
+//ctx.fillText("MOhan",10,50);
+</script> 
+
+
+</html>

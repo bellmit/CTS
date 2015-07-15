@@ -1,0 +1,30 @@
+package com.spring.controller;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.spring.model.User;
+
+@Controller
+public class LoginController {
+
+	@RequestMapping("/")
+	public ModelAndView loginCheck()
+	{
+		System.out.println("Method >>>>>>Login");
+		return new ModelAndView("login", "login", "Welcome please Login");
+	}
+	
+	@RequestMapping("/loginResponse")
+	public ModelAndView verifyLogin(User user,HttpServletRequest request)
+	{
+		System.out.println("Method >>>>>>Responce");
+		ModelAndView loginView=new ModelAndView();
+		loginView.setViewName("login");
+		return loginView;
+	}
+	
+}

@@ -1,0 +1,75 @@
+package com.cognizant.designproject.main;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
+import org.junit.Test;
+
+import com.cognizant.designproject.rules.identification.ConditionsExtractor;
+import com.cognizant.designproject.rules.identification.GenerateDesignProject;
+import com.cognizant.designproject.rules.identification.MessageConstantExtractor;
+
+public class TestRuleExtract {
+	
+	@Test
+	//Semi Automation
+	public void testRuleExtraction_CategoryH()
+		throws Exception {
+		//String filenameWithPath = BASE_DIR+"operations//ServiceAuthorization//ServiceAuthorizationComponents//com//acs//enterprise//mmis//operations//serviceauthorization//application//domainmanager//ServiceAuthDomainManager.java";
+		String filenameWithPath = "D:\\RuleExtract_TestData\\ServiceAuthDomainManager_CatH.java";
+		RuleExtractor.testRuleExtraction(filenameWithPath);
+
+	}
+	
+	@Test
+	public void testFullFlow_FinancialAccounting_Sample() throws Exception {
+		String propPath = "D:\\Logs\\testProperty\\ErrorMessages.properties";
+		String outputpath = "D:\\Logs\\Extraction\\Sample";
+
+		List<String> constantFiles = new ArrayList<String>();
+		Map<String, String> constantsInputMap = new HashMap<String, String>();
+		List<String> propertyFiles = new ArrayList<String>();
+		Properties mapData = ConditionsExtractor.loadPropertyData(propPath);
+
+		Properties ruleToErrProp = ConditionsExtractor
+				.loadPropertyData("D:\\Logs\\testProperty\\ErrorToRule.properties");
+
+		Map<String, String> messageMap = new HashMap<String, String>();
+		
+		String[] inputMessages = mapData.values().toArray(
+				new String[mapData.size()]);
+		GenerateDesignProject gdp = new GenerateDesignProject();
+		gdp.getPropertyFileNames(new File(
+				"D:\\ClearCase_Source\\396662_CTS_MNT_FIX_Dev_2\\"),
+				propertyFiles);
+		gdp.getPropertyFileNames(
+				new File(
+						"D:\\ClearCase_Source\\396662_CTS_MNT_FIX_Dev_2\\enterprise\\enterprisecommon\\EnterpriseCommonUtilities\\"),
+				propertyFiles);
+		gdp.getConstantFileNames(new File(
+				"D:\\ClearCase_Source\\396662_CTS_MNT_FIX_Dev_2\\"),
+				constantFiles);
+		MessageConstantExtractor.extractPropertyKeys(propertyFiles,
+				inputMessages, messageMap);
+		System.out.println("MessageMap Data :" + messageMap.toString());
+		MessageConstantExtractor.extractConstants(constantsInputMap,
+				constantFiles, messageMap, null, "D:\\Logs\\Output");
+		System.out.println("ConstantsInputMap Map Data :"
+				+ constantsInputMap.toString());
+		if (constantsInputMap.size() == 0) {
+			System.out
+					.println("No Constants Are Loaded From Java File for this Input Message"
+							+ inputMessages.toString());
+		}
+
+		ConditionsExtractor
+				.extractAllDataMessagesBased(
+						"D:\\ClearCase_Source\\396662_CTS_MNT_FIX_Dev_2\\program\\Accounting\\AccountingPortlet\\",
+						outputpath, constantsInputMap, propPath, ruleToErrProp);
+	}
+
+}

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;MMIS_RIFUI/WebContent/pages/filelUpload.html&apos; to &apos;fileUpload.html&apos;" description="Rename resource &apos;filelUpload.html&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="WebContent/pages/filelUpload.html" name="fileUpload.html" stamp="1416900243382" updateReferences="true"/>
+</session>

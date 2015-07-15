@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="blazestub-10.0.0.jar"/>
+	<classpathentry kind="lib" path="ehcache-2.8.3.jar"/>
+	<classpathentry kind="lib" path="jaxb-api-2.2.11.jar"/>
+	<classpathentry kind="lib" path="log4j-1.2.16.jar"/>
+	<classpathentry kind="lib" path="slf4j-api-1.7.7.jar"/>
+	<classpathentry kind="lib" path="slf4j-log4j12-1.7.7.jar"/>
+	<classpathentry kind="lib" path="xercesImpl-2.4.0.jar"/>
+	<classpathentry kind="lib" path="xml-apis-1.0.b2.jar"/>
+	<classpathentry kind="lib" path="RIF-2.0-SNAPSHOT.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/ExternalLib"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/SharedLib"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/WASRuntime"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

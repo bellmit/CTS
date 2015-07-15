@@ -1,0 +1,44 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+	
+	<script type="text/javascript">
+		<c:set var="context" value="${pageContext.request.contextPath}" />
+		var contextPath = '<c:out value="${context}"/>';		
+  	</script>
+
+<!-- <script>
+   $(function() {
+	  alert('test');
+    $( "#tabs" ).tabs();
+  }); 
+  </script> -->
+<div id=tabs>
+	<ul>
+        <li><a href="#tabs-1">Ajax Call</a></li>
+        <li><a href="#tabs-2">JGrid</a></li>
+        <li><a href="#tabs-3">REST</a></li>
+    </ul>
+    <div id="tabs-1">
+        <p>
+			<input type="text" name="name" id="checkname"/>
+			<input type="button" name="search" id="search" value="search" ></input>
+			  			
+			<div id='suggestname' class='responsivetbl'>
+         <div class='tblcontainer'>
+            <table class="table table-bordered table-striped">
+               <thead>
+               </thead>
+               <tbody>
+               </tbody>
+            </table>
+         </div>
+      </div>
+			
+		</p>
+    </div>
+    <div id="tabs-2">
+        <p>Content for Tab 2</p>
+    </div>
+    <div id="tabs-3">
+        <p>Content for Tab 3</p>
+    </div>
+</div>

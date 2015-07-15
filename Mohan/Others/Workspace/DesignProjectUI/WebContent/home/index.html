@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="PRAGMA" content="NO-CACHE">
+	<link rel="stylesheet" href="/DesignProjectUI/css/joint.css"/>	
+	<link rel="stylesheet" href="/DesignProjectUI/css/aciTree.css"/>
+	<link rel="stylesheet" href="/DesignProjectUI/css/DashBoard.css"/>
+	<link rel="stylesheet" href="/DesignProjectUI/css/layout-default-latest.css"/>
+	<link rel="stylesheet" href="/DesignProjectUI/css/CodeFlower.css"/>
+	<link rel="stylesheet" href="/DesignProjectUI/css/bootstrap.min.css"/>
+	<link rel="stylesheet" href="/DesignProjectUI/css/bootstrap-table.css"/>
+	<link rel="stylesheet" href="/DesignProjectUI/css/jasny-bootstrap.min.css"/>
+	<link rel="stylesheet" href="/DesignProjectUI/css/bootstrap-dropdown-checkbox.css"/>
+	
+	<title>CA2 Reverse Engineering</title>
+	
+</head>
+<body>
+<div class="ui-layout-north" style="background: #191007;">
+	<div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#"><img src="/DesignProjectUI/image/CA2_logo.png" style="height:30px"/> Reverse Engineering</a>
+        </div>
+        <div class="navbar-collapse collapse">         
+          <form class="navbar-form navbar-right" id="metricsForm" name="metricsForm" method="post" enctype="multipart/form-data">
+           <div class="fileinput fileinput-new input-group " data-provides="fileinput" >
+ 			 <div data-trigger="fileinput"style="width:200px;" > <span class="fileinput-filename" style="color:white"></span></div>
+ 				 <span class="input-group-addon btn btn-default btn-file"><span class="fileinput-new" >Browse source zip file</span><span class="fileinput-exists">Change</span><input type="file" name="file" id="file"></span>
+ 				 <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>&nbsp;&nbsp;
+            <input type="checkbox" name="fromCATwo" id="fromCATwo"/><span style="color:white">CA2?</span>&nbsp;&nbsp;
+            <button type="button" class="btn btn-primary" id="getClsInfo" >Reverse Engineer Code</button>
+            </div>
+          </form>
+        </div>
+      </div>
+ </div>      
+<div class="ui-layout-west" id="parentForTree" >    
+	<div id="treeTabContainer" style="padding-left:5px">
+    	<ul class="nav nav-tabs" role="tablist">
+ 			<li class="active"><a data-toggle="tab" href="#prjTreeContent" id="9">Project</a></li>
+	  		<li><a data-toggle="tab" href="#classTreeContent" id="10">Class Diagram</a></li>
+		</ul>
+		<div id="my-tab-tree-content" class="tab-content">
+			<div id="prjTreeContent" class="tab-pane fade in active">
+				<div id="designProjectTree" class="aciTree aciTreeNoBranches" >	        	
+	       		</div>
+	       	</div>
+	       	<div id="classTreeContent" class="tab-pane fade in ">
+				<div id="designClassTree" class="aciTree aciTreeNoBranches" >	        	
+	       		</div>
+	       	</div>
+		</div>
+    </div>
+</div>       
+<div class="ui-layout-center">	
+  	<div id="tabsContainer" style="padding-left:20px">
+  		<ul class="nav nav-tabs" role="tablist">
+ 		  <li class="active"><a data-toggle="tab" href="#dashBoardContent" id="0">Dashboard</a></li>
+		  <li><a data-toggle="tab" href="#sourceCodeContent" id="1">Source Code View</a></li>
+		  <li><a data-toggle="tab" href="#useCaseContent" id="2">Use Case View</a></li>
+		  <li><a data-toggle="tab" href="#dependencyContent" id="3">Dependency View</a></li>
+		  <li><a data-toggle="tab" href="#classDiagramContent" id="4">Class Diagram View</a></li>
+		  <li><a data-toggle="tab" href="#sequenceContent" id="5">Sequence View</a></li>
+		</ul>
+		<div id="my-tab-content" class="tab-content">
+			<div id="pageHeaderContent">
+				<h2 id="pageHeader"></h2>
+			</div>
+			<div id="dashBoardContent" class="tab-pane fade in active">
+				<div style="display:none" id="loaderDiv"><image src="/DesignProjectUI/image/loadingPreload.gif" id="imgLoader"/></div>
+				<div class="row">&nbsp;</div>
+  								<div class="row" id="designMetrics" style="display:none">
+		     		<div id="noOfLines" class="col-sm-1">
+		     		</div>
+		     		<div id="classes" class="col-sm-2">
+		     		</div>	
+		     		<div id="complexity" class="col-sm-3">
+		     		</div>	
+		     		<div id="designQuality" class="col-sm-3">
+		     		</div>
+		     		<div id="designDependency" class="col-sm-3">
+		     		</div>							     						     		
+		     	</div>							     	
+	     		<div class="row">&nbsp;</div>
+	     		<div class="row">
+	     			<div id="metricsContainer" style="display:none">
+	     				<ul class="nav nav-tabs" role="tablist" id="metricsTab">
+		     				  <li class="active"><a data-toggle="tab" href="#packageMetricContent" id="6">Package Metrics</a></li>
+							  <li><a data-toggle="tab" href="#fileMetricContent" id="7">File Metrics</a></li>
+							  <li><a data-toggle="tab" href="#methodMetricContent" id="8">Method Metrics</a></li>
+						</ul>
+						<div id="metrics-tab-content" class="tab-content">
+							<div id="packageMetricContent" class="tab-pane fade in active" style="padding-left:15px">
+								<div class="row">&nbsp;</div>
+								<div class="row">
+									<table id="packageMetricTable" data-height="300"></table>
+								</div>
+							</div>
+							<div id="fileMetricContent" class="tab-pane fade in" style="padding-left:15px">
+								<div class="row">
+									<h2 id="classMetricHeader"></h2>
+									
+									<table id="classMetricTable" data-height="300"></table>
+								</div>
+							</div>
+							<div id="methodMetricContent" class="tab-pane fade in" style="padding-left:15px"">
+								<div class="row">
+									<h2 id="methodMetricHeader"></h2>
+									<table id="methodMetricTable" data-height="300" data-row-style="rowStyle"></table>
+								</div>
+							</div>
+						</div>
+	     			</div>
+	     		</div>								           							
+			</div>
+  			<div id="sourceCodeContent" class="tab-pane fade in">
+			</div>
+			<div id="useCaseContent" class="tab-pane fade in" >
+				<div id="useCaseDiagram"></div>
+			</div>
+			<div id="dependencyContent" class="tab-pane fade in">   							
+			</div>
+			<div id="classDiagramContent" class="tab-pane fade in">
+				<div id="classDiagram"></div>
+			</div>
+			<div id="sequenceContent" class="tab-pane fade in" >							
+				<div id="sequenceDiagram"></div>
+			</div>
+     	</div>    
+    </div>
+</div>
+   	
+   	
+
+<script src="/DesignProjectUI/js/vendor/raphael.js"></script>
+<script src="/DesignProjectUI/js/vendor/joint.js"></script>
+<script src="/DesignProjectUI/js/vendor/joint.shapes.uml.js"></script>
+<script src="/DesignProjectUI/js/vendor/joint.layout.DirectedGraph.js"></script>
+<script src="/DesignProjectUI/js/vendor/jquery-ui.js"></script>
+<script src="/DesignProjectUI/js/ClassDiagram.js"></script>
+<script src="/DesignProjectUI/js/ClassDiagramTree.js"></script>
+<script src="/DesignProjectUI/js/vendor/sequence-diagram-min.js"></script>
+<script src="/DesignProjectUI/js/SeqDiagram.js"></script>
+<script src="/DesignProjectUI/js/vendor/bootstrap.min.js"></script>
+<script src="/DesignProjectUI/js/vendor/jquery.aciPlugin.min.js"></script>
+<script src="/DesignProjectUI/js/vendor/jquery.aciTree.min.js"></script>
+<script src="/DesignProjectUI/js/ClassInfoTree.js"></script>
+<script src="/DesignProjectUI/js/UseCaseDiagram.js"></script>
+<script src="/DesignProjectUI/js/vendor/bootstrap-table.js"></script>
+<script src="/DesignProjectUI/js/vendor/jasny-bootstrap.js"></script>
+<script src="/DesignProjectUI/js/vendor/bootstrap-dropdown-checkbox.js"></script>
+<script src="/DesignProjectUI/js/vendor/jquery.layout-latest.js"></script>
+<script src="/DesignProjectUI/js/vendor/pablo.js"></script>
+<script type="text/javascript">
+$(function() {
+	$('body').layout({resizable:true,north:{togglerLength_open:0,closable:false,fxName:"none",spacing_open:10},
+		west:{initClosed:true,spacing_closed:10,spacing_open:10,fxSettings_open:{easing:"easeOutBounce"},size:300,resizable:true}
+	});
+});
+var globalResult;
+var selectedPkgName;
+var filterList=[];
+var selectedSequence;
+var filterListForCD=[];
+var expandAllFlag=false;
+var selectedSequenceName;
+var selectedModName;
+function clearPageHeader(){
+	$("#pageHeaderContent").empty();
+	$("#pageHeaderContent").append('<h2 id="pageHeader"></h2>');
+}
+
+$(function() {
+	$('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
+		var target=e.target["id"];
+		if(target=="0"){			
+			//showDashBoardData();
+			clearPageHeader();
+			
+		}
+		else if(target=="1")	{
+			$.getScript("/DesignProjectUI/js/vendor/d3CodeFlower.js",function(){
+				$.getScript("/DesignProjectUI/js/vendor/d3CodeFlower.geom.js",function(){
+					$.getScript("/DesignProjectUI/js/vendor/d3CodeFlower.layout.js",function(){
+						$.getScript("/DesignProjectUI/js/vendor/CodeFlower.js",function(){
+							$.getScript("/DesignProjectUI/js/vendor/dataConverter.js",function(){
+								$.getScript("/DesignProjectUI/js/CodeFlowerData.js",function(){
+									if(globalResult){
+										$("#sourceCodeContent").empty();
+										var headText="Code Flower";
+										$("#pageHeaderContent").append('<h2 id="pageHeader"></h2>');
+										$("#pageHeader").text(headText);		
+										var currentFlower = new CodeFlower("#sourceCodeContent", 1000, 900);
+										var jsonData=convertFromClocToJSON(globalResult.metricsInfo);
+										currentFlower.update(jsonData);
+									}	
+								});
+							});
+						});
+					});
+				});
+			});			
+		}
+		else if (target=="2"){
+			clearPageHeader();
+		}
+		else if(target=="3"){			
+			$.getScript("/DesignProjectUI/js/vendor/d3.js",function(){
+				$.getScript("/DesignProjectUI/js/vendor/d3.dependencyWheel.js",function(){
+					$.getScript("/DesignProjectUI/js/vendor/composerBuilder.js",function(){
+						$.getScript("/DesignProjectUI/js/PackageDependency.js",function(){
+							if(globalResult){
+								var headText="Dependency Wheel";
+								$("#pageHeaderContent").append('<h2 id="pageHeader"></h2>');
+								$("#pageHeader").text(headText);
+								$("#dependencyContent").empty();
+								var data=getDependencyWheelData(globalResult.metricsInfo);
+								var chart = d3.chart.dependencyWheel().width(2000).margin(500).padding(.02);
+								d3.select('#dependencyContent').datum(data).call(chart);
+							}
+						});
+					});
+				});
+			});			
+		}
+		else if(target=="4"){
+			clearPageHeader();
+		}
+		else {
+			clearPageHeader();
+		}
+	})
+});
+function rowStyle(row, index) {
+    if (row.fCyclomaticCxty>10 && row.fCyclomaticCxty<=20) {
+        return {
+            classes: 'warning'
+        };
+    }else if(row.fCyclomaticCxty>20){
+    	 return {
+             classes: 'danger'
+         };
+    }
+    return {};
+}
+function showDashBoardData(result){
+	if(result){
+		$("#pageHeaderContent").empty();
+		$("#tabsContainer").width(1200);
+		$("#designMetrics").show();
+		$("#metricsContainer").show();
+		var pkgInfo=result.metricsInfo;
+		var noOfPackages=pkgInfo.length;
+		var noOfLines=0;
+		var totalNoOfLines=0;
+		var totalNoOfClasses=0;
+		var totalNoOfConcreteClasses=0;
+		var totalNoOfAbstractClasses=0;
+		var totalNoOfInterfaces=0;
+		var totalComplexity=0;
+		var totalAfferentCoupling=0;
+		var totalEfferentCoupling=0;
+		var totalInstability=0;
+		var totalAbstractNess=0;
+		var totalNoOfMethods=0;
+		var totalMethodComplexity=0;
+		var totalFileComplexity=0;
+		var normalMethodCount=0;
+		var moderateComplexMethodCount=0;
+		var riskyComplexMethodCount=0;
+		
+		for(var i=0;i<noOfPackages;i++){
+			noOfLines+=pkgInfo[i].numberOfLines;
+			totalNoOfClasses+=pkgInfo[i].totalClassCount;
+			totalNoOfConcreteClasses+=pkgInfo[i].concreteClassCount;
+			totalNoOfAbstractClasses+=pkgInfo[i].abstractClassCount;
+			totalNoOfInterfaces+=pkgInfo[i].interfacesCount;
+			totalComplexity+=pkgInfo[i].cyclomaticComplexity;
+			totalAfferentCoupling+=pkgInfo[i].afferentCoupling;
+			totalEfferentCoupling+=pkgInfo[i].efferentCoupling;
+			if(pkgInfo[i].instability>=0.5)
+				totalInstability+=1;
+			if(pkgInfo[i].abstractness<0.5)
+				totalAbstractNess+=1;
+			/*var classList=pkgInfo[i].classList;
+			_.each(classList,function(clasInfo){
+				var methodList=clasInfo.methodList;
+				totalNoOfMethods+=methodList.length;
+			});*/
+			var metricsList=pkgInfo[i].classMetricList;
+			_.each(metricsList,function(clsMetricsInfo){
+				totalFileComplexity+=clsMetricsInfo.clsCyclomaticCxty;
+				totalNoOfLines+=clsMetricsInfo.clsLineCount;
+				_.each(clsMetricsInfo.functionMetricList,function(funcMetricInfo){
+					totalMethodComplexity+=funcMetricInfo.fCyclomaticCxty;
+					totalNoOfMethods+=1;
+					if(funcMetricInfo.fCyclomaticCxty<=10)
+						normalMethodCount+=1;
+					else if(funcMetricInfo.fCyclomaticCxty>10 && funcMetricInfo.fCyclomaticCxty<=20)
+						moderateComplexMethodCount+=1;
+					else
+						riskyComplexMethodCount+=1;
+				});
+			});
+		}
+		var avgMethodComplexity=(totalMethodComplexity/totalNoOfMethods).toFixed(2);
+		var avgClassComplexity=(totalFileComplexity/totalNoOfClasses).toFixed(2);
+		$("#designMetrics").attr("style","border:2px solid #98bf21");
+		var noOfLinesDiv=$("#noOfLines");
+		noOfLinesDiv.empty();
+		noOfLinesDiv.append("<span style='color:#FF3300'>No Of Lines</span><br><strong>"+noOfLines+"</strong><br><small>"+totalNoOfLines+"&nbsp;lines</small>");
+		var classesDiv=$("#classes");
+		classesDiv.empty();
+		classesDiv.append("<span style='color:#FF3300'>Classes</span><br><strong>"+totalNoOfClasses+"</strong><br><small>"+totalNoOfConcreteClasses+"&nbsp;concrete classes</small><br><small>"+totalNoOfAbstractClasses+"&nbsp;abstract classes</small><br><small>"+totalNoOfInterfaces+"&nbsp;interfaces</small><br><small>"+noOfPackages+"&nbsp;packages</small><br><small>"+totalNoOfMethods+"&nbsp;methods</small><br><small>"+result.jspPageCount+"&nbsp; JSP pages</small>");
+		var complexityDiv=$("#complexity");
+		complexityDiv.empty();
+		complexityDiv.append("<span style='color:#FF3300'>Complexity</span><br><strong>"+avgMethodComplexity+"</strong><small>/method</small><br><strong>"+avgClassComplexity+"</strong><small>/class</small><br><strong>"+normalMethodCount+"</strong>&nbsp;<small>methods (Complexity<10)</small><br><strong>"+moderateComplexMethodCount+"</strong>&nbsp;<small>methods (10>Complexity<=20)</small><br><strong>"+riskyComplexMethodCount+"</strong>&nbsp;<small>methods (Complexity>20)</small>");
+		var designQualityDiv=$("#designQuality");
+		designQualityDiv.empty();
+		designQualityDiv.append("<span style='color:#FF3300'>Design Quality</span><br><strong>"+totalInstability+"</strong><small>&nbsp;instable packages</small><br><strong>"+totalAbstractNess+"</strong><small>&nbsp;rigid packages(Abstractness)</small>")
+		var designDependencyDiv=$("#designDependency");
+		designDependencyDiv.empty();
+		designDependencyDiv.append("<span style='color:#FF3300'>Dependencies</span><br><strong>"+totalAfferentCoupling+"</strong><small>&nbsp;Afferent(incoming) couplings</small><br><strong>"+totalEfferentCoupling+"</strong><small>&nbsp;Efferent (outgoing) couplings</small>");
+		$("#packageMetricTable").bootstrapTable("destroy");
+		$("#packageMetricTable").bootstrapTable({
+			data:pkgInfo,
+			striped:false,
+			columns:[{field:'packageName',title:"Package Name",sortable:true,width:500},{field:"numberOfLines",title:"Number Of Lines",sortable:true},{field:"cyclomaticComplexity",title:"Complexity",sortable:true,formatter:valueFormatter},{field:"concreteClassCount",title:"#Concrete Classes",sortable:true},{field:"abstractClassCount",title:"#Abstract Classes",sortable:true},{field:"interfacesCount",title:"#Interfaces",sortable:true},{field:"totalClassCount",title:"#Classes",sortable:true},{field:"afferentCoupling",title:"Afferent Coupling",sortable:true},{field:"efferentCoupling",title:"Efferent Coupling",sortable:true},{field:"instability",title:"Instability",sortable:true,formatter:valueFormatter},{field:"abstractness",title:"Abstractness",sortable:true,formatter:valueFormatter},{field:"distance",title:"Distance",sortable:true,formatter:valueFormatter},{field:"classMetricList",title:"Class Metric",visible:false}]
+		}).on('dbl-click-row.bs.table', function (e, row, $element) {            
+			$("#classMetricHeader").text("Files List for Package: "+row.packageName);
+			 var $table = $('#classMetricTable');
+			 $table.bootstrapTable('destroy');
+			 var clsMetricList=row.classMetricList;
+			 clsMetricList.sort(function(a,b){
+				 return b.clsNcssCount-a.clsNcssCount;
+			 });
+			 $("#classMetricTable").bootstrapTable("destroy");
+            $("#classMetricTable").bootstrapTable({
+    			data:clsMetricList,
+    			striped:false,
+    			columns:[{field:'className',title:"Class Name",sortable:true,width:500},{field:"clsNcssCount",title:"#Lines",sortable:true},{field:"clsCyclomaticCxty",title:"Complexity",sortable:true},{field:"functionMetricList",title:"Function Metrics",visible:false}]
+    		}).on('dbl-click-row.bs.table', function (e, row, $element) {
+    			var $table = $('#methodMetricTable');
+   			 	$table.bootstrapTable('destroy');
+   			 	var funcMetricList=row.functionMetricList;
+   			 	funcMetricList.sort(function(a,b){
+   			 		return b.fNcssLineCount-a.fNcssLineCount;
+   			 	});
+    			$("#methodMetricHeader").text("Methods List for Class: "+row.className); 
+    			 $("#methodMetricTable").bootstrapTable("destroy");
+    			 $("#methodMetricTable").bootstrapTable({    				 
+    	    			data:funcMetricList,
+    	    			striped:false,
+    	    			columns:[{field:'functionName',title:"Function Name",sortable:true,width:500},{field:"fNcssLineCount",title:"#Lines",sortable:true},{field:"fCyclomaticCxty",title:"Complexity",sortable:true},{field:"fNpathCxty",title:"NpathComplexity",sortable:true}]
+    	    		});
+    	    		 $('#metricsTab a[id="8"]').tab('show');
+    		});
+            $('#metricsTab a[id="7"]').tab('show');
+        });
+	}
+}
+function valueFormatter(value){
+	return value.toFixed(2);
+}
+function clearDashBoardData(){
+	$("#designMetrics").hide();
+	$("#metricsContainer").hide();
+	clearPageHeader();
+}
+function clear(){
+	$("#prjTreeContent").empty();
+	$("#prjTreeContent").append('<div id="designProjectTree" class="aciTree aciTreeNoBranches" ></div>');
+	$("#classTreeContent").empty();
+	$("#classTreeContent").append('<div id="designClassTree" class="aciTree aciTreeNoBranches" ></div>');
+	$('#tabsContainer a[href="#dashBoardContent"]').tab('show');
+	clearDashBoardData();
+}
+
+$("#getClsInfo").click(function(){
+	var fromCATwo=$('#fromCATwo').is(":checked") ? "Yes" : "No";
+	var formData=new FormData();
+	formData.append('file', $('#file')[0].files[0]);
+	formData.append('fromCATwo', fromCATwo);
+	clear();	
+	var myLayout = $('body').layout();
+	myLayout.close('west');
+	$("#loaderDiv").show();	
+	$.ajax({
+		type : "POST",
+		url : "rest/GenerateMetrics/getMetrics",
+		data : formData,
+		cache:false,
+	 	contentType: false,
+     	processData: false,
+		success : function(dataResult){
+			var result=JSON.parse(dataResult);
+			globalResult=result;
+			var treeData=buildProjectTree(result);
+			var classData=buildClassTree(result);
+			var wrapperData=[];	
+			var classWrapperData=[];
+			wrapperData.push(treeData);
+			classWrapperData.push(classData);
+			$("#loaderDiv").hide();		
+			var myLayout = $('body').layout();
+			myLayout.open("west");
+			$('#designClassTree').aciTree({
+				rootData:classWrapperData
+			}).on("acitree",function(event, api, item, eventName, options){
+				switch (eventName){
+				case 'selected':
+					var id=api.getId(item);
+					if(_.contains(classData.packageIds,id)){
+						//$("#loaderDiv").show();	
+						$('#tabsContainer a[href="#classDiagramContent"]').tab('show');
+						var pkgName=api.getLabel(item);
+						selectedPkgName=pkgName;
+						showClassDiagram(pkgName,false);
+						//$("#loaderDiv").hide();	
+					}
+					break;
+				}
+			});
+			$('#designProjectTree').aciTree({
+				rootData:wrapperData
+			}).on("acitree",function(event, api, item, eventName, options){
+				switch (eventName){
+				case 'selected':
+					if(api.getLabel(item)=="Use Cases"){
+						
+						var id=api.getId(item);
+						if(_.contains(treeData.useCaseIds,id)){
+							_.each(treeData.useCaseData,function(actUcData){
+								if(actUcData.id===id){
+									//$("#loaderDiv").show();	
+									var ucData=actUcData.ucList;
+									var headText="Use Case Diagram for "+actUcData.modName+":";	
+									clearPageHeader();
+									$("#pageHeader").text(headText);
+									var parent=api.parent(item);
+									selectedModName=api.getLabel(parent);
+									showUseCaseDiagram(ucData)
+								}
+							});
+						}
+					}
+					else
+					{
+						var id=api.getId(item);
+						if(_.contains(treeData.seqIds,id)){
+							_.each(treeData.seqData,function(actSequenceData){
+								if(actSequenceData.id===id){
+									var label=api.getLabel(item);
+									var sequenceData=actSequenceData.sequence;
+									
+									selectedSequence=sequenceData;
+									selectedSequenceName=label;
+									var headText="Sequence Diagram for "+label+":";
+									clearPageHeader();
+									$("#pageHeader").text(headText);
+									showSequenceDiagram(sequenceData);
+								}
+							});
+						}
+					}					
+					break;
+				}
+			});
+			showDashBoardData(result);
+		}
+		});	
+});
+function filterClass(){
+	$("#filterClasses").click(function(){
+		var selectedItems=$("#sequenceFilter").dropdownCheckbox("checked");	
+		filterList=[];
+		if(selectedItems.length>0){
+			_.each(selectedItems,function(selectedItem){
+				filterList.push(selectedItem.label);
+			});
+		}
+		showSequenceDiagram(selectedSequence);
+	});
+}
+function removeFilter(){
+	$("#removeFilter").click(function(){
+		filterList=[];
+		showSequenceDiagram(selectedSequence);
+	});
+}
+function showUseCaseDiagram(ucData,modName){
+	$('#tabsContainer a[href="#useCaseContent"]').tab('show');
+	$("#useCaseContent").empty();
+	$("#useCaseContent").append('<div class="row" ><button type="button" id="downloadUCD" class="btn btn-primary"><span class="glyphicon glyphicon-download"></span>&nbsp;Download</button></div><div id="useCaseDiagram"></div>');
+	$("#classDiagram").empty();
+	$("#sequenceContent").empty();
+	downloadUseCaseDiagram();
+	drawUseCaseDiagram(ucData);	
+}
+function downloadUseCaseDiagram(){
+	$("#downloadUCD").click(function(){
+		var item=$("#useCaseDiagram > svg > *");
+		var cdFileName=selectedModName+"SD.png";
+		Pablo(item).download('png', cdFileName);
+	});
+}
+function showSequenceDiagram(sequenceData){
+	$('#tabsContainer a[href="#sequenceContent"]').tab('show');
+	//$("#loaderDiv").show();	
+	$("#useCaseContent").empty();
+	$("#classDiagramContent").empty();
+	$("#sequenceContent").empty();
+	$("#sequenceContent").append('<div class="row" ><span id="sequenceFilter"></span>&nbsp;&nbsp;&nbsp;&nbsp;<div class="btn-group"><button type="button" id="filterClasses" class="btn btn-primary"><span class="glyphicon glyphicon-filter"></span>&nbsp;Filter</button><button type="button" id="removeFilter" class="btn btn-primary"><span class="glyphicon glyphicon-remove-sign"></span>&nbsp;Remove Filter</button><button type="button" id="downloadSD" class="btn btn-primary"><span class="glyphicon glyphicon-download"></span>&nbsp;Download</button></div></div><div id="sequenceDiagram" style="width:5000"></div>');	
+	createFilterList(sequenceData);
+	filterClass();	
+	removeFilter();
+	downloadSequenceDiagram();
+	drawSequenceDiagram(sequenceData,filterList);
+}
+function createFilterList(sequenceData){
+	var classList=getClasses(sequenceData,filterList);
+	$("#sequenceFilter").dropdownCheckbox({
+		  data: classList,
+		  title: "Select Classes to Filter",
+		  autosearch:true,
+		  btnClass:"btn btn-primary",
+		  hideHeader: false
+	});
+}
+function createFilterListForCD(globalResult,pkgName){
+	var classList=getClassesForCD(globalResult,pkgName,filterListForCD);
+	$("#classDiagramFilter").dropdownCheckbox({
+		  data: classList,
+		  title: "Select Classes to Filter",
+		  autosearch:true,
+		  btnClass:"btn btn-primary",
+		  hideHeader: false
+	});
+}
+function filterClassForCD(){
+	$("#filterClassesForCD").click(function(){
+		var selectedItems=$("#classDiagramFilter").dropdownCheckbox("checked");	
+		filterListForCD=[];
+		if(selectedItems.length>0){
+			_.each(selectedItems,function(selectedItem){
+				filterListForCD.push(selectedItem.label);
+			});
+		}
+		showClassDiagram(selectedPkgName,expandAllFlag);
+	});
+}
+function removeFilterForCD(){
+	$("#removeFilterForCD").click(function(){
+		filterListForCD=[];
+		showClassDiagram(selectedPkgName,expandAllFlag);
+	});
+}
+function showClassDiagram(pkgName,expandAll){
+	$("#useCaseContent").empty();
+	$("#classDiagramContent").empty();
+	$("#sequenceContent").empty();
+	$("#classDiagramContent").append('<div class="row"><div class="btn-group"><button type="button" class="btn btn-primary" id="expandClassDiagram"><span class="glyphicon glyphicon-expand"></span>&nbsp;Expand All</button><button type="button" class="btn btn-primary" id="collapseClassDiagram"><span class="glyphicon glyphicon-collapse-down"></span>&nbsp;Collapse All</button></div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="classDiagramFilter"></span>&nbsp;&nbsp;&nbsp;<div class="btn-group"><button type="button" id="filterClassesForCD" class="btn btn-primary"><span class="glyphicon glyphicon-filter"></span>&nbsp;Filter</button><button type="button" id="removeFilterForCD" class="btn btn-primary"><span class="glyphicon glyphicon-remove-sign"></span>&nbsp;Remove Filter</button><button type="button" id="downloadCD" class="btn btn-primary"><span class="glyphicon glyphicon-download"></span>&nbsp;Download</button></div></div><div>&nbsp;</div><div id="classDiagram"></div>');
+	var headText="Class Diagram for "+pkgName+":";
+	clearPageHeader();
+	$("#pageHeader").text(headText);	
+	createFilterListForCD(globalResult,pkgName);
+	filterClassForCD();
+	removeFilterForCD();
+	downloadClassDiagram();
+	drawClassDiagram(globalResult,pkgName,expandAll,filterListForCD);	
+	expand();
+	collapse();
+}
+function expand(){
+	$("#expandClassDiagram").click(function(){	
+		showClassDiagram(selectedPkgName,true);
+		expandAllFlag=true;
+	});
+};
+function collapse(){
+	$("#collapseClassDiagram").click(function(){
+		showClassDiagram(selectedPkgName,false);
+		expandAllFlag=false;
+	});
+};
+function downloadClassDiagram(){
+	$("#downloadCD").click(function(){
+		var item=$("#classDiagram > svg > *");
+		var temp=selectedPkgName.replace(/\./g,"_");
+		var cdFileName=temp+"SD.png";
+		Pablo(item).download('png', cdFileName);
+	});
+}
+function downloadSequenceDiagram(){
+	$("#downloadSD").click(function(){
+		var item=$("#sequenceDiagram > svg");
+		var sequenceFileName=selectedSequenceName+"SeqDiag.png";
+		Pablo(item).download('png', sequenceFileName);
+	});
+}
+</script>
+</body>
+</html>

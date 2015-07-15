@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="com.hibernate.test.entity.Employee" table="employee">
+		<id name="empId" column="EMP_ID" >
+			<generator class="identity">
+				
+			</generator>
+		</id>
+		<component name="Contact" class="com.hibernate.test.entity.Contact">
+			<property name="landLine" column="EMP_LLNO" optimistic-lock="false" ></property>
+			<property name="mobile"  column="EMP_MOBNO"></property>
+		</component>
+		<property name="EmpName" column="EMP_NAME"></property>
+		<property name="EmpAddress" column="EMP_ADDRESS"></property>
+		<one-to-one name="EmployeeTransport" class="com.hibernate.test.entity.EmployeeTransport" cascade="save-update" ></one-to-one>
+		<join table="employee_preference" catalog="hibernate_test" fetch="join" optional="true" >
+			<key column="EMP_ID"  property-ref="empId"></key>
+			<property name="color"></property>
+			<property name="food"></property>
+			
+		</join>
+		
+	
+		
+	</class>
+
+</hibernate-mapping>

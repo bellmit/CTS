@@ -1,0 +1,20 @@
+
+<%@ taglib uri="http://java.sun.com/jsf/core" prefix="f"%>
+<%@ taglib uri="http://acs.enterprise.com/help" prefix="e"%>
+<%@ taglib uri="http://java.sun.com/portlet" prefix="portlet"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1" session="false"%>
+<portlet:defineObjects />
+<f:view>
+	<f:loadBundle basename="com.acs.enterprise.common.program.contactmanagement.view.nl.PGM_IN_CMSearchCase"
+			var="helpmsg" />
+			
+<f:loadBundle basename="com.acs.enterprise.common.util.config.ServerLocation"
+			var="helpserver" />
+			
+<script>
+var url = '<e:helpPath helpServer="#{helpserver['httpProviderURL']}" helpJunctionUrl="#{helpserver['internalHelpJunction']}" mapFile="#{helpmsg['mapFile']}" helpRoot="#{helpmsg['helpRoot']}" helpContentPath="#{helpmsg['helpContentPath']}" helpId="#{helpmsg['helpId']}"/>'; 
+location.href= url;
+</script>
+
+</f:view>

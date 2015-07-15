@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<faces-config
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
+    version="1.2">
+	<application>
+		<state-manager>com.ibm.faces.application.DevelopmentStateManager</state-manager>
+		<variable-resolver>com.ibm.faces.portlet.PortletVariableResolver</variable-resolver>
+		<locale-config>
+			<supported-locale>en</supported-locale>			
+		</locale-config>
+	</application>
+	<factory>
+		<faces-context-factory>com.ibm.faces.context.AjaxFacesContextFactory</faces-context-factory>
+		<render-kit-factory>com.ibm.faces.renderkit.AjaxRenderKitFactory</render-kit-factory>
+	</factory>
+	<lifecycle>
+		<phase-listener>com.ibm.faces.webapp.ValueResourcePhaseListener</phase-listener>
+	</lifecycle>
+</faces-config>

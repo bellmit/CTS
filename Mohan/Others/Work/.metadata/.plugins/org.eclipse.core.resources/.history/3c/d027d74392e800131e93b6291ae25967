@@ -1,0 +1,19 @@
+.header
+{
+	background-color:gray;
+	text-align: center;
+	font-size:large;
+		margin:5px;
+		margin-top:-5px;
+}
+#wrapper
+	{
+		font-family: serif;
+		font-style: italic;
+		width: 100%;
+	}
+table
+{
+	width: 100%;
+	
+}

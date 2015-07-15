@@ -1,0 +1,62 @@
+			  
+#set ($rulereturnBoolean = $ruleDescriptor.getRuleReturnField())
+		#if($isBatchRule)
+			RulesDelegate ruleDelegate = new RulesDelegate();
+			List objects;
+		#end
+		#foreach($ruleDescriptor in $ruleDescriptorList)
+	             //Rule Invocation Context object holds object arrays used in rule execution.
+			 
+			  #if($isBatchRule)
+				String ruleId$foreach.count = "$ruleDescriptor.getRuleId()";
+				objects = new ArrayList(); 
+				//Adding object into rule invocation context.
+			  	$ruleTempUtility.getAddObjectsToContext($ruleDescriptor.getRuleContextParams(), "ruleDelegate","objects","$ruleDescriptor.getRuleId()")	
+			  #else			    
+			    String ruleId = "$ruleDescriptor.getRuleId()";
+			    RulesDelegate ruleDelegate = new RulesDelegate(ruleId);
+			    //Adding object into rule invocation context.
+			 	$ruleTempUtility.getAddObjectsToContext($ruleDescriptor.getRuleContextParams(), "ruleDelegate")	    
+			  #end
+        #end                                
+		   
+              //Invoke RIF with ruleid and rule invocation objects.
+			  #if($isBatchRule)
+				List<RulesResultVO> rulesResult = null;
+			  #else
+			    RulesResultVO rulesResult = null;
+			  #end
+              
+              try {
+              		
+                     #if($isBatchRule)
+						rulesResult = ruleDelegate.invokeRules();
+					  #else
+						rulesResult = ruleDelegate.invokeRule();	
+					  #end
+					  #if($rulereturnBoolean)
+						$rulereturnBoolean=rulesResult.isReturnBooleanValue(); 
+					  #end
+					  
+				  #if($isBatchRule)
+				  for (RulesResult ruleResult: rulesResult) {
+					if (!ruleResult.isReturnBooleanValue()) {
+					  flag = false;
+					}
+		   		  #else
+					if (!ruleResult.isReturnBooleanValue()) {
+					  flag = false;
+					}
+			   	  #end
+              } catch (RulesDelegateException re){
+                     if("300".equals(re.getErrorCode()))
+					 {
+						logger.warn("Rule Expired::::"+);
+						//If needed perform expires logic here  
+					 }
+					  logger.info("RulesDelegateException::::"+re);
+              }
+			  
+		
+              
+              logger.info("Rule Execution Ended::::"+ruleId+"\n");

@@ -1,0 +1,332 @@
+<?xml version="1.0"?>
+<faces-config
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
+   version="2.0">
+	
+
+	<managed-bean>
+		<managed-bean-name>eAddressControllerBean</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.commonentities.view.bean.EAddressControllerBean
+		</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>phoneControllerBean</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.commonentities.view.bean.PhoneControllerBean
+		</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+
+
+
+	<managed-bean>
+		<managed-bean-name>commonNotesControllerBean</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.commonentities.view.bean.CommonNotesControllerBean
+		</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>
+			detailedNotesControllerBean
+		</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.commonentities.view.bean.DetailedNotesControllerBean
+		</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>
+			commonContactControllerBean
+		</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.commonentities.view.bean.CommonContactControllerBean
+		</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>addressControllerBean</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.commonentities.view.bean.AddressControllerBean
+		</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>commonEntityDataBean</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.commonentities.view.bean.CommonEntityDataBean
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+		<managed-property>
+			<property-name>commonEntityVO</property-name>
+			<value>#{commonEntityVO}</value>
+		</managed-property>
+		<managed-property>
+			<property-name>commonNoteSearchVO</property-name>
+			<value>#{commonNoteSearchVO}</value>
+		</managed-property>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>commonEntityVO</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.commonentities.view.vo.CommonEntityVO
+		</managed-bean-class>
+		<managed-bean-scope>none</managed-bean-scope>
+
+		<managed-property>
+			<property-name>noteSetVO</property-name>
+			<value>#{noteSetVO}</value>
+		</managed-property>
+
+		<managed-property>
+			<property-name>commonNotesVO</property-name>
+			<value>#{commonNotesVO}</value>
+		</managed-property>
+
+
+		<managed-property>
+			<property-name>detailNoteSetVO</property-name>
+			<value>#{detailNoteSetVO}</value>
+		</managed-property>
+
+		<managed-property>
+			<property-name>detailCommonNotesVO</property-name>
+			<value>#{detailCommonNotesVO}</value>
+		</managed-property>
+
+		<managed-property>
+			<property-name>contactVOList</property-name>
+			<value>#{contactVOList}</value>
+		</managed-property>
+
+		<managed-property>
+			<property-name>commonContactVO</property-name>
+			<value>#{commonContactVO}</value>
+		</managed-property>
+
+		<managed-property>
+			<property-name>addressVO</property-name>
+			<value>#{addressVO}</value>
+		</managed-property>
+
+		<managed-property>
+			<property-name>eaddressVO</property-name>
+			<value>#{eaddressVO}</value>
+		</managed-property>
+		<managed-property>
+			<property-name>eaddressVOList</property-name>
+			<value>#{eaddressVOList}</value>
+		</managed-property>
+		<managed-property>
+			<property-name>phoneVO</property-name>
+			<value>#{phoneVO}</value>
+		</managed-property>
+		<managed-property>
+			<property-name>phoneVOList</property-name>
+			<value>#{phoneVOList}</value>
+		</managed-property>
+
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>commonNoteSearchVO</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.commonentities.view.vo.CommonNotesSearchCriteriaVO
+		</managed-bean-class>
+		<managed-bean-scope>none</managed-bean-scope>
+	</managed-bean>
+
+
+	<managed-bean>
+		<managed-bean-name>noteSetVO</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.commonentities.view.vo.NoteSetVO
+		</managed-bean-class>
+		<managed-bean-scope>none</managed-bean-scope>
+
+		<managed-property>
+			<property-name>notesList</property-name>
+			<value>#{notesList}</value>
+		</managed-property>
+	</managed-bean>
+
+
+	<managed-bean>
+		<managed-bean-name>commonNotesVO</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.commonentities.view.vo.CommonNotesVO
+		</managed-bean-class>
+		<managed-bean-scope>none</managed-bean-scope>
+
+		<managed-property>
+			<property-name>usageTypeList</property-name>
+			<value>#{usageTypeList}</value>
+		</managed-property>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>detailNoteSetVO</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.commonentities.view.vo.NoteSetVO
+		</managed-bean-class>
+		<managed-bean-scope>none</managed-bean-scope>
+	</managed-bean>
+
+
+	<managed-bean>
+		<managed-bean-name>detailCommonNotesVO</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.commonentities.view.vo.CommonNotesVO
+		</managed-bean-class>
+		<managed-bean-scope>none</managed-bean-scope>
+
+		<managed-property>
+			<property-name>usageTypeList</property-name>
+			<value>#{usageTypeList}</value>
+		</managed-property>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>contactVOList</managed-bean-name>
+		<managed-bean-class>java.util.ArrayList</managed-bean-class>
+		<managed-bean-scope>none</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>commonContactVO</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.commonentities.view.vo.CommonContactVO
+		</managed-bean-class>
+		<managed-bean-scope>none</managed-bean-scope>
+
+		<managed-property>
+			<property-name>nameVO</property-name>
+			<value>#{nameVO}</value>
+		</managed-property>
+
+		<managed-property>
+			<property-name>commonContactTypeVO</property-name>
+			<value>#{commonContactTypeVO}</value>
+		</managed-property>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>nameVO</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.commonentities.view.vo.NameVO
+		</managed-bean-class>
+		<managed-bean-scope>none</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>commonContactTypeVO</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.commonentities.view.vo.CommonContactTypeVO
+		</managed-bean-class>
+		<managed-bean-scope>none</managed-bean-scope>
+
+	</managed-bean>
+
+
+	<managed-bean>
+		<managed-bean-name>notesList</managed-bean-name>
+		<managed-bean-class>java.util.ArrayList</managed-bean-class>
+		<managed-bean-scope>none</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>usageTypeList</managed-bean-name>
+		<managed-bean-class>java.util.ArrayList</managed-bean-class>
+		<managed-bean-scope>none</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>eaddressVO</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.commonentities.view.vo.EAddressVO
+		</managed-bean-class>
+		<managed-bean-scope>none</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>addressVO</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.commonentities.view.vo.AddressVO
+		</managed-bean-class>
+		<managed-bean-scope>none</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>phoneVO</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.commonentities.view.vo.PhoneVO
+		</managed-bean-class>
+		<managed-bean-scope>none</managed-bean-scope>
+		<managed-property>
+			<property-name>usageList</property-name>
+			<value>#{usageList}</value>
+		</managed-property>
+		<managed-property>
+			<property-name>countryCodeList</property-name>
+			<value>#{countryCodeList}</value>
+		</managed-property>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>usageList</managed-bean-name>
+		<managed-bean-class>java.util.ArrayList</managed-bean-class>
+		<managed-bean-scope>none</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>countryCodeList</managed-bean-name>
+		<managed-bean-class>java.util.ArrayList</managed-bean-class>
+		<managed-bean-scope>none</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>eaddressVOList</managed-bean-name>
+		<managed-bean-class>java.util.ArrayList</managed-bean-class>
+		<managed-bean-scope>none</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>phoneVOList</managed-bean-name>
+		<managed-bean-class>java.util.ArrayList</managed-bean-class>
+		<managed-bean-scope>none</managed-bean-scope>
+	</managed-bean>
+
+
+	<!--
+		<navigation-rule>
+		<from-view-id>/jsp/commonEntities/commonNotes.jsp</from-view-id>
+		<navigation-case>
+		<from-action>#{commonNotesControllerBean.cancelNotes}</from-action>
+		<from-outcome>cancelNotes</from-outcome>
+		<to-view-id>/jsp/commonEntities/commonNotes.jsp</to-view-id>
+		</navigation-case>
+		</navigation-rule>
+		
+	-->
+	<application>
+		
+
+
+		<!--<locale-config>
+			<default-locale>en</default-locale>
+		</locale-config>
+		--><message-bundle>com.acs.enterprise.common.program.commonentities.nl.PGM_CE_CommonNotes</message-bundle>
+		<!--<locale-config>
+			<default-locale>en</default-locale>
+		</locale-config>
+	--></application>
+</faces-config>

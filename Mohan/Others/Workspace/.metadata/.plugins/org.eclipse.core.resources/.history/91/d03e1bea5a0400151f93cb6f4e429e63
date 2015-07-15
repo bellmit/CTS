@@ -1,0 +1,4752 @@
+/*
+ * Copyright (c) 2007 Affiliated Computer Services, Inc.
+ */
+
+package com.acs.enterprise.mmis.operations.claimadjudication.application.domainmanager;
+
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+
+
+
+
+
+
+
+
+
+
+
+import com.acs.enterprise.common.base.application.domainmanager.EnterpriseBaseDomainManager;
+import com.acs.enterprise.common.base.application.exception.EnterpriseBaseBusinessException;
+import com.acs.enterprise.common.program.administration.common.domain.SystemParameter;
+import com.acs.enterprise.common.program.administration.common.domain.SystemParameterDetail;
+import com.acs.enterprise.common.program.benefitadministration.common.domain.MapSetHeader;
+import com.acs.enterprise.common.util.logger.EnterpriseLogFactory;
+import com.acs.enterprise.common.util.logger.EnterpriseLogger;
+import com.acs.enterprise.mmis.operations.claimadjudication.application.helper.ClaimTPLEditsHelper;
+import com.acs.enterprise.mmis.operations.claimadjudication.common.helper.ClaimAdjudicationConstants;
+import com.acs.enterprise.mmis.operations.claimadjudication.common.helper.ClaimAdjudicationHelper;
+import com.acs.enterprise.mmis.operations.claimadjudication.common.helper.MapSetHelper;
+import com.acs.enterprise.mmis.operations.claimadjudication.common.helper.SystemListCheckUtil;
+import com.acs.enterprise.mmis.operations.common.domain.ClaimAdjudicationEdit;
+import com.acs.enterprise.mmis.operations.common.domain.ClaimAttachment;
+import com.acs.enterprise.mmis.operations.common.domain.ClaimPricing;
+import com.acs.enterprise.mmis.operations.common.domain.ClaimTPLAmountInfo;
+import com.acs.enterprise.mmis.operations.common.domain.ClaimTPLBilling;
+import com.acs.enterprise.mmis.operations.common.domain.ClaimTPLInfo;
+import com.acs.enterprise.mmis.operations.common.domain.ClaimTPLMatrix;
+import com.acs.enterprise.mmis.operations.common.domain.Diagnosis;
+import com.acs.enterprise.mmis.operations.common.domain.EnterpriseClaim;
+import com.acs.enterprise.mmis.operations.common.domain.EnterpriseClaimLineItem;
+import com.acs.enterprise.mmis.operations.common.domain.InstitutionalClaim;
+import com.acs.enterprise.mmis.operations.common.domain.OccurrenceCode;
+import com.acs.enterprise.mmis.operations.common.domain.OccurrenceSpan;
+import com.acs.enterprise.mmis.operations.common.domain.ProfessionalLineItem;
+import com.acs.enterprise.mmis.operations.common.vo.ClaimTPLBillingVO;
+import com.acs.enterprise.mmis.operations.tpladministration.common.domain.TPLCarrier;
+import com.acs.enterprise.common.rif.rules.delegate.RulesDelegate;
+import com.acs.enterprise.common.util.rif.rules.exception.RulesDelegateException;
+import com.acs.enterprise.common.util.rif.rules.helper.RulesConstants;
+import com.acs.enterprise.common.util.rif.rules.vo.RulesResultVO;
+
+
+/**
+ * This class is basically an infrastructural class. This is used to route the
+ * request from facade to database layer.
+ * 
+ * @author Wipro
+ */
+public class ClaimTPLEditsManager
+        extends EnterpriseBaseDomainManager
+{
+    private static final String RULES_DELEGATE_EXCEPTION = "RulesDelegateExceptwion::::";
+
+	/** Declaration of EnterpriseLogger */
+    private transient EnterpriseLogger logger = EnterpriseLogFactory
+            .getLogger(this.getClass());
+
+    /**For Rules PMD**/
+	private static final String RULESDELEGATE_EXCEPTION = RULES_DELEGATE_EXCEPTION;
+	private static final String EXECUTION_ENDED = "Rule Execution Ended::::";
+	private static final String RULE_EXPIRED = "Rule Expired...";
+	private static final String ERRORCODE = "300";
+	private static final String ruleId27 = "CLM4002.0027.01";
+	private static final String ruleId29 = "CLM4002.0029.01";
+	private static final String ruleId31 = "CLM4002.0031.01";
+	private static final String ruleId34 = "CLM4002.0034.01";
+	private static final String ruleId41 = "CLM4002.0041.01";
+    private static final String ruleId48 = "CLM4001.0048.01";	
+    private static final String ruleId49 = "CLM4001.0049.01";
+	private static final String ruleId50 = "CLM4001.0050.01";
+	private static final String RULE_IDCLM4002006201 = "CLM4002.0062.01";
+	private static final String RULE_IDCLM4002005201 = "CLM4002.0052.01";
+    /** Default Constructor */
+    public ClaimTPLEditsManager()
+    {
+        super();
+        logger.info(" Inside ClaimTPLEditsManager() ");
+    }
+
+    /** This variable holds instance for SystemListCheckUtil */
+    private transient SystemListCheckUtil checkUtil = new SystemListCheckUtil();
+    
+    /** This variable holds instance for ClaimTPLEditsHelper */
+    private transient ClaimTPLEditsHelper tplHelper = new ClaimTPLEditsHelper();
+
+    /** Constant to hold size for Collections */
+    private static final int HUNDRED = 100;
+
+    /** Declaration of Attachment Codes Set */
+    private transient Set claimAttachments;
+
+    /** Map that holds the required SystemLists */
+    private transient Map systemListMap;
+
+    /** Indicator for PrenatalDiagnosis Code */
+    private transient boolean prenatalDiagnosis = false;
+
+    /** List to hold Denied LineItems */
+    private transient List deniedLines;
+
+    /** List to hold List of Exception Codes */
+    private transient List exceptionList;
+
+    /**Holds resource types*/
+    private transient Map resourceTypeMap;
+
+    /**Holds SystemParameters*/
+    private transient Map systemParameterMap = null;
+
+    /**Holds exception codes*/
+    private transient Map exceptionCodesMap;    
+
+    /**
+     * This Method is used to process the TPL Edits
+     * 
+     * @param enterpriseClaim
+     *                     EnterpriseClaim Object
+     * @param editStatus
+     *                     Map the represents EditStatus of TPLEdits
+     * @param sysListMap
+     *                     Map contains all the System Lists required in TPLEdits Process
+     * @param systemParameterMap
+     *                     Map contains all the System Parameters required in TPL Edits
+     *                     Process
+     * @return enterpriseClaim EnterpriseClaim Object
+     * @throws EnterpriseBaseBusinessException
+     * 					EnterpriseBaseBusinessException
+     */
+    public EnterpriseClaim processClaimTPLEdits(
+            EnterpriseClaim enterpriseClaim, List editStatus, Map sysListMap,
+            Map systemParameterMap)
+            throws EnterpriseBaseBusinessException
+    {
+        if(logger.isInfoEnabled()) {
+	        logger
+	                .info("CLAIMTPLEDITS MANAGER : processClaimTPLEdits() : BEGIN TCN:"
+	                        + enterpriseClaim.getTcn());
+
+        }
+
+        this.systemParameterMap = systemParameterMap;
+        boolean headerFlag = false;
+        String coverageCode = null;
+        Long memberSysID = enterpriseClaim.getMemberSystemID();
+        Date fDOS = enterpriseClaim.getFDOS();
+        Date lDOS = enterpriseClaim.getLDOS();
+        String lobCode = enterpriseClaim.getLobCode();
+        boolean loopFlag = true;        
+        List tplPolicies = null;
+        Set editsSet = null;
+        ClaimAdjudicationHelper helper = new ClaimAdjudicationHelper();
+        boolean msqIndicator = false;
+        boolean tplBillingIndicator = false;
+        Boolean headerCostAvoidanceIndicator = Boolean.FALSE;
+        boolean matrixFlag = true;
+        exceptionList = new ArrayList();
+        resourceTypeMap = new HashMap();
+        exceptionCodesMap = new HashMap();        
+        deniedLines = new ArrayList();
+        Set postedEdits = new HashSet();
+        systemListMap = sysListMap;
+        String bypassParamValue =  getSystemParameterValueData(
+				systemParameterMap,
+				fDOS,
+				new Long(
+						ClaimAdjudicationConstants.TPL_MATRIX_STOP_LOOP_PARAM));
+        if(logger.isDebugEnabled()) {
+	        logger.debug("TPL matrix stop loop param value" + bypassParamValue);
+
+        }
+
+        double totalTPLAmount = populateTPLAmounts(enterpriseClaim);
+        if (totalTPLAmount > ClaimAdjudicationConstants.TPL_THRESHOLD_AMOUNT)
+        {
+            matrixFlag = false;
+        }
+        claimAttachments = enterpriseClaim.getClaimAttachment();
+
+        if(logger.isInfoEnabled()) {
+	        logger.info("MemberSysID : " + memberSysID);
+	        logger.info("FDOS : " + fDOS);
+	        logger.info("LDOS : " + lDOS);
+
+        }
+
+
+        /* Get TPL Policies and TPL CoverageCode associated with Member */
+        try
+        {
+            tplPolicies = tplHelper.getMatchingTPLPoliciesForMember(memberSysID,
+            		fDOS, lDOS);
+        }
+        catch (EnterpriseBaseBusinessException ex)
+        {
+            logger.error(ex.getMessage(), ex);
+            throw new EnterpriseBaseBusinessException(ex);
+        }
+        boolean postException6040 = 
+        	tplHelper.otherPayerCarrierCodeIsOnFile(enterpriseClaim);
+        
+        if (postException6040)
+        {            
+            ClaimAdjudicationEdit edit = new ClaimAdjudicationEdit();
+
+            edit.setLineNumber(Integer.valueOf(0));
+            edit.setExceptionCode(ClaimAdjudicationConstants.EDIT_6040);
+            postedEdits.add(edit);            
+            //exceptionList.add(ClaimAdjudicationConstants.EDIT_6040);
+            logger.debug(" 6040 is Posted! ");
+        }        
+       //invoke TPL Matrix Bypass Edits
+        Set matrixBypassEdits = headerTPLMatrixBypassEdits(enterpriseClaim,
+        		 Integer.valueOf(0));
+        if (matrixBypassEdits != null && !matrixBypassEdits.isEmpty())
+        {
+        		postedEdits.addAll(matrixBypassEdits);
+        }
+        List list = tplHelper.getListOfExceptions(postedEdits);
+        if (list != null && !list.isEmpty())
+        {
+        	exceptionList.addAll(list);
+        }
+        if (ClaimAdjudicationConstants.TPL_MATRIX_STOP_LOOP_PARAM_VALUE
+                    		.equalsIgnoreCase(bypassParamValue))
+        {
+	        matrixFlag = !checkUtil
+			.isPresentInSystemList(
+					systemListMap,
+					ClaimAdjudicationConstants.FUNCTIONAL_AREA_C3,
+					new Long(
+							ClaimAdjudicationConstants.TPL_EDITS_STOP_LOOP_LIST),
+							exceptionList, enterpriseClaim.getFDOS());
+        }
+        if(logger.isDebugEnabled()) {
+	        logger.debug("matrixFlag:" + matrixFlag);
+
+        }
+
+        Set edits = enterpriseClaim.getLineItemEdits();
+        edits = helper.setEditsToLineItemEditsSet(edits, postedEdits,
+                Integer.valueOf(0));
+        enterpriseClaim.setLineItemEdits(edits);        
+        String pricingMethodcode = enterpriseClaim.getPricingMethodCode();
+        // Defect - ESPRD00810591
+        if (enterpriseClaim.getClaimFormCode() != null && ClaimAdjudicationConstants.INSTITUTIONAL_CLAIMS
+                .equals(enterpriseClaim.getClaimFormCode()))
+        {
+            headerFlag = true;
+        }
+        HashSet coverageCodes = new HashSet(HUNDRED);
+        ClaimTPLBillingVO tplPolicy = null;
+        List resourceTypeList = null;
+
+        if(logger.isDebugEnabled()) {
+	        logger.debug("headerFlag is :" + headerFlag);
+
+        }
+
+        if (headerFlag)
+        {
+            editsSet = processHeaderBusinessRule(enterpriseClaim);
+            if (editsSet != null && !editsSet.isEmpty())
+            {
+            	postedEdits.addAll(editsSet);
+            }
+            exceptionCodesMap.put(Integer.valueOf(0), postedEdits);
+            //adding all the exceptions into list.
+            List headerExceptions = tplHelper.getListOfExceptions(editsSet);
+            if (headerExceptions != null && !headerExceptions.isEmpty())
+            {
+            	exceptionList.addAll(headerExceptions);        
+            }
+            Set lineEdits = enterpriseClaim.getLineItemEdits();
+            lineEdits = helper.setEditsToLineItemEditsSet(lineEdits, editsSet,
+                    Integer.valueOf(0));
+            enterpriseClaim.setLineItemEdits(lineEdits);
+            if (enterpriseClaim.getEnterpriseClaimAux() != null
+                    && enterpriseClaim.getEnterpriseClaimAux()
+                            .getCostAvoidanceIndicator() != null)
+            {
+                headerCostAvoidanceIndicator = enterpriseClaim
+                        .getEnterpriseClaimAux().getCostAvoidanceIndicator();
+            }
+        }
+        else
+        {
+            Set lineItemSet = enterpriseClaim.getEnterpriseClaimLineItem();
+            Iterator lineItemSetItr = lineItemSet.iterator();
+            while (lineItemSetItr.hasNext())
+            {
+                EnterpriseClaimLineItem enterpriseClaimLine = (EnterpriseClaimLineItem) lineItemSetItr
+                        .next();
+                editsSet = processLineBusinessRule(enterpriseClaim,
+                        enterpriseClaimLine);
+                if (editsSet != null && !editsSet.isEmpty())
+                {
+                    if(logger.isInfoEnabled()) {
+	                    logger.info("Line Number is :"
+	                            + enterpriseClaimLine.getLineNumber());
+
+                    }
+
+                    exceptionCodesMap.put(enterpriseClaimLine.getLineNumber(),
+                            editsSet);
+                    logger.debug("Adding all lineexceptions into list");
+                    List lineExceptions = tplHelper.getListOfExceptions(editsSet);
+                    //adding all the line item exception into list.
+                    exceptionList.addAll(lineExceptions);
+                }
+                Set lineEdits = enterpriseClaim.getLineItemEdits();
+                lineEdits = helper.setEditsToLineItemEditsSet(lineEdits,
+                        editsSet, enterpriseClaimLine.getLineNumber());
+                enterpriseClaim.setLineItemEdits(lineEdits);
+            }
+            //Removing duplicate Exceptions
+            if (exceptionList != null)
+            {
+                HashSet exceptionSet = new HashSet(exceptionList);
+                exceptionList.clear();
+                exceptionList.addAll(exceptionSet);
+            }
+        }
+        /* AlterFlow 2A and 3A */
+        String exceptionCode = null;
+        if (tplPolicies == null || tplPolicies.isEmpty())
+        {
+            logger.debug("Process for ClaimWithNoTPLPolicy to post 6060 ");
+            exceptionCode = processClaimWithNoTPLPolicy(enterpriseClaim,
+                    claimAttachments, tplPolicies);
+            
+        }
+        else
+        {
+            logger.debug("Process for ClaimWithNoTPLCarrier to post 6065 ");
+            exceptionCode = processClaimWithNoTPLCarrier(enterpriseClaim,tplPolicies);
+        }
+         
+        if (exceptionCode != null)
+        {
+            if(logger.isDebugEnabled()) {
+	            logger.debug("exceptionCode to be post is "+exceptionCode);
+
+            }
+
+            exceptionList.add(exceptionCode);
+            if(logger.isDebugEnabled()) {
+	            logger.debug("exceptionList "+exceptionList);
+
+            }
+
+        }
+
+        if (tplPolicies != null && !tplPolicies.isEmpty() && matrixFlag)
+        {
+            if(logger.isDebugEnabled()) {
+	            logger.debug("Size of the TPLPolicies Size:"
+	                    + tplPolicies.size());
+
+            }
+
+            int size = tplPolicies.size();
+            for (int i = 0; i < size; i++)
+            {                
+                tplPolicy = (ClaimTPLBillingVO) tplPolicies.get(i);
+                if (tplPolicy != null)
+                {
+                    coverageCodes.add(tplPolicy.getCoveragePolicyCode());
+                    if(logger.isDebugEnabled()) {
+	                    logger.debug("CoveragePolicyCode:"
+	                            + tplPolicy.getCoveragePolicyCode());
+
+                    }
+
+                    if (resourceTypeMap.get(tplPolicy.getCoveragePolicyCode()) == null)
+                    {
+                        resourceTypeList = new ArrayList();
+                        resourceTypeList.add(tplPolicy.getResourceType());
+                        resourceTypeMap.put(tplPolicy.getCoveragePolicyCode(),
+                                resourceTypeList);
+                    }
+                    else
+                    {
+                        resourceTypeList = (List) resourceTypeMap.get(tplPolicy
+                                .getCoveragePolicyCode());
+                        resourceTypeList.add(tplPolicy.getResourceType());
+                        resourceTypeMap.put(tplPolicy.getCoveragePolicyCode(),
+                                resourceTypeList);
+                    }
+                }
+            }
+            List tplMatrices = null;
+            /* Iterate Through Every Unique CoverageCode */
+            Iterator iterator = coverageCodes.iterator();
+            while (iterator.hasNext() && loopFlag)
+            {
+                loopFlag = true;                
+                /* Find The Matching TPLMatrices For Every CoverageCode */
+                coverageCode = (String) iterator.next();
+                if(logger.isDebugEnabled()) {
+	                logger.debug("CoverageCode: " + coverageCode);
+
+                }
+
+                if (coverageCode != null)
+                {
+                    tplMatrices = tplHelper.getMatchedCoverageCodesWithTPLMatrix(
+                            coverageCode, lobCode);
+                    /**
+                     * If Not Matching CoverageCode found in TPLMatrixData then
+                     * Process Next CoverageCode
+                     */
+                    if (tplMatrices != null && !tplMatrices.isEmpty())
+                    {
+                        logger.debug("BeforeSorting the CoverageCodes based on Rank");                        
+                        int tplMatricesSize = tplMatrices.size();                        
+                        for (int i = 0; i < tplMatricesSize; i++)
+                        {
+                            if(logger.isDebugEnabled()) {
+	                            logger.debug("MapsetID:" + ((ClaimTPLMatrix) tplMatrices.get(i)).getMapSetID());
+	                            logger.debug("Rank:" + ((ClaimTPLMatrix) tplMatrices.get(i)).getRank());
+
+                            }
+
+                        }
+
+                        /** Sorting CoverageCodes based on Rank */
+                        logger.debug("Sorting the CoverageCodes based on Rank");                        
+                        tplMatrices = tplHelper.sortCoverageCodesByRank(tplMatrices);
+                        tplMatricesSize = tplMatrices.size();
+                        for (int i = 0; i < tplMatricesSize; i++)
+                        {
+                            if(logger.isDebugEnabled()) {
+	                            logger.debug("MapsetID:" + ((ClaimTPLMatrix) tplMatrices.get(i)).getMapSetID());
+	                            logger.debug("Rank:" + ((ClaimTPLMatrix) tplMatrices.get(i)).getRank());
+
+                            }
+
+                        }
+
+//                        if (headerFlag && !headerCostAvoidanceIndicator.booleanValue())
+//                        {
+//                            loopFlag = processHeader(enterpriseClaim,
+//                                    tplMatrices, coverageCode, tplPolicies,
+//                                    editStatus, bypassParamValue);                           
+//                        }
+//                        /** LineLevelFlow :: Not InpatientInstitutional */
+//                        else
+//                        {
+//                            processLine(enterpriseClaim, tplPolicies,
+//                                    tplMatrices, coverageCode, editStatus, bypassParamValue);
+//                        }
+                        if (!headerCostAvoidanceIndicator.booleanValue()
+                        		|| !headerFlag)
+                        {
+                           processLine(enterpriseClaim, tplPolicies,
+                                    tplMatrices, coverageCode, editStatus, bypassParamValue);
+                        }
+                    }
+                }
+            }
+        }
+        /** GAP 8624 : Setting MSQ/Billing Indicator */
+        enterpriseClaim.setTplTraumaIndicator(Boolean.FALSE);
+        enterpriseClaim.setTplPolicyIndicator(Boolean.FALSE);
+       
+        msqIndicator = checkUtil.isPresentInSystemList(systemListMap,
+                ClaimAdjudicationConstants.FUNCTIONAL_AREA_C2, new Long(
+                        ClaimAdjudicationConstants.MSQ_LIST_NUM),
+                exceptionList, fDOS);
+        if(logger.isDebugEnabled()) {
+	        logger.debug(">>>>>> msqIndicator :" + msqIndicator);
+
+        }
+
+        if (msqIndicator)
+        {
+            enterpriseClaim.setTplTraumaIndicator(Boolean.TRUE);
+            enterpriseClaim.setMsqTypeCode(ClaimAdjudicationConstants.G);
+        }
+        else
+        {
+            enterpriseClaim.setTplTraumaIndicator(Boolean.FALSE);
+            enterpriseClaim.setMsqTypeCode("");
+        }
+        if(logger.isDebugEnabled()) {
+	        logger.debug("<<<<<<<<<<< TplTraumaIndicator:"
+	                + enterpriseClaim.getTplTraumaIndicator());
+
+        }
+
+       
+        tplBillingIndicator = checkUtil.isPresentInSystemList(systemListMap,
+                ClaimAdjudicationConstants.FUNCTIONAL_AREA_C2, new Long(
+                        ClaimAdjudicationConstants.TPL_BILLING_LIST_NUM),
+                exceptionList, fDOS);
+
+        if(logger.isDebugEnabled()) {
+	        logger.debug("tplBillingIndicator " + tplBillingIndicator);
+
+        }
+
+        if (tplBillingIndicator)
+        {
+            enterpriseClaim.setTplPolicyIndicator(Boolean.TRUE);
+            enterpriseClaim.setBillingInd(Boolean.TRUE);
+        }
+        else
+        {
+            enterpriseClaim.setTplPolicyIndicator(Boolean.FALSE);
+            enterpriseClaim.setBillingInd(Boolean.FALSE);
+        }
+        if(logger.isDebugEnabled()) {
+	        logger.debug(">>>>>>>>TplPolicyIndicator is:"
+	                + enterpriseClaim.getTplPolicyIndicator());
+
+        }
+
+        logger.info("CLAIMTPLEDITS MANAGER : processClaimTPLEdits() : END");
+        return enterpriseClaim;
+    }     
+
+    /** CR ESPRD00811892
+     * Process Rule 6065 -- No TPLCarrier Found For Member
+     * 
+     * @param claim
+     *                     EnterpriseClaim Object
+     * @param claimAttachments
+     *                     Set of Attachments
+     * @param tplPolicies
+     *                  List
+     * @return String exceptioncode 
+     */
+    private String processClaimWithNoTPLCarrier(
+            EnterpriseClaim claim, List<ClaimTPLBillingVO> tplPoliciesList)
+    {
+        logger
+                .info("ClaimTPLEditsManager.processClaimWithNoTPLCarrier() start");
+        boolean postEdit6065 = false;
+        boolean carrierFlag = false;
+        String exceptionCode = null;
+        ClaimAdjudicationHelper helper = new ClaimAdjudicationHelper();
+        Integer lineNum = Integer.valueOf(0);
+        Set<ClaimAdjudicationEdit> postedEdits = null;
+        Double tplAmount = claim.getTotalTPLAmount();
+        Boolean otherInsurance = claim.getOtherInsuranceIndicator();
+        List<String> carrierIdList = this.getCarrierIdList(tplPoliciesList);
+        if (!carrierIdList.isEmpty())
+        {
+            Set<ClaimTPLInfo> claimTPLInfos = claim.getClaimTPLInfo();
+            if (claimTPLInfos != null && !claimTPLInfos.isEmpty())
+            {
+                if(logger.isDebugEnabled()) {
+	                logger.debug("claimTPLInfos set Size is "
+	                        + claimTPLInfos.size());
+
+                }
+
+                for(ClaimTPLInfo claimTPLInfo : claimTPLInfos)
+                {
+                    if (claimTPLInfo != null
+                            && claimTPLInfo.getOtherPayerID() != null
+                            && !claimTPLInfo.getOtherPayerID().trim()
+                                    .equals(""))
+                    {
+                        if(logger.isDebugEnabled()) {
+	                        logger.debug("claimTPLInfo.getOtherPayerID() "
+	                                + claimTPLInfo.getOtherPayerID());
+	                      //Added for the defect ESPRD00912108 Start
+	                        logger.debug("carrierIdList " + carrierIdList);
+
+                        }
+
+                        String otherCarrierID = claimTPLInfo.getOtherPayerID();
+                        otherCarrierID = otherCarrierID.replaceAll("^0*", "");
+                        //Added for the defect ESPRD00912108 Ends
+                        if (!otherCarrierID.isEmpty() && !carrierIdList.contains(otherCarrierID))
+                        {
+                            carrierFlag = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        if(logger.isDebugEnabled()) {
+	        logger.debug("carrierFlag " + carrierFlag);
+
+        }
+
+        if (getRuleResult_CLM4001_0048_01(carrierFlag, tplAmount))
+        {
+            logger
+                    .debug(" TPL Amount is greater than zero and posting EDIT 6065 ");
+            postEdit6065 = true;
+        }
+        else if (getRuleResult_CLM4001_0050_01(carrierFlag, otherInsurance))
+        {
+            logger.debug(" Other insurance is true and posting EDIT 6065 ");
+            postEdit6065 = true;
+        }
+        else if (getRuleResult_CLM4001_0049_01(carrierFlag, claim,lineNum,systemListMap,claimAttachments,checkUtil))
+        {
+            logger
+                    .debug(" Attachment is in system list true and posting EDIT 6065 ");
+            postEdit6065 = true;
+        }
+
+        ClaimAdjudicationEdit edit = null;
+        if (postEdit6065)
+        {
+            exceptionCode = ClaimAdjudicationConstants.EDIT_6065;
+            edit = new ClaimAdjudicationEdit();
+            edit.setExceptionCode(exceptionCode);
+            edit.setLineNumber(lineNum);
+            postedEdits = new HashSet<ClaimAdjudicationEdit>();
+            postedEdits.add(edit);
+            Set edits = claim.getLineItemEdits();
+            edits = helper.setEditsToLineItemEditsSet(edits, postedEdits,
+                    lineNum);
+            claim.setLineItemEdits(edits);
+
+            logger.debug(" 6065 Edit is Posted! ");
+        }
+        logger.info("ClaimTPLEditsManager.processClaimWithNoTPLCarrier() END");
+        return exceptionCode;
+    }
+
+    /**
+     * CR ESPRD00811892
+     * @param List<ClaimTPLBillingVO>      tplPoliciesList
+     * @return List carrierIDList 
+     */
+    private List<String> getCarrierIdList(List<ClaimTPLBillingVO> tplPoliciesList)
+    {
+        logger.info("ClaimTPLEditsManager.getCarrierIdLIst() Start ");
+        List<String> carrierIDList = new ArrayList<String>();
+        for(ClaimTPLBillingVO billingVO : tplPoliciesList)
+        {
+            if(billingVO != null && billingVO.getCarrierID() != null && !billingVO.getCarrierID().isEmpty() )
+            {
+              //Added for the defect ESPRD00912108 start
+                String carrierID = billingVO.getCarrierID();
+                carrierID = carrierID.replaceAll("^0*", "");
+              
+                if(!carrierID.isEmpty())
+                {
+                    carrierIDList.add(carrierID);
+                }
+              //Added for the defect ESPRD00912108 Ends
+            }
+        }
+        if(logger.isDebugEnabled()) {
+	        logger.debug("carrierIDList is "+carrierIDList);
+
+        }
+
+        logger.info("ClaimTPLEditsManager.getCarrierIdLIst() Ends ");
+        return carrierIDList;
+    }
+
+    /**
+     * Process Rule 6060 -- No TPLPolicy Found For Member
+     * 
+     * @param claim
+     *                     EnterpriseClaim Object
+     * @param claimAttachments
+     *                     Set of Attachments
+     * @param tplPolicies
+     * 					List
+     * @return claim EnterpriseClaimObject
+     */
+    private String processClaimWithNoTPLPolicy(EnterpriseClaim claim,
+            Set claimAttachments, List tplPolicies)
+    {
+        logger
+                .info("CLAIMTPLEDITS MANAGER : processClaimWithNoTPLPolicy() : BEGIN");
+        String exceptionCode = null;
+        boolean postEdit = false;
+        Integer lineNum = Integer.valueOf(0);
+        ClaimAdjudicationHelper helper = new ClaimAdjudicationHelper();
+        Double tplAmount = claim.getTotalTPLAmount();
+        Set postedEdits = null;
+        Boolean otherInsurance = claim.getOtherInsuranceIndicator();
+        ClaimAdjudicationEdit edit = null;
+        if(logger.isInfoEnabled()) {
+	        logger.info(" Attachments Set " + claimAttachments);
+	        logger.info(" TotalTPLAmount : " + tplAmount);
+	        logger.info(" OtherInsuranceIndicator : " + otherInsurance);
+
+        }
+        // Posting the edit 6060 for CLM4001.0015.01 Rule.
+        //RIF STARTS CLM4001.0015.01
+        boolean postEDITflag1 = getRulesResult_CLM4001_0015(postEdit, tplAmount);
+        //RIF ENDS CLM4001.0015.01
+
+        //RIF STARTS CLM4001.0018.01
+        boolean postEDITflag2 = getRulesResult_CLM4001_0018(postEdit, otherInsurance);
+        //RIF ENDS CLM4001.0018.01
+
+
+        //RIF STARTS CLM4001.0015.01
+        boolean postEDITflag3 = getRulesResult_CLM4001_0016(postEdit, lineNum ,claim);
+        //RIF ENDS CLM4001.0015.01
+        
+        if (postEDITflag1 ||postEDITflag2 ||postEDITflag3)
+        {
+            edit = new ClaimAdjudicationEdit();
+            exceptionCode = ClaimAdjudicationConstants.EDIT_6060;
+            edit.setExceptionCode(exceptionCode);
+            edit.setLineNumber(lineNum);
+            postedEdits = new HashSet();
+            postedEdits.add(edit);
+            Set edits = claim.getLineItemEdits();
+            edits = helper.setEditsToLineItemEditsSet(edits, postedEdits,
+                    lineNum);
+            claim.setLineItemEdits(edits);
+            
+            logger.debug(" 6060 Edit is Posted! ");
+        }
+        logger
+                .info("CLAIMTPLEDITS MANAGER : processClaimWithNoTPLPolicy() : END");
+        return exceptionCode;
+    }
+
+    /**
+     * @param postEdit
+     * @param lineNum
+     * @param claim
+     * @return flag boolean
+     */
+    private boolean getRulesResult_CLM4001_0016(final boolean postEdit,
+    		final Integer lineNum, final EnterpriseClaim claim) {
+    	// TODO Auto-generated method stub
+    	boolean flag= false;
+    	//Rule Invocation Context object holds object arrays used in rule execution.
+    	String ruleId = "CLM4001.0016.01";
+    	RulesDelegate ruleDelegate = new RulesDelegate(ruleId);
+    	//Adding object into rule invocation context.
+    	ruleDelegate.addObject(postEdit);
+    	ruleDelegate.addObject(lineNum);
+    	ruleDelegate.addObject(claim);
+    	//Invoke RIF with ruleid and rule invocation objects.
+    	RulesResultVO rulesResult = null;
+    	try {
+    		rulesResult = ruleDelegate.invokeRule();	
+    		flag=rulesResult.isReturnBooleanValue();  
+    	} catch (RulesDelegateException re){
+    		if(RulesConstants.IS_EXPIRED.equals(re.getErrorCode()))
+    		{
+    			logger.error(RulesConstants.RULE_EXPIRED+ ruleId);
+    			//If needed perform expires logic here  
+    		}
+    		logger.error(RulesConstants.RULE_EXCEPTION + re.getMessage());
+    	}
+    	if(logger.isDebugEnabled()) {
+    		logger.debug(RulesConstants.RULE_ENDS + ruleId + "\n");
+    	}
+    	return flag;
+    }
+
+    /**
+     * @param postEdit
+     * @param otherInsurance
+     * @return flag boolean
+     */
+    private boolean getRulesResult_CLM4001_0018(final boolean postEdit,
+    		final boolean otherInsurance) {
+    	// TODO Auto-generated method stub
+    	boolean flag = false;
+    	//Rule Invocation Context object holds object arrays used in rule execution.
+    	String ruleId = "CLM4001.0018.01";
+    	RulesDelegate ruleDelegate = new RulesDelegate(ruleId);
+    	//Adding object into rule invocation context.
+    	ruleDelegate.addObject(postEdit);
+    	ruleDelegate.addObject(otherInsurance);
+    	//Invoke RIF with ruleid and rule invocation objects.
+    	RulesResultVO rulesResult = null;
+    	try {
+    		rulesResult = ruleDelegate.invokeRule();	
+    		flag=rulesResult.isReturnBooleanValue(); 
+    	} catch (RulesDelegateException re){
+    		logger.warn(RULES_DELEGATE_EXCEPTION+re.getMessage());
+    		if(ERRORCODE.equals(re.getErrorCode()))
+    		{
+    			logger.warn(RULE_EXPIRED+ruleId);
+    			//If needed perform expires logic here  
+    		}
+    		logger.error(RULESDELEGATE_EXCEPTION+re.getMessage());
+    	}
+    	if(logger.isDebugEnabled()) {
+    		logger.debug(RulesConstants.RULE_ENDS + ruleId + "\n");
+    	}
+    	return flag;
+    }
+
+	/**
+     * @param postEdit boolean
+     * @param tplAmount Double
+     * @return flag boolean
+     */
+    private boolean getRulesResult_CLM4001_0015(final boolean postEdit,
+    		final Double tplAmount) {
+    	// TODO Auto-generated method stub
+    	boolean flag = false;
+    	//Rule Invocation Context object holds object arrays used in rule execution.
+    	String ruleId = "CLM4001.0015.01";
+    	RulesDelegate ruleDelegate = new RulesDelegate(ruleId);
+    	//Adding object into rule invocation context.
+    	ruleDelegate.addObject(postEdit);
+    	ruleDelegate.addObject(tplAmount);
+    	//Invoke RIF with ruleid and rule invocation objects.
+    	RulesResultVO rulesResult = null;
+    	try {
+    		rulesResult = ruleDelegate.invokeRule();	
+    		flag=rulesResult.isReturnBooleanValue(); 
+    	} catch (RulesDelegateException re){
+    		if(ERRORCODE.equals(re.getErrorCode()))
+    		{
+    			logger.warn(RULE_EXPIRED+ruleId);
+    			//If needed perform expires logic here  
+    		}
+    		logger.error(RULESDELEGATE_EXCEPTION+re.getMessage());
+    	}
+    	if(logger.isDebugEnabled()) {
+    		logger.debug(RulesConstants.RULE_ENDS + ruleId + "\n");
+    	}
+    	return flag;
+    }
+    private boolean getRuleResult_CLM4001_0048_01(final boolean carrierFlag ,final Double tplAmount) {        
+        //Rule Invocation Context object holds object arrays used in rule execution.
+        boolean flag=false;
+        RulesDelegate ruleDelegate = new RulesDelegate(ruleId48);
+        //Adding object into rule invocation context.
+        ruleDelegate.addObject(carrierFlag);
+        ruleDelegate.addObject(tplAmount);     
+        //Invoke RIF with ruleid and rule invocation objects.
+        RulesResultVO rulesResult = null;
+        try {
+               rulesResult = ruleDelegate.invokeRule();              
+                     flag = rulesResult.isReturnBooleanValue();
+               
+        } catch (RulesDelegateException re){
+               if(ERRORCODE.equals(re.getErrorCode()))
+               {
+                     logger.warn(RULE_EXPIRED +ruleId48);
+                     //If needed perform expires logic here  
+               }
+               if(logger.isErrorEnabled()){
+               logger.error(RULESDELEGATE_EXCEPTION+re.getMessage());
+        }
+        }
+        if(logger.isDebugEnabled()){
+               logger.debug(EXECUTION_ENDED+ruleId48+"\n");
+        }
+        return flag;
+}
+    private boolean getRuleResult_CLM4001_0049_01(final boolean carrierFlag , final EnterpriseClaim claim, final Integer lineNum
+    		,final Map systemListMap,final Set claimAttachments,final SystemListCheckUtil checkUtil ) {        
+        //Rule Invocation Context object holds object arrays used in rule execution.
+        boolean flag=false;
+        RulesDelegate ruleDelegate = new RulesDelegate(ruleId49);
+        //Adding object into rule invocation context.
+        ruleDelegate.addObject(carrierFlag);
+        ruleDelegate.addObject(claim);  
+        ruleDelegate.addObject(lineNum);
+        ruleDelegate.addObject(systemListMap);  
+        ruleDelegate.addObject(claimAttachments);
+        ruleDelegate.addObject(checkUtil);
+        //Invoke RIF with ruleid and rule invocation objects.
+        RulesResultVO rulesResult = null;
+        try {
+               rulesResult = ruleDelegate.invokeRule();              
+             flag = rulesResult.isReturnBooleanValue();              
+        } catch (RulesDelegateException re){
+               if(ERRORCODE.equals(re.getErrorCode()))
+               {
+                     logger.warn(RULE_EXPIRED +ruleId49);
+                     //If needed perform expires logic here  
+               }
+               if(logger.isErrorEnabled()){
+               logger.error(RULESDELEGATE_EXCEPTION+re.getMessage());
+        }
+        }
+        if(logger.isDebugEnabled()){
+               logger.debug(EXECUTION_ENDED+ruleId49+"\n");
+        }
+        return flag;
+} 
+
+ private boolean getRuleResult_CLM4001_0050_01(final boolean carrierFlag , final Boolean otherInsurance) {        
+        //Rule Invocation Context object holds object arrays used in rule execution.
+        boolean flag=false;
+        RulesDelegate ruleDelegate = new RulesDelegate(ruleId50);
+        //Adding object into rule invocation context.
+        ruleDelegate.addObject(carrierFlag);
+        ruleDelegate.addObject(otherInsurance);     
+        //Invoke RIF with ruleid and rule invocation objects.
+        RulesResultVO rulesResult = null;
+        try {
+               rulesResult = ruleDelegate.invokeRule();              
+                     flag = rulesResult.isReturnBooleanValue();
+               
+        } catch (RulesDelegateException re){
+               if(ERRORCODE.equals(re.getErrorCode()))
+               {
+                     logger.warn(RULE_EXPIRED +ruleId50);
+                     //If needed perform expires logic here  
+               }
+               if(logger.isErrorEnabled()){
+               logger.error(RULESDELEGATE_EXCEPTION+re.getMessage());
+        }
+        }
+        if(logger.isDebugEnabled()){
+               logger.debug(EXECUTION_ENDED+ruleId50+"\n");
+        }
+        return flag;
+}  
+	/**
+     * @param claim EnterpriseClaim Object
+     * @param lineNum    Integer
+     * @return boolean true/false
+     */
+    private boolean checkAttachments(EnterpriseClaim claim, Integer lineNum)
+    {
+        logger.info("ClaimTPLEditsManager.checkAttachments() start ");
+        Set attachments = getAttachmentCodes(lineNum);
+        if (attachments != null && !attachments.isEmpty())
+        {
+            Iterator attachmentIter = attachments.iterator();
+            while (attachmentIter.hasNext())
+            {
+                String attachment = (String) attachmentIter.next();
+                if(logger.isDebugEnabled()) {
+	                logger.debug("Attachment: " + attachment);
+
+                }
+
+                boolean attachmentFlag = checkUtil
+                        .isPresentInSystemList(
+                                systemListMap,
+                                ClaimAdjudicationConstants.FUNCTIONAL_AREA_C3,
+                                new Long(
+                                        ClaimAdjudicationConstants.TPL_ATTACHMENTS_CODES_LIST),
+                                attachment, claim.getFDOS());
+                if (attachmentFlag)
+                {
+                    logger.debug("Attachment is in system list");
+                    return true;
+                }
+            }
+        }
+        logger.info("ClaimTPLEditsManager.checkAttachments() Ends  ");
+        return false;
+    }
+    /**
+     * This Method COmpares the ClaimData with the MapDefinition
+     * 
+     * @param enterpriseClaim
+     *                     EnterpriseClaim Object
+     * @param claimTPLMatrix
+     *                     ClaimTPLMatrixSearchResultVO
+     * @param lineNum
+     *                     Current LineNumber
+     * @return flag MapSetCriteria Indicator
+     * @throws EnterpriseBaseBusinessException
+     * 						EnterpriseBaseBusinessException
+     */
+    private boolean compareClaimWithMapDefinitionData(
+            EnterpriseClaim enterpriseClaim, ClaimTPLMatrix claimTPLMatrix,
+            Integer lineNum)
+            throws EnterpriseBaseBusinessException
+    {
+        logger
+                .info("CLAIMTPLEDITS MANAGER : compareClaimWithMapDefinitionData() : BEGIN");
+        String mapID = null;
+        boolean flag = false;
+        MapSetHeader mapHeader = null;
+        MapSetHelper helper = null;
+        boolean tplBillingFlag = false;
+
+        if (claimTPLMatrix != null && claimTPLMatrix.getMapSetID() != null)
+        {
+            mapID = claimTPLMatrix.getMapSetID();
+            if(logger.isDebugEnabled()) {
+	            logger.debug("MapSetID:" + mapID);
+
+            }
+
+            try
+            {
+                if (mapID != null)
+                {
+                    helper = new MapSetHelper();
+                    mapHeader = ClaimAdjudicationCacheManager.getInstance()
+                            .getMapSetDetailsFromCache(mapID,
+                                    enterpriseClaim.getLobCode());
+                    flag = helper.compareClaimWithMapData(enterpriseClaim,
+                            mapHeader, lineNum);
+                    if(logger.isDebugEnabled()) {
+	                    logger.debug("The flag value is:" + flag);
+
+                    }
+
+                    if (flag)
+                    {
+                    	if (ClaimAdjudicationConstants.CLAIM_HEADER_PRICING_METHOD_CODE
+                    			.equalsIgnoreCase(enterpriseClaim.getPricingMethodCode()))
+                    	{
+                    		lineNum = 0;
+                    	}
+                        Set editsSet = new HashSet();
+                        ClaimAdjudicationEdit edits = processTPLMatrixException(
+                                claimTPLMatrix, lineNum);
+                        if(logger.isInfoEnabled()) {
+	                        logger.info("The value of ClaimAdjudicationEdit is"
+	                                + edits);
+
+                        }
+
+                        if (edits != null)
+                        {
+                            editsSet.add(edits);
+                            Set exceptions = (Set) exceptionCodesMap.get(lineNum);
+                            if (exceptions != null)
+                            {
+                            	exceptions.add(edits);
+                            	exceptionCodesMap.put(lineNum, exceptions);
+                            }
+                            tplBillingFlag = true;
+                        }
+
+                        if (!editsSet.isEmpty())
+                        {
+                            ClaimAdjudicationHelper clmadjhelper = new ClaimAdjudicationHelper();
+                            Set lineEdits = enterpriseClaim.getLineItemEdits();
+                            lineEdits = clmadjhelper
+                                    .setEditsToLineItemEditsSet(lineEdits,
+                                            editsSet, lineNum);
+                            enterpriseClaim.setLineItemEdits(lineEdits);
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                if(logger.isErrorEnabled()) {
+	                logger.error(" Exception in Retrieving MapSetHeader : " + e);
+
+                }
+
+                throw new EnterpriseBaseBusinessException(e);
+            }
+        }
+        logger
+                .info("CLAIMTPLEDITS MANAGER : compareClaimWithMapDefinitionData() : END");
+        return tplBillingFlag;
+    }
+
+    /**
+     * This method calculates the total tpl amounts of all line items and
+     * claimheader, populates them in a Map using lineNumber as key and returns
+     * that map.
+     * 
+     * @param claim
+     *                     Represents the EnterpriseClaim
+     * @return double
+     * 
+     */
+    private double populateTPLAmounts(EnterpriseClaim claim)
+    {
+        logger.info("CLAIMTPLEDITS MANAGER : populateTPLAmounts() : BEGIN");
+        ClaimTPLInfo tplInfo = null;
+        Set claimTPLAmount = null;
+        ClaimTPLAmountInfo amountInfo = null;
+        double totalTPLAmount = 0;
+        Integer lineNum = null;
+        HashMap tplMap = new HashMap();
+        Double total = null;
+        EnterpriseClaimLineItem enterpriseClaimLineItem = null;
+        if (claim.getClaimTPLInfo() != null)
+        {
+            Set claimTPLInfo = claim.getClaimTPLInfo();
+            Iterator infoIterator = claimTPLInfo.iterator();
+            while (infoIterator.hasNext())
+            {
+                tplInfo = (ClaimTPLInfo) infoIterator.next();
+
+                if (tplInfo != null && tplInfo.getClaimTPLAmountInfo() != null)
+                {
+                    claimTPLAmount = tplInfo.getClaimTPLAmountInfo();
+                    Iterator amountIterator = claimTPLAmount.iterator();
+                    while (amountIterator.hasNext())
+                    {
+                        amountInfo = (ClaimTPLAmountInfo) amountIterator.next();
+                        if (amountInfo != null
+                                && amountInfo.getPaidAmount() != null)
+                        {
+                            lineNum = amountInfo.getLineNumber();
+                            if(logger.isDebugEnabled()) {
+	                            logger.debug("Line Number" + lineNum);
+
+                            }
+
+                            if (tplMap.containsKey(lineNum))
+                            {
+                                total = (Double) tplMap.get(lineNum);
+                                total = new Double(total.doubleValue()
+                                        + amountInfo.getPaidAmount()
+                                                .doubleValue());
+                                tplMap.put(lineNum, total);
+                                if(logger.isDebugEnabled()) {
+	                                logger.debug("LineItem Amount" + total);
+
+                                }
+
+                            }
+                            else
+                            {
+                                tplMap.put(lineNum, amountInfo.getPaidAmount());
+                            }
+                            totalTPLAmount += amountInfo.getPaidAmount()
+                                    .doubleValue();
+                            if(logger.isDebugEnabled()) {
+	                            logger.debug("TotalTPLAmount:" + totalTPLAmount);
+
+                            }
+
+                        }
+                    }
+                }
+           }
+      } //Defect - ESPRD00798632, Amount not Reseting, added else condition and setting 0.00
+      if (claim.getEnterpriseClaimLineItem() != null)
+        {
+            Iterator tplIterator = claim.getEnterpriseClaimLineItem()
+                    .iterator();
+            while (tplIterator.hasNext())
+            {
+                enterpriseClaimLineItem = (EnterpriseClaimLineItem) tplIterator
+                        .next();
+                if(logger.isInfoEnabled()) {
+	                logger.info("Line Number is"
+	                        + enterpriseClaimLineItem.getLineNumber());
+
+                }
+
+                if (tplMap.get(enterpriseClaimLineItem.getLineNumber()) != null)
+                {
+                    enterpriseClaimLineItem.setTplAmount((Double) tplMap
+                            .get(enterpriseClaimLineItem.getLineNumber()));
+                }
+                else 
+                {
+                    enterpriseClaimLineItem.setTplAmount(0.00);
+                }
+            }
+        }
+        logger.info("CLAIMTPLEDITS MANAGER : populateTPLAmounts() : END");
+        return totalTPLAmount;
+    }
+
+    /**
+     * This Method Fetches the Required SystemParameterValue
+     * 
+     * @param systemParameterMap
+     *                     Map
+     * @param fDOS
+     *                     Date
+     * @return detail Percent Value of the SystemParameter
+     */
+    private Double getSystemParameter(Map systemParameterMap, Date fDOS)
+    {
+        logger.info("ClaimTPlManager.getSystemParameter(): BEGIN");
+        SystemParameter sysParam = null;
+        SystemParameterDetail detail = null;
+        Set details = null;
+        Double percent = null;
+        sysParam = (SystemParameter) systemParameterMap.get(new Long(
+                ClaimAdjudicationConstants.TPL_TRESHOLD_PERCENT));
+        if(logger.isDebugEnabled()) {
+	        logger.debug("sysParam: " + sysParam);
+
+        }
+
+        if (sysParam != null && sysParam.getSystemParameterDetail() != null)
+        {
+            details = sysParam.getSystemParameterDetail();
+            Iterator detailIterator = details.iterator();
+            while (detailIterator.hasNext())
+            {
+                detail = (SystemParameterDetail) detailIterator.next();
+                Date bDate = detail.getBeginDate();
+                Date eDate = detail.getEndDate();
+                if (bDate != null && eDate != null && !(fDOS.before(bDate))
+                        && !(fDOS.after(eDate)))
+                {
+                    percent = detail.getValuePCT();
+                    break;
+                }
+            }
+        }
+        logger.info("ClaimTPlManager.getSystemParameter(): END");
+        return percent;
+    }
+    
+    /**
+     * This Method Fetches the Required SystemParameterValue
+     * 
+     * @param systemParameterMap
+     *                     Map
+     * @param fDOS
+     *                     Date
+     * @return detail Percent Value of the SystemParameter
+     */
+    private Double getSystemParameterValueAmount(Map systemParameterMap,
+    		Date fDOS, Long parameter)
+    {
+        logger.info("ClaimTPlManager.getSystemParameter(): BEGIN");
+        SystemParameter sysParam = null;
+        SystemParameterDetail detail = null;
+        Set details = null;
+        Double paramAmount = null;
+        sysParam = (SystemParameter) systemParameterMap.get(parameter);
+        if(logger.isDebugEnabled()) {
+	        logger.debug("sysParam: " + sysParam);
+
+        }
+
+        if (sysParam != null && sysParam.getSystemParameterDetail() != null)
+        {
+            details = sysParam.getSystemParameterDetail();
+            Iterator detailIterator = details.iterator();
+            while (detailIterator.hasNext())
+            {
+                detail = (SystemParameterDetail) detailIterator.next();
+                Date bDate = detail.getBeginDate();
+                Date eDate = detail.getEndDate();
+                if (bDate != null && eDate != null && fDOS != null
+                		&& !(fDOS.before(bDate))
+                        && !(fDOS.after(eDate)))
+                {
+                	paramAmount = detail.getValueAmt();
+                    break;
+                }
+            }
+        }
+        logger.info("ClaimTPlManager.getSystemParameter(): END");
+        return paramAmount;
+    }
+    
+    /**
+     * This Method Fetches the Required SystemParameterValue
+     * 
+     * @param systemParameterMap
+     *                     Map
+     * @param fDOS
+     *                     Date
+     * @return detail Percent Value of the SystemParameter
+     */
+    private String getSystemParameterValueData(Map systemParameterMap,
+    		Date fDOS, Long parameter)
+    {
+        logger.info("ClaimTPlManager.getSystemParameter(): BEGIN");
+        SystemParameter sysParam = null;
+        SystemParameterDetail detail = null;
+        Set details = null;
+        String paramValue = null;
+        sysParam = (SystemParameter) systemParameterMap.get(parameter);
+        if(logger.isDebugEnabled()) {
+	        logger.debug("sysParam: " + sysParam);
+
+        }
+
+        if (sysParam != null && sysParam.getSystemParameterDetail() != null)
+        {
+            details = sysParam.getSystemParameterDetail();
+            Iterator detailIterator = details.iterator();
+            while (detailIterator.hasNext())
+            {
+                detail = (SystemParameterDetail) detailIterator.next();
+                Date bDate = detail.getBeginDate();
+                Date eDate = detail.getEndDate();
+                if (bDate != null && eDate != null && !(fDOS.before(bDate))
+                        && !(fDOS.after(eDate)))
+                {
+                	paramValue = detail.getValueData();
+                    break;
+                }
+            }
+        }
+        logger.info("ClaimTPlManager.getSystemParameter(): END");
+        return paramValue;
+    }
+
+    /**
+     * This Method finds the status of byPassCriteria
+     * 
+     * @param claimType
+     *                     ClaimType Code
+     * @param goodCauseIndicator
+     * 					Boolean
+     * @param policyCourtOrderIndicator
+     * 					Boolean
+     * @param costAvoidanceCode
+     * 					String
+     * @return flag CommonBypassCriteria Flag
+     */
+    private boolean determineCommonByPassCriteriaFlag(String claimType,
+            Boolean goodCauseIndicator, Boolean policyCourtOrderIndicator,
+            String costAvoidanceCode)
+    {
+        logger
+                .info("CLAIMTPLEDITS MANAGER : determineCommonByPassCriteriaFlag() : BEGIN");
+        boolean flag = false;
+        boolean byePassInd = true;
+        //RIF STARTS CLM4001.0045.0046.0047.01
+        //Rule Invocation Context object holds object arrays used in rule execution.
+        String ruleId = "CLM4001.0045.0046.0047.01";
+        RulesDelegate ruleDelegate = new RulesDelegate(ruleId);
+        //Adding object into rule invocation context.
+        ruleDelegate.addObject(policyCourtOrderIndicator);
+        ruleDelegate.addObject(goodCauseIndicator);
+        ruleDelegate.addObject(prenatalDiagnosis);
+        ruleDelegate.addObject(claimType);
+        ruleDelegate.addObject(costAvoidanceCode);
+        ruleDelegate.addObject(byePassInd);
+        //Invoke RIF with ruleid and rule invocation objects.
+        RulesResultVO rulesResult = null;
+        try {
+        	rulesResult = ruleDelegate.invokeRule();	
+        	flag =rulesResult.isReturnBooleanValue(); 
+        	
+        } catch (RulesDelegateException re){
+        	if(ERRORCODE.equals(re.getErrorCode()))
+        	{
+        		logger.warn(RULE_EXPIRED+ruleId);
+        		//If needed perform expires logic here  
+        	}
+        	logger.error(RULESDELEGATE_EXCEPTION+re.getMessage());
+        }
+        if(logger.isDebugEnabled()){
+        logger.debug(EXECUTION_ENDED+ruleId+"\n");
+        }
+        //RIF ENDS CLM4001.0045.0046.0047.01
+        logger
+                .info("CLAIMTPLEDITS MANAGER : determineCommonByPassCriteriaFlag() : END");
+        return flag;
+    }
+
+    /**
+     * Process Rule 6050
+     * 
+     * @param lineNum
+     *                     Integer
+     * @param tplAmount
+     *                     double
+     * @param fDOS
+     *                     Date
+     * @param totalSubmittedClaimAmount
+     *                    double
+     * @return edit ClaimAdjudicationEdit Object
+     */
+    private ClaimAdjudicationEdit processTPLWithInsufficientAmount(
+            Integer lineNum, double tplAmount, Date fDOS,
+            double totalSubmittedClaimAmount)
+    {
+        logger
+                .info(" CLAIMTPLEDITS MANAGER : processClaimWithInsufficientTPLAmount : 6050");
+        ClaimAdjudicationEdit edit = null;
+        Double tplPercent = getSystemParameter(systemParameterMap, fDOS);
+        if(logger.isDebugEnabled()) {
+	        logger.debug("tplPercent: " + tplPercent);
+
+        }
+
+        double pct = 0;
+        if (tplPercent != null)
+        {
+            pct = tplPercent.doubleValue();
+        }
+        if(logger.isInfoEnabled()) {
+	        logger.info(" Treshold % = " + pct);
+
+        }
+
+        //RIF STARTS CLM4001.0045.0046.0047.01
+        boolean flag = getRulesResultCLM4001_45_46_47(pct, totalSubmittedClaimAmount, tplAmount);
+        if (flag) //RIF ENDS CLM4001.0045.0046.0047.01
+        {
+            edit = new ClaimAdjudicationEdit();
+            edit.setExceptionCode(ClaimAdjudicationConstants.EDIT_6050);
+            edit.setLineNumber(lineNum);
+            logger.debug("6050 Edit posted");
+        }               
+        if(logger.isInfoEnabled()) {
+	        logger.info(" OutOf processClaimWithInsufficientTPLAmount : 6050 :"
+	                + edit);
+
+        }
+
+        return edit;
+    }
+
+    private boolean getRulesResultCLM4001_45_46_47(final double pct,
+			final double totalSubmittedClaimAmount, final double tplAmount) {
+    	// TODO Auto-generated method stub
+    	//Rule Invocation Context object holds object arrays used in rule execution.
+    	boolean flag= false;
+    	boolean byePassInd = false;
+    	String ruleId = "CLM4001.0045.0046.0047.01";
+    	RulesDelegate ruleDelegate = new RulesDelegate(ruleId);
+    	//Adding object into rule invocation context.
+    	ruleDelegate.addObject(pct);
+    	ruleDelegate.addObject(totalSubmittedClaimAmount);
+    	ruleDelegate.addObject(tplAmount);
+    	ruleDelegate.addObject(byePassInd);
+    	//Invoke RIF with ruleid and rule invocation objects.
+    	RulesResultVO rulesResult = null;
+    	try {
+    		rulesResult = ruleDelegate.invokeRule();	
+    		if(rulesResult.isReturnBooleanValue()){
+    			flag= true;
+    		}
+    	} catch (RulesDelegateException re){
+    		if(ERRORCODE.equals(re.getErrorCode()))
+    		{
+    			logger.warn(RULE_EXPIRED+ruleId);
+    			//If needed perform expires logic here  
+    		}
+    		logger.error(RULESDELEGATE_EXCEPTION+re.getMessage());
+    	}
+    	if(logger.isDebugEnabled()){
+    	logger.debug(EXECUTION_ENDED+ruleId+"\n");
+    	}
+    	return flag;
+	}
+
+	/**
+     * The Method Populates ClaimTPLBilling Tables
+     * 
+     * @param claim
+     *                     EnterpriseClaim
+     * @param lineNum
+     *                     Current Integer
+     * @param coverageCode
+     *                     String
+     * @param tplPolicies
+     *                     List
+     * @param claimTPLMatrix
+     * 					ClaimTPLMatrix
+     */
+    private void updateTPLBillingWithPolicyDetails(EnterpriseClaim claim,
+            Integer lineNum, String coverageCode, List tplPolicies,
+            ClaimTPLMatrix claimTPLMatrix)
+    {
+        logger
+                .info("CLAIMTPLEDITS MANAGER : updateTPLBillingWithPolicyDetails() : BEGIN");
+        Set claimTPLBills = new HashSet(HUNDRED);
+        ClaimTPLBillingVO tplPolicy = null;
+        ClaimTPLBilling tplBilling = null;
+        Iterator tplPolicyIterator = tplPolicies.iterator();
+        while (tplPolicyIterator.hasNext())
+        {
+            tplPolicy = (ClaimTPLBillingVO) tplPolicyIterator.next();
+            if (tplPolicy != null
+                    && (claimTPLMatrix.getResourceType() == null || claimTPLMatrix
+                            .getResourceType().equals(
+                                    tplPolicy.getResourceType()))
+                    && (coverageCode != null && coverageCode.equals(tplPolicy
+                            .getCoveragePolicyCode())))
+            {
+                if(logger.isInfoEnabled()) {
+	                logger.info("CoveragePolicyCode():"
+	                        + tplPolicy.getCoveragePolicyCode());
+
+                }
+
+                tplBilling = new ClaimTPLBilling();
+                tplBilling.setCarrierID(tplPolicy.getCarrierID());
+                tplBilling.setLineNumber(lineNum);
+                tplBilling.setPolicySequenceNumber(tplPolicy
+                        .getPolicySequenceNumber());
+                tplBilling.setCoveragePolicyCode(tplPolicy
+                        .getCoveragePolicyCode());
+                tplBilling.setCoverageMemberSK(tplPolicy.getCoverageMemberSK());
+                tplBilling.setGroupPolicySK(tplPolicy.getGroupPolicySK());
+                claimTPLBills.add(tplBilling);
+            }
+        }
+        Set tplBills = claim.getClaimTPLBilling();
+        if (tplBills != null)
+        {
+            claimTPLBills.addAll(tplBills);
+        }
+        claim.setClaimTPLBilling(claimTPLBills);
+        logger
+                .info("CLAIMTPLEDITS MANAGER : updateTPLBillingWithPolicyDetails() : END");
+    }
+
+    /**
+     * A Common Method that Processes the Rules
+     * 
+     * @param enterpriseClaim
+     * 				EnterpriseClaim
+     * @param lineNum
+     *              Integer
+     * @param fDOS
+     *              Date
+     * @param memberAge
+     *              int
+     * @param diagAccidentIndicator
+     * 				boolean
+     * @param commonBypassFlag
+     * 				boolean
+     * @param totalChargeAmount
+     * 				Double object.
+     * @param allowedAmount
+     * 				Double object.
+     * @return editsSet Set of ClaimAdjudicationEdits Posted
+     */
+    private Set processBussinessRules(EnterpriseClaim enterpriseClaim,
+    		Integer lineNum, Date fDOS, int memberAge,
+            boolean diagAccidentIndicator, boolean commonBypassFlag,
+            Double totalChargeAmount, Double allowedAmount)
+    {    	
+        logger.info(" CLAIMTPLEDITS MANAGER : processBussinessRules : BEGIN");
+        Set editsSet = new HashSet(HUNDRED);
+        String claimFormType = enterpriseClaim.getClaimFormCode();
+        double totalSubmittedClaimAmount = 0;
+        double tplAmount = 0;
+        Set suspectAccidentTPLEdits = null;
+        Set suspectOtherAccidentTPLEdits = null;
+        Set suspectNonAccidentTPLEdits = null;
+        Set screeningAccidentTPLEdits =  null;
+        List causeCodes = new ArrayList();
+        //Get all the OccurenceCodes of the EnterpriseClaim
+        List occurenceCodes = findOccurenceCodes(enterpriseClaim.getInstitutionalClaim());
+        if(logger.isInfoEnabled()) {
+	        logger.info("occurenceCodes:" + occurenceCodes);
+
+        }
+
+        
+      //Get all the OccurenceSpanCodes of the EnterpriseClaim
+        List occurenceSpanCodes = findOccurenceSpanCodes(enterpriseClaim.getInstitutionalClaim());
+        
+        if(logger.isInfoEnabled()) {
+	        logger.info("occurenceSpanCodes:" + occurenceSpanCodes);
+
+        }
+
+        if (enterpriseClaim.getRelatedCauseCode1() != null
+                && !enterpriseClaim.getRelatedCauseCode1().trim().isEmpty())
+        {
+            causeCodes.add(enterpriseClaim.getRelatedCauseCode1());
+        }
+        if (enterpriseClaim.getRelatedCauseCode2() != null
+                && !enterpriseClaim.getRelatedCauseCode2().trim().isEmpty())
+        {
+            causeCodes.add(enterpriseClaim.getRelatedCauseCode2());
+        }
+        if (enterpriseClaim.getRelatedCauseCode3() != null
+                && !enterpriseClaim.getRelatedCauseCode3().trim().isEmpty())
+        {
+            causeCodes.add(enterpriseClaim.getRelatedCauseCode3());
+        }
+        if (enterpriseClaim.getTotalTPLAmount() != null)
+        {
+        	tplAmount = enterpriseClaim.getTotalTPLAmount().doubleValue();
+        }
+        if (enterpriseClaim.getTotalChargeAmount() != null)
+        {
+            totalSubmittedClaimAmount = enterpriseClaim.getTotalChargeAmount()
+                    .doubleValue();
+        }
+        ClaimAdjudicationEdit edit = null;
+        if (!commonBypassFlag)
+        {
+            edit = processTPLWithInsufficientAmount(lineNum, tplAmount, fDOS,
+                    totalSubmittedClaimAmount);
+            if (edit != null)
+            {
+                editsSet.add(edit);
+            }
+        }
+        //Process edits 6030, 6032,6033 and 6036.
+        if (ClaimAdjudicationConstants.INSTITUTIONAL_CLAIMS
+                .equals(claimFormType))
+        {
+             suspectAccidentTPLEdits = inpatientSuspectAccidentTPLEdits(memberAge,
+            		occurenceCodes, occurenceSpanCodes,
+            		totalChargeAmount,  fDOS,  lineNum);
+        }
+        else if (ClaimAdjudicationConstants.MEDICAL_CLAIMS
+                .equals(claimFormType) || ClaimAdjudicationConstants.DENTAL_CLAIMS
+                .equals(claimFormType) )
+        {
+             suspectAccidentTPLEdits = suspectAccidentTPLEdits(memberAge,
+                    causeCodes, totalChargeAmount, fDOS, lineNum);
+        }
+        if (suspectAccidentTPLEdits != null
+                && !suspectAccidentTPLEdits.isEmpty())
+        {
+            editsSet.addAll(suspectAccidentTPLEdits);
+        }
+        //Process edits 6031 and 6034.
+        if (ClaimAdjudicationConstants.INSTITUTIONAL_CLAIMS
+                .equals(claimFormType))
+        {
+	        suspectOtherAccidentTPLEdits = inpatientProcessSuspectOtherAccidentTPLEdits(
+	                memberAge, occurenceCodes, occurenceSpanCodes, 
+	                diagAccidentIndicator, lineNum, fDOS, totalChargeAmount, allowedAmount);
+        }
+        else if (ClaimAdjudicationConstants.MEDICAL_CLAIMS
+                .equals(claimFormType))
+        {
+        	suspectOtherAccidentTPLEdits = medicalProcessSuspectOtherAccidentTPLEdits(memberAge,
+                    causeCodes, diagAccidentIndicator, lineNum, fDOS, totalChargeAmount, allowedAmount);
+        }
+        else if (ClaimAdjudicationConstants.DENTAL_CLAIMS
+                .equals(claimFormType) )
+        {
+        	suspectOtherAccidentTPLEdits = dentalProcessSuspectOtherAccidentTPLEdits(memberAge,
+                     causeCodes, lineNum, fDOS, totalChargeAmount, allowedAmount);
+        }
+        if (suspectOtherAccidentTPLEdits != null
+                && !suspectOtherAccidentTPLEdits.isEmpty())
+        {
+            editsSet.addAll(suspectOtherAccidentTPLEdits);
+        }
+        //Process edit 6035.        
+        if (ClaimAdjudicationConstants.INSTITUTIONAL_CLAIMS
+                .equals(claimFormType))
+        {
+        	suspectNonAccidentTPLEdits = inpatientprocessSuspectNonAccidentTPLEdits(
+            		occurenceCodes, occurenceSpanCodes, fDOS, memberAge,
+                    diagAccidentIndicator, lineNum);
+        	
+        }
+        else if (ClaimAdjudicationConstants.MEDICAL_CLAIMS
+                .equals(claimFormType))
+        {
+        	suspectNonAccidentTPLEdits = medicalprocessSuspectNonAccidentTPLEdits(
+            		causeCodes, fDOS, memberAge,
+                    diagAccidentIndicator, lineNum);        	
+        }
+        if (suspectNonAccidentTPLEdits != null
+                && !suspectNonAccidentTPLEdits.isEmpty())
+        {
+            editsSet.addAll(suspectNonAccidentTPLEdits);
+        }
+        //Process edits 6037 and 6038.        
+        if (ClaimAdjudicationConstants.INSTITUTIONAL_CLAIMS
+                .equals(claimFormType))
+        {
+        	screeningAccidentTPLEdits = inpatientProcessScreeningAccidentTPLEdits(
+        			memberAge, occurenceCodes, occurenceSpanCodes, 
+	                diagAccidentIndicator, lineNum, fDOS, totalChargeAmount,
+	                allowedAmount);        	
+        }
+        else if (ClaimAdjudicationConstants.MEDICAL_CLAIMS
+                .equals(claimFormType))
+        {
+        	screeningAccidentTPLEdits = medicalProcessScreeningAccidentTPLEdits(
+        			memberAge, causeCodes, diagAccidentIndicator, lineNum, fDOS,
+        			totalChargeAmount, allowedAmount);        	
+        }
+        else if (ClaimAdjudicationConstants.DENTAL_CLAIMS
+                .equals(claimFormType))
+        {
+        	screeningAccidentTPLEdits = dentalProcessScreeningAccidentTPLEdits(
+        			memberAge, causeCodes, lineNum, fDOS, totalChargeAmount,
+        			allowedAmount);        	
+        }
+        if (screeningAccidentTPLEdits != null
+                && !screeningAccidentTPLEdits.isEmpty())
+        {
+            editsSet.addAll(screeningAccidentTPLEdits);
+        }        
+        logger.info(" CLAIMTPLEDITS MANAGER : processBussinessRules : END ");
+        return editsSet;
+    }
+
+    /**
+     * This Method Finds all the Attachment Codes for given LineNum
+     * 
+     * @param lineNum
+     *                     Claim Line Number
+     * @return attachmentCodes Set of AttachmentCodes for given LineNumber
+     */
+    private Set getAttachmentCodes(Integer lineNum)
+    {
+        logger.info(" CLAIMTPLEDITS MANAGER : getAttachmentCodes : BEGIN ");
+        //read the header and the line attachments.
+        Set attachmentCodes = new HashSet(HUNDRED);
+        ClaimAttachment attachment = null;
+        if (claimAttachments != null && lineNum != null)
+        {
+            Iterator i = claimAttachments.iterator();
+            while (i.hasNext())
+            {
+                attachment = (ClaimAttachment) i.next();
+                if (attachment != null
+                        && attachment.getAttachmentCode() != null)
+                {
+                    if(logger.isDebugEnabled()) {
+	                    logger.debug("AttachmentCode:"
+	                            + attachment.getAttachmentCode());
+
+                    }
+
+                    if (Integer.valueOf(0).equals(lineNum))
+                    {
+                        attachmentCodes.add(attachment.getAttachmentCode());
+                    }
+                    else if ((lineNum.equals(attachment.getLineNumber()))
+                            || (Integer.valueOf(0).equals(attachment
+                                    .getLineNumber())))
+                    {
+                        attachmentCodes.add(attachment.getAttachmentCode());
+                    }
+                }
+            }
+        }
+        logger.info(" CLAIMTPLEDITS MANAGER : getAttachmentCodes : END ");
+        return attachmentCodes;
+    }
+
+    /**
+     * This method is used to get ClaimDiagnosissList for all types of claims.
+     * 
+     * @param claimFormCode
+     *                     String
+     * @param diagnosisSet
+     *                     Set
+     * @param enterpriseClaimLineItem
+     *                     EnterpriseClaimLineItem
+     * @return claimDiagnosissCodeList List
+     */
+    private List getClaimDiagnosissList(String claimFormCode, Set diagnosisSet,
+            EnterpriseClaimLineItem enterpriseClaimLineItem)
+    {
+        logger.info("CLAIMTPLEDITS MANAGER : getClaimDiagnosissList(): BEGIN");
+        List claimDiagnosissCodeList = null;
+        List liDiagPtrCodeList = null;
+        Iterator diagnosisIter = null;
+        Diagnosis diagnosis = null;
+        ProfessionalLineItem professionalLineItem = null;
+        if (claimFormCode != null)
+        {
+            claimDiagnosissCodeList = new ArrayList();
+            if (ClaimAdjudicationConstants.INSTITUTIONAL_CLAIMS
+                    .equals(claimFormCode))
+            {
+                diagnosisIter = diagnosisSet.iterator();
+                while (diagnosisIter.hasNext())
+                {
+                    diagnosis = (Diagnosis) diagnosisIter.next();
+                    if (diagnosis.getDiagnosisCode() != null)
+                    {
+                        if(logger.isDebugEnabled()) {
+	                        logger.debug("DiagnosisCodes are:"
+	                                + diagnosis.getDiagnosisCode());
+
+                        }
+
+                        claimDiagnosissCodeList.add(diagnosis
+                                .getDiagnosisCode());
+                        //logger.debug("Cost avoidance code" +diagnosis.getCostAvoidanceCode());
+                    }
+                }
+            }
+            else if (enterpriseClaimLineItem != null)
+            {
+                liDiagPtrCodeList = new ArrayList();
+                professionalLineItem = enterpriseClaimLineItem
+                        .getProfessionalLineItem();
+                if (professionalLineItem != null)
+                {
+                    if (professionalLineItem.getRelatedDiagnosisPointer1() != null)
+                    {
+                        liDiagPtrCodeList.add(professionalLineItem
+                                .getRelatedDiagnosisPointer1());
+                    }
+                    if (professionalLineItem.getRelatedDiagnosisPointer2() != null)
+                    {
+                        liDiagPtrCodeList.add(professionalLineItem
+                                .getRelatedDiagnosisPointer2());
+                    }
+                    if (professionalLineItem.getRelatedDiagnosisPointer3() != null)
+                    {
+                        liDiagPtrCodeList.add(professionalLineItem
+                                .getRelatedDiagnosisPointer3());
+                    }
+                    if (professionalLineItem.getRelatedDiagnosisPointer4() != null)
+                    {
+                        liDiagPtrCodeList.add(professionalLineItem
+                                .getRelatedDiagnosisPointer4());
+                    }
+                    diagnosisIter = diagnosisSet.iterator();
+                    while (diagnosisIter.hasNext())
+                    {
+                        diagnosis = (Diagnosis) diagnosisIter.next();
+                        if (diagnosis != null
+                                && diagnosis.getSequenceNumber() != null)
+                        {
+                            if(logger.isDebugEnabled()) {
+	                            logger.debug("DiagnosisCodes are:"
+	                                    + diagnosis.getDiagnosisCode());
+
+                            }
+
+                            if (liDiagPtrCodeList.contains(diagnosis
+                                    .getSequenceNumber().toString()))
+                            {
+                                claimDiagnosissCodeList.add(diagnosis
+                                        .getDiagnosisCode());
+                            }
+                            //logger.debug("Cost avoidance code" +diagnosis.getCostAvoidanceCode());
+                        }
+                    }
+                }
+            }
+        }
+        logger.info("CLAIMTPLEDITS MANAGER :getClaimDiagnosissList(): END");
+        return claimDiagnosissCodeList;
+    }
+
+    /**
+     * This Method will Fetch All the OccurrenceCodes from the Claim
+     * 
+     * @param iClaim
+     *                     Represents InstitutionalClaim Object
+     * @return occurCodes Represents Set of OccurrenceCodes
+     */
+    private List findOccurenceCodes(InstitutionalClaim iClaim)
+    {
+        logger.info("CLAIMTPLEDITS MANAGER : findOccurenceCodes() : BEGIN");
+        List occurCodes = new ArrayList();
+        if (iClaim != null && iClaim.getCoverageAdmission() != null
+                && iClaim.getCoverageAdmission().getOccurrenceCode() != null)
+        {
+            Set occurrenceCodes = iClaim.getCoverageAdmission()
+                    .getOccurrenceCode();
+            OccurrenceCode oCode = null;
+            Iterator occurIterator = occurrenceCodes.iterator();
+            while (occurIterator.hasNext())
+            {
+                oCode = (OccurrenceCode) occurIterator.next();
+                if (oCode != null && oCode.getOccurrenceCode() != null
+                		&& !oCode.getOccurrenceCode().trim().isEmpty())
+                {
+                    if(logger.isDebugEnabled()) {
+	                    logger
+	                            .debug("OccurenceCode is"
+	                                    + oCode.getOccurrenceCode());
+
+                    }
+
+                    occurCodes.add(oCode.getOccurrenceCode());
+                }
+            }
+        }        
+        logger.info("CLAIMTPLEDITS MANAGER : findOccurenceCodes() : END");
+        return occurCodes;
+    }
+    
+    /**
+     * This Method will Fetch All the OccurrenceCodes from the Claim
+     * 
+     * @param iClaim
+     *                     Represents InstitutionalClaim Object
+     * @return occurCodes Represents Set of OccurrenceCodes
+     */
+    private List findOccurenceSpanCodes(InstitutionalClaim iClaim)
+    {
+        logger.info("CLAIMTPLEDITS MANAGER : findOccurenceSpans() : BEGIN");
+        List occurCodes = new ArrayList();       
+        if (iClaim != null && iClaim.getCoverageAdmission() != null
+                && iClaim.getCoverageAdmission().getOccurrenceSpan() != null)
+        {
+            Set occurrenceSpans = iClaim.getCoverageAdmission()
+                    .getOccurrenceSpan();
+            OccurrenceSpan oCode = null;
+            Iterator occurIterator = occurrenceSpans.iterator();
+            while (occurIterator.hasNext())
+            {
+                oCode = (OccurrenceSpan) occurIterator.next();
+                if (oCode != null && oCode.getOccurrenceSpanCode() != null
+                		&& !oCode.getOccurrenceSpanCode().trim().isEmpty())
+                {
+                    if(logger.isDebugEnabled()) {
+	                    logger
+	                            .debug("OccurenceSpanCode is"
+	                                    + oCode.getOccurrenceSpanCode());
+
+                    }
+
+                    occurCodes.add(oCode.getOccurrenceSpanCode());
+                }
+            }
+        }
+        logger.info("CLAIMTPLEDITS MANAGER : findOccurenceSpans() : END");
+        return occurCodes;
+    }
+
+    /**
+     * This Method finds the Exception Disposition Codes for given Edits
+     * 
+     * @param editsSet
+     *                     Set of Edits that are posted
+     * @param editStatus
+     *                     List of Edits Status [isDeny or Not]
+     * @return isDeny Flag that specifies if any edit has status deny
+     */
+    private boolean getExceptionDispositionCodes(Set editsSet, List editStatus)
+    {
+        logger.info("CLAIMTPLEDITS MANAGER : getExceptionDispositionCodes !");
+        boolean isDeny = false;
+        ClaimAdjudicationEdit edit = null;
+        Object obj = null;
+
+        if (editStatus != null)
+        {
+            Iterator editIterator = editsSet.iterator();
+            while (editIterator.hasNext())
+            {
+                obj = editIterator.next();
+                if (obj != null)
+                {
+                    edit = (ClaimAdjudicationEdit) obj;
+                    if (edit.getExceptionCode() != null
+                            && editStatus.contains(edit.getExceptionCode()))
+                    {
+                        isDeny = true;
+                        break;
+                    }
+                }
+            }
+        }
+        logger.info(" CLAIMTPLEDITS MANAGER : getExceptionDispositionCodes !");
+        return isDeny;
+    }
+
+    /**
+     * This Method Process the Header for TPLEdits
+     * 
+     * @param claim
+     *                     EnterpriseClaim
+     * @param tplMatrices
+     *                     List
+     * @param coverageCode
+     *                     String
+     * @param tplPolicies
+     *                     List
+     * @param editStatus
+     *                     Map
+     * @return loopFlag boolean
+     * @throws EnterpriseBaseBusinessException
+     * 						EnterpriseBaseBusinessException
+     */
+    private boolean processHeader(EnterpriseClaim claim, List tplMatrices,
+            String coverageCode, List tplPolicies, List editStatus, String bypassParamValue)
+            throws EnterpriseBaseBusinessException
+    {
+        logger.info("CLAIMTPLEDITS MANAGER : processHeader() : BEGIN");
+        Integer lineNum = Integer.valueOf(0);
+        Set editsSet = null;
+        boolean loopFlag = true;
+        boolean mapFlag = false;
+        ClaimTPLMatrix claimTPLMatrix = null;
+        String resourceType = null;
+        List matchedTPLMatrices = 
+        	tplHelper.compareCoverageCodeWithClaim(tplMatrices,
+                claim.getFDOS(), claim.getLDOS());
+        if (!matchedTPLMatrices.isEmpty())
+        {
+            if(logger.isDebugEnabled()) {
+	            logger.debug("matchedTPLMatrices size: "
+	                    + matchedTPLMatrices.size());
+
+            }
+
+            Iterator tplIterator = matchedTPLMatrices.iterator();
+            while (tplIterator.hasNext() && loopFlag)
+            {
+                claimTPLMatrix = (ClaimTPLMatrix) tplIterator.next();
+                resourceType = claimTPLMatrix.getResourceType();
+                if(logger.isDebugEnabled()) {
+	                logger.debug("ResourceType :" + resourceType);
+
+                }
+
+                mapFlag = false;
+                if (resourceType == null)
+                {
+                    mapFlag = compareClaimWithMapDefinitionData(claim,
+                            claimTPLMatrix, lineNum);
+                }
+                else
+                {
+                    List resourceTypes = (List) resourceTypeMap
+                            .get(coverageCode);
+                    if (resourceTypes != null
+                            && resourceTypes.contains(resourceType))
+                    {
+                        mapFlag = compareClaimWithMapDefinitionData(claim,
+                                claimTPLMatrix, lineNum);
+                    }
+                }
+                /** If MapSetCriteria is NotMet Continue with Next CoverageCode */
+                if(logger.isDebugEnabled()) {
+	                logger.debug("mapFlag value is " + mapFlag);
+
+                }
+
+                if (mapFlag)
+                {
+                    updateTPLBillingWithPolicyDetails(claim, lineNum,
+                            coverageCode, tplPolicies, claimTPLMatrix);
+                    editsSet = (Set) exceptionCodesMap.get(lineNum);                    
+                    /** If no Edits are Posted Continue with next CoverageCode */
+                    /** Return if Disposition is Deny of any Edit */
+                    if (editsSet != null && !editsSet.isEmpty() 
+                            && getExceptionDispositionCodes(editsSet, editStatus))
+                   {
+                            loopFlag = false;
+                    }
+                    if (loopFlag 
+                    		&& ClaimAdjudicationConstants.TPL_MATRIX_STOP_LOOP_PARAM_VALUE
+                    		.equalsIgnoreCase(bypassParamValue))
+                    {   
+                        loopFlag = !checkUtil
+                		.isPresentInSystemList(
+                				systemListMap,
+                				ClaimAdjudicationConstants.FUNCTIONAL_AREA_C3,
+                				new Long(
+                						ClaimAdjudicationConstants.TPL_EDITS_STOP_LOOP_LIST),
+                						tplHelper.getListOfExceptions(
+                                    			(Set)exceptionCodesMap.get(Integer.valueOf(0))), claim.getFDOS());
+                        if(logger.isDebugEnabled()) {
+	                        logger.debug("loopFlag:" + loopFlag);
+
+                        }
+
+                    }
+                    break;
+                }
+            }
+        }
+        logger.info("CLAIMTPLEDITS MANAGER : processHeader() : END");
+        return loopFlag;
+    }
+
+    /**
+     * This Method Process the HeaderBusinessRules for TPLEdits
+     * 
+     * @param claim
+     *                     EnterpriseClaim
+     * @return editsSet Set
+     * @throws EnterpriseBaseBusinessException
+     * 						EnterpriseBaseBusinessException
+     */
+    private Set processHeaderBusinessRule(EnterpriseClaim claim)
+            throws EnterpriseBaseBusinessException
+    {
+        logger.info("CLAIMTPLEDITS: processHeaderBusinessRule Begin");
+        boolean commonBypassFlag = false;
+        Set editsSet = new HashSet();
+        Integer lineNum = Integer.valueOf(0);
+        String claimForm = claim.getClaimFormCode();
+        int memberAge = 0;
+        boolean diagAccidentIndicator = false;
+        List diagCodes = null;
+        Double allowedAmount = new Double(0);
+        ClaimPricing claimPricing = claim.getClaimPricing();
+        if (claimPricing != null)
+        {
+        	allowedAmount = claimPricing.getAllowedAmount();
+        }
+        if (claim.getClaimMember() != null && claim.getClaimMember().getAge() != null)
+        {
+            memberAge = claim.getClaimMember().getAge().intValue()
+             / ClaimAdjudicationConstants.NUMBER_OF_MONTHS;
+            if(logger.isDebugEnabled()) {
+	            logger.debug("MemberAge is:" + memberAge);
+
+            }
+
+        }
+        if (claim.getClaimProcessFields() != null)
+        {
+            diagAccidentIndicator = claim.getClaimProcessFields()
+                    .getAccidentIndicator();
+            if(logger.isDebugEnabled()) {
+	            logger.debug("diagAccidentIndicator is :" + diagAccidentIndicator);
+
+            }
+
+        }
+        diagCodes = getClaimDiagnosissList(claimForm, claim.getDiagnosis(),
+                null);
+        if(logger.isDebugEnabled()) {
+	        logger.debug("DiagCodes :" + diagCodes);
+
+        }
+
+        prenatalDiagnosis = checkUtil
+                .isPresentInSystemList(
+                        systemListMap,
+                        ClaimAdjudicationConstants.FUNCTIONAL_AREA_C3,
+                        new Long(
+                                ClaimAdjudicationConstants.PRENATAL_DIAGNOSIS_LIST_NUM),
+                        diagCodes, claim.getFDOS());
+        commonBypassFlag = determineCommonByPassCriteriaFlag(claim
+                .getClaimTypeCode(), claim.getGoodCauseIndicator(), claim
+                .getPolicyCourtOrderIndicator(), null);
+        if(logger.isDebugEnabled()) {
+	        logger.debug("commonBypassFlag is:" + commonBypassFlag);
+
+        }
+
+        editsSet.addAll(processBussinessRules(claim, lineNum, claim
+                .getFDOS(), memberAge, diagAccidentIndicator,
+                commonBypassFlag, claim.getTotalChargeAmount(), allowedAmount));
+        
+        logger.info("CLAIMTPLEDITS: processHeaderBusinessRule: End");
+        return editsSet;
+    }
+
+    /**
+     * This Method Process the LineItem for TPLEdits
+     * 
+     * @param claim
+     *                     EnterpriseClaim
+     * @param tplPolicies
+     *                     List
+     * @param tplMatrices
+     *                     List
+     * @param coverageCode
+     *                     String
+     * @param editStatus
+     *                     Map
+     * @throws EnterpriseBaseBusinessException
+     * 					EnterpriseBaseBusinessException
+     */
+    private void processLine(EnterpriseClaim claim, List tplPolicies,
+            List tplMatrices, String coverageCode, List editStatus, String bypassParamValue)
+            throws EnterpriseBaseBusinessException
+    {
+        logger.info("CLAIMTPLEDITS MANAGER : processLine() : BEGIN");
+        Set lineItems = claim.getEnterpriseClaimLineItem();
+        List matchedTPLMatrices = null;
+        Integer lineNum = null;
+        ClaimTPLMatrix claimTPLMatrix = null;
+        boolean mapFlag = false;
+        boolean lineLoopFlag = true;
+        Set editsSet = null;
+        EnterpriseClaimLineItem claimLine = null;
+        String resourceType = null;
+        if (lineItems.contains(null))
+        {
+            lineItems.remove(null);
+        }
+        /** Iterate Through All The EnterpriseClaimLineITems */
+        Iterator lineIterator = lineItems.iterator();
+        while (lineIterator.hasNext())
+        {
+            claimLine = (EnterpriseClaimLineItem) lineIterator.next(); 
+            if(logger.isDebugEnabled()) {
+	            logger.debug("Process Line Number:" + claimLine.getLineNumber());
+
+            }
+
+			List lineExceptions = tplHelper.getListOfExceptions(
+            		(Set)exceptionCodesMap.get(claimLine.getLineNumber()));
+            if (ClaimAdjudicationConstants.TPL_MATRIX_STOP_LOOP_PARAM_VALUE
+                    		.equalsIgnoreCase(bypassParamValue))
+            {
+	            lineLoopFlag = !checkUtil
+				.isPresentInSystemList(
+						systemListMap,
+						ClaimAdjudicationConstants.FUNCTIONAL_AREA_C3,
+						new Long(
+								ClaimAdjudicationConstants.TPL_EDITS_STOP_LOOP_LIST),
+								lineExceptions, claimLine.getFDOS());
+	            if(logger.isDebugEnabled()) {
+		            logger.debug("lineLoopFlag:" + lineLoopFlag);
+
+	            }
+
+            }
+            Boolean lineCostAvoidanceIndicator = Boolean.FALSE;
+            if (claimLine != null && claimLine.getCostAvoidIndicator() != null)
+            {
+                lineCostAvoidanceIndicator =  claimLine.getCostAvoidIndicator();
+            }
+            /** Find MatchingTPLMatrices CoverageCodes */
+            if (claimLine != null && !lineCostAvoidanceIndicator.booleanValue()
+            		&& lineLoopFlag)
+            {
+                matchedTPLMatrices = 
+                	tplHelper.compareCoverageCodeWithClaim(tplMatrices,
+                        claimLine.getFDOS(), claimLine.getLDOS());
+                if(logger.isInfoEnabled()) {
+	                logger.info("MatchedTPLMatrices is" + matchedTPLMatrices);
+
+                }
+
+                if (!matchedTPLMatrices.isEmpty())
+                {
+                    lineNum = claimLine.getLineNumber();
+                    if (deniedLines.contains(lineNum))
+                    {
+                        if(logger.isDebugEnabled()) {
+	                        logger.debug(" LineNumber : " + lineNum
+	                                + " is denied; Skipping;");
+
+                        }
+
+                    }
+                    else
+                    {
+                        /** Compare ClaimLineItemData with MapDefinition Criteria */
+                        Iterator tplIterator = matchedTPLMatrices.iterator();
+                        while (tplIterator.hasNext())
+                        {
+                            //editsSet = new HashSet();
+                            claimTPLMatrix = (ClaimTPLMatrix) tplIterator
+                                    .next();
+                            mapFlag = false;
+                            resourceType = claimTPLMatrix.getResourceType();
+                            if (resourceType == null)
+                            {
+                                mapFlag = compareClaimWithMapDefinitionData(
+                                        claim, claimTPLMatrix, lineNum);
+                            }
+                            else
+                            {
+                                List resourceTypes = (List) resourceTypeMap
+                                        .get(coverageCode);
+                                if (resourceTypes != null
+                                        && resourceTypes.contains(resourceType))
+                                {
+                                    mapFlag = compareClaimWithMapDefinitionData(
+                                            claim, claimTPLMatrix, lineNum);
+                                }
+                            }
+//                            mapFlag = compareClaimWithMapDefinitionData(claim,
+//                                    claimTPLMatrix, lineNum);
+                            /**
+                             * If MapCriteria not Met Continue with next
+                             * LineItem
+                             */
+                            if(logger.isInfoEnabled()) {
+	                            logger.info("mapFlag value is " + mapFlag);
+
+                            }
+
+                            if (mapFlag)
+                            {
+                                updateTPLBillingWithPolicyDetails(claim,
+                                        lineNum, coverageCode, tplPolicies,
+                                        claimTPLMatrix);
+                                editsSet = (Set) exceptionCodesMap.get(lineNum);
+                                if (editsSet != null && !editsSet.isEmpty() 
+                                        && getExceptionDispositionCodes(editsSet,
+                                            editStatus))
+                               {
+                                        deniedLines.add(lineNum);
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        logger.info("CLAIMTPLEDITS MANAGER : processLine() : BEGIN");
+    }
+
+    /**
+     * This Method Process the LineBusinessRules for TPLEdits
+     * @param claim
+     * 			EnterpriseClaim
+     * @param claimLine
+     * 			EnterpriseClaimLineItem
+     * @return editsSet
+     * 			Set
+     * @throws EnterpriseBaseBusinessException
+     * 						EnterpriseBaseBusinessException
+     */
+    private Set processLineBusinessRule(EnterpriseClaim claim,
+            EnterpriseClaimLineItem claimLine)
+            throws EnterpriseBaseBusinessException
+    {
+        logger.info("ClaimTPLManager : processLineBusinessRule : Begin");
+        boolean commonBypassFlag = false;
+        String costAvoidanceCode = null;
+        boolean diagAccidentIndicator = false;
+        Integer lineNum = null;
+        Set editsSet = null;
+        int memberAge = 0;
+        String claimForm = claim.getClaimFormCode();
+        List diagCodes = null;       
+        String memberConfidentialityCode = null;
+        if (claimLine != null)
+        {
+            lineNum = claimLine.getLineNumber();
+            if (deniedLines.contains(lineNum))
+            {
+                if(logger.isInfoEnabled()) {
+	                logger.info(" LineNumber : " + lineNum
+	                        + " is denied; Skipping;");
+
+                }
+
+            }
+            else
+            {
+                if (claimLine.getEnterpriseClaimLineItemAux() != null)
+                {
+                    memberAge = claimLine.getEnterpriseClaimLineItemAux()
+                            .getMemberAge().intValue() / ClaimAdjudicationConstants.NUMBER_OF_MONTHS;
+                    if(logger.isDebugEnabled()) {
+	                    logger.debug("MemberAge is:" + memberAge);
+
+                    }
+
+
+                }
+                if (ClaimAdjudicationConstants.INSTITUTIONAL_CLAIMS
+                        .equalsIgnoreCase(claimForm))
+                {
+                    if (claim.getClaimProcessFields() != null)
+                    {
+                        diagAccidentIndicator = claim.getClaimProcessFields()
+                                .getAccidentIndicator();
+                        if(logger.isDebugEnabled()) {
+	                        logger.debug("Header diagAccidentIndicator is :"
+	                                + diagAccidentIndicator);
+
+                        }
+
+                    }
+                }
+                else if (claimLine.getClaimLineItemProcessFields() != null)
+                {
+
+                    diagAccidentIndicator = claimLine
+                            .getClaimLineItemProcessFields()
+                            .getAccidentIndicator();
+                    if(logger.isDebugEnabled()) {
+	                    logger.debug("LineItem diagAccidentIndicator is :"
+	                            + diagAccidentIndicator);
+
+                    }
+
+                }
+                if (claimLine.getClaimLineItemProcessFields() != null)
+                {
+                    costAvoidanceCode = claimLine
+                            .getClaimLineItemProcessFields()
+                            .getCostAvoidanceIndicator();
+                    if(logger.isDebugEnabled()) {
+	                    logger.debug("costAvoidanceCode is :" + costAvoidanceCode);
+
+                    }
+
+                }
+                diagCodes = getClaimDiagnosissList(claimForm, claim
+                        .getDiagnosis(), claimLine);
+                prenatalDiagnosis = checkUtil
+                        .isPresentInSystemList(
+                                systemListMap,
+                                ClaimAdjudicationConstants.FUNCTIONAL_AREA_C3,
+                                new Long(
+                                        ClaimAdjudicationConstants.PRENATAL_DIAGNOSIS_LIST_NUM),
+                                diagCodes, claimLine.getFDOS());
+
+                commonBypassFlag = determineCommonByPassCriteriaFlag(claim
+                        .getClaimTypeCode(), claim.getGoodCauseIndicator(),
+                        claim.getPolicyCourtOrderIndicator(), costAvoidanceCode);
+
+                if(logger.isInfoEnabled()) {
+	                logger.info("commonBypassFlag is :" + commonBypassFlag);
+
+                }
+
+                if (editsSet == null)
+                {
+                    editsSet = new HashSet();
+                }
+                editsSet.addAll(processBussinessRules(claim, lineNum,
+                        claimLine.getFDOS(), memberAge, diagAccidentIndicator,
+                        commonBypassFlag, claimLine.getSubmitChargeAmount(),
+                        claimLine.getAllowedChargeAmount()));                
+              //invoke TPL Matrix Bypass Edits
+                Set matixBypassEdits = lineTPLMatrixBypassEdits(
+                		claim.getClaimTypeCode(),
+                		memberConfidentialityCode, claimLine);
+                if (matixBypassEdits != null && !matixBypassEdits.isEmpty())
+                {
+                	editsSet.addAll(matixBypassEdits);
+                }
+            }
+        }
+        logger.info("ClaimTPLManager : processLineBusinessRule : END");
+        return editsSet;
+    }
+
+    /**
+     * @param clmtplmatrix
+     * 					ClaimTPLMatrix
+     * @param linenum
+     * 					Integer
+     * @return ClaimAdjudicationEdit
+     */
+    private ClaimAdjudicationEdit processTPLMatrixException(
+            ClaimTPLMatrix clmtplmatrix, Integer linenum)
+    {
+        ClaimAdjudicationEdit edit = null;
+        if (clmtplmatrix != null
+                && clmtplmatrix.getClaimExceptionCode() != null)
+        {
+            edit = new ClaimAdjudicationEdit();
+            edit.setLineNumber(linenum);
+            if(logger.isDebugEnabled()) {
+	            logger.debug("ClaimExceptionCode "
+	                    + clmtplmatrix.getClaimExceptionCode().getExceptionCode());
+
+            }
+
+            if (clmtplmatrix.getClaimExceptionCode()
+                    .getExceptionCode() != null)
+            {
+	            edit.setExceptionCode(clmtplmatrix.getClaimExceptionCode()
+	                    .getExceptionCode());
+	            if (!exceptionList.contains(clmtplmatrix.getClaimExceptionCode()
+                    .getExceptionCode()))
+	            {
+		            exceptionList.add(clmtplmatrix.getClaimExceptionCode()
+		                    .getExceptionCode());
+	            }
+            }
+        }
+        return edit;
+    }   
+
+    /**
+     * This method is used to post the edits 6030, 6032,6033 and 6036 related to
+     * Inpatient Suspect Accident TPL Edits Process.
+     *
+     * @param memberAge
+     * 						int value.
+     * @param occurCodes
+     * 						List of String Objects.
+     * @param causeCodes
+     * 						List of String Objects.
+     * @param fDOS
+     * 						Date
+     * @param claimFormType
+     * 						String Object.
+     *  @param lineNumber
+     *  					Integer Object.
+     *  @return editsSet
+     *  					Set of exceptions.
+     */
+    private Set inpatientSuspectAccidentTPLEdits(int memberAge, List occurCodes,
+            List occurenceSpanCodes, Double claimBilledAmount,
+            Date fDOS, Integer lineNumber)
+    {
+        logger.info("ClaimTPLManager: inpatientSuspectAccidentTPLEdits BEGIN");
+        Set editsSet = null;
+        boolean accidentFlag = false;
+        RulesResultVO rulesResult =null;
+        if(logger.isDebugEnabled()) {
+	        logger.debug("MemberAge is :" + memberAge);
+
+        }
+
+        Double thresholdAmount = getSystemParameterValueAmount(
+   			 systemParameterMap, fDOS,
+   			 new Long(ClaimAdjudicationConstants.TPL_SUSP_ACC_SUBM_THRSHLD_PARAM));
+		/* PMD Violations - P1 Fix - AvoidDuplicateLiterals - Changed By 123510 Starts */
+
+		if(logger.isDebugEnabled()) {
+			logger.debug("TPL suspect accident submitted threshold param value in inpatientSuspectAccidentTPLEdits():" 
+					+ thresholdAmount);
+
+		}
+
+		/* PMD Violations - P1 Fix - AvoidDuplicateLiterals - Changed By 123510 Ends */
+            if (occurCodes != null && !occurCodes.isEmpty())
+            {
+                /** Check for Occurrence Codes in System List C3-5322 */
+            	accidentFlag = checkUtil
+                        .isPresentInSystemList(
+                                systemListMap,
+                                ClaimAdjudicationConstants.FUNCTIONAL_AREA_C3,
+                                new Long(
+                                        ClaimAdjudicationConstants.EXCP_6030_OCCURRENCE_CDS_LIST),
+                                occurCodes, fDOS);
+                if(logger.isDebugEnabled()) {
+	                logger.debug("Occurrence codes in system list C3-5322: " + accidentFlag);
+
+                }
+
+                //RIF STARTS CLM4002.0001.01
+                boolean flag = getRulesResult_CLM4002_0001(memberAge, accidentFlag);
+                //RIF ENDS CLM4002.0001.01
+                if(flag){
+                	if(logger.isDebugEnabled()){
+                    logger
+                            .debug("Rule CLM4002.0001.01 - posting exception 6030");
+                	}
+                    editsSet = setException(editsSet,
+                            ClaimAdjudicationConstants.EDIT_6030, lineNumber);
+                }                
+                /** Check for Occurrence Codes in System List  C3-5378*/
+            	accidentFlag = checkUtil
+                        .isPresentInSystemList(
+                                systemListMap,
+                                ClaimAdjudicationConstants.FUNCTIONAL_AREA_C3,
+                                new Long(
+                                        ClaimAdjudicationConstants.EXCP_6032_OCCURRENCE_CDS_LIST),
+                                occurCodes, fDOS);
+                if(logger.isDebugEnabled()) {
+	                logger.debug("Occurrence codes in system list C3-5378: " + accidentFlag);
+
+                }
+
+                //Rule ID CLM4002.0009.01
+                int member_age=ClaimAdjudicationConstants.MEMBER_AGE_18;
+             // Rule Invocation Context object holds object arrays used in rule
+    			// execution.
+
+                //RIF STARTS CLM4002.0009.01
+                boolean CLM4002_0009_flag = getRulesResult_CLM4002_0009(member_age, memberAge, accidentFlag); 
+                if (CLM4002_0009_flag)
+                	//RIF ENDS CLM4002.0009.01
+                {
+                	if(logger.isDebugEnabled()){
+                    logger
+                            .debug("Rule CLM4002.0009.01 - posting exception 6032");
+                	}
+                    editsSet = setException(editsSet,
+                            ClaimAdjudicationConstants.EDIT_6032, lineNumber);
+                }
+                
+                /** Check for Occurrence Codes in System List  C3-5381*/
+            	accidentFlag = checkUtil
+                        .isPresentInSystemList(
+                                systemListMap,
+                                ClaimAdjudicationConstants.FUNCTIONAL_AREA_C3,
+                                new Long(
+                                        ClaimAdjudicationConstants.EXCP_6033_OCCURRENCE_CDS_LIST),
+                                occurCodes, fDOS); 
+            	 if(logger.isDebugEnabled()) {
+	            	 logger.debug("Occurrence codes in system list C3-5381: " + accidentFlag);
+
+            	 }
+
+            	 
+                //Rule ID CLM4002.0011.01
+            	 int claimAge = ClaimAdjudicationConstants.MEMBER_AGE_18;
+            	 rulesResult = getExtract_4002_0011_01(memberAge,
+						claimBilledAmount, accidentFlag, thresholdAmount,
+						claimAge);
+            	 if(rulesResult.isReturnBooleanValue()){
+               /* if (memberAge >= ClaimAdjudicationConstants.MEMBER_AGE_18
+                        && accidentFlag
+                        && claimBilledAmount >= thresholdAmount)
+                {*/
+            		 if(logger.isDebugEnabled()) {
+                    logger
+                            .debug("Rule CLM4002.0011.01 - posting exception 6033");
+            		 }
+                    editsSet = setException(editsSet,
+                            ClaimAdjudicationConstants.EDIT_6033, lineNumber);
+                }
+                
+                /** Check for Occurrence Codes in System List  C3-5387*/
+            	accidentFlag = checkUtil
+                        .isPresentInSystemList(
+                                systemListMap,
+                                ClaimAdjudicationConstants.FUNCTIONAL_AREA_C3,
+                                new Long(
+                                        ClaimAdjudicationConstants.EXCP_6036_OCCURRENCE_CDS_LIST),
+                                occurCodes, fDOS); 
+            	 if(logger.isDebugEnabled()) {
+	            	 logger.debug("Occurrence codes in system list C3-5387: " + accidentFlag);
+
+            	 }
+
+            	 
+                //Rule ID CLM4002.0025.01
+            	 
+            	rulesResult = executeRuleCLM4002_0025_01(memberAge,
+						claimBilledAmount, accidentFlag, thresholdAmount);	
+                if (rulesResult.isReturnBooleanValue())
+                {
+                	if(logger.isDebugEnabled()){
+                    logger
+                            .debug("Rule CLM4002.0025.01 - posting exception 6036");
+                	}
+                    editsSet = setException(editsSet,
+                            ClaimAdjudicationConstants.EDIT_6036, lineNumber);
+                }
+            }
+            accidentFlag = false;
+            if (occurenceSpanCodes != null && !occurenceSpanCodes.isEmpty())
+            {
+            	/** Check for Occurrence Span Codes in System List C3-5373*/
+            	accidentFlag = checkUtil
+                        .isPresentInSystemList(
+                                systemListMap,
+                                ClaimAdjudicationConstants.FUNCTIONAL_AREA_C3,
+                                new Long(
+                                        ClaimAdjudicationConstants.EXCP_6030_OCCURRENCE_SPAN_CDS_LIST),
+                                        occurenceSpanCodes, fDOS);
+            	if(logger.isDebugEnabled()) {
+	            	logger.debug("Occurrence span codes in system list C3-5373: " + accidentFlag);
+
+            	}
+
+            	///Rule Invocation Context object holds object arrays used in rule execution.
+            	//RIF Call for CLM4002.0027.01
+			    if(getRulesResult_CLM4002_0027(memberAge,accidentFlag))
+                {
+                    logger
+                            .debug("Rule CLM4002.0027.01 - posting exception 6030");
+                    editsSet = setException(editsSet,
+                            ClaimAdjudicationConstants.EDIT_6030, lineNumber);
+                }
+                /** Check for Occurrence Span Codes in System List  C3-5379*/
+            	accidentFlag = checkUtil
+                        .isPresentInSystemList(
+                                systemListMap,
+                                ClaimAdjudicationConstants.FUNCTIONAL_AREA_C3,
+                                new Long(
+                                        ClaimAdjudicationConstants.EXCP_6032_OCCURRENCE_SPAN_CDS_LIST),
+                                        occurenceSpanCodes, fDOS);
+            	if(logger.isDebugEnabled()) {
+	            	logger.debug("Occurrence span codes in system list C3-5379: " + accidentFlag);
+
+            	}
+
+                //Rule ID CLM4002.0032.01
+            	RulesResultVO rulesResult1 = getRulesResult_4002_0032_01(
+						memberAge, accidentFlag);
+            	if(rulesResult1.isReturnBooleanValue()){
+               /* if (memberAge >= ClaimAdjudicationConstants.MEMBER_AGE_18
+                        && accidentFlag)
+                {*/
+            		if(logger.isDebugEnabled()){
+                    logger
+                            .debug("Rule CLM4002.0032.01 - posting exception 6030");
+            		}
+                    editsSet = setException(editsSet,
+                            ClaimAdjudicationConstants.EDIT_6032, lineNumber);
+                }
+                /** Check for Occurrence Span Codes in System List  C3-5382*/
+            	accidentFlag = checkUtil
+                        .isPresentInSystemList(
+                                systemListMap,
+                                ClaimAdjudicationConstants.FUNCTIONAL_AREA_C3,
+                                new Long(
+                                        ClaimAdjudicationConstants.EXCP_6033_OCCURRENCE_SPAN_CDS_LIST),
+                                        occurenceSpanCodes, fDOS); 
+            	 if(logger.isDebugEnabled()) {
+	            	 logger.debug("Occurrence span codes in system list C3-5382: " + accidentFlag);            	 
+
+            	 }
+
+            	
+                //Rule ID CLM4002.0034.01
+            	   if(getRulesResult_CLM4002_0034(memberAge,accidentFlag,claimBilledAmount,thresholdAmount))    
+                {
+                    logger
+                            .debug("Rule CLM4002.0034.01 - posting exception 6033");
+                    editsSet = setException(editsSet,
+                            ClaimAdjudicationConstants.EDIT_6033, lineNumber);
+                }
+                
+                /** Check for Occurrence Span Codes in System List  C3-5388*/
+            	accidentFlag = checkUtil
+                        .isPresentInSystemList(
+                                systemListMap,
+                                ClaimAdjudicationConstants.FUNCTIONAL_AREA_C3,
+                                new Long(
+                                        ClaimAdjudicationConstants.EXCP_6036_OCCURRENCE_SPAN_CDS_LIST),
+                                        occurenceSpanCodes, fDOS); 
+            	 if(logger.isDebugEnabled()) {
+	            	 logger.debug("Occurrence span codes in system list C3-5388: " + accidentFlag);            	 
+
+            	 }
+
+            	
+                //Rule ID CLM4002.0041.01
+            	 if(getRulesResult_CLM4002_0041(memberAge, accidentFlag, claimBilledAmount, thresholdAmount))
+                 {
+                    logger
+                            .debug("Rule CLM4002.0041.01 - posting exception 6033");
+                    editsSet = setException(editsSet,
+                            ClaimAdjudicationConstants.EDIT_6036, lineNumber);
+                }
+            }
+            logger.info("ClaimTPLManager: inpatientSuspectAccidentTPLEdits END");
+        return editsSet;
+    }
+    
+    
+    /**
+     * @param member_age
+     * @param memberAge
+     * @param accidentFlag
+     * @return flag boolean 
+     */
+    private boolean getRulesResult_CLM4002_0009(final int member_age, final int memberAge,
+			final boolean accidentFlag) {
+		// TODO Auto-generated method stub
+    	boolean flag =false;
+    	String ruleId = "CLM4002.0009.01";
+		RulesDelegate ruleDelegate = new RulesDelegate(ruleId);
+		// Adding object into rule invocation context.
+		ruleDelegate.addObject(member_age);
+		ruleDelegate.addObject(memberAge);
+		ruleDelegate.addObject(accidentFlag);
+		// Invoke RIF with ruleid and rule invocation objects.
+		RulesResultVO rulesResult = null;
+		try {
+			rulesResult = ruleDelegate.invokeRule();
+			flag = rulesResult.isReturnBooleanValue();
+		} catch (RulesDelegateException re) {
+			if (ERRORCODE.equals(re.getErrorCode())&&logger.isDebugEnabled()) {
+				logger.warn(RULE_EXPIRED + ruleId);
+				// If needed perform expires logic here
+			}
+			if(logger.isErrorEnabled()){
+			logger.error(RULESDELEGATE_EXCEPTION + re.getMessage());
+			}
+		}
+		if(logger.isDebugEnabled()){
+		logger.info(EXECUTION_ENDED+ ruleId + "\n");
+		}
+		return flag;
+	}
+
+	/**
+     * executing CLM4002.0034.01
+     * @param memberAge
+     * @param accidentFlag
+     * @param claimbilledamt
+     * @return flag boolean
+     */ 
+    private boolean getRulesResult_CLM4002_0034(final int memberAge, final boolean accidentFlag,final double claimBilledAmount,final double thresholdAmount) {
+		// TODO Auto-generated method stub
+    	 //Rule Invocation Context object holds object arrays used in rule execution.
+        String ruleId = ruleId34;
+        boolean flag= false;
+        RulesDelegate ruleDelegate = new RulesDelegate(ruleId);
+        //Adding object into rule invocation context.
+		ruleDelegate.addObject(memberAge);
+		ruleDelegate.addObject(accidentFlag);
+		ruleDelegate.addObject(claimBilledAmount);
+		ruleDelegate.addObject(thresholdAmount);
+        //Invoke RIF with ruleid and rule invocation objects.
+        RulesResultVO rulesResult = null;
+        try {
+        	rulesResult = ruleDelegate.invokeRule();
+        	flag= rulesResult.isReturnBooleanValue();
+        } catch (RulesDelegateException re){
+        	if(ERRORCODE.equals(re.getErrorCode()))
+        	{
+        		logger.warn(RULE_EXPIRED+ruleId);
+        		//If needed perform expires logic here  
+        	}
+        	logger.error(EXECUTION_ENDED+re.getMessage());
+        }
+        if(logger.isDebugEnabled()){
+        logger.debug(EXECUTION_ENDED+ruleId+"\n");
+        }
+		return flag;
+	}
+	
+	
+	 
+	
+	
+	 /**
+     * executing CLM4002.0041.01
+     * @param memberAge
+     * @param accidentFlag
+     * @param claimbilledamt
+     * @return flag boolean
+     */ 
+    private boolean getRulesResult_CLM4002_0041(final int memberAge, final boolean accidentFlag,final double claimBilledAmount,final double thresholdAmount) {
+		// TODO Auto-generated method stub
+    	 //Rule Invocation Context object holds object arrays used in rule execution.
+        String ruleId = ruleId41;
+        boolean flag= false;
+        RulesDelegate ruleDelegate = new RulesDelegate(ruleId);
+        //Adding object into rule invocation context.
+		ruleDelegate.addObject(memberAge);
+		ruleDelegate.addObject(accidentFlag);
+		ruleDelegate.addObject(claimBilledAmount);
+		ruleDelegate.addObject(thresholdAmount);
+        //Invoke RIF with ruleid and rule invocation objects.
+        RulesResultVO rulesResult = null;
+        try {
+        	rulesResult = ruleDelegate.invokeRule();
+        	flag= rulesResult.isReturnBooleanValue();
+        } catch (RulesDelegateException re){
+        	if(ERRORCODE.equals(re.getErrorCode()))
+        	{
+        		logger.warn(RULE_EXPIRED+ruleId);
+        		//If needed perform expires logic here  
+        	}
+        	logger.error(EXECUTION_ENDED+re.getMessage());
+        }
+        if(logger.isDebugEnabled()){
+        logger.debug(EXECUTION_ENDED+ruleId+"\n");
+        }
+		return flag;
+	}
+    
+    
+  //This method is to implement the rule "CLM4002.0027.01"
+    private boolean getRulesResult_CLM4002_0027(final int memberAge, final boolean accidentFlag) 
+    {
+    	String ruleId = ruleId27;
+    RulesDelegate ruleDelegate = new RulesDelegate(ruleId);
+    //Adding object into rule invocation context.
+ 	ruleDelegate.addObject(memberAge);
+	ruleDelegate.addObject(accidentFlag);
+    //Invoke RIF with ruleid and rule invocation objects.
+    RulesResultVO rulesResult = null;
+    try {
+  			rulesResult = ruleDelegate.invokeRule();	
+		 } catch (RulesDelegateException re){
+			 if(ERRORCODE.equals(re.getErrorCode()))
+    		{
+    			logger.warn(RULE_EXPIRED+ruleId);
+    			//If needed perform expires logic here  
+    		}
+    		logger.error(RULESDELEGATE_EXCEPTION+re);
+    	}
+    	logger.info(EXECUTION_ENDED+ruleId+"\n");
+    	return rulesResult.isReturnBooleanValue();
+}
+  
+	private RulesResultVO executeRuleCLM4002_0025_01(final int memberAge,
+			final Double claimBilledAmount, final boolean accidentFlag,
+			final Double thresholdAmount) {
+		String ruleId;
+		RulesDelegate ruleDelegate;
+		// Rule Invocation Context object holds object arrays used in rule
+		// execution.
+
+		ruleId = "CLM4002.0025.01";
+		ruleDelegate = new RulesDelegate(ruleId);
+		// Adding object into rule invocation context.
+		ruleDelegate.addObject(thresholdAmount);
+		ruleDelegate.addObject(claimBilledAmount);
+		ruleDelegate.addObject(memberAge);
+		ruleDelegate.addObject(accidentFlag);
+
+		// Invoke RIF with ruleid and rule invocation objects.
+		RulesResultVO rulesResult=null;
+
+		try {
+
+			 rulesResult = ruleDelegate.invokeRule();
+
+		} catch (RulesDelegateException re) {
+			if (ERRORCODE.equals(re.getErrorCode()) && logger.isDebugEnabled()) {
+				logger.debug(RULE_EXPIRED + ruleId);
+				// If needed perform expires logic here
+			}
+			
+			if(logger.isDebugEnabled()){
+			logger.info(RULESDELEGATE_EXCEPTION + re);
+			}
+		}
+
+		if(logger.isDebugEnabled()){
+		logger.info(EXECUTION_ENDED + ruleId + "\n");
+		}
+		return rulesResult;
+	}
+    /**
+     * Added this method for Rule CLM4002.0032.01
+     * @author 300051
+     */
+    
+	private RulesResultVO getRulesResult_4002_0032_01(final int memberAge,
+			final boolean accidentFlag) {
+		
+		int claimAge = ClaimAdjudicationConstants.MEMBER_AGE_18;
+		
+		//Rule Invocation Context object holds object arrays used in rule execution.
+		
+		String ruleId = "CLM4002.0032.01";
+		RulesDelegate ruleDelegate = new RulesDelegate(ruleId);
+		//Adding object into rule invocation context.
+		ruleDelegate.addObject(claimAge);
+		ruleDelegate.addObject(memberAge);
+		ruleDelegate.addObject(accidentFlag);
+		//Invoke RIF with ruleid and rule invocation objects.
+		RulesResultVO rulesResult = null;
+		try {
+
+			rulesResult = ruleDelegate.invokeRule();	
+		} catch (RulesDelegateException re){
+			if(RulesConstants.IS_EXPIRED.equals(re.getErrorCode()))
+			{
+				logger.warn(RulesConstants.RULE_EXPIRED+ruleId);
+				//If needed perform expires logic here  
+			}
+			logger.info(RulesConstants.RULE_EXCEPTION+re);
+		}
+		logger.info(RulesConstants.RULE_ENDS+ruleId+"\n");
+		return rulesResult;
+	}
+    /**
+     * Added this method for Rule CLM4002.0011.01
+     * @author 300051
+     */
+	private RulesResultVO getExtract_4002_0011_01(final int memberAge,
+			final Double claimBilledAmount,final boolean accidentFlag,
+			final Double thresholdAmount,final int claimAge) {
+		//Rule Invocation Context object holds object arrays used in rule execution.
+		 String ruleId = "CLM4002.0011.01";
+		 RulesDelegate ruleDelegate = new RulesDelegate(ruleId);
+		 //Adding object into rule invocation context.
+		 ruleDelegate.addObject(claimAge);
+		 ruleDelegate.addObject(thresholdAmount);
+		 ruleDelegate.addObject(claimBilledAmount);
+		 ruleDelegate.addObject(memberAge);
+		 ruleDelegate.addObject(accidentFlag);
+		 //Invoke RIF with ruleid and rule invocation objects.
+		 RulesResultVO rulesResult = null;
+		 try {
+			 rulesResult = ruleDelegate.invokeRule();	
+		 } catch (RulesDelegateException re){
+			 if(RulesConstants.IS_EXPIRED.equals(re.getErrorCode()))
+			 {
+				 logger.warn(RulesConstants.RULE_EXPIRED+ruleId);
+				 //If needed perform expires logic here  
+			 }
+			 logger.info(RulesConstants.RULE_EXCEPTION+re.getMessage());
+		 }
+		 logger.info(RulesConstants.RULE_ENDS+ruleId+"\n");
+		return rulesResult;
+	}
+        
+    /**
+     * executing CLM4002.0001.01
+     * @param memberAge
+     * @param accidentFlag
+     * @return flag boolean
+     */
+    private boolean getRulesResult_CLM4002_0001(final int memberAge, final boolean accidentFlag) {
+		// TODO Auto-generated method stub
+    	 //Rule Invocation Context object holds object arrays used in rule execution.
+        String ruleId = "CLM4002.0001.01";
+        boolean flag= false;
+        RulesDelegate ruleDelegate = new RulesDelegate(ruleId);
+        //Adding object into rule invocation context.
+        ruleDelegate.addObject(memberAge);
+        ruleDelegate.addObject(accidentFlag);
+        //Invoke RIF with ruleid and rule invocation objects.
+        RulesResultVO rulesResult = null;
+        try {
+        	rulesResult = ruleDelegate.invokeRule();
+        	flag= rulesResult.isReturnBooleanValue();
+        } catch (RulesDelegateException re){
+        	if(ERRORCODE.equals(re.getErrorCode()))
+        	{
+        		logger.warn(RULE_EXPIRED+ruleId);
+        		//If needed perform expires logic here  
+        	}
+        	logger.error(EXECUTION_ENDED+re.getMessage());
+        }
+        if(logger.isDebugEnabled()){
+        logger.debug(EXECUTION_ENDED+ruleId+"\n");
+        }
+		return flag;
+	}
+
+	/**
+     * This method is for executing Rule CLM4002.0010.01
+     * @param memberAge
+     * @param accidentFlag
+     * @return rulesResult RulesResultVO
+     */
+    private RulesResultVO getRulesResult_CLM4002_0010(final int memberAge, final boolean accidentFlag)
+    {
+    	//Rule Invocation Context object holds object arrays used in rule execution.
+    	String ruleId = "CLM4002.0010.01";
+    	RulesDelegate ruleDelegate = new RulesDelegate(ruleId);
+    	//Adding object into rule invocation context.
+    	ruleDelegate.addObject(memberAge);
+    	ruleDelegate.addObject(accidentFlag);
+    	//Invoke RIF with ruleid and rule invocation objects.
+    	RulesResultVO rulesResult = null;
+    	try {
+    		rulesResult = ruleDelegate.invokeRule();	
+    	} catch (RulesDelegateException re){
+    		if(ERRORCODE.equals(re.getErrorCode()))
+    		{
+    			logger.warn(RULE_EXPIRED+ruleId);
+    			//If needed perform expires logic here  
+    		}
+    		logger.error(RULESDELEGATE_EXCEPTION+re);
+    	}
+    	if(logger.isDebugEnabled()){
+    		logger.debug(EXECUTION_ENDED+ruleId+"\n");
+    	}
+    	return rulesResult;
+    }
+        /**
+         * This method is used to post the edits 6030, 6032,6033 and 6036 related to
+         * Suspect Accident TPL Edits Process.
+         *
+         * @param memberAge
+         * 						int value.
+         * @param occurCodes
+         * 						List of String Objects.
+         * @param causeCodes
+         * 						List of String Objects.
+         * @param fDOS
+         * 						Date
+         * @param claimFormType
+         * 						String Object.
+         *  @param lineNumber
+         *  					Integer Object.
+         *  @return editsSet
+         *  					Set of exceptions.
+         */
+        private Set suspectAccidentTPLEdits(int memberAge, List causeCodes,
+                Double lineBilledAmount, Date fDOS, Integer lineNumber)
+        {
+            logger.info("ClaimTPLManager: processSuspectAccidentTPLEdits BEGIN");
+            Set editsSet = null;
+            boolean accidentFlag = false;
+            if(logger.isDebugEnabled()) {
+	            logger.debug("MemberAge is :" + memberAge);
+	            logger.debug("claim Line Item Total Charge Amount:" + lineBilledAmount);
+
+            }
+
+            Double thresholdAmount = getSystemParameterValueAmount(
+          			 systemParameterMap, fDOS,
+          			 new Long(ClaimAdjudicationConstants.TPL_SUSP_ACC_SUBM_THRSHLD_PARAM));
+		/* PMD Violations - P1 Fix - AvoidDuplicateLiterals - Changed By 123510 Starts */
+
+		if(logger.isDebugEnabled()) {
+			logger.debug("TPL suspect accident submitted threshold param value in suspectAccidentTPLEdits():" 
+					+ thresholdAmount);
+
+		}
+
+		/* PMD Violations - P1 Fix - AvoidDuplicateLiterals - Changed By 123510 Ends */
+            if (causeCodes != null && !causeCodes.isEmpty())
+            {
+            	 /** Check for relative cause code in System List  C3-5374*/
+                accidentFlag = checkUtil
+                .isPresentInSystemList(
+                        systemListMap,
+                        ClaimAdjudicationConstants.FUNCTIONAL_AREA_C3,
+                        new Long(
+                                ClaimAdjudicationConstants.EXCP_6030_RLTD_CAUSE_CDS_LIST),
+                                causeCodes, fDOS);
+                if(logger.isDebugEnabled()) {
+	                logger.debug("Relative cause code in system list C3-5374: " + accidentFlag);
+
+                }
+
+                //Rule IDs CLM4002.0002.01 and CLM4002.0028.01
+               
+                	/*
+        			 * if (memberAge < ClaimAdjudicationConstants.MEMBER_AGE_18 &&
+        			 * accidentFlag)
+        			 */
+			RulesResultVO rulesResult1 = invokeRuleCLM4002_0002_01(memberAge,
+					accidentFlag);
+			if (rulesResult1.isReturnBooleanValue()) {
+				if (logger.isDebugEnabled()) {
+					logger.debug("Rules CLM4002.0002.01 and CLM4002.0028.01 - posting exception 6030");
+				}
+        				editsSet = setException(editsSet,
+                            ClaimAdjudicationConstants.EDIT_6030, lineNumber);
+                }
+                /** Check for relative cause code in System List  C3-5380*/
+                accidentFlag = checkUtil
+                .isPresentInSystemList(
+                        systemListMap,
+                        ClaimAdjudicationConstants.FUNCTIONAL_AREA_C3,
+                        new Long(
+                                ClaimAdjudicationConstants.EXCP_6032_RLTD_CAUSE_CDS_LIST),
+                                causeCodes, fDOS);
+                if(logger.isDebugEnabled()) {
+	                logger.debug("Relative cause code in system list C3-5380: " + accidentFlag);
+
+                }
+
+                //Rule IDs CLM4002.0010.01 and CLM4002.0033.01
+                /*if (memberAge >= ClaimAdjudicationConstants.MEMBER_AGE_18
+                        && accidentFlag)*/
+                //RIF START FOR RULES CLM4002.0010.01 and CLM4002.0033.01
+                
+                RulesResultVO rulesResult = getRulesResult_CLM4002_0010(memberAge, accidentFlag);
+				if(rulesResult.isReturnBooleanValue())		//RIF END
+                {
+                    logger
+                            .debug("Rules CLM4002.0010.01 and CLM4002.0033.01 - posting exception 6032");
+                    editsSet = setException(editsSet,
+                            ClaimAdjudicationConstants.EDIT_6032, lineNumber);
+                }
+                /** Check for relative cause code in System List  C3-5383*/
+                accidentFlag = checkUtil
+                .isPresentInSystemList(
+                        systemListMap,
+                        ClaimAdjudicationConstants.FUNCTIONAL_AREA_C3,
+                        new Long(
+                                ClaimAdjudicationConstants.EXCP_6033_RLTD_CAUSE_CDS_LIST),
+                                causeCodes, fDOS);
+                if(logger.isDebugEnabled()) {
+	                logger.debug("Relative cause code in system list C3-5383: " + accidentFlag);
+
+                }
+
+                //Rule IDs CLM4002.0012.01 and CLM4002.0035.01
+                int claimAge = ClaimAdjudicationConstants.MEMBER_AGE_18;
+                rulesResult = getExtract_4002_0012_01(memberAge,
+						lineBilledAmount, accidentFlag, thresholdAmount,
+						claimAge);
+                if(rulesResult.isReturnBooleanValue()){
+                /*if (memberAge >= ClaimAdjudicationConstants.MEMBER_AGE_18
+                        && accidentFlag
+                        &&  lineBilledAmount >= thresholdAmount )
+                {*/
+                	 if(logger.isDebugEnabled()) {
+                    logger
+                            .debug("Rules CLM4002.0012.01 and and CLM4002.0035.01 - posting exception 6033");
+                	 }
+                    editsSet = setException(editsSet,
+                            ClaimAdjudicationConstants.EDIT_6033, lineNumber);
+                }
+                /** Check for relative cause code in System List  C3-5389*/
+                accidentFlag = checkUtil
+                .isPresentInSystemList(
+                        systemListMap,
+                        ClaimAdjudicationConstants.FUNCTIONAL_AREA_C3,
+                        new Long(
+                                ClaimAdjudicationConstants.EXCP_6036_RLTD_CASUE_CDS_LIST),
+                                causeCodes, fDOS);
+                if(logger.isDebugEnabled()) {
+	                logger.debug("Relative cause code in system list C3-5389: " + accidentFlag);
+
+                }
+
+                //Rule IDs CLM4002.0026.01 and CLM4002.0042.01
+                
+             rulesResult = executeRuleCLM4002_0026_01(memberAge,
+					lineBilledAmount, accidentFlag, thresholdAmount);
+                if (rulesResult.isReturnBooleanValue())
+                {
+                	if(logger.isDebugEnabled()){
+                    logger
+                            .info("Rule CLM4002.0026.01 and CLM4002.0042.01 - posting exception 6036");
+                	}
+                    editsSet = setException(editsSet,
+                            ClaimAdjudicationConstants.EDIT_6036, lineNumber);
+                }
+        }
+        logger.info("ClaimTPLManager: processSuspectAccidentTPLEdits END");
+        return editsSet;
+    }
+
+        private RulesResultVO invokeRuleCLM4002_0002_01(final int memberAge,
+        		final boolean accidentFlag) {
+        	// Rule Invocation Context object holds object arrays used in rule
+        	// execution.
+        	String ruleId = "CLM4002.0002.01";
+        	RulesDelegate ruleDelegate = new RulesDelegate(ruleId);
+        	// Adding object into rule invocation context.
+        	ruleDelegate.addObject(memberAge);
+        	ruleDelegate.addObject(accidentFlag);
+        	// Invoke RIF with ruleid and rule invocation objects.
+        	RulesResultVO rulesResult1 = null;
+        	try {
+        		rulesResult1 = ruleDelegate.invokeRule();
+        	} catch (RulesDelegateException re) {
+        		if ("300".equals(re.getErrorCode())) {
+        			logger.error("Rule Expired::::" + re.getMessage());
+        			// If needed perform expires logic here
+        		}
+        		logger.info(RULES_DELEGATE_EXCEPTION + re);
+        	}
+        	return rulesResult1;
+        }
+
+        private RulesResultVO executeRuleCLM4002_0026_01(final int memberAge,
+        		final Double lineBilledAmount,final boolean accidentFlag,
+        		final Double thresholdAmount) {
+        	String ruleId;
+        	RulesDelegate ruleDelegate;
+        	// Rule Invocation Context object holds object arrays used in rule
+        	// execution.
+        	ruleId = "CLM4002.0026.01";
+        	ruleDelegate = new RulesDelegate(ruleId);
+        	// Adding object into rule invocation context.
+        	ruleDelegate.addObject(thresholdAmount);
+        	ruleDelegate.addObject(lineBilledAmount);
+        	ruleDelegate.addObject(memberAge);
+        	ruleDelegate.addObject(accidentFlag);
+        	// Invoke RIF with ruleid and rule invocation objects.
+        	RulesResultVO rulesResult=null;
+        	try {
+        		rulesResult = ruleDelegate.invokeRule();
+        	} catch (RulesDelegateException re) {
+        		if (ERRORCODE.equals(re.getErrorCode()) && logger.isDebugEnabled()) {
+        			logger.debug(RULE_EXPIRED + ruleId);
+        			// If needed perform expires logic here
+        		}
+        		if(logger.isDebugEnabled()){
+        			logger.debug(RULESDELEGATE_EXCEPTION + re);
+        		}
+        	}
+        	if(logger.isDebugEnabled()){
+        		logger.debug(EXECUTION_ENDED + ruleId + "\n");
+        	}
+        	return rulesResult;
+        }
+        /**
+         * Added this method for Rule CLM4002.0012.01
+         * @author 300051
+         */
+		private RulesResultVO getExtract_4002_0012_01(final int memberAge,
+				final Double lineBilledAmount, final boolean accidentFlag,
+				final Double thresholdAmount,final int claimAge) {
+			//Rule Invocation Context object holds object arrays used in rule execution.
+            String ruleId1 = "CLM4002.0012.01";
+            RulesDelegate ruleDelegate1 = new RulesDelegate(ruleId1);
+			//Adding object into rule invocation context.
+			ruleDelegate1.addObject(claimAge);
+			ruleDelegate1.addObject(thresholdAmount);
+			ruleDelegate1.addObject(lineBilledAmount);
+			ruleDelegate1.addObject(memberAge);
+			ruleDelegate1.addObject(accidentFlag);
+			//Invoke RIF with ruleId1 and rule invocation objects.
+			RulesResultVO rulesResult1 = null;
+			try {
+				rulesResult1 = ruleDelegate1.invokeRule();	
+			} catch (RulesDelegateException re){
+				if(RulesConstants.IS_EXPIRED.equals(re.getErrorCode()))
+				{
+					logger.warn(RulesConstants.RULE_EXPIRED+ruleId1);
+					//If needed perform expires logic here  
+				}
+				logger.info(RulesConstants.RULE_EXCEPTION+re);
+			}
+			logger.info(RulesConstants.RULE_ENDS+ruleId1+"\n");
+			return rulesResult1;
+		}
+        
+    //checking for edits 6031 and 6034
+    /**
+     * This method is used to post the edits 6031 and 6034 related to
+     * Suspect Other Accident TPL Edits Process.
+     *
+     * @param memberAge
+     * 						int value.
+     * @param occurCodes
+     * 						List of String Objects.
+     * @param causeCodes
+     * 						List of String Objects.
+     * @param claimFormType
+     * 						String Object.
+     * @param diagAccidentIndicator
+     * 						boolean value.
+     * @param lineNumber
+     *  					Integer Object.
+     * @param fDOS
+     *  					java.util.Date
+     * @param totalBilledAmount
+     *  					Double Object.
+     * @param allowedAmount
+     *  					Double Object.
+     *  @return editsSet
+     *  					Set of exceptions.
+     */
+    private Set inpatientProcessSuspectOtherAccidentTPLEdits(int memberAge,
+            List occurCodes, List occurenceSpanCodes, boolean diagAccidentIndicator,
+            Integer lineNumber, Date fDOS, Double totalBilledAmount, Double allowedAmount)
+    {
+    	logger
+        .info("ClaimTPLManager: processSuspectOtherAccidentTPLEdits BEGIN");
+	    Set editsSet = null;
+	    boolean accidentFlag = false;
+	    Double thresholdAmount = getSystemParameterValueAmount(
+			 systemParameterMap, fDOS,
+			 new Long(ClaimAdjudicationConstants.TPL_SUSP_ACC_SUBM_THRSHLD_PARAM));
+		/* PMD Violations - P1 Fix - AvoidDuplicateLiterals - Changed By 123510 Starts */
+
+		if(logger.isDebugEnabled()) {
+			logger.debug("TPL suspect accident submitted threshold param value "
+					+ "in inpatientProcessSuspectOtherAccidentTPLEdits():" + thresholdAmount);
+
+		}
+
+		/* PMD Violations - P1 Fix - AvoidDuplicateLiterals - Changed By 123510 Ends */
+	    logger
+	            .debug("executing Rules CLM4002.0003.01 and CLM4002.0004.01...");
+	    if (occurCodes != null && !occurCodes.isEmpty())
+	    {
+	            accidentFlag = checkUtil
+	            	.isPresentInSystemList(
+	                    systemListMap,
+	                    ClaimAdjudicationConstants.FUNCTIONAL_AREA_C3,
+	                    new Long(
+	                            ClaimAdjudicationConstants.EXCP_6031_OCCURRENCE_CDS_LIST),
+	                            occurCodes, fDOS);
+	    }
+	    else
+	    {
+	    	accidentFlag = true;
+	    }
+	    if(logger.isDebugEnabled()) {
+		    logger.debug("Occurrence codes in system list C3-5375: " + accidentFlag);
+
+	    }
+
+	   
+	    	/*
+			 * if (memberAge < ClaimAdjudicationConstants.MEMBER_AGE_18 &&
+			 * accidentFlag && diagAccidentIndicator && totalBilledAmount <
+			 * thresholdAmount)
+			 */
+			RulesResultVO rulesResult = invokeRuleCLM4002_0003_01(memberAge,
+					diagAccidentIndicator, totalBilledAmount, accidentFlag,
+					thresholdAmount);
+			if (rulesResult.isReturnBooleanValue())
+	    {
+	        if(logger.isDebugEnabled()) {
+		        logger
+		                .debug("Rules CLM4002.0003.01, CLM4002.0004.01, CLM4002.0057.01 " +
+		                		"and CLM4002.0058.0004.01 - posting exception 6031");
+
+	        }
+
+	        editsSet = setException(editsSet,
+	                ClaimAdjudicationConstants.EDIT_6031, lineNumber);
+	    }
+	    logger
+	            .debug("executing Rules CLM4002.0029.01 and CLM4002.0030.01...");
+	    accidentFlag = false;
+	    if (occurenceSpanCodes != null && !occurenceSpanCodes.isEmpty())
+	    {
+	        accidentFlag = checkUtil
+	        	.isPresentInSystemList(
+	                systemListMap,
+	                ClaimAdjudicationConstants.FUNCTIONAL_AREA_C3,
+	                new Long(
+	                        ClaimAdjudicationConstants.EXCP_6031_OCCURRENCE_SPAN_CDS_LIST),
+	                        occurenceSpanCodes, fDOS);
+	        if(logger.isDebugEnabled()) {
+		        logger.debug("Occurrence span codes in system list C3-5376: " + accidentFlag);
+
+	        }
+
+	    }
+	    else
+	    {
+	    	accidentFlag = true;
+	    	if(logger.isDebugEnabled()) {
+		    	logger.debug("Occurrence span codes are null or empty " + accidentFlag);
+
+	    	}
+
+	    }	    
+	    	//Rule Invocation Context object holds object arrays used in rule execution.
+		   //Rif call for CLM4002.0029.01 and CLM4002.0030.01
+			if(getRulesResult_CLM4002_0029(thresholdAmount,diagAccidentIndicator, memberAge,totalBilledAmount, accidentFlag))
+		    {
+	        if(logger.isDebugEnabled()) {
+		        logger
+		                .debug("Rules CLM4002.0029.01, CLM4030.0004.01, CLM4002.0059.01 " +
+		                		"and CLM4002.0060.0004.01 - posting exception 6031");
+
+	        }
+
+	        editsSet = setException(editsSet,
+	                ClaimAdjudicationConstants.EDIT_6031, lineNumber);
+	    }
+	    accidentFlag = false;
+	    logger
+	            .debug("executing Rules CLM4002.0013.01 and CLM4002.0014.01...");
+	    if (occurCodes != null && !occurCodes.isEmpty())
+	    {
+	            accidentFlag = checkUtil
+	            	.isPresentInSystemList(
+	                    systemListMap,
+	                    ClaimAdjudicationConstants.FUNCTIONAL_AREA_C3,
+	                    new Long(
+	                            ClaimAdjudicationConstants.EXCP_6034_OCCURRENCE_CDS_LIST),
+	                            occurCodes, fDOS);
+	    }
+	    if(logger.isDebugEnabled()) {
+		    logger.debug("Occurrence codes in system list C3-5384: " + accidentFlag);
+
+	    }
+
+	    //Changed submitted amount to allowed amount for CR ESPRD00942064 implementation.
+	    //RIF STARTS CLM4002.0013.01 and CLM4002.0014.01
+	    boolean edit_6034flag = getRulesResult_CLM4002_13_14(thresholdAmount, diagAccidentIndicator, allowedAmount, memberAge, accidentFlag);
+	    //RIF ENDS CLM4002.0013.01 and CLM4002.0014.01
+	    if(edit_6034flag){
+	        logger
+	                .debug("Rules CLM4002.0013.01 and CLM4002.0014.01 - posting exception 6034");
+	        editsSet = setException(editsSet,
+	                ClaimAdjudicationConstants.EDIT_6034, lineNumber);
+	    }
+	    accidentFlag = false;
+	    if (occurenceSpanCodes != null && !occurenceSpanCodes.isEmpty())
+	    {
+	            accidentFlag = checkUtil
+	            	.isPresentInSystemList(
+	                    systemListMap,
+	                    ClaimAdjudicationConstants.FUNCTIONAL_AREA_C3,
+	                    new Long(
+	                            ClaimAdjudicationConstants.EXCP_6034_OCCURRENCE_SPAN_CDS_LIST),
+	                            occurenceSpanCodes, fDOS);
+	    }
+	    if(logger.isDebugEnabled()) {
+		    logger.debug("Occurrence span codes in system list C3-5385: " + accidentFlag);
+
+	    }
+
+	    //Changed submitted amount to allowed amount for CR ESPRD00942064 implementation.
+		rulesResult = executeRuleCLM4002_0036_01(memberAge,
+				diagAccidentIndicator, allowedAmount, accidentFlag,
+				thresholdAmount);
+		if (rulesResult.isReturnBooleanValue()) {
+			if (logger.isDebugEnabled()) {
+				logger.debug("Rules CLM4002.0036.01 and CLM4002.0037.01 - posting exception 6034");
+			}
+			editsSet = setException(editsSet,
+					ClaimAdjudicationConstants.EDIT_6034, lineNumber);
+		}
+	    return editsSet;
+    }
+
+	private RulesResultVO invokeRuleCLM4002_0003_01(final int memberAge,
+		final	boolean diagAccidentIndicator, final Double totalBilledAmount,
+		final	boolean accidentFlag, final Double thresholdAmount) {
+		// Rule Invocation Context object holds object arrays used in rule
+		// execution.
+		String ruleId = "CLM4002.0003.01";
+		RulesDelegate ruleDelegate = new RulesDelegate(ruleId);
+		// Adding object into rule invocation context.
+		ruleDelegate.addObject(thresholdAmount);
+		ruleDelegate.addObject(diagAccidentIndicator);
+		ruleDelegate.addObject(memberAge);
+		ruleDelegate.addObject(totalBilledAmount);
+		ruleDelegate.addObject(accidentFlag);
+		// Invoke RIF with ruleid and rule invocation objects.
+		RulesResultVO rulesResult = null;
+		try {
+			rulesResult = ruleDelegate.invokeRule();
+		} catch (RulesDelegateException re) {
+			if ("300".equals(re.getErrorCode())) {
+				logger.error("Rule Expired::::" + re.getMessage());
+				// If needed perform expires logic here
+			}
+			logger.info(RULES_DELEGATE_EXCEPTION + re);
+		}
+		return rulesResult;
+	}
+
+	private RulesResultVO executeRuleCLM4002_0036_01(final int memberAge,
+			final boolean diagAccidentIndicator, final Double allowedAmount,
+			final boolean accidentFlag,final Double thresholdAmount) {
+		String ruleId;
+		RulesDelegate ruleDelegate;
+		// Rule Invocation Context object holds object arrays used in rule
+		// execution.
+		ruleId = "CLM4002.0036.01";
+		ruleDelegate = new RulesDelegate(ruleId);
+		// Adding object into rule invocation context.
+		ruleDelegate.addObject(thresholdAmount);
+		ruleDelegate.addObject(diagAccidentIndicator);
+		ruleDelegate.addObject(allowedAmount);
+		ruleDelegate.addObject(memberAge);
+		ruleDelegate.addObject(accidentFlag);
+		// Invoke RIF with ruleid and rule invocation objects.
+		RulesResultVO rulesResult=null;
+		try {
+			rulesResult = ruleDelegate.invokeRule();
+		} catch (RulesDelegateException re) {
+			if (ERRORCODE.equals(re.getErrorCode()) && logger.isDebugEnabled()) {
+				logger.debug(RULE_EXPIRED + ruleId);
+				// If needed perform expires logic here
+			}
+			if (logger.isDebugEnabled()) {
+				logger.debug(RULES_DELEGATE_EXCEPTION + re);
+			}
+		}
+		if (logger.isDebugEnabled()) {
+			logger.debug(EXECUTION_ENDED + ruleId + "\n");
+		}
+		return rulesResult;
+	}
+    
+  //This method is to implement the rule CLM4002.0029.01 and CLM4002.0030.01
+    private boolean getRulesResult_CLM4002_0029(final Double thresholdAmount,final boolean diagAccidentIndicator,final int memberAge,final Double totalBilledAmount, final boolean accidentFlag) 
+    {
+    	String ruleId1 = ruleId29;
+		RulesDelegate ruleDelegate1 = new RulesDelegate(ruleId1);
+		//Adding object into rule invocation context.
+		ruleDelegate1.addObject(thresholdAmount);
+		ruleDelegate1.addObject(diagAccidentIndicator);
+		ruleDelegate1.addObject(memberAge);
+		ruleDelegate1.addObject(totalBilledAmount);
+		ruleDelegate1.addObject(accidentFlag);
+		//Invoke RIF with ruleid and rule invocation objects.
+		RulesResultVO rulesResult1 = null;
+        try {
+              	rulesResult1 = ruleDelegate1.invokeRule();	
+		    } catch (RulesDelegateException re){
+		    	if(ERRORCODE.equals(re.getErrorCode()))
+	    		{
+	    			logger.warn(RULE_EXPIRED+ruleId1);
+	    			//If needed perform expires logic here  
+	    		}
+	    		logger.error(RULESDELEGATE_EXCEPTION+re);
+	    	}
+	    	logger.info(EXECUTION_ENDED+ruleId1+"\n");
+    	return rulesResult1.isReturnBooleanValue();
+}
+
+
+
+    /**
+     * @param thresholdAmount
+     * @param diagAccidentIndicator
+     * @param allowedAmount
+     * @param memberAge
+     * @param accidentFlag
+     * @return flag boolean
+     */
+    private boolean getRulesResult_CLM4002_13_14(final Double thresholdAmount,
+    		final boolean diagAccidentIndicator, final Double allowedAmount, final int memberAge,
+    		final boolean accidentFlag) {
+    	//Rule Invocation Context object holds object arrays used in rule execution.
+    	String ruleId = "CLM4002.0013.0014.01";
+    	boolean flag = false;
+    	RulesDelegate ruleDelegate = new RulesDelegate(ruleId);
+    	//Adding object into rule invocation context.
+    	ruleDelegate.addObject(thresholdAmount);
+    	ruleDelegate.addObject(diagAccidentIndicator);
+    	ruleDelegate.addObject(allowedAmount);
+    	ruleDelegate.addObject(memberAge);
+    	ruleDelegate.addObject(accidentFlag);
+    	//Invoke RIF with ruleid and rule invocation objects.
+    	RulesResultVO rulesResult = null;
+    	try {
+    		rulesResult = ruleDelegate.invokeRule();	
+    		flag = rulesResult.isReturnBooleanValue();
+    	} catch (RulesDelegateException re){
+    		if(RulesConstants.IS_EXPIRED.equals(re.getErrorCode()))
+    		{
+    			logger.warn(RulesConstants.RULE_EXPIRED+ruleId);
+    			//If needed perform expires logic here  
+    		}
+    		logger.error(RulesConstants.RULE_EXCEPTION+re.getMessage());
+    	}
+    	if(logger.isDebugEnabled()){
+    		logger.debug(RulesConstants.RULE_ENDS+ruleId+"\n");
+    	}
+    	return flag;
+    }
+
+
+
+    /**
+     * @param thresholdAmount
+     * @param diagAccidentIndicator
+     * @param allowedAmount
+     * @param memberAge
+     * @param accidentFlag
+     * @return flag boolean
+     */
+    private boolean getRulesResult_CLM4002_15_16(final Double thresholdAmount,
+    		final boolean diagAccidentIndicator, final Double allowedAmount, final int memberAge,
+    		final boolean accidentFlag) {
+    	//Rule Invocation Context object holds object arrays used in rule execution.
+    	String ruleId = "CLM4002.0015.0016.01";
+    	boolean flag = false;
+    	RulesDelegate ruleDelegate = new RulesDelegate(ruleId);
+    	//Adding object into rule invocation context.
+    	ruleDelegate.addObject(thresholdAmount);
+    	ruleDelegate.addObject(diagAccidentIndicator);
+    	ruleDelegate.addObject(allowedAmount);
+    	ruleDelegate.addObject(memberAge);
+    	ruleDelegate.addObject(accidentFlag);
+    	//Invoke RIF with ruleid and rule invocation objects.
+    	RulesResultVO rulesResult = null;
+    	try {
+    		rulesResult = ruleDelegate.invokeRule();	
+    		flag = rulesResult.isReturnBooleanValue();
+    	} catch (RulesDelegateException re){
+    		if(RulesConstants.IS_EXPIRED.equals(re.getErrorCode()))
+    		{
+    			logger.warn(RulesConstants.RULE_EXPIRED+ruleId);
+    			//If needed perform expires logic here  
+    		}
+    		logger.error(RulesConstants.RULE_EXCEPTION+re.getMessage());
+    	}
+    	if(logger.isDebugEnabled()){
+    		logger.debug(RulesConstants.RULE_ENDS+ruleId+"\n");
+    	}
+    	return flag;
+    }
+
+	/**
+     * This method is used to post the edits 6031 and 6034  
+     * for medical claims related to Suspect Other Accident TPL Edits Process.
+     *
+     * @param memberAge
+     * 						int value.
+     * @param causeCodes
+     * 						List of String Objects.
+     * @param diagAccidentIndicator
+     * 						boolean value.
+     * @param lineNumber
+     *  					Integer Object.
+     * @param fDOS
+     *  					java.util.Date
+     * @param totalBilledAmount
+     *  					Double Object.
+     * @param allowedAmount
+     *  					Double Object. 
+     * @return editsSet
+     *  					Set of exceptions. 
+      */
+       private Set medicalProcessSuspectOtherAccidentTPLEdits(int memberAge,
+        		List causeCodes, boolean diagAccidentIndicator,
+                Integer lineNumber, Date fDOS, Double totalBilledAmount, Double allowedAmount)
+        {
+        	Set editsSet = null;
+            boolean accidentFlag = false;
+            Double thresholdAmount = getSystemParameterValueAmount(
+            		systemParameterMap, fDOS,
+            		new Long(ClaimAdjudicationConstants.TPL_SUSP_ACC_SUBM_THRSHLD_PARAM));   
+            
+            //RIF STARTS CLM4002.0006.01
+            boolean CLM4002_0006_flag = getRulesResult_CLM4002_0006(causeCodes);
+            if (CLM4002_0006_flag)//RIF ENDS CLM4002.0006.01
+            {
+            	accidentFlag = checkUtil
+            			.isPresentInSystemList(
+            					systemListMap,
+            					ClaimAdjudicationConstants.FUNCTIONAL_AREA_C3,
+            					new Long(
+            							ClaimAdjudicationConstants.EXCP_6031_RLTD_CAUSE_CDS_LIST),
+            							causeCodes, fDOS);
+
+            }
+            else
+            {
+            	accidentFlag = true;
+            } 
+            int member_age_18=ClaimAdjudicationConstants.MEMBER_AGE_18;
+            //RIF STARTS CLM4002.0007.01
+            boolean CLM4002_0007_flag = getRulesResult_CLM4002_0007(thresholdAmount, diagAccidentIndicator, member_age_18, memberAge, totalBilledAmount, accidentFlag);
+            if (CLM4002_0007_flag)//RIF ENDS CLM4002.0007.01
+            {
+
+            	editsSet = setException(editsSet,
+            			ClaimAdjudicationConstants.EDIT_6031, lineNumber);
+            }
+            accidentFlag = false;
+            // Business Rules CLM4002.0015.01 and CLM4002.0016.01
+            if (causeCodes != null && !causeCodes.isEmpty())
+            {
+            	accidentFlag = checkUtil
+            			.isPresentInSystemList(
+            					systemListMap,
+            					ClaimAdjudicationConstants.FUNCTIONAL_AREA_C3,
+            					new Long(
+            							ClaimAdjudicationConstants.EXCP_6034_RLTD_CASUE_CDS_LIST),
+            							causeCodes, fDOS);
+            }
+            
+           //RIF STARTS CLM4002.0015.01 and CLM4002.0016.01
+            boolean EDIT_6034flag = getRulesResult_CLM4002_15_16(thresholdAmount, diagAccidentIndicator, allowedAmount, memberAge, accidentFlag);
+            if(EDIT_6034flag){
+            //RIF ENDS CLM4002.0015.01 and CLM4002.0016.01
+            	editsSet = setException(editsSet,
+            			ClaimAdjudicationConstants.EDIT_6034, lineNumber);
+            }
+            return editsSet;
+        }
+        
+       /**
+     * @param causeCodes LIST
+     * @return flag boolean
+     */
+    private boolean getRulesResult_CLM4002_0006(final List causeCodes) {
+    	   // TODO Auto-generated method stub
+    	   String ruleId = "CLM4002.0006.01";
+    	   boolean flag = false;
+    	   RulesDelegate ruleDelegate = new RulesDelegate(ruleId);
+    	   ruleDelegate.addObject(causeCodes);
+    	   RulesResultVO rulesResult = null;
+    	   try {
+    		   rulesResult = ruleDelegate.invokeRule();
+    		   flag = rulesResult.isReturnBooleanValue();
+    	   } catch (RulesDelegateException re) {
+    		   if (ERRORCODE.equals(re.getErrorCode())&&logger.isDebugEnabled()) {
+    			   logger.warn(RULE_EXPIRED + ruleId);
+    		   }
+    		   logger.error(RulesConstants.RULE_EXCEPTION+re.getMessage());
+    	   }
+    	   return flag;
+       }
+
+	/**
+     * @param thresholdAmount
+     * @param diagAccidentIndicator
+     * @param member_age_18
+     * @param memberAge
+     * @param totalBilledAmount
+     * @param accidentFlag
+     * @return flag boolean 
+     */
+       private boolean getRulesResult_CLM4002_0007(final Double thresholdAmount,
+    		   final boolean diagAccidentIndicator, final int member_age_18, final int memberAge,
+    		   final Double totalBilledAmount, final boolean accidentFlag) {
+    	   // TODO Auto-generated method stub
+    	   boolean flag =false;
+    	   String ruleId = "CLM4002.0007.01";
+    	   RulesResultVO rulesResult= null;
+    	   RulesDelegate ruleDelegate = new RulesDelegate(ruleId);
+    	   ruleDelegate.addObject(thresholdAmount);
+    	   ruleDelegate.addObject(diagAccidentIndicator);
+    	   ruleDelegate.addObject(member_age_18);
+    	   ruleDelegate.addObject(memberAge);
+    	   ruleDelegate.addObject(totalBilledAmount);
+    	   ruleDelegate.addObject(accidentFlag);
+    	   try {
+    		   rulesResult = ruleDelegate.invokeRule();
+    		   flag = rulesResult.isReturnBooleanValue();
+    	   } catch (RulesDelegateException re) {
+    		   if (ERRORCODE.equals(re.getErrorCode()) && logger.isDebugEnabled()) {
+    			   logger.debug(RULE_EXPIRED + ruleId);
+    		   }
+    	   }
+    	   return flag;
+       }
+
+		/**
+         * This method is used to post the edits 6031 and 6034  
+         * for dental claims related to Suspect Other Accident TPL Edits Process.
+         *
+         * @param memberAge
+         * 						int value.
+         * @param causeCodes
+         * 						List of String Objects.
+         * @param diagAccidentIndicator
+         * 						boolean value.
+         * @param lineNumber
+         *  					Integer Object.
+         * @param fDOS
+	     *  					java.util.Date
+	     * @param totalBilledAmount
+	     *  					Double Object.
+	     * @param allowedAmount
+	     *  					Double Object.  
+	     * @return editsSet
+         *  					Set of exceptions. 
+          */
+        private Set dentalProcessSuspectOtherAccidentTPLEdits(int memberAge,
+                List causeCodes, Integer lineNumber, Date fDOS, Double totalBilledAmount,
+                Double allowedAmount)
+        {
+        	Set editsSet = null;
+            boolean accidentFlag = false;
+            Double thresholdAmount = getSystemParameterValueAmount(
+          			 systemParameterMap, fDOS,
+          			 new Long(ClaimAdjudicationConstants.TPL_SUSP_ACC_SUBM_THRSHLD_PARAM));    
+        	// Business Rule CLM4002.0031.01
+            if (causeCodes != null && !causeCodes.isEmpty())
+    	    {
+    	            accidentFlag = checkUtil
+    	            	.isPresentInSystemList(
+    	                    systemListMap,
+    	                    ClaimAdjudicationConstants.FUNCTIONAL_AREA_C3,
+    	                    new Long(
+    	                            ClaimAdjudicationConstants.EXCP_6031_RLTD_CAUSE_CDS_LIST),
+    	                            causeCodes, fDOS);
+    	            if(logger.isDebugEnabled()) {
+	    	            logger.debug("Cause codes in system list C3-5377: " + accidentFlag);
+
+    	            }
+
+    	    }    	   
+          //RIF call for CLM4002.0031.01
+            if(getRulesResult_CLM4002_0031(thresholdAmount, memberAge,totalBilledAmount,accidentFlag))
+            {
+                logger
+                        .debug("Rules CLM4002.0031.01- posting exception 6031");
+                editsSet = setException(editsSet,
+                        ClaimAdjudicationConstants.EDIT_6031, lineNumber);
+            }
+            accidentFlag = false;
+            // Business Rule CLM4002.0038.01
+            if (causeCodes != null && !causeCodes.isEmpty())
+    	    {
+    	            accidentFlag = checkUtil
+    	            	.isPresentInSystemList(
+    	                    systemListMap,
+    	                    ClaimAdjudicationConstants.FUNCTIONAL_AREA_C3,
+    	                    new Long(
+    	                            ClaimAdjudicationConstants.EXCP_6034_RLTD_CASUE_CDS_LIST),
+    	                            causeCodes, fDOS);
+    	    }
+            if(logger.isDebugEnabled()) {
+	            logger.debug("Cause codes in system list C3-5386: " + accidentFlag);
+
+            }
+
+            //Changed submitted amount to allowed amount for CR ESPRD00942064 implementation.
+          RulesResultVO rulesResult = executeRuleCLM4002_0038_01(memberAge,
+				allowedAmount, accidentFlag, thresholdAmount);
+            if (rulesResult.isReturnBooleanValue())
+            {
+			if (logger.isDebugEnabled()) {
+				logger.debug("Rule CLM4002.0038.01- posting exception 6034");
+			}
+                editsSet = setException(editsSet,
+                        ClaimAdjudicationConstants.EDIT_6034, lineNumber);
+            }
+        logger.info("ClaimTPLManager: processSuspectOtherAccidentTPLEdits END");        
+        return editsSet;
+    }
+
+        private RulesResultVO executeRuleCLM4002_0038_01(final int memberAge,
+        		final Double allowedAmount, final boolean accidentFlag,
+        		final Double thresholdAmount) {
+        	//Rule Invocation Context object holds object arrays used in rule execution.
+        	String ruleId = "CLM4002.0038.01";
+        	RulesDelegate ruleDelegate = new RulesDelegate(ruleId);
+        	// Adding object into rule invocation context.
+        	ruleDelegate.addObject(thresholdAmount);
+        	ruleDelegate.addObject(allowedAmount);
+        	ruleDelegate.addObject(memberAge);
+        	ruleDelegate.addObject(accidentFlag);
+        	// Invoke RIF with ruleid and rule invocation objects.
+        	RulesResultVO rulesResult = null;
+        	try {
+        		rulesResult = ruleDelegate.invokeRule();
+        	} catch (RulesDelegateException re) {
+        		if (ERRORCODE.equals(re.getErrorCode()) && logger.isDebugEnabled()) {
+        			logger.debug(RULE_EXPIRED + ruleId);
+        			// If needed perform expires logic here
+        		}
+        		if (logger.isDebugEnabled()) {
+        			logger.debug(RULES_DELEGATE_EXCEPTION + re);
+        		}
+        	}
+        	if (logger.isDebugEnabled()) {
+        		logger.debug(EXECUTION_ENDED + ruleId + "\n");
+        	}
+        	return rulesResult;
+        }
+        
+        private boolean getRulesResult_CLM4002_0031(final Double thresholdAmount,final int memberAge,final Double totalBilledAmount, final boolean accidentFlag)
+        {
+        	//Rule Invocation Context object holds object arrays used in rule execution.
+        	String ruleId = ruleId31;
+        	RulesDelegate ruleDelegate = new RulesDelegate(ruleId);
+        	//Adding object into rule invocation context.
+        	ruleDelegate.addObject(thresholdAmount);
+        	ruleDelegate.addObject(memberAge);
+        	ruleDelegate.addObject(totalBilledAmount);
+        	ruleDelegate.addObject(accidentFlag);
+        	//Invoke RIF with ruleid and rule invocation objects.
+        	RulesResultVO rulesResult = null;
+        	try {
+        		rulesResult = ruleDelegate.invokeRule();	
+        	} catch (RulesDelegateException re){
+        		if(ERRORCODE.equals(re.getErrorCode()))
+        		{
+        			logger.warn(RULE_EXPIRED+ruleId);
+        			//If needed perform expires logic here  
+        		}
+        		logger.error(RULESDELEGATE_EXCEPTION+re);
+        	}
+        	logger.info(EXECUTION_ENDED+ruleId+"\n");
+        	return rulesResult.isReturnBooleanValue();
+
+        }    
+    //checking for edit 6035
+    /**
+     * This method is used to post the edit 6035 related to
+     * Suspect NonAccident TPL Edits Process.
+     * @param occurCodes
+     * 						List of String Objects.
+     * @param occurenceSpanCodes
+     * 						List of String Objects.
+     * @param fDOS
+     * 						java.util.Date Object.
+     * @param memberAge
+     * 						int value.
+     * @param diagAccidentIndicator
+     * 						boolean value.
+     *  @param lineNumber
+     *  					Integer Object.
+     *  @return editsSet
+     *  					Set of exceptions.
+     */
+    private Set inpatientprocessSuspectNonAccidentTPLEdits(List occurCodes,
+    		List occurenceSpanCodes, Date fDOS, int memberAge,
+            boolean diagAccidentIndicator, Integer lineNumber)
+    {
+        logger.info("ClaimTPLManager: processSuspectNonAccidentTPLEdits BEGIN");
+		Set editsSet = null;
+		//RIF STARTS CLM4002.0019.01 and CLM4002.0020.01
+		boolean edit_6035flag = getRulesResult_CLM4002_19_20(occurCodes, diagAccidentIndicator, memberAge);
+		if(edit_6035flag){
+			//RIF ENDS CLM4002.0019.01 and CLM4002.0020.01
+			logger
+			.debug("Rules CLM4002.0019.01 and CLM4002.0020.01- posting exception 6035");
+			editsSet = setException(editsSet,
+					ClaimAdjudicationConstants.EDIT_6035, lineNumber);
+		}
+		//Rules CLM4002.0039.01 and CLM4002.0040.01
+		RulesResultVO rulesResult = executeRuleCLM4002_0039_01(
+				occurenceSpanCodes, memberAge, diagAccidentIndicator);
+		if (rulesResult.isReturnBooleanValue()) {
+			if (logger.isDebugEnabled()) {
+				logger.debug("RulesCLM4002.0039.01 and CLM4002.0040.01- posting exception 6035");
+			}
+			editsSet = setException(editsSet,
+					ClaimAdjudicationConstants.EDIT_6035, lineNumber);
+		}
+        logger.info("ClaimTPLManager: processSuspectNonAccidentTPLEdits END");
+        return editsSet;
+    }
+
+    private RulesResultVO executeRuleCLM4002_0039_01(final List occurenceSpanCodes,
+    		final int memberAge,final boolean diagAccidentIndicator) {
+    	// Rule Invocation Context object holds object arrays used in rule
+    	// execution.
+    	String ruleId = "CLM4002.0039.01";
+    	RulesDelegate ruleDelegate = new RulesDelegate(ruleId);
+    	// Adding object into rule invocation context.
+    	ruleDelegate.addObject(occurenceSpanCodes);
+    	ruleDelegate.addObject(diagAccidentIndicator);
+    	ruleDelegate.addObject(memberAge);
+    	// Invoke RIF with ruleid and rule invocation objects.
+    	RulesResultVO rulesResult = null;
+    	try {
+    		rulesResult = ruleDelegate.invokeRule();
+    	} catch (RulesDelegateException re) {
+    		if (ERRORCODE.equals(re.getErrorCode()) && logger.isDebugEnabled()) {
+    			logger.debug(RULE_EXPIRED + ruleId);
+    			// If needed perform expires logic here
+    		}
+    		if (logger.isDebugEnabled()) {
+    			logger.debug(RULES_DELEGATE_EXCEPTION + re);
+    		}
+    	}
+    	if (logger.isDebugEnabled()) {
+    		logger.debug(EXECUTION_ENDED + ruleId + "\n");
+    	}
+    	return rulesResult;
+    }
+    
+
+    /**
+     * @param occurCodes
+     * @param diagAccidentIndicator
+     * @param memberAge
+     * @return flag boolean
+     */
+    private boolean getRulesResult_CLM4002_19_20(final List occurCodes, final boolean diagAccidentIndicator, final int memberAge){
+	//Rule Invocation Context object holds object arrays used in rule execution.
+		String ruleId = "CLM4002.0019.0020.01";
+		boolean flag= false;
+		RulesDelegate ruleDelegate = new RulesDelegate(ruleId);
+		//Adding object into rule invocation context.
+		ruleDelegate.addObject(occurCodes);
+		ruleDelegate.addObject(diagAccidentIndicator);
+		ruleDelegate.addObject(memberAge);
+		//Invoke RIF with ruleid and rule invocation objects.
+		RulesResultVO rulesResult = null;
+		try {
+			rulesResult = ruleDelegate.invokeRule();	
+			flag=rulesResult.isReturnBooleanValue(); 
+		} catch (RulesDelegateException re){
+			if(RulesConstants.IS_EXPIRED.equals(re.getErrorCode()))
+			{
+				logger.warn(RulesConstants.RULE_EXPIRED+ruleId);
+				//If needed perform expires logic here  
+			}
+			logger.error(RulesConstants.RULE_EXCEPTION+re.getMessage());
+		}     
+			if(logger.isDebugEnabled()){
+              logger.debug(RulesConstants.RULE_ENDS+ruleId+"\n");
+			  }
+			return flag;
+	}
+
+	//checking for edit 6035
+    /**
+     * This method is used to post the edit 6035 related to
+     * Suspect NonAccident TPL Edits Process.
+     * @param causeCodes
+     * 						List of String Objects.
+     * @param fDOS
+     * 						java.util.Date Object.
+     * @param memberAge
+     * 						int value..
+     * @param diagAccidentIndicator
+     * 						boolean value.
+     *  @param lineNumber
+     *  					Integer Object.
+     *  @return editsSet
+     *  					Set of exceptions.
+     */
+    private Set medicalprocessSuspectNonAccidentTPLEdits(List causeCodes,
+    		Date fDOS, int memberAge,
+            boolean diagAccidentIndicator, Integer lineNumber)
+    {
+        logger.info("ClaimTPLManager: medicalprocessSuspectNonAccidentTPLEdits BEGIN");
+        Set editsSet = null;
+		// Rules CLM4002.0021.01 and CLM4002.0022.01
+     // Rule Invocation Context object holds object arrays used in rule
+     		// execution.
+
+     		RulesResultVO rulesResult = executeRuleCLM4002_0021_01(causeCodes,
+					memberAge, diagAccidentIndicator);
+		if (rulesResult.isReturnBooleanValue()) {
+			if(logger.isDebugEnabled()){
+			logger
+					.debug("Rules CLM4002.0021.01 and CLM4002.0022.01- posting exception 6035");
+			}
+			editsSet = setException(editsSet,
+					ClaimAdjudicationConstants.EDIT_6035, lineNumber);
+		}
+        logger.info("ClaimTPLManager: medicalprocessSuspectNonAccidentTPLEdits END");
+        return editsSet;
+    }
+
+	private RulesResultVO executeRuleCLM4002_0021_01(final List causeCodes,
+			final int memberAge, final boolean diagAccidentIndicator) {
+		String ruleId = "CLM4002.0021.01";
+		RulesDelegate ruleDelegate = new RulesDelegate(ruleId);
+		// Adding object into rule invocation context.
+		ruleDelegate.addObject(causeCodes);
+		ruleDelegate.addObject(diagAccidentIndicator);
+		ruleDelegate.addObject(memberAge);
+		// Invoke RIF with ruleid and rule invocation objects.
+		RulesResultVO rulesResult = null;
+		try {
+			rulesResult = ruleDelegate.invokeRule();
+		} catch (RulesDelegateException re) {
+			if (ERRORCODE.equals(re.getErrorCode()) && logger.isDebugEnabled()) {
+				logger.warn(RULE_EXPIRED + ruleId);
+				// If needed perform expires logic here
+			}
+			if (logger.isDebugEnabled()) {
+				logger.info(RULESDELEGATE_EXCEPTION + re);
+			}
+		}
+		if (logger.isDebugEnabled()) {
+			logger.info(EXECUTION_ENDED + ruleId + "\n");
+		}
+		return rulesResult;
+	}
+	/**
+     * @param memberAge
+     * @param checkAge
+     * @param accidentFlag
+     * @param diagAccidentIndicator
+     * @param allowedAmount
+     * @param thresholdAmount
+     * @return rulesResult.isReturnBooleanValue() boolean
+     */
+    private boolean involeRuleCLM4002006201(final int memberAge,final int checkAge,final boolean accidentFlag,final boolean diagAccidentIndicator,
+            final double allowedAmount, final double thresholdAmount)
+    {
+	    RulesDelegate ruleDelegate = new RulesDelegate(RULE_IDCLM4002006201);
+	    //Adding object into rule invocation context.
+	    ruleDelegate.addObject(memberAge);
+	    ruleDelegate.addObject(checkAge);
+	    ruleDelegate.addObject(accidentFlag);
+	    ruleDelegate.addObject(diagAccidentIndicator);
+		ruleDelegate.addObject(allowedAmount);
+		ruleDelegate.addObject(thresholdAmount);	          		   
+      //Invoke RIF with ruleid and rule invocation objects.
+	  			    RulesResultVO rulesResult = null;
+	  			    try {
+	  			    	rulesResult = ruleDelegate.invokeRule();	
+	  			    } catch (RulesDelegateException re){
+             if(RulesConstants.IS_EXPIRED.equals(re.getErrorCode()))
+			 {
+				logger.warn(RulesConstants.RULE_EXPIRED+RULE_IDCLM4002006201);
+				//If needed perform expires logic here  
+			 }
+             if(logger.isInfoEnabled()){
+			  logger.info(RulesConstants.RULE_EXCEPTION+re.getMessage());
+             }
+      } 
+	  			    if(logger.isDebugEnabled()){
+	  			    logger.debug(RulesConstants.RULE_ENDS+RULE_IDCLM4002006201+"\n");
+	  			    }
+    	return rulesResult.isReturnBooleanValue();
+    }
+  //checking edits 6037 and 6038
+    /**
+     * This method is used to post the edits 6037 and 6038 related to
+     * Suspect Other Accident TPL Edits Process.
+     *
+     * @param memberAge
+     * 						int value.
+     * @param occurCodes
+     * 						List of String Objects.
+     * @param causeCodes
+     * 						List of String Objects.
+     * @param claimFormType
+     * 						String Object.
+     * @param diagAccidentIndicator
+     * 						boolean value.
+     * @param lineNumber
+     *  					Integer Object.
+     * @param fDOS
+     *  					java.util.Date
+     * @param totalBilledAmount
+     *  					Double Object.
+     * @param allowedAmount
+     *  					Double Object.
+     * @return editsSet
+     *  					Set of exceptions.
+     */
+    private Set inpatientProcessScreeningAccidentTPLEdits(int memberAge,
+            List occurCodes, List occurenceSpanCodes, boolean diagAccidentIndicator,
+            Integer lineNumber, Date fDOS, Double totalBilledAmount, Double allowedAmount)
+    {
+    	logger
+        .info("ClaimTPLManager: inpatientProcessScreeningAccidentTPLEdits BEGIN");
+	    Set editsSet = null;
+	    boolean accidentFlag = false;
+	    int checkAge=ClaimAdjudicationConstants.MEMBER_AGE_18;
+	    Double thresholdAmount = getSystemParameterValueAmount(
+			 systemParameterMap, fDOS,
+			 new Long(ClaimAdjudicationConstants.TPL_SUSP_ACC_SUBM_THRSHLD_PARAM));
+		/* PMD Violations - P1 Fix - AvoidDuplicateLiterals - Changed By 123510 Starts */
+
+		if(logger.isDebugEnabled()) {
+			logger.debug("TPL suspect accident submitted threshold param value "
+					+ "in inpatientProcessScreeningAccidentTPLEdits():" + thresholdAmount);
+
+		}
+
+		/* PMD Violations - P1 Fix - AvoidDuplicateLiterals - Changed By 123510 Ends */
+	    if(logger.isDebugEnabled()) {
+		    logger
+		            .debug("executing Rules CLM4002.0043.01, CLM4002.0044.01, CLM4002.0061.01" +
+		            		" and CLM4002.0062.01...");
+
+	    }
+
+	    if (occurCodes != null && !occurCodes.isEmpty())
+	    {
+	            accidentFlag = checkUtil
+	            	.isPresentInSystemList(
+	                    systemListMap,
+	                    ClaimAdjudicationConstants.FUNCTIONAL_AREA_C3,
+	                    new Long(
+	                            ClaimAdjudicationConstants.EXCP_6037_OCCURRENCE_CDS_LIST),
+	                            occurCodes, fDOS);
+	            if(logger.isDebugEnabled()) {
+		            logger.debug("Occurrence codes in system list C3-5390: " + accidentFlag);
+
+	            }
+
+	    }
+	    else
+	    {
+	    	logger.debug("Occurrence codes null or empty");
+	    	accidentFlag = true;	    	
+	    }
+	    //Changed submitted amount to allowed amount for CR ESPRD00942064 implementation.
+	 // RIF STARTS for Rule id CLM4002.0062.01,CLM4002.0044.01
+	    if(involeRuleCLM4002006201(memberAge, checkAge, accidentFlag, diagAccidentIndicator, allowedAmount, thresholdAmount))
+	    	// RIF ENDS for Rule id CLM4002.0062.01,CLM4002.0044.01
+	    {
+	        if(logger.isDebugEnabled()) {
+		        logger
+		                .debug("Rules CLM4002.0043.01, CLM4002.0044.01, CLM4002.0061.01" +
+		            		" and CLM4002.0062.01 - posting exception 6037");
+
+	        }
+
+	        editsSet = setException(editsSet,
+	                ClaimAdjudicationConstants.EDIT_6037, lineNumber);
+	    }
+	    accidentFlag = false;
+	    if(logger.isDebugEnabled()) {
+		    logger
+					.debug("executing Rules CLM4002.0045.01, CLM4002.0047.01, CLM4002.0063.01"
+							+ " and CLM4002.0064.01...");
+
+	    }
+
+		if (occurenceSpanCodes != null && !occurenceSpanCodes.isEmpty())
+		{
+			accidentFlag = checkUtil
+					.isPresentInSystemList(
+							systemListMap,
+							ClaimAdjudicationConstants.FUNCTIONAL_AREA_C3,
+							new Long(
+									ClaimAdjudicationConstants.EXCP_6037_OCCURRENCE_SPAN_CDS_LIST),
+									occurenceSpanCodes, fDOS);
+			if(logger.isDebugEnabled()) {
+				logger.debug("Occurrence span codes in system list C3-5391: "
+						+ accidentFlag);
+
+			}
+
+		} 
+		else
+		{
+			logger.debug("Occurrence span codes null or empty");
+			accidentFlag = true;
+		}
+		//Changed submitted amount to allowed amount for CR ESPRD00942064 implementation.
+		RulesResultVO rulesResult = invokeRuleCLM4002_0064_01(memberAge,
+				diagAccidentIndicator, allowedAmount, accidentFlag, checkAge,
+				thresholdAmount);
+				if(rulesResult.isReturnBooleanValue())
+				{
+		//RIF_CLM4002.0064.01,RIF for rule CLM4002.0045.01,CLM4002.0064.01
+			if(logger.isDebugEnabled()) {
+				logger
+						.debug("Rules CLM4002.0045.01, CLM4002.0047.01, CLM4002.0063.01"
+								+ " and CLM4002.0064.01 - posting exception 6037");
+
+			}
+
+			editsSet = setException(editsSet,
+					ClaimAdjudicationConstants.EDIT_6037, lineNumber);
+		}
+		accidentFlag = false;
+		logger
+        .debug("executing Rule CLM4002.0053.01...");
+		 if (occurCodes != null && !occurCodes.isEmpty())
+		 {
+		            accidentFlag = checkUtil
+		            	.isPresentInSystemList(
+		                    systemListMap,
+		                    ClaimAdjudicationConstants.FUNCTIONAL_AREA_C3,
+		                    new Long(
+		                            ClaimAdjudicationConstants.EXCP_6038_OCCURRENCE_CDS_LIST),
+		                            occurCodes, fDOS);		           
+		 }
+		 if(logger.isDebugEnabled()) {
+			 logger.debug("Occurrence codes in system list C3-5393: " + accidentFlag);
+
+		 }
+
+		 if (memberAge < ClaimAdjudicationConstants.MEMBER_AGE_18
+		            && accidentFlag
+		            && totalBilledAmount < thresholdAmount)
+		 {
+		        logger
+		                .debug("Rule CLM4002.0053.01 - posting exception 6038");
+		        editsSet = setException(editsSet,
+		                ClaimAdjudicationConstants.EDIT_6038, lineNumber);
+		 }
+		 accidentFlag = false;
+		logger.debug("executing Rule CLM4002.0054.01...");
+		if (occurenceSpanCodes != null && !occurenceSpanCodes.isEmpty())
+		{
+			accidentFlag = checkUtil
+					.isPresentInSystemList(
+							systemListMap,
+							ClaimAdjudicationConstants.FUNCTIONAL_AREA_C3,
+							new Long(
+									ClaimAdjudicationConstants.EXCP_6038_OCCURRENCE_SPAN_CDS_LIST),
+									occurenceSpanCodes, fDOS);
+		}
+		if(logger.isDebugEnabled()) {
+			logger
+					.debug("Occurrence codes in system list C3-5394: "
+							+ accidentFlag);
+
+		}
+
+		if (memberAge < ClaimAdjudicationConstants.MEMBER_AGE_18
+				&& accidentFlag 
+				&& totalBilledAmount < thresholdAmount) {
+			logger.debug("Rule CLM4002.0054.01 - posting exception 6038");
+			editsSet = setException(editsSet,
+					ClaimAdjudicationConstants.EDIT_6038, lineNumber);
+		}
+	    logger
+        .info("ClaimTPLManager: inpatientProcessScreeningAccidentTPLEdits END");
+	    return editsSet;
+    }
+
+	private RulesResultVO invokeRuleCLM4002_0064_01(final int memberAge,
+			final boolean diagAccidentIndicator,final Double allowedAmount,
+			final boolean isaccidentFlag,final int checkAge,final Double thresholdAmount) {
+		//Rule Invocation Context object holds object arrays used in rule execution.
+				String ruleId = "CLM4002.0064.01";
+				RulesDelegate ruleDelegate = new RulesDelegate(ruleId);
+				//Adding object into rule invocation context.
+				ruleDelegate.addObject(memberAge);
+				ruleDelegate.addObject(checkAge);
+				ruleDelegate.addObject(isaccidentFlag);
+				ruleDelegate.addObject(diagAccidentIndicator);
+				ruleDelegate.addObject(allowedAmount);
+				ruleDelegate.addObject(thresholdAmount);
+				//Invoke RIF with ruleid and rule invocation objects.
+				RulesResultVO rulesResult = null;
+				try {
+					rulesResult = ruleDelegate.invokeRule();						
+				} catch (RulesDelegateException re){
+					if(RulesConstants.IS_EXPIRED.equals(re.getErrorCode()))
+					{
+						logger.warn(RulesConstants.RULE_EXPIRED+ruleId);
+						//If needed perform expires logic here  
+					}
+					logger.error(RulesConstants.RULE_EXCEPTION+re.getMessage());
+				}
+				if(logger.isDebugEnabled()) {
+				logger.debug(RulesConstants.RULE_ENDS+ruleId+"\n");
+				}
+		return rulesResult;
+	}
+    
+    /**
+     * @param memberAge
+     * @param checkAge
+     * @param accidentFlag
+     * @param diagAccidentIndicator
+     * @param allowedAmount
+     * @param thresholdAmount
+     * @return rulesResult.isReturnBooleanValue() boolean
+     */
+    private boolean involeRuleCLM4002005201(final int memberAge,final int checkAge,final boolean accidentFlag,final boolean diagAccidentIndicator,
+            final double allowedAmount, final double thresholdAmount)
+    {
+	    RulesDelegate ruleDelegate = new RulesDelegate(RULE_IDCLM4002005201);
+	    //Adding object into rule invocation context.
+	    ruleDelegate.addObject(memberAge);
+	    ruleDelegate.addObject(checkAge);
+	    ruleDelegate.addObject(accidentFlag);
+	    ruleDelegate.addObject(diagAccidentIndicator);
+		ruleDelegate.addObject(allowedAmount);
+		ruleDelegate.addObject(thresholdAmount);	          		   
+      //Invoke RIF with ruleid and rule invocation objects.
+	  			    RulesResultVO rulesResult = null;
+	  			    try {
+	  			    	rulesResult = ruleDelegate.invokeRule();	
+	  			    } catch (RulesDelegateException re){
+             if(RulesConstants.IS_EXPIRED.equals(re.getErrorCode()))
+			 {
+				logger.warn(RulesConstants.RULE_EXPIRED+RULE_IDCLM4002005201);
+				//If needed perform expires logic here  
+			 }
+             if(logger.isInfoEnabled()){
+			  logger.info(RulesConstants.RULE_EXCEPTION+re.getMessage());
+             }
+      } 
+	  			    if(logger.isDebugEnabled()){
+	  			    logger.debug(RulesConstants.RULE_ENDS+RULE_IDCLM4002005201+"\n");
+	  			    }
+    	return rulesResult.isReturnBooleanValue();
+    }
+    /**
+     * This method is used to post the edits 6037 and 6038
+     * for medical claims related to Suspect Other Accident TPL Edits Process.
+     *
+     * @param memberAge
+     * 						int value.
+     * @param causeCodes
+     * 						List of String Objects.
+     * @param diagAccidentIndicator
+     * 						boolean value.
+     * @param lineNumber
+     *  					Integer Object.
+     * @param fDOS
+     *  					java.util.Date
+     * @param totalBilledAmount
+     *  					Double Object.
+     * @param allowedAmount
+     *  					Double Object.
+     *  @return editsSet
+     *  					Set of exceptions. 
+      */
+       private Set medicalProcessScreeningAccidentTPLEdits(int memberAge,
+        		List causeCodes, boolean diagAccidentIndicator,
+                Integer lineNumber, Date fDOS, Double totalBilledAmount,
+                Double allowedAmount)
+        {
+    	   logger
+           .info("ClaimTPLManager: medicalProcessScreeningAccidentTPLEdits BEGIN");
+        	Set editsSet = null;
+            boolean accidentFlag = false;
+            int checkAge=ClaimAdjudicationConstants.MEMBER_AGE_18;
+            Double thresholdAmount = getSystemParameterValueAmount(
+          			 systemParameterMap, fDOS,
+          			 new Long(ClaimAdjudicationConstants.TPL_SUSP_ACC_SUBM_THRSHLD_PARAM));       
+           // Business Rules CLM4002.0048.01, CLM4002.0050.01, CLM4002.0051.01 and CLM4002.0052.01
+            if (causeCodes != null && !causeCodes.isEmpty())
+    	    {
+    	            accidentFlag = checkUtil
+    	            	.isPresentInSystemList(
+    	                    systemListMap,
+    	                    ClaimAdjudicationConstants.FUNCTIONAL_AREA_C3,
+    	                    new Long(
+    	                            ClaimAdjudicationConstants.EXCP_6037_RLTD_CAUSE_CDS_LIST),
+    	                            causeCodes, fDOS);
+    	            if(logger.isDebugEnabled()) {
+	    	            logger.debug("Cause codes in system list C3-5392: " + accidentFlag);
+
+    	            }
+
+    	    }
+            else
+            {
+            	accidentFlag = true;
+            	if(logger.isDebugEnabled()) {
+	            	logger.debug("Cause codes are null or empty: " + accidentFlag);
+
+            	}
+
+            }
+            //Changed submitted amount to allowed amount for CR ESPRD00942064 implementation.
+          //RIF Starts for Rule id CLM4002.0052.01
+            if(involeRuleCLM4002005201(memberAge, checkAge, accidentFlag, diagAccidentIndicator, allowedAmount, thresholdAmount))
+            // RIF Ends for Rule id CLM4002.0052.01
+            {
+                if(logger.isDebugEnabled()) {
+	                logger
+	                        .debug("Rules CLM4002.0048.01, CLM4002.0050.01, CLM4002.0051.01 " +
+	                        		"and CLM4002.0052.01- posting exception 6037");
+
+                }
+
+                editsSet = setException(editsSet,
+                        ClaimAdjudicationConstants.EDIT_6037, lineNumber);
+            }
+            accidentFlag = false;
+           // Business Rule CLM4002.0056.01
+            if (causeCodes != null && !causeCodes.isEmpty())
+    	    {
+    	            accidentFlag = checkUtil
+    	            	.isPresentInSystemList(
+    	                    systemListMap,
+    	                    ClaimAdjudicationConstants.FUNCTIONAL_AREA_C3,
+    	                    new Long(
+    	                            ClaimAdjudicationConstants.EXCP_6038_RLTD_CAUSE_CDS_LIST),
+    	                            causeCodes, fDOS);
+    	            if(logger.isDebugEnabled()) {
+	    	            logger.debug("Cause codes in system list C3-5395: " + accidentFlag);
+
+    	            }
+
+    	    }
+            if (memberAge < ClaimAdjudicationConstants.MEMBER_AGE_18
+                    && accidentFlag
+                    && totalBilledAmount < thresholdAmount)
+            {
+                logger
+                        .debug("Rules CLM4002.0056.01- posting exception 6037");
+                editsSet = setException(editsSet,
+                        ClaimAdjudicationConstants.EDIT_6038, lineNumber);
+            }
+            logger
+            .info("ClaimTPLManager: medicalProcessScreeningAccidentTPLEdits END");
+            return editsSet;
+        }
+
+	/**
+	 * This method is used to post the edits 6037 and 6038 for dental claims
+	 * related to Suspect Other Accident TPL Edits Process.
+	 * 
+	 * @param memberAge
+	 *            int value.
+	 * @param causeCodes
+	 *            List of String Objects.
+	 * @param diagAccidentIndicator
+	 *            boolean value.
+	 * @param lineNumber
+	 *            Integer Object.
+	 * @param fDOS
+	 *            java.util.Date
+	 * @param totalBilledAmount
+	 *            Double Object.
+	 * @param allowedAmount
+	 *            Double Object.
+	 * @return editsSet Set of exceptions.
+	 */
+       private Set dentalProcessScreeningAccidentTPLEdits(int memberAge,
+			List causeCodes, Integer lineNumber, Date fDOS,
+			Double totalBilledAmount, Double allowedAmount) 
+       {
+	    	logger.info("ClaimTPLManager: dentalProcessScreeningAccidentTPLEdits BEGIN");   
+			Set editsSet = null;
+			boolean accidentFlag = false;
+			Double thresholdAmount = getSystemParameterValueAmount(
+					systemParameterMap,
+					fDOS,
+					new Long(
+							ClaimAdjudicationConstants.TPL_SUSP_ACC_SUBM_THRSHLD_PARAM));
+			// Business Rule CLM4002.0049.01
+			if (causeCodes != null && !causeCodes.isEmpty()) 
+			{
+				accidentFlag = checkUtil
+						.isPresentInSystemList(
+								systemListMap,
+								ClaimAdjudicationConstants.FUNCTIONAL_AREA_C3,
+								new Long(
+										ClaimAdjudicationConstants.EXCP_6037_RLTD_CAUSE_CDS_LIST),
+								causeCodes, fDOS);
+				if(logger.isDebugEnabled()) {
+					logger.debug("Cause codes in system list C3-5392: " + accidentFlag);
+
+				}
+
+			}
+			//Changed submitted amount to allowed amount for CR ESPRD00942064 implementation.
+			if (memberAge < ClaimAdjudicationConstants.MEMBER_AGE_18
+					&& accidentFlag 
+					&& allowedAmount >= thresholdAmount) {
+				logger.debug("Rules CLM4002.0049.01- posting exception 6037");
+				editsSet = setException(editsSet,
+						ClaimAdjudicationConstants.EDIT_6037, lineNumber);
+			}
+			accidentFlag = false;
+			// Business Rule CLM4002.0055.01
+			if (causeCodes != null && !causeCodes.isEmpty()) 
+			{
+				accidentFlag = checkUtil
+						.isPresentInSystemList(
+								systemListMap,
+								ClaimAdjudicationConstants.FUNCTIONAL_AREA_C3,
+								new Long(
+										ClaimAdjudicationConstants.EXCP_6038_RLTD_CAUSE_CDS_LIST),
+								causeCodes, fDOS);
+				if(logger.isDebugEnabled()) {
+					logger.debug("Cause codes in system list C3-5395: " + accidentFlag);
+
+				}
+
+			}
+			if (memberAge < ClaimAdjudicationConstants.MEMBER_AGE_18
+					&& accidentFlag 
+					&& totalBilledAmount < thresholdAmount) {
+				logger.debug("Rules CLM4002.0055.01- posting exception 6038");
+				editsSet = setException(editsSet,
+						ClaimAdjudicationConstants.EDIT_6038, lineNumber);
+			}
+			logger.info("ClaimTPLManager: dentalProcessScreeningAccidentTPLEdits END");
+			return editsSet;
+	}
+      /**
+        * This method is used to post the edit 6070.
+        * 
+        * @param enterpriseClaim
+        * 						EnterpriseClaim.
+        *  @param lineNumber
+        *  					Integer Object.
+        *  @return editsSet
+        *  					Set of exceptions. 
+         */
+       private Set headerTPLMatrixBypassEdits(EnterpriseClaim enterpriseClaim , Integer lineNumber) 
+       						throws EnterpriseBaseBusinessException
+       {
+    	   logger.info("ClaimTPLManager: headerTPLMatrixBypassEdits BEGIN");
+    	   String claimType = enterpriseClaim.getClaimTypeCode();
+    	   String benefitPlanID = enterpriseClaim.getBenefitPlanID();
+    	   double totalTPLAmount = 0;
+    	   if (enterpriseClaim.getTotalTPLAmount() != null)
+    	   {
+    		   totalTPLAmount = enterpriseClaim.getTotalTPLAmount().doubleValue();	 
+    	   }
+	    	if(logger.isDebugEnabled()) {
+		    	logger.debug("Benefit Plan ID:" + benefitPlanID);
+		    	logger.debug("Total TPL Amount:" + totalTPLAmount);
+
+	    	}
+
+			Set editsSet = null;			
+			// Business Rule CLM4002.0065.01
+			if ((ClaimAdjudicationConstants.CLAIMS_CLAIM_TYPE_INPATIENT
+					.equalsIgnoreCase(claimType)
+					|| ClaimAdjudicationConstants.CLAIMS_CLAIM_TYPE_INPATIENT_CROSSOVER
+					.equalsIgnoreCase(claimType))
+					&& ClaimAdjudicationConstants.BENEFIT_PLAN_ID_DDU
+					.equalsIgnoreCase(benefitPlanID))
+			{
+					logger.debug("Rules CLM4002.0065.01- posting exception 6070");
+					editsSet = setException(editsSet,
+							ClaimAdjudicationConstants.EDIT_6070, lineNumber);
+			}
+			//CLM4002.0068.01
+			else if (!(ClaimAdjudicationConstants.CLAIMS_CLAIM_TYPE_INPATIENT_CROSSOVER
+					.equalsIgnoreCase(claimType)
+					|| ClaimAdjudicationConstants.OUTPATIENT_XOVER_CLAIM_TYPE
+					.equalsIgnoreCase(claimType)
+					|| ClaimAdjudicationConstants.PROFESSIONAL_XOVER_CLAIM_TYPE
+					.equalsIgnoreCase(claimType))
+					&& totalTPLAmount > 0)
+			{
+					logger.debug("Rules CLM4002.0068.01- posting exception 6070");
+					editsSet = setException(editsSet,
+						ClaimAdjudicationConstants.EDIT_6070, lineNumber);
+			}
+			else
+			{
+				//CLM4002.0067.01
+				Boolean confidentialityInd = tplHelper.checkMemberConfidentialityCode
+						(enterpriseClaim.getMemberSystemID(), enterpriseClaim.getFDOS());
+			   if (confidentialityInd)
+			   {
+					logger.debug("Rules CLM4002.0067.01- posting exception 6070");
+					editsSet = setException(editsSet,
+							ClaimAdjudicationConstants.EDIT_6070, lineNumber);
+			   }
+			}		
+			logger.info("ClaimTPLManager: headerTPLMatrixBypassEdits END");
+			return editsSet;
+	}
+       
+    /**
+     * This method is used to post the edit 6070.
+     * 
+     * @param claimType
+     *            String.
+     * @param memberConfidentialityCode
+     *            String.
+     * @param claimLine
+     *            EnterpriseClaimLineItem Object.
+     * @return editsSet Set of exceptions.
+     */
+    private Set lineTPLMatrixBypassEdits(String claimType,
+            String memberConfidentialityCode, EnterpriseClaimLineItem claimLine)
+    {
+
+		logger.info("ClaimTPLManager: lineTPLMatrixBypassEdits BEGIN");
+		String benefitPlanID = claimLine.getBenefitPlanID();
+		double totalTPLAmount = claimLine.getTplAmount();
+		Integer lineNumber = claimLine.getLineNumber();
+		Set editsSet = null;
+		// Business Rule CLM4002.0066.01
+		if (!(ClaimAdjudicationConstants.CLAIMS_CLAIM_TYPE_INPATIENT
+				.equalsIgnoreCase(claimType) || ClaimAdjudicationConstants.CLAIMS_CLAIM_TYPE_INPATIENT_CROSSOVER
+				.equalsIgnoreCase(claimType))
+				&& ClaimAdjudicationConstants.BENEFIT_PLAN_ID_DDU
+						.equalsIgnoreCase(benefitPlanID)) {
+			logger.debug("Rules CLM4002.0066.01- posting exception 6070");
+			editsSet = setException(editsSet,
+					ClaimAdjudicationConstants.EDIT_6070, lineNumber);
+		}// Business Rule CLM4002.0068.01
+		else if (!(ClaimAdjudicationConstants.CLAIMS_CLAIM_TYPE_INPATIENT_CROSSOVER
+				.equalsIgnoreCase(claimType)
+				|| ClaimAdjudicationConstants.OUTPATIENT_XOVER_CLAIM_TYPE
+						.equalsIgnoreCase(claimType) || ClaimAdjudicationConstants.PROFESSIONAL_XOVER_CLAIM_TYPE
+				.equalsIgnoreCase(claimType))
+				&& totalTPLAmount > 0) {
+			logger.debug("Rules CLM4002.0068.01- posting exception 6070");
+			editsSet = setException(editsSet,
+					ClaimAdjudicationConstants.EDIT_6070, lineNumber);
+		} // Business Rule CLM4002.0069.01
+		else if ((ClaimAdjudicationConstants.MEDICAL_CLAIM_TYPE
+				.equalsIgnoreCase(claimType) || ClaimAdjudicationConstants.PROFESSIONAL_XOVER_CLAIM_TYPE
+				.equalsIgnoreCase(claimType))
+				&& (ClaimAdjudicationConstants.EDIT_6070_BYPASS_MODIFIER
+						.equals(claimLine.getProcedureModifierCode1())
+						|| ClaimAdjudicationConstants.EDIT_6070_BYPASS_MODIFIER
+								.equals(claimLine.getProcedureModifierCode2())
+						|| ClaimAdjudicationConstants.EDIT_6070_BYPASS_MODIFIER
+								.equals(claimLine.getProcedureModifierCode3()) || ClaimAdjudicationConstants.EDIT_6070_BYPASS_MODIFIER
+						.equals(claimLine.getProcedureModifierCode4()))) {
+			logger.debug("Rules CLM4002.0069.01- posting exception 6070");
+			editsSet = setException(editsSet,
+					ClaimAdjudicationConstants.EDIT_6070, lineNumber);
+		}
+		logger.info("ClaimTPLManager: lineTPLMatrixBypassEdits END");
+		return editsSet;
+	}
+
+    /**
+     * This method is used to add exception to the exception set.
+     *
+     * @param editsSet
+     * 						Set of exceptions.
+     * @param exception
+     * 						String Object.
+     * @param lineNumber
+     * 						Integer Object.
+     * @return editSet
+     * 						Set
+     */
+    private Set setException(Set editsSet, String exception, Integer lineNumber)
+    {
+        if (editsSet == null)
+        {
+            editsSet = new HashSet();
+        }
+        ClaimAdjudicationEdit edit = new ClaimAdjudicationEdit();
+        edit.setExceptionCode(exception);
+        edit.setLineNumber(lineNumber);
+        editsSet.add(edit);
+        if(logger.isDebugEnabled()) {
+	        logger.debug("After set the ExceptionCode" + editsSet.size());
+
+        }
+
+        return editsSet;
+    }
+}

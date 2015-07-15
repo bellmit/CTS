@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class table="employee" name="com.hibernate.entity.Employee" >
+		<id column="EMP_ID" name="empId" > 
+			<generator class="identity"></generator>
+		</id>
+		<property name="empName" column="EMP_NAME"></property>		
+		<property name="empAddress" column="EMP_ADDRESS"></property>
+		<property name="landLine" column="EMP_LLNO" ></property>
+		<property name="mobile"  column="EMP_MOBNO"></property>
+		<property name="designation" column="EMP_DESGN"></property>
+	</class>
+</hibernate-mapping>

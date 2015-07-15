@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?><definitions name="SearchEntityPortlet_Service" targetNamespace="http://enterprise.ipc" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:portlet="http://www.ibm.com/wps/c2a" xmlns:tns="http://enterprise.ipc" xmlns:tns0="http://contactmanagementportletnew" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<types>
+		<xsd:schema targetNamespace="http://enterprise.ipc">
+			<xsd:simpleType name="EntityMemberDetail">
+				<xsd:restriction base="xsd:string"/>
+			</xsd:simpleType>
+			<xsd:simpleType name="MaintainEntityId">
+				<xsd:restriction base="xsd:string"/>
+			</xsd:simpleType>
+			<xsd:simpleType name="ProviderEntityId">
+				<xsd:restriction base="xsd:string"/>
+			</xsd:simpleType>
+			<xsd:simpleType name="TPLCarrierIdType">
+				<xsd:restriction base="xsd:string"/>
+			</xsd:simpleType>
+			<!-- TPL Policy  -->
+			<xsd:simpleType name="CarrierIDType">
+				<xsd:restriction base="xsd:string"/>
+			</xsd:simpleType>
+			<!-- Trading Partner  Maintenance  -->
+			
+			<xsd:simpleType name="tradingPartnerMIDType">
+				<xsd:restriction base="xsd:string"/>
+			</xsd:simpleType>
+			<!-- Trading Partner App Maintenance  -->
+			
+			<xsd:simpleType name="tradingPartnerAppID">
+				<xsd:restriction base="xsd:string"/>
+			</xsd:simpleType>
+			<xsd:complexType name="MyDatatype"/>
+			<xsd:complexType name="EntSrchCrsSrchDataType">
+			</xsd:complexType>
+
+			<xsd:complexType name="EntSrchCaseSrchDataType">
+			</xsd:complexType>
+           <xsd:complexType name="LogCrsEntityDataType">
+			</xsd:complexType>
+			<xsd:complexType name="SrcEntLogCrsDataType">
+			</xsd:complexType>
+			<xsd:simpleType name="SearchEntity">
+				<xsd:restriction base="xsd:string"/>
+			</xsd:simpleType>
+			<xsd:complexType name="MyDatatypeLogCase"/>
+		   <xsd:complexType name="EntSrchtoLogCaseDataType">
+			</xsd:complexType>
+			 <xsd:complexType name="EntSrchEDMSSrchDataType">
+			</xsd:complexType>
+			<xsd:simpleType name="providerSysID">
+				<xsd:restriction base="xsd:string"/>
+			</xsd:simpleType>
+            <xsd:complexType name="EntSrchRACrsSrchDataType"/>
+        </xsd:schema>
+    </types>
+	<message name="EntityId_Response">
+		<part name="MaintainEntityId_Output" type="tns:MaintainEntityId"/>
+		<part name="EntityMemberDetail_Output" type="tns:EntityMemberDetail"/>
+		<part name="ProviderEntityId_Output" type="tns:ProviderEntityId"/>
+		<part name="TPLCarrierIdType_Output" type="tns:TPLCarrierIdType"/>
+		<!-- TPL Policy  -->
+		<part name="CarrierIDType_Output" type="tns:CarrierIDType"/>
+			
+			<!-- Trading Partner  Maintenance  -->
+		<part name="tradingPartnerMIDType_Output" type="tns:tradingPartnerMIDType"/>
+			<!-- Trading Partner App Maintenance  -->
+		<part name="tradingPartnerAppID_Output" type="tns:tradingPartnerAppID"/>
+		<part name="providerSysID_Output" type="tns:providerSysID"/>
+	</message>
+	<message name="EntSrchCrsSrchDataType_Response">		
+		<part name="EntSrchCrsSrchDataType_Output" type="tns:EntSrchCrsSrchDataType"/>
+		<part name="EntSrchCaseSrchDataType_Output" type="tns:EntSrchCaseSrchDataType"/>
+		<part name="EntSrchEDMSSrchDataType_Output" type="tns:EntSrchEDMSSrchDataType"/>
+	</message>
+	<message name="SrcEntLogCrsDataType_Response">
+		<part name="SrcEntLogCrsDataType_Output" type="tns:SrcEntLogCrsDataType"/>
+
+	</message>
+	<message name="MyDatatype_Request">
+		<part name="MyDatatype_Input" type="tns:MyDatatype"/>
+	</message>
+
+	<message name="LogCrsEntityDataType_Request">
+		<part name="LogCrsEntityDataType_Input" type="tns:LogCrsEntityDataType"/>
+	</message>
+		
+	<message name="SearchCREntity_Request">
+		<part name="SearchEntity_Input" type="tns:SearchEntity"/>
+	</message>
+	<message name="MyDatatypeLogCase_Request">
+		<part name="MyDatatypeLogCase_Input" type="tns:MyDatatypeLogCase"/>
+	</message>
+	
+	<message name="EntSrchtoLogCaseDataType_Response">
+		<part name="EntSrchtoLogCaseDataType_Output" type="tns:EntSrchtoLogCaseDataType"/>
+	</message>
+    <message name="EntSrchRACrsSrch_SOURCE_ACTION_Response">
+    <part name="EntSrchRACrsSrchDataType_Output" type="tns:EntSrchRACrsSrchDataType"/>
+  </message>
+    <portType name="SearchEntityPortlet_Service">
+		<operation name="SearchEntityPortlet">
+			<output message="tns:EntityId_Response"/>
+		</operation>
+		<operation name="SrcEntLogCrsDataType">
+			<output message="tns:SrcEntLogCrsDataType_Response"/>
+		</operation>
+		<operation name="EntSrchCrsSrchDataType">
+			<output message="tns:EntSrchCrsSrchDataType_Response"/>
+		</operation>
+		<operation name="SearchEntityPortletFromCase">
+			<input message="tns:MyDatatype_Request"/>
+		</operation>
+		<operation name="SearchEntityPortlet0">
+			<input message="tns:MyDatatype_Request"/>
+		</operation>
+		<operation name="SearchEntityPortlet1">
+			<input message="tns:LogCrsEntityDataType_Request"/>
+		</operation>
+		<operation name="CrSearchEntityPortlet">
+			<input message="tns:SearchCREntity_Request"/>
+		</operation>
+		 <operation name="LogcaseSrchEntity">
+			<input message="tns:MyDatatypeLogCase_Request"/>
+		</operation>
+		<operation name="EntSrchtoLogCase">
+			<output message="tns:EntSrchtoLogCaseDataType_Response"/>
+		</operation>
+      
+        <operation name="SearchEntityPortlet2">
+      <output message="tns:EntSrchRACrsSrch_SOURCE_ACTION_Response"/>
+    </operation>
+    </portType>
+
+
+	<binding name="SearchEntityPortlet_Binding" type="tns:SearchEntityPortlet_Service">
+		<portlet:binding/>
+		<operation name="SearchEntityPortlet">
+			<portlet:action actionNameParameter="send.Entity.Id" caption="send.Common.Entity.Id" description="Send.Entity.Id" name="sendEntityId" type="standard"/>
+			<output>
+				<portlet:param boundTo="request-attribute" caption="send.Maintain.Entity.Id" name="maintainEntityId" partname="MaintainEntityId_Output"/>
+				<portlet:param boundTo="request-attribute" caption="send.Member.Entity.Id" name="EntityMemberDetail" partname="EntityMemberDetail_Output"/>
+				<portlet:param boundTo="request-attribute" caption="send.Provider.Entity.Id" name="providerEntityId" partname="ProviderEntityId_Output"/>
+				<portlet:param boundTo="request-attribute" caption="tplCarrierId.info" name="tplCarrierId" partname="TPLCarrierIdType_Output"/>
+					
+				<portlet:param boundTo="request-attribute" caption="CarrierID.type" name="CarrierID" partname="CarrierIDType_Output"/>	
+					<!-- Trading Partner  Maintenance  -->
+				<portlet:param boundTo="request-attribute" caption="tradingPartnerMID.Type" name="tradingPartnerMID" partname="tradingPartnerMIDType_Output"/>
+				
+				<!-- Trading Partner App Maintenance  -->
+				<portlet:param boundTo="request-attribute" caption="tradingPartnerAppID.Type" name="tradingPartnerAppID" partname="tradingPartnerAppID_Output"/>
+				
+				<!-- Provider App Maintenance  -->
+				<portlet:param boundTo="request-attribute" name="providerSysID" partname="providerSysID_Output"/>
+								
+			</output>
+		</operation>		
+
+		<operation name="SearchEntityPortletFromCase">
+			<portlet:action actionNameParameter="ACTION_NAME" name="MyName" type="standard"/>
+			<input>
+				<portlet:param boundTo="request-attribute" caption="send.case.sk" class="com.acs.enterprise.common.program.contactmanagement.common.vo.CaseRecordSearchCriteriaVO" name="MyParam" partname="MyDatatype_Input"/>
+			</input>
+		</operation>
+
+		 <operation name="EntSrchCrsSrchDataType">
+			<portlet:action actionNameParameter="EntSrchCrsSrch_ACTION" name="EntSrchCrsSrch_SOURCE_ACTION" type="standard"/>
+			<output>
+				<portlet:param boundTo="request-attribute" caption="EntSrchToCrsSrch" class="java.util.Map" name="EntitySearchMap" partname="EntSrchCrsSrchDataType_Output"/>
+			</output>
+		</operation>
+		
+
+		<operation name="SearchEntityPortlet0">
+			<portlet:action actionNameParameter="SrchCREntSrch_ACTION" caption="SearchCrsToSrchEntity" description="SearchCrsToSrchEntity" name="SrchCrEntSrch_TARGET_ACTION" type="standard"/>
+
+			<input>
+				<portlet:param boundTo="request-attribute" caption="SearchCrsToSrchEntity" class="com.acs.enterprise.common.program.contactmanagement.common.vo.CorrespondenceSearchCriteriaVO" name="SearchCrsToSrchEntityVO" partname="MyDatatype_Input"/>
+			</input>
+		</operation>
+		
+		<operation name="EntSrchCrsSrchDataType">
+			<portlet:action actionNameParameter="EntSrchCrsSrch_ACTION" name="EntSrchCrsSrch_SOURCE_ACTION" type="standard"/>
+			<output>				
+				<portlet:param boundTo="request-attribute" caption="EntSrchToCrsSrch" class="java.util.Map" name="EntitySearchMap" partname="EntSrchCrsSrchDataType_Output"/>
+				<portlet:param boundTo="request-attribute" caption="EntSrchCaseSrch" class="java.util.Map" name="EntitySearchMap2" partname="EntSrchCaseSrchDataType_Output"/>	
+				<portlet:param boundTo="request-attribute" caption="EntSrchToEDMSSrch" class="java.util.Map" name="EntitySearchMap3" partname="EntSrchEDMSSrchDataType_Output"/>
+			</output>
+			
+		</operation>
+		<operation name="SrcEntLogCrsDataType">
+			<portlet:action actionNameParameter="SrcEntLogCrs_ACTION" name="SrcEntLogCrs_SOURCE_ACTION" type="standard"/>
+			<output>
+				<portlet:param boundTo="request-attribute" caption="SrcEntToLogCrs" class="java.util.Map" name="srcEntityMap" partname="SrcEntLogCrsDataType_Output"/>
+			</output>
+		</operation>
+		<operation name="SearchEntityPortlet1">
+			<portlet:action actionNameParameter="LogCrsSrchEntity_ACTION_NAME" caption="LogCrsToSrchEntity" description="LogCrsToSrchEntity" name="LogCrsSrchEnt_TARGET_ACTION" type="standard"/>
+			<input>
+				<portlet:param boundTo="request-attribute" caption="LogCrsToSrchEntity" class="com.acs.enterprise.common.program.contactmanagement.common.vo.CorrespondenceSearchCriteriaVO" name="crsSrchCriVO" partname="LogCrsEntityDataType_Input"/>
+			</input>
+		</operation>
+		<operation name="CrSearchEntityPortlet">
+			<portlet:action actionNameParameter="GO.TO.CR.ENTITY.SEARCH.PAGE" caption="to.cr.enity.search.page" description="go.to.cr.entitySearch.page" name="goToCrEntitySearchPage" type="standard"/>
+			<input>
+				<portlet:param boundTo="request-attribute" caption="go.to.cr.EntSrch" name="SearchEntityPage" partname="SearchEntity_Input"/>
+			</input>
+		</operation>
+		<operation name="LogcaseSrchEntity">
+			<portlet:action actionNameParameter="ENTYSRCHACTION_NAME" name="EntSrch" type="standard"/>
+			<input>
+				<portlet:param boundTo="request-attribute" caption="send.ent.srch" class="com.acs.enterprise.common.program.contactmanagement.common.vo.CaseRecordSearchCriteriaVO" name="CaseSearchVO" partname="MyDatatypeLogCase_Input"/>
+			</input>
+		</operation>	
+		<operation name="EntSrchtoLogCase">
+			<portlet:action actionNameParameter="EntSrchtoLogCase_ACTION" name="EntSrchtoLogCase_SOURCE_ACTION" type="standard"/>
+			<output>
+				<portlet:param boundTo="request-attribute" caption="EntSrchToCaseSrch" class="java.util.Map" name="EntSrchLogCaseMap" partname="EntSrchtoLogCaseDataType_Output"/>
+			</output>
+		</operation>
+	 
+        <operation name="SearchEntityPortlet2">
+      <portlet:action actionNameParameter="EntSrchRACrsSrch_ACTION"  name="EntSrchRACrsSrch_SOURCE_ACTION" type="standard"/>
+      <output>
+        <portlet:param boundTo="request-attribute" caption="EntSrchToRACrsSrch" class="java.util.Map" name="EntitySearchMap4" partname="EntSrchRACrsSrchDataType_Output"/>
+      </output>
+    </operation>
+    </binding>
+</definitions>

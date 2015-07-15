@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<faces-config
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
+   version="2.0">
+	<!--<factory>
+		<faces-context-factory>
+		com.ibm.faces.context.PortletFacesContextFactoryImpl
+		</faces-context-factory>
+		</factory>
+		
+	-->
+	<managed-bean>
+		<managed-bean-name>AttachmentControllerBean</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.bean.AttachmentControllerBean
+		</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>AttachmentDataBean</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.bean.AttachmentDataBean
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+		<managed-property>
+			<property-name>attachmentVO</property-name>
+			<value>#{attachmentVO}</value>
+		</managed-property>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>attachmentVO</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.vo.AttachmentVO
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+
+	<navigation-rule>
+		<from-view-id>
+			/jsp/logcorrespondence/logCorrespondence.jsp
+		</from-view-id>
+		<navigation-case>
+			<from-action>#{AttachmentControllerBean.addAttachment}</from-action>
+			<from-outcome>rendersuccess</from-outcome>
+			<to-view-id>
+				/jsp/attachments/inc_addAttachment.jsp
+			</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<from-view-id>
+			/jsp/attachments/inc_addAttachment.jsp
+		</from-view-id>
+		<navigation-case>
+			<from-action>#{AttachmentControllerBean.cancelAttachments}</from-action>
+			<from-outcome>rendersuccess</from-outcome>
+			<to-view-id>
+				/jsp/logcorrespondence/logCorrespondence.jsp
+			</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+
+	<!-- Added for Attachment Functionality -->
+	<lifecycle>
+		<phase-listener>
+			com.ibm.faces.webapp.ValueResourcePhaseListener
+		</phase-listener>
+	</lifecycle>
+
+
+	<application>
+		
+		<!--<locale-config>
+			<default-locale>en</default-locale>
+			<supported-locale>es</supported-locale>
+		</locale-config>
+		--><message-bundle>com.acs.enterprise.common.program.contactmanagement.view.nl.PGM_IN_CommonAttachment</message-bundle>
+	</application>
+</faces-config>

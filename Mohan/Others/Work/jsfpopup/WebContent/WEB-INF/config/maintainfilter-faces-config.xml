@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<faces-config
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
+   version="2.0">
+
+	<managed-bean>
+		<managed-bean-name>FilterControllerBean</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.bean.FilterControllerBean
+		</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>FilterDataBean</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.bean.FilterDataBean
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+		<managed-property>
+			<property-name>filterVO</property-name>
+			<value>#{FilterVO}</value>
+		</managed-property>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>FilterVO</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.vo.FilterVO
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+
+	<navigation-rule>
+		<from-view-id>/jsp/maintainfilter/maintainFilter.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>rendersuccess</from-outcome>
+			<to-view-id>/jsp/maintainfilter/maintainFilter.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<application>
+		<locale-config>
+			<default-locale>en</default-locale>
+			<supported-locale>es</supported-locale>
+		</locale-config>
+		<message-bundle>com.acs.enterprise.common.program.contactmanagement.view.nl.PGM_IN_ContactMaintainFilter</message-bundle>
+	</application>
+
+</faces-config>

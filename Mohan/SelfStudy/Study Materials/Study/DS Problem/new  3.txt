@@ -1,0 +1,27 @@
+There is a stack consisting of N bricks. You and your friend decide to play a game using this stack. In this game, one can alternatively remove 1/2/3 bricks from the top and the numbers on the bricks removed by the player is added to his score. You have to play in such a way that you obtain maximum possible score while it is given that your friend will also play optimally and you will get a chance to make first move.
+
+Input Format
+First line will contain an integer T i.e. number of test cases. There will be two lines corresponding to each test case, first line will contain and number N i.e. number of element in stack and next line will contain N numbers i.e. numbers written on bricks from top to bottom.
+
+Output Format
+A single line containing maximum value corresponding to each test case.
+
+Constraints
+1 = T = 5
+1 = N = 105
+0 = each number on brick = 109
+
+Sample Input
+
+2
+5
+999 1 1 1 0
+5
+0 1 1 1 999
+Sample Output
+
+1001
+999
+Explanation
+
+In first test case you will pick 999,1,1. If you will play in any other way, you will not get a score of 1001.

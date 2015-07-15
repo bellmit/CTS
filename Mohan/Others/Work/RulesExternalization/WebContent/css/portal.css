@@ -1,0 +1,279 @@
+@import url("portalBranding.css");
+@import url("menu.css");
+
+/* Structure */
+body {text-align:center;}
+body, div, p, form, table, td, ul, ol {padding:0; margin:0; border:0;}
+
+#wrapper { margin:5px 1px 5px 1px; text-align:left; border-style:solid; border-width:1px; border-collapse:collapse;}
+#content {margin:3px;}
+#homeImg {text-align:right; padding-right:200px; height:200px; background-repeat:no-repeat;}
+
+#navToggle {position:absolute; left:500px; top:0px; width:30px; height:5px;  background-color:#f00; padding:0px; margin:0px; cursor:pointer;}
+
+.stackedRadioButtonTop {height:12px; margin-top:5px;}
+.stackedRadioButtonMiddle {height:12px;}
+.stackedRadioButtonBottom {height:12px;}
+.clear {clear:both;}
+.centerDiv {margin-left: auto; margin-right: auto; width: 60%;}
+.centerDiv2 {margin-left: auto; margin-right: auto; width: 85%;}
+.centerDiv3 {margin-left: 20%; margin-right: auto; width: 60%;}
+.instructionDiv {padding:5px; border:1px solid}
+.plus {background : url(../images/plus.gif) no-repeat; padding-left:20px;}
+.minus {background : url(../images/minus.gif) no-repeat; padding-left:20px;}
+.padb {padding:0 0 8px 0;}
+.midCol {float:left; width:1%;}
+.leftCol20 {width:19%; float:left; text-align:left;}
+.leftCol25 {width:24%; float:left; text-align:left;}
+.leftCol28 {width:27%; float:left; text-align:left;}
+.leftCol33 {width:32%; float:left; text-align:left;}
+.leftCol37 {width:36%; float:left; text-align:left;}
+.leftCol40 {width:39%; float:left; text-align:left;}
+.leftCol50 {width:49%; float:left; text-align:left;}
+.leftCol60 {width:59%; float:left; text-align:left;}
+.leftCol66 {width:66%; float:left; text-align:left;}
+.leftCol79 {width:79%; float:left; text-align:left;}
+.leftCol80 {width:80%; float:left; text-align:left;}
+.rightCol20 {width:19%; float:right; text-align:left;}
+.rightCol33 {width:32%; float:right; text-align:left;}
+.rightCol40 {width:39%; float:right; text-align:left;}
+.rightCol60 {width:60%; float:right; text-align:left;}
+.rightCol63 {width:63%; float:right; text-align:left;}
+.rightCol66 {width:66%; float:right; text-align:left;}
+.rightCol72 {width:72%; float:right; text-align:left;}
+.rightCol50 {width:50%; float:right; text-align:left;}
+.rightCol80 {width:80%; float:right; text-align:left;}
+.question {padding:0 0 5px 25px;}
+.answer {padding:0 0 0 25px;}
+.indent {padding-left:25px;}
+.indent50 {padding-left:50px;}
+.hide {display:none;}
+.floatl {float:left;}
+.floatr {float:right;}
+ul.menu {list-style-type:none; margin:0; padding:0;}
+ul.menu li {float:left; padding-right:15px; font-size:11px; white-space: nowrap; width: auto;}
+ol.menu li {float:left; padding-right:35px; font-size:11px; list-style-type:none;}
+.floatDiv {position:absolute; top:5px; right:5px; border:1px solid; z-index:1;  text-align:left;}
+.underline {text-decoration:underline;}
+.tableTitle {text-align:left; padding:0; vertical-align:bottom;}
+.tableAction {text-align:right; padding:0; vertical-align:bottom;}
+
+/* new style for exception box displaying within portlet, not floating on top */
+
+/*.floatDivExc {position:absolute; top:142px; right:22px; border:1px solid; width:185px; text-align:left;}
+.exceptionCol {position:relative; padding-top:5px; padding-right:0px; z-index:1}*/
+.floatDivExc {position:absolute; top:0px; right:0px; border:1px solid; width:185px; text-align:left;}
+.exceptionCol {position:relative; padding-top:5px; padding-right:0px; z-index:1}
+.floatTitlebar {padding:2px 4px 2px 4px}
+.floatTitle {float:left; width:90%; padding:2px; overflow:hidden; display:inline}
+.floatClose {float:right; width:10%; text-align:right; padding:2px; display:inline}
+.floatContent {padding:2px;}
+.floatExcTable {overflow:auto; height:130px}
+
+
+
+.claimQuestion {float:left; line-height:20px; padding-left:25px; padding-right:25px;}
+.claimAnswer {float:left; line-height:20px; padding-right:25px;}
+.toolTip {border-width:1px;border-style:dashed; display:inline; padding:2px;}
+.rowSpace {padding:5px;}
+.money {text-align:right;}
+.moneydata {text-align:left;}
+
+
+#pagelinks, .tabAnchorLinks {padding:2px;}
+.borderr {border-right:1px solid #000;}
+.borderl {border-left:1px solid #000;}
+.bordert {border-top:1px solid #000;}
+.borderb {border-bottom:1px solid #000;}
+.divWrap {border-width:1px; border-style:solid; padding:4px; margin-left:10px; _width:100%}
+
+/* Basic */
+img {border:none;}
+h1{padding:0; margin:0 0 5px 0; border-width:0 0 1px 0; border-style:solid;}
+h2{padding:0 0 5px 0; margin:0;}
+h3 {margin:0 0 5px 0; padding:0;}
+h4 {padding:5px 20px 5px 5px; margin:0 0 5px 0;}
+ul, ol {margin:0; padding:0 0 0 15px;}
+
+/* Lists */
+ul.podList {padding:0; list-style-type:none;}
+ul.podList li {vertical-align:top; line-height:16px; padding:0 0 0 19px;}
+
+/*	Header Area */
+#head, #head_internal {width:100%; text-align:left; position:relative;}
+#headImg {float:left; width:60%;margin-bottom:8px;}
+#headTxt {float:right; width:40%;}
+#headLine1 {text-align:right; padding:0 8px 0 0; vertical-align:middle;}
+#headLine2 {text-align:right; padding:10px 8px 5px; vertical-align:middle;}
+#headLine2 form {display:inline;}
+#bar4 {text-align:right; padding:0 8px 0 0; vertical-align:middle;}
+#bar4 form {display:inline;}
+#homeImg {text-align:right; padding-right:200px; height:200px; background-image:url(../images/home.jpg); background-repeat:no-repeat;}
+
+/* Portlet Structure */
+.portlet {border-style:outset; border-width:1px;}
+.portletTitleBar {border-bottom-style:solid; border-bottom-width:1px; padding:2px 5px;}
+.portletTitle {float:left; padding-top:2px;}
+.portletIcons {float:right;}
+div.portletIcons a:link, div.portletIcons a:hover, div.portletIcons a:visited {letter-spacing:1px;}
+.portletArea {padding:5px;}
+.portletActionBar {border-bottom-width:1px; border-bottom-style:solid; padding:2px 5px;}
+.portletRequired {float:left;}
+.portletActions {float:right;}
+
+/* Forms */
+.padtb{padding:2px 1px 2px 1px}
+input, select { margin:0 0 5px 0; padding:1; vertical-align:middle;}
+.buttonRow {text-align:right;}
+.formBtn {border-width:1px; border-style:solid;}
+.disabled {border-width:1px; border-style:solid; margin:0 0 5px 0; padding:0; vertical-align:middle;}
+.fieldFormat {font-size:9px; margin:-5px 0 5px 0;}
+
+
+/* Fieldset  */
+fieldset.expand legend {border:none; padding:0 5px 0 0; margin:0;}
+legend {position:relative;border-style:solid; border-width:1px; border-collapse:collapse; padding:5px; margin:0;}
+fieldset {padding:5px; clear:right; position:relative; border-style:solid; border-width:1px; border-collapse:collapse;}
+.fieldsetActions {font-size:10px; position:relative; top:-17px; right:-5px; float:right; height:15px; border-left-style:solid; border-left-width:1px; border-bottom-style:solid; border-bottom-width:1px; padding-left:8px; padding-right:8px; z-index:1;}
+* html fieldset {padding-top:0; margin-top:15px;}	/* hack for IE */
+* html .fieldsetActions {top:-24px;}	/* hack for IE */
+* html legend {top:-15px;}
+* html .fieldsetContainer {padding-top:15px;}
+
+/*	Tabs */
+.tabnav {height:20px; margin:0; padding-left:5px; background:url(../images/tab_bottom.gif) repeat-x bottom;}
+.tabnav li {margin:0; padding:0; display:inline; list-style-type:none;}
+.tabnav a:link, .tabnav a:visited {float:left; line-height:14px; font-weight:bold; padding: 2px 6px 2px 6px; margin-right:4px; border-width:1px; border-style:solid; text-decoration:none;}
+.tabnav a:link.active, .tabnav a:visited.active {border-bottom-width:1px; border-bottom-style:solid;}
+.tabContent {border-style:none solid solid solid; border-width:0 1px 1px 1px; padding:5px 10px 5px 10px;}
+.searchBoxHide {border-color:#069; border-style:solid solid solid solid; border-width:1px 1px 1px 1px; padding:10px 10px 5px 10px; display:none;}
+.searchBoxShow {border-color:#069; border-style:solid solid solid solid; border-width:1px 1px 1px 1px; padding:10px 10px 5px 10px; display:block;}
+
+
+/*	Tables */
+td {vertical-align:top;}
+th {padding:3px 2px 3px 2px; border-style:solid;border-width:1px;text-align:left;}
+table.dataTable, table.CdataTable {border-style:solid; border-width:1px; border-spacing:0;}
+table.dataTable td, table.CdataTable td {font-size:11px; padding:3px;}
+
+
+/*.row_mouse {cursor:pointer;}*/
+.row td, .row_alt td, .row_selected td, .row_mouse td, .rowStrong td {line-height:19px; border-width:1px; border-style:solid; border-collapse:collapse;}
+.nowrap{whitespace:nowrap}
+.rowHeadAbove td {line-height:13px; border-bottom-width:1px; border-bottom-style:solid; border-collapse:collapse;}
+.scrollTable {overflow:auto; height:150px !important; width:99%;} /*need the width set to 99% to avoid horizontal scrollbar in Firefox;*/
+
+.row_selected td, .row_mouse td {border-style:solid none;  padding-left:4px !important; padding-right:4px !important}
+.row_selected td.money, .row_mouse td.money{padding-right:4px !important;}
+.closeTable {text-align:right; padding:3px; border-width:0 0 1px 0; border-style:solid; border-collapse:collapse;}
+.closeTable a {display:block;}
+.resultset {text-align:right; padding:0 5px 0 0; font-size:9px; font-weight:bold;}
+tr.inputRow td {padding:3px 3px 0 3px; border-width:1px; border-style:solid; border-collapse:collapse;}
+.dataLabel {text-align:right; padding:0 2px 0 0;}
+.dataLabelLeft {text-align:left; padding:0 2px 0 0;}
+.tableActions {font-size:10px; height:19px; line-height:19px; border-bottom-style:solid; border-bottom-width:1px; padding-right:8px; text-align:right;}
+
+.viewTable {background-color:#ffffff;border:0px !important}
+.viewTable, .viewTable td, .viewTable td div {padding:0 0 3px 0 !important;}
+
+.centerCell{text-align:center !important;}
+.rightCell {text-align:right;}
+.leftCell {text-align:left;}
+.moneyHeader{text-align:right;}
+.moneyCell {text-align:right;}
+
+.scrollTable2 {border-width:1px; border-style:solid; overflow:auto; height:300px; width:99%} /*need the width set to 99% to avoid horizontal scrollbar in Firefox; you may need to override height on the page...this allow 10 single line rows and header to display */
+
+
+/* acuity cost tables */
+table.fieldTable {border:none !important}
+table.fieldTable td {border:none !important;}
+.row2 td, .row_alt2 td {line-height:19px !important;}
+.rowHead {border-right-width:1px; border-right-style:solid; padding:2px}
+.cellHead {font-weight:bold; line-height:1.2em; background-color:#ECEFC6;}
+
+.auditorBox{position:absolute; top:-5px; right:0px; border-width:1px; border-style:solid; padding:2px; text-align:right; }
+
+
+/*	Pods */
+.pod {border-style:solid; border-width:1px; padding:5px 10px;}
+.podTitle {font-size:12px;}
+.podLine {height:1px;}
+.pod_content {text-align:left;}
+.noborder {border-style:none;}
+.signin {padding:0 0 8px 0;}
+
+/*	Tree */
+#treeTable {border-collapse:collapse;}
+#navigator_pod {width:24%; overflow:auto; border-style:solid; border-width:1px; padding:5px 10px; font-size:11px; text-align:left;}
+#slider {width:2%; border-style:solid; border-width:1px; vertical-align:middle;}
+#sliderSpace {width:1%;}
+#main_pod { width:73%; border-width:0;}
+div.treeList {}
+ul.tree {width:auto; padding-left:0; margin-left:0;}
+ul.tree img {border:none;}
+ul.tree, ul.tree ul {padding-left:0;}
+ul.tree ul {margin-left:16px;}
+ul.tree li.closed ul {display: none;}
+ul.tree li {list-style:none; background:url(../images/i-repeater.gif) 0 0 repeat-y; display:block; width:auto;}
+ul.tree li.last {list-style:none; background-image:none;}
+ul.tree span.a {background:url(../images/t.gif) 0 50% no-repeat; display:block;}
+ul.tree span.a.last {background:url(../images/l.gif) 0 50% no-repeat;}
+ul.tree span.a.children span.b {background:url(../images/minus.gif) 0 50% no-repeat; cursor:pointer;}
+ul.tree li.closed span.a.children span.b {background: url(../images/plus.gif) 0 50% no-repeat; cursor:pointer;}
+ul.tree span.a.children span.c {background: url(../images/i-bottom.gif) 0 50% no-repeat; }
+ul.tree span.a.spanClosed span.c {background-image: none;}
+ul.tree a  {white-space:nowrap; overflow:hidden; padding:3px 0 3px 0px; margin-left:18px; line-height:16px;}
+ul.tree span.a.children a {background-image:none;}
+ul.tree span.a.children.spanClosed a {background-image:none;}
+ul.tree.unformatted li {background-image:none; padding-left:16px;}
+ul.tree.unformatted li li {background-image:none; padding-left:0;}
+ul.tree li div {float:right; clear:right; height:1em; margin-top:-26px;}
+ul.tree div a  {padding:0; background-image:none; height:auto;}
+.hereTree {padding:2px}
+
+
+/* Fixes Floating Box issue in IE */
+* html #head_internal,
+* html #nav,
+* html #headTxt,
+* html .portletTitleBar,
+* html .portletActionBar,
+* html .portletContent,
+* html .portletArea,
+* html .floatContainer,
+* html .pod,
+* html .moreInfoBar,
+* html .searchResults {height: 1%;}
+/* End hide from IE5-mac */
+
+/*IE Hacks */
+ol {_padding:0 0 0 25px;}
+
+/* Errors */
+
+#errorBox{ border:1px dashed #900; padding:4px}
+.errorBox { border:1px dashed #900; padding:4px}
+/* Messages */
+
+.msgBox{ border:1px dashed #000; padding:4px; margin-bottom:4px;}
+
+.inprogress {position:absolute; top:0px; left:0px;  border-width:2px; border-style:solid; background-color:#fff; z-index:100000}
+.inprogressinner {position:relative; top:0px; left:0px; height:80px; width:400px; padding:20px 10px 20px 10px; z-index:100001; text-align:center}
+.progressCont{position:absolute; top:40%; margin-top:-40px; left:50%; width:420px; margin-left:-210px; display:none;  z-index:99999}
+.progressframe{position:absolute; top:0px; right:0px;   width:420px;  z-index:99999; border:0; filter:progid:DXImageTransform.Microsoft.Alpha(style=0,opacity=0)}
+/* internal claims forms */
+.padx {padding:0 0 3px 0;}
+
+.moreInfo {border-style:solid; border-width:1px; border-spacing:0; width:100%; margin:0}
+.infoTitle {float:left; text-align:left; font-weight:bold;padding:0 0 0 5px;}
+.infoActions {float:right; text-align:right; padding:0 0 0 0;}
+.moreInfoBar {font-size:10px; height:19px; line-height:19px; border-bottom-style:solid; border-bottom-width:1px; padding-right:5px;}
+.moreInfoContent {padding:0px; margin:6px;}
+
+/*  Site Map */
+.smSection {margin-bottom:15px; line-height:1.5em;}
+div.headlink{padding:0px; margin-bottom:5px; border-bottom:1px solid #000;}
+ul.sub1Menu{padding-bottom:3px;}
+ul.sub2Menu{padding-bottom:3px;}
+ul.sub3Menu{padding-bottom:3px;}

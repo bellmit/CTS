@@ -1,0 +1,34 @@
+.header
+{
+	background-color:gray;
+	text-align: center;
+	font-size:large;
+	font-family:monospace;
+	font-weight:bolder;
+	margin:5px;
+	margin-top:-5px;
+}
+
+.menu
+{
+	width: 30%;
+	text-align: left;
+	font-style: italic;
+	height: 80%
+}
+.content
+{
+	
+}
+.footer
+{
+	text-align: center;
+	
+}
+
+table
+{
+	width: 100%;
+	height:100%
+	border-top: thin;
+}

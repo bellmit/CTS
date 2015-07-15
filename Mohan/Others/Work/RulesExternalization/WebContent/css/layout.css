@@ -1,0 +1,235 @@
+@import url("menu.css");
+@import url("branding.css");
+/*@import url("approved.css");*/
+
+/* Layout CSS */
+
+/* Global Style */
+.test {border-width:1px; border-style:solid;}
+body {font-size:12px; padding:0; border:0; margin:0; text-align:center;}
+img {border:0;}
+ul, ol {margin:0; padding:0 0 0 15px;}
+#wrapper {width:99%; margin:10px auto 10px auto; text-align:left; border-style:solid; border-width:1px; border-collapse:collapse;}
+#content {margin:10px;}
+.minHeight {height:350px; float:right; width:1px;position:relative;}
+.clear {clear:both;}
+.clearr {clear:right;}
+.clearl {clear:left;}
+
+.col20l {width:19%; float:left; text-align:left;}
+.leftCol20 {width:19%; float:left; text-align:left;}
+.midCol {float:left; width:1%;}
+.col20r {width:19%; float:right; text-align:left;}
+/* added col25l for benefit plan -TH */
+.col25l {width:24%; float:left; text-align:left;}
+.col33l {width:32%; float:left; text-align:left;}
+.leftCol33 {width:32%; float:left; text-align:left;}
+.col33r {width:32%; float:right; text-align:left;}
+.col34 {width:34%; text-align:left;}
+.col40l {width:39%; float:left; text-align:left;}
+.col40r {width:39%; float:right; text-align:left;}
+.rightCol40 {width:39%; float:right; text-align:left;}
+.col50l {width:49%; float:left; text-align:left;}
+.col50r {width:49%; float:right; text-align:left;}
+.col60l {width:59%; float:left; text-align:left;}
+.leftCol60 {width:60%; float:left; text-align:left;}
+.col60r {width:59%; float:right; text-align:left;}
+.col66r {width:65%; float:right; text-align:left;}
+.rightCol66 {width:66%; float:right; text-align:left;}
+.col66l {width:65%; float:left; text-align:left;}
+/* added col75r for benefit plan -TH */
+.col75r {width:71%; float:right; text-align:left;}
+.col80r {width:79%; float:right; text-align:left;}
+.rightCol80 {width:80%; float:right; text-align:left;}
+.col80l {width:79%; float:left; text-align:left;}
+.col100 {width:98%; text-align:left;}
+.colpr {padding-right:8px;}
+.colpl {padding-left:8px;}
+.borderr {border-right:thin solid #000;}
+.borderl {border-left:thin solid #000;}
+.bordert {border-top:thin solid #000;}
+.borderb {border-bottom:thin solid #000;}
+#threeColumns {position:relative; display:block; border-left:200px solid #fff; border-right:200px solid #fff;}
+#threeInner {display:block; margin-left:-200px; margin-right:-200px; padding:5px;}
+#firstColumn {float:left; position:relative; width:200px; left:3px;}
+#secondColumn {margin-left:210px; margin-right:210px; position:relative; display:block; height:1%;}
+#thirdColumn {float:right; position:relative; width:190px; right:5px;}
+.qa {height:50px;}
+.borders {border-width:1px; border-style:solid;}
+h1{font-size:18px; padding:0; margin:0 0 5px 0; border-width:0 0 1px 0; border-style:solid;}
+h2{font-size:14px; padding:0 0 5px 0; margin:0;}
+h3 {font-size:12px; font-weight:bold;margin:0 0 5px 0; padding:0;}
+h4 {font-size:12px; padding:5px 20px 5px 5px; margin:0 0 5px 0;}
+.refNum {line-height:20px;}
+.padb {padding:0 0 8px 0;}
+.hide {display:none;}
+#homeImg {text-align:right; padding-right:200px; height:200px; background-image:url(../images/home.jpg); background-repeat:no-repeat;}
+.floatContainer {border-collapse:collapse;}
+/* Hides from IE5-mac \*/
+* html .floatContainer {height: 1%;}
+/* End hide from IE5-mac */
+.floatl {float:left;}
+.floatr {float:right;}
+ul.menu {list-style-type:none; margin:0; padding:0;}
+ul.menu li {float:left; padding-right:15px; font-size:11px;}
+ol.menu li {float:left; padding-right:35px; font-size:11px; list-style-type:none;}
+.floatDiv {position:absolute; top:5px; right:5px; border:1px solid; z-index:1; width:300px; text-align:left;}
+.floatTitle {float:left; width:74%; padding:2px; overflow:hidden;}
+.floatClose {float:left; width:21%; text-align:right; padding:2px;}
+.floatContent {padding:5px;}
+#udm {z-index:5}
+#pagelinks, .tabAnchorLinks {padding:2px;}
+.claimQuestion {float:left; line-height:20px; padding-left:25px; padding-right:25px;}
+.claimAnswer {float:left; line-height:20px; padding-right:25px;}
+.message {padding:2px;}
+.centerForm {width:500px;}
+/*	Header Area */
+
+#head, #head_internal {width:100%; text-align:left; position:relative;}
+
+#headImg {float:left; width:60%;}
+#headTxt {float:right; width:40%;}
+#headLine1 {text-align:right; padding:0 8px 0 0; vertical-align:middle;}
+#headLine2 {text-align:right; padding:10px 8px 5px; vertical-align:middle;}
+#headLine2 form {display:inline;}
+#bar4 {text-align:right; padding:0 8px 0 0; vertical-align:middle;}
+#bar4 form {display:inline;}
+/* Hides from IE5-mac \*/
+* html #head_internal, #nav, headTxt {height: 1%;}
+/* End hide from IE5-mac */
+
+/*	Footer Area */
+#footer {text-align:left; padding-left:15px;}
+
+/*	Portlet Header */
+.titleBar {width:100%; height:1.5em;}
+.icons {float:right; text-align:right; width:50px; overflow:auto; vertical-align:text-top;}
+.title {font-size:14px; float:left; overflow:auto; padding-left:10px;}
+.fulltitle {font-size:14px; font-weight:bold; float:left; overflow:auto; padding:3px 0 0 10px;}
+.actions {text-align:right; line-height:16px; border-width:1px; border-style:solid; padding:1px 3px 1px 3px;}
+
+/*	Tabs */
+.tabs {font-size:12px;}
+.tabnav {height:20px; margin:0; padding-left:5px; background:url(../images/tab_bottom.gif) repeat-x bottom;}
+.tabnav li {margin:0; padding:0; display:inline; list-style-type:none;}
+.tabnav a:link, .tabnav a:visited {float:left; line-height:14px; font-weight:bold; padding: 2px 6px 2px 6px; margin-right:4px; border-width:1px; border-style:solid; text-decoration:none;}
+.tabnav a:link.active, .tabnav a:visited.active {border-bottom-width:1px; border-bottom-style:solid;}
+.tabContent {border-style:none solid solid solid; border-width:0 1px 1px 1px; padding:5px 10px 5px 10px;}
+
+/*	Pods */
+/* Hides from IE5-mac \*/
+* html .pod {height: 1%;}
+/* End hide from IE5-mac */
+.pod {border-style:solid; border-width:1px; padding:5px 10px;}
+.podTitle {font-size:12px;}
+.podLine {height:1px;}
+.pod_content {font-size:11px; text-align:left;}
+.noborder {border-style:none;}
+#linkMenu a:hover, ul.status a:hover {}
+
+/*	Portlet */
+.xtop, .xbottom {display:block; background:transparent; font-size:1px;}
+.xb1, .xb2, .xb3, .xb4 {display:block; overflow:hidden;}
+.xb1, .xb2, .xb3 {height:1px;}
+.xb2, .xb3, .xb4 {border-left:1px solid; border-right:1px solid;}
+.xb1 {margin:0 5px;}
+.xb2 {margin:0 3px; border-width:0 2px;}
+.xb3 {margin:0 2px;}
+.xb4 {height:2px; margin:0 1px;}
+.portlet_content {padding:0 10px 0 10px; font-size:11px; border-style:solid; border-width:0 1px 0 1px; text-align:left;}
+
+
+/*	Forms */
+input {vertical-align:middle;}
+form {margin:0; padding:0; border:0;}
+input, select {margin:0 0 5px 0; padding:0;}
+.fieldFormat {font-size:9px; margin:-5px 0 5px 0;}
+
+label {line-height:14px;}
+.actionBarRequired {float:left; padding-left:10px;}
+.requiredStatement {text-align:right;}
+.requiredLine {padding:5px 15px;}
+.buttonRow {text-align:right;}
+.formBtn {border-width:1px; border-style:solid; padding:2px 6px 2px 6px;}
+a.formBtn {padding:2px 6px 2px 6px;}
+.btnHover {border-width:1px; border-style:solid;}
+input.countText {border-width:0; font-size:10px; width:30px;}
+.char1 {width:15px;}
+.char2 {width:25px;}
+.char3 {width:40px;}
+.char5 {width:50px;}
+.char6 {width:70px;}
+
+/*	Tables */
+table{font-size:11px; padding:0; margin:0;}
+td {vertical-align:top;}
+.bottomAlign {vertical-align:bottom;}
+table.dataTable, table.hiddenTable {border-style:solid; border-width:1px; border-collapse:collapse;}
+table.dataTable td {font-size:11px; padding:3px;}
+.tableHead, th {padding:5px; border-bottom-style:solid;border-bottom-width:1px;}
+.row_mouse {cursor:pointer;}
+.closeTable {text-align:right; padding:3px; border-width:0 0 1px 0; border-style:solid; border-collapse:collapse;}
+.closeTable a {display:block;}
+.resultset {text-align:right; padding:0 5px 0 0; font-size:9px; font-weight:bold;}
+.label {text-align:right;}
+.inputRow td {padding:5px 0 5px 0;}
+.actionRow {font-size:10px; border-bottom-style:solid; border-bottom-width:1px; text-align:right; padding: 5px;}
+tr.inputRow {border-bottom-style:solid; border-bottom-width:1px;}
+
+/*	Fieldset */
+legend {border-style:solid; border-width:1px; border-collapse:collapse; padding:0; margin:0;}
+fieldset.expand legend {border:none; padding:0; margin:0;}
+fieldset {font-size:11px;padding:10px; clear:right; border-style:solid; border-width:1px; border-collapse:collapse;}
+fieldset.plain {font-size:11px;padding:10px; clear:right; position:relative; border-style:solid; border-width:1px; border-collapse:collapse;}
+fieldset.plain legend {border:none; padding: 0 3px 0 3px; margin:0;}
+.tableTitle {padding:5px; position:relative;_top:-15px;}
+.fieldsetActions {font-size:10px; position:relative; top:-22px; right:-10px; float:right; height:15px; border-left-style:solid; border-left-width:1px; border-bottom-style:solid; border-bottom-width:1px; padding-left:8px; padding-right:8px; z-index:1;}
+.fieldsetActions {_top:-24px;}	/* hack for IE */
+fieldset {_padding-top:0; _margin-top:15px;}	/* hack for IE */
+.fieldTable {_padding-top:15px;}	/* hack for IE */
+fieldset ol li, fieldset ul li {padding-bottom:4px;}
+.indent {padding-left:25px;}
+legend a {text-decoration:underline;}
+.plus {background : url(../images/plus.gif) no-repeat;padding-left:20px;}
+.minus {background : url(../images/minus.gif) no-repeat;padding-left:20px;}
+
+/*	Tree */
+#treeTable {border-collapse:collapse;}
+#navigator_pod {width:24%; overflow:auto; border-style:solid; border-width:1px; padding:5px 10px; font-size:11px; text-align:left;}
+#slider {width:2%; border-style:solid; border-width:1px; vertical-align:middle;}
+#sliderSpace {width:1%;}
+#main_pod { width:73%; border-width:0;}
+div.treeList {}
+ul.tree {width:auto; padding-left:0; margin-left:0;}
+ul.tree img {border:none;}
+ul.tree, ul.tree ul {padding-left:0;}
+ul.tree ul {margin-left:16px;}
+ul.tree li.closed ul {display: none;}
+ul.tree li {list-style:none; background:url(../images/i-repeater.gif) 0 0 repeat-y; display:block; width:auto;}
+ul.tree li.last {list-style:none; background-image:none;}
+ul.tree span.a {background:url(../images/t.gif) 0 50% no-repeat; display:block;}
+ul.tree span.a.last {background:url(../images/l.gif) 0 50% no-repeat;}
+ul.tree span.a.children span.b {background:url(../images/minus.gif) 0 50% no-repeat; cursor:pointer;}
+ul.tree li.closed span.a.children span.b {background: url(../images/plus.gif) 0 50% no-repeat; cursor:pointer;}
+ul.tree span.a.children span.c {background: url(../images/i-bottom.gif) 0 50% no-repeat;}
+ul.tree span.a.spanClosed span.c {background-image: none;}
+ul.tree a  {white-space:nowrap; overflow:hidden; padding:3px 0 3px 18px; line-height:16px;}
+ul.tree span.a.children a {background-image:none;}
+ul.tree span.a.children.spanClosed a {background-image:none;}
+ul.tree.unformatted li {background-image:none; padding-left:16px;}
+ul.tree.unformatted li li {background-image:none; padding-left:0;}
+ul.tree li div {float:right; clear:right; height:1em; margin-top:-26px;}
+ul.tree div a  {padding:0; background-image:none; min-height:auto; height:auto;}
+
+/* Portlet */
+.portlet {border-style:outset; border-width:1px;}
+.portletTitleBar {border-bottom-style:solid; border-bottom-width:1px; padding:2px 5px; background-image:url(../images/titlebar.gif);}
+/* Hides from IE5-mac \*/
+* html .portletTitleBar, * html .portletContent {height: 1%;}
+/* End hide from IE5-mac */
+.portletTitle {float:left; font-size:10px; font-weight:bold; padding-top:2px;}
+.portletIcons {float:right;}
+.portletContent {padding:5px;}
+
+.question {padding:0 0 10px 25px;}
+.answer {padding:0 0 0 25px;}

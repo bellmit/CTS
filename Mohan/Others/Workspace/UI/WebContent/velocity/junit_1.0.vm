@@ -1,0 +1,80 @@
+#set( $testClass="${entry.className}Test") 
+##
+package $entry.packageName
+
+import junit.framework.Test; 
+import junit.framework.TestSuite; 
+import junit.framework.TestCase; 
+
+import java.util.ArrayList;
+import java.util.List;
+import com.xerox.enterprise.ghs.mmis.rif.core.RulesContext;
+import com.xerox.enterprise.ghs.mmis.rif.core.api.RulesManager;
+import com.xerox.enterprise.ghs.mmis.rif.common.exception.RIFException;
+
+#foreach($string in $imports) 
+import $string; 
+#end 
+
+
+/** 
+ * The class $testClass contains tests for the class
+ * ${entry.className}. 
+ * 
+ * @author $authorName
+ * @generatedBy RIF 
+ * @since <pre>$today</pre> 
+ * @version 1.0 
+ */ 
+public class $testClass extends TestCase { 
+    public $testClass(String name) { 
+        super(name); 
+    } 
+ 
+    public void setUp() throws Exception { 
+        super.setUp(); 
+    } 
+ 
+    public void tearDown() throws Exception { 
+        super.tearDown(); 
+    } 
+#foreach($method in $entry.methodList) 
+    /** 
+     * Method Name: $method.name
+     * Param: $method.signature 
+     * 
+     */ 
+	 
+    public void test${method.name.toUpperCase()}() throws Exception { 
+        //TODO: Test goes here... 
+		
+		//TODO: Assignment
+	#foreach($string in $method.paramNames)
+	$string 
+	#end 
+	
+		$method.ruleInvokeCode
+    	assertEquals(true,rulesResult.getRuleStatus());
+    } 
+ 
+#end 
+ 
+#foreach($method in $entry.privateMethodList) 
+    /** 
+     * 
+     * Method: $method.signature 
+     * 
+     */ 
+    public void test#cap(${method.name})() throws Exception { 
+        //TODO: Test goes here... 
+    #foreach($string in $method.reflectionCode) 
+    $string 
+    #end 
+    } 
+ 
+#end 
+ 
+    public static Test suite() { 
+        return new TestSuite(${testClass}.class); 
+    } 
+} 

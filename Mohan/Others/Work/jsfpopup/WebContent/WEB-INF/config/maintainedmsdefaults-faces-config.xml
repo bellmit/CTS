@@ -1,0 +1,118 @@
+<?xml version="1.0"?>
+<faces-config
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
+   version="2.0">
+	
+
+	<managed-bean>
+		<managed-bean-name>
+			EDMSDefaultsControllerBean
+		</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.bean.EDMSDefaultsControllerBean
+		</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>EDMSDefaultsDataBean</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.bean.EDMSDefaultsDataBean
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+		<managed-property>
+			<property-name>edmsDefaultsVO</property-name>
+			<value>#{EDMSDefaultsVO}</value>
+		</managed-property>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>EDMSDefaultsVO</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.vo.EDMSDefaultsVO
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+		<managed-property>
+			<property-name>categoryVO</property-name>
+			<value>#{CategoryVO}</value>
+		</managed-property>
+		<managed-property>
+			<property-name>departmentVO</property-name>
+			<value>#{DepartmentVO}</value>
+		</managed-property>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>DepartmentVO</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.internalmessage.common.vo.DepartmentVO
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>CategoryVO</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.vo.CategoryVO
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<navigation-rule>
+		<from-view-id>/jsp/maintainedmsdefaults/maintainEdmsDefaults.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>rendersuccess</from-outcome>
+			<to-view-id>/jsp/maintainedmsdefaults/maintainEdmsDefaults.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<!--  	<navigation-rule>
+		<from-view-id>/jsp/maintainedmsdefaults/maintainEdmsDefaults.jsp</from-view-id>
+		<navigation-case>
+		<from-action>#{EDMSDefaultsControllerBean.updateEDMSDefaults}</from-action>
+		<from-outcome>Success</from-outcome>
+		<to-view-id>/jsp/maintainedmsdefaults/maintainEdmsDefaults.jsp</to-view-id>
+		</navigation-case>
+		
+		<from-view-id>/jsp/maintainedmsdefaults/maintainEdmsDefaults.jsp</from-view-id>
+		<navigation-case>
+		<from-action>#{EDMSDefaultsControllerBean.updateEDMSDefaults}</from-action>
+		<from-outcome>Success</from-outcome>
+		<to-view-id>/jsp/maintainedmsdefaults/maintainEdmsDefaults.jsp</to-view-id>
+		</navigation-case>
+		
+		<navigation-case>
+		<from-action>#{EDMSDefaultsControllerBean.getSubjectsForCategory}</from-action>
+		<from-outcome>categoryForSubj</from-outcome>
+		<to-view-id>/jsp/maintainedmsdefaults/maintainEdmsDefaults.jsp</to-view-id>
+		</navigation-case> 
+		<navigation-case>
+		<from-action>#{EDMSDefaultsControllerBean.reset}</from-action>
+		<from-outcome>resetsuccess</from-outcome>
+		<to-view-id>/jsp/maintainedmsdefaults/maintainEdmsDefaults.jsp</to-view-id>
+		</navigation-case> 
+		<navigation-case>
+		<from-action>#{EDMSDefaultsControllerBean.updateEDMSDefaults}</from-action>
+		<from-outcome>editfail</from-outcome>
+		<to-view-id>/jsp/maintainedmsdefaults/maintainEdmsDefaults.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+		<from-action>#{EDMSDefaultsControllerBean.previous}</from-action>
+		<from-outcome>previoussuccess</from-outcome>
+		<to-view-id>/jsp/maintainedmsdefaults/maintainEdmsDefaults.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+		<from-action>#{EDMSDefaultsControllerBean.next}</from-action>
+		<from-outcome>nextsuccess</from-outcome>
+		<to-view-id>/jsp/maintainedmsdefaults/maintainEdmsDefaults.jsp</to-view-id>
+		</navigation-case>
+		</navigation-rule>  -->
+	<application>
+		<locale-config>
+			<default-locale>en</default-locale>
+			<supported-locale>es</supported-locale>
+		</locale-config>
+		<message-bundle>com.acs.enterprise.common.program.contactmanagement.view.nl.PGM_IN_ContactEdmsDefaultsMaintenance</message-bundle>
+	</application>
+</faces-config>

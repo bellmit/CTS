@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy element &apos;NCPDPClosureDateUpdateTest.java&apos; to &apos;RIF_0.0.1/src/test/java/com.xerox.ghs.mmis.rif.rules.provider&apos;&#x0D;&#x0A;- Original project: &apos;RIF_0.0.1Test&apos;&#x0D;&#x0A;- Destination element: &apos;RIF_0.0.1/src/test/java/com.xerox.ghs.mmis.rif.rules.provider&apos;&#x0D;&#x0A;- Original element: &apos;com.xerox.ghs.mmis.rif.rules.provider.NCPDPClosureDateUpdateTest.java&apos;" description="Copy compilation unit" destination="=RIF_0.0.1/src\/test\/java&lt;com.xerox.ghs.mmis.rif.rules.provider" element1="/java&lt;com.xerox.ghs.mmis.rif.rules.provider{NCPDPClosureDateUpdateTest.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1399549495989" units="1" version="1.0"/>
+</session>

@@ -1,0 +1,41 @@
+package com.xerox.enterprise.ghs.mmis.rif.common.util;
+
+import java.io.IOException;
+import java.io.InputStream;
+
+import org.xml.sax.SAXException;
+
+import com.xerox.enterprise.ghs.mmis.rif.common.exception.RIFException;
+import com.xerox.enterprise.ghs.mmis.rif.core.cache.RulesXMLConfigReader;
+
+public class RuleTurnOnOffUtility {
+
+	private RulesXMLConfigReader configReader;
+	
+	public RuleTurnOnOffUtility() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		System.out.println("RuleId:"+args[0]);
+		configReader = new RulesXMLConfigReader();	
+	}
+
+private void loadRulesConfigfromXML()throws RIFException {
+		
+        try {
+        	System.out.println("Xml Path:"+Thread.currentThread().getContextClassLoader().
+        			getResource("Rules-Metadata.xml").getFile());
+        	InputStream is=Thread.currentThread().getContextClassLoader().
+        			getResource("Rules-Metadata.xml").openStream();       	
+        	saxParser.parse(is, configReader);
+		} catch (SAXException e) {			
+			LOG.error("SAX configuration exception occured while parsing Rules Metadata file", e);
+			throw new RIFException(e);
+		} catch (IOException ioe) {			
+			LOG.error("IO exception occured while parsing Rules Metadata file", ioe);
+			throw new RIFException(ioe);
+		}
+	}
+}

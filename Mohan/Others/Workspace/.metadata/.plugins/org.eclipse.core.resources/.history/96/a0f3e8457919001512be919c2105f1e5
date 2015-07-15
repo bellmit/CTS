@@ -1,0 +1,90 @@
+package com.xerox.enterprise.ghs.mmis.rif.common.util;
+
+import java.io.File;
+import java.io.IOException;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+public class DomXMLWriter {
+	
+	public static void main(String args[])
+	{
+		String filepath = Thread.currentThread().getContextClassLoader().
+    			getResource("Rules-Metadata.xml").getFile();
+		writeXML(filepath,"PGM4005.9001.NH01",true);
+	}
+
+	public static void writeXML(String filePath,String ruleId,boolean isOn) {
+		// TODO Auto-generated constructor stub
+		
+		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder docBuilder;
+		Document doc;
+		try {
+			docBuilder = docFactory.newDocumentBuilder();
+			doc = docBuilder.parse(filepath);
+			System.out.println(doc.getFirstChild());
+			Node node=doc.getElementsByTagName("RulesConfig").item(0);
+			NodeList nodes=node.getChildNodes();
+			System.out.println(nodes.getLength());
+			
+			for(int i=0;i<nodes.getLength();i++)
+			{
+				//System.out.println("Node::"+nodes.item(i).getNodeName());
+				if(nodes.item(i).getNodeName().equalsIgnoreCase("Rule"))
+				{
+					Node ruleNode=nodes.item(i);
+					String ruleid=ruleNode.getAttributes().getNamedItem("id").getNodeValue();
+					System.out.println(ruleNode.getChildNodes().item(9).getNodeName());
+					if(ruleId.equalsIgnoreCase(ruleid))
+					{
+						Node endDate=ruleNode.getChildNodes().item(9);
+						System.out.println("EndDate Value"+endDate.getTextContent());
+						endDate.setTextContent("31-12-9999");
+						System.out.println("Value:"+ruleid);
+					}
+				}
+			}
+			
+			// write the content into xml file
+			TransformerFactory transformerFactory = TransformerFactory.newInstance();
+			Transformer transformer = transformerFactory.newTransformer();
+			DOMSource source = new DOMSource(doc);
+			StreamResult result = new StreamResult(new File(filepath));
+			transformer.transform(source, result);
+			
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TransformerConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TransformerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
+
+}

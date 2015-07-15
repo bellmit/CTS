@@ -1,0 +1,225 @@
+package com.xerox.ghs.mmis.rif.adapter;
+
+import org.junit.*;
+import static org.junit.Assert.*;
+import com.xerox.ghs.mmis.rif.common.exception.RIFBlazeAdapterException;
+import com.xerox.ghs.mmis.rif.core.RuleInvocationContext;
+import com.xerox.ghs.mmis.rif.core.RulesResult;
+
+/**
+ * The class <code>BlazeAdapterTest</code> contains tests for the class <code>{@link BlazeAdapter}</code>.
+ *
+ * @generatedBy CodePro at 5/5/14 5:55 PM
+ * @author 396662
+ * @version $Revision: 1.0 $
+ */
+public class BlazeAdapterTest {
+	/**
+	 * Run the BlazeAdapter(String) constructor test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testBlazeAdapter_1()
+		throws Exception {
+		String ruleName = "";
+
+		BlazeAdapter result = new BlazeAdapter(ruleName);
+
+		// add additional test code here
+		assertNotNull(result);
+	}
+
+	/**
+	 * Run the String getRuleInvocationPoint(String) method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test(expected = com.xerox.ghs.mmis.rif.common.exception.RIFBlazeAdapterException.class)
+	public void testGetRuleInvocationPoint_1()
+		throws Exception {
+		BlazeAdapter fixture = new BlazeAdapter("");
+		String ruleName = "";
+
+		String result = fixture.getRuleInvocationPoint(ruleName);
+
+		// add additional test code here
+		assertNotNull(result);
+	}
+
+	/**
+	 * Run the String getRuleInvocationPoint(String) method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test(expected = com.xerox.ghs.mmis.rif.common.exception.RIFBlazeAdapterException.class)
+	public void testGetRuleInvocationPoint_2()
+		throws Exception {
+		BlazeAdapter fixture = new BlazeAdapter("");
+		String ruleName = "";
+
+		String result = fixture.getRuleInvocationPoint(ruleName);
+
+		// add additional test code here
+		assertNotNull(result);
+	}
+
+	/**
+	 * Run the String getRuleInvocationPoint(String) method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test(expected = com.xerox.ghs.mmis.rif.common.exception.RIFBlazeAdapterException.class)
+	public void testGetRuleInvocationPoint_3()
+		throws Exception {
+		BlazeAdapter fixture = new BlazeAdapter("");
+		String ruleName = "";
+
+		String result = fixture.getRuleInvocationPoint(ruleName);
+
+		// add additional test code here
+		assertNotNull(result);
+	}
+
+	/**
+	 * Run the String getRuleInvocationPoint(String) method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test(expected = com.xerox.ghs.mmis.rif.common.exception.RIFBlazeAdapterException.class)
+	public void testGetRuleInvocationPoint_4()
+		throws Exception {
+		BlazeAdapter fixture = new BlazeAdapter("");
+		String ruleName = "";
+
+		String result = fixture.getRuleInvocationPoint(ruleName);
+
+		// add additional test code here
+		assertNotNull(result);
+	}
+
+	/**
+	 * Run the String getRuleInvocationPoint(String) method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test(expected = com.xerox.ghs.mmis.rif.common.exception.RIFBlazeAdapterException.class)
+	public void testGetRuleInvocationPoint_5()
+		throws Exception {
+		BlazeAdapter fixture = new BlazeAdapter("");
+		String ruleName = "";
+
+		String result = fixture.getRuleInvocationPoint(ruleName);
+
+		// add additional test code here
+		assertNotNull(result);
+	}
+
+	/**
+	 * Run the RulesResult invoke(RuleInvocationContext) method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test(expected = com.xerox.ghs.mmis.rif.common.exception.RIFBlazeAdapterException.class)
+	public void testInvoke_1()
+		throws Exception {
+		BlazeAdapter fixture = new BlazeAdapter("");
+		RuleInvocationContext ctx = new RuleInvocationContext(1);
+
+		RulesResult result = fixture.invoke(ctx);
+
+		// add additional test code here
+		assertNotNull(result);
+	}
+
+	/**
+	 * Run the RulesResult invoke(RuleInvocationContext) method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test(expected = com.xerox.ghs.mmis.rif.common.exception.RIFBlazeAdapterException.class)
+	public void testInvoke_2()
+		throws Exception {
+		BlazeAdapter fixture = new BlazeAdapter("");
+		RuleInvocationContext ctx = new RuleInvocationContext(1);
+
+		RulesResult result = fixture.invoke(ctx);
+
+		// add additional test code here
+		assertNotNull(result);
+	}
+
+	/**
+	 * Run the RulesResult invoke(RuleInvocationContext) method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test(expected = com.xerox.ghs.mmis.rif.common.exception.RIFBlazeAdapterException.class)
+	public void testInvoke_3()
+		throws Exception {
+		BlazeAdapter fixture = new BlazeAdapter("");
+		RuleInvocationContext ctx = new RuleInvocationContext(1);
+
+		RulesResult result = fixture.invoke(ctx);
+
+		// add additional test code here
+		assertNotNull(result);
+	}
+
+	/**
+	 * Perform pre-test initialization.
+	 *
+	 * @throws Exception
+	 *         if the initialization fails for some reason
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Before
+	public void setUp()
+		throws Exception {
+		// add additional set up code here
+	}
+
+	/**
+	 * Perform post-test clean-up.
+	 *
+	 * @throws Exception
+	 *         if the clean-up fails for some reason
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@After
+	public void tearDown()
+		throws Exception {
+		// Add additional tear down code here
+	}
+
+	/**
+	 * Launch the test.
+	 *
+	 * @param args the command line arguments
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	public static void main(String[] args) {
+		new org.junit.runner.JUnitCore().run(BlazeAdapterTest.class);
+	}
+}

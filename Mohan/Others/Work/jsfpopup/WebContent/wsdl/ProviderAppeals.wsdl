@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="ProviderAppeals_Service"
+	targetNamespace="http://enterprise.ipc"
+	xmlns="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:portlet="http://www.ibm.com/wps/c2a"
+	xmlns:tns="http://enterprise.ipc"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<types>
+		<xsd:schema targetNamespace="http://enterprise.ipc">
+		
+			<xsd:simpleType name="InternalServiceAuthIDType">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+			
+			<xsd:complexType name="CMCaseSearchDataType">
+			</xsd:complexType>
+			
+			<!-- Changed from simpleType to complexType to recieve TCNList -->
+			<xsd:complexType name="DentalTcnInfo" />
+
+	   		<!-- Changed from simpleType to complexType to recieve TCNList -->
+			<xsd:complexType name="InstitutionalTcnInfo" />
+		
+			<!-- Changed from simpleType to complexType to recieve TCNList -->
+			<xsd:complexType name="ProfessionalTcnInfo" />
+
+			
+			<!-- Changed from simpleType to complexType to recieve TCNList -->
+			<xsd:complexType name="VoidReplaceTcnInfo" />
+						
+			<xsd:complexType name="ProviderAppealsDatatype">
+			</xsd:complexType>
+			<xsd:simpleType name="CaseTrackingDatatype">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+		   </xsd:simpleType>
+		    <xsd:simpleType name="CrspdGenAppealDatatype">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+		   </xsd:simpleType>
+		   <!-- ESPRD00529011 starts -->
+		   <!-- Commented for the Defect ESPRD00731985 -->
+		   <!--<xsd:simpleType name="ClaimInternalInquiryType">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+		   -->
+		   <!-- Added for the Defect ESPRD00731985 -->
+		   <xsd:complexType name="ObjClaimInternalInquiryType"/>
+		   <!-- ESPRD00529011 ends -->
+		   <!-- ESPRD00531190 starts -->
+		   <xsd:simpleType name="ServiceAuthInquiry">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+			<!-- ESPRD00531190 ends -->
+		</xsd:schema>
+	</types>
+	
+	<message name="InternalServiceAuthIDType_Response">
+		<part name="InternalServiceAuthIDType_Output"
+			type="tns:InternalServiceAuthIDType" />
+		<part name="DentalTcnInfo_Output" type="tns:DentalTcnInfo"/>
+		<part name="InstitutionalTcnInfo_Output" type="tns:InstitutionalTcnInfo"/>
+		<part name="ProfessionalTcnInfo_Output" type="tns:ProfessionalTcnInfo"/>
+		<part name="VoidReplaceTcnInfo_Output" type="tns:VoidReplaceTcnInfo"/>
+	</message>
+	
+		
+	<message name="CMCaseSearchDataType_Response">
+		<part name="CMCaseSearchDataType_Output"
+			type="tns:CMCaseSearchDataType" />
+	</message>
+	
+	<message name="ProviderAppealsDatatype_Request">
+		<part name="ProviderAppealsDatatype_Input"
+			type="tns:ProviderAppealsDatatype" />
+	</message>
+	
+	<message name="CaseTrackingDatatype_Response">
+		<part name="CaseTrackingDatatype_Output" 
+		type="tns:CaseTrackingDatatype" />
+		<part name="CrspdGenAppealDatatype_Output" 
+			type="tns:CrspdGenAppealDatatype" />	
+   </message>
+	<!-- ESPRD00529011 starts -->
+	<message name="ClaimInternalInquiryType_Response">
+	<!-- Commented for the Defect ESPRD00731985 -->
+		<!--<part name="ClaimInternalInquiryType_Output" type="tns:ClaimInternalInquiryType" />
+	-->
+	<!-- Added for the Defect ESPRD00731985 -->
+	<part name="ObjClaimInternalInquiryType_Output" type="tns:ObjClaimInternalInquiryType" />
+	</message>
+   <!-- ESPRD00529011 ends -->
+   <!-- ESPRD00531190 starts -->
+   <message name="InstiClaimCorrInfo_Response">
+		<part name="ServiceAuthInquiry_Output"
+			type="tns:ServiceAuthInquiry"/>
+	</message>
+	 <!-- ESPRD00531190 ends -->
+	<portType name="ProviderAppeals_Service">
+		<operation name="SearchCase">
+			<output message="tns:CMCaseSearchDataType_Response" />
+		</operation>
+		<operation name="ProviderAppeals">
+			<input message="tns:ProviderAppealsDatatype_Request" />
+		</operation>
+		<operation name="CaseTrackingProvider">
+			<output message="tns:CaseTrackingDatatype_Response" />
+		</operation>
+					
+		<operation name="AddAppeals1">
+			<output message="tns:InternalServiceAuthIDType_Response" />
+		</operation>
+		<!-- ESPRD00529011 starts -->		
+		<operation name="ClaimsInquiry">
+			<output message="tns:ClaimInternalInquiryType_Response" />
+		</operation>
+	   <!-- ESPRD00529011 ends -->
+	    <!-- ESPRD00531190 starts -->
+	   <operation name="SendInstiCorrInfo">
+			<output message="tns:InstiClaimCorrInfo_Response" />
+		</operation>
+		 <!-- ESPRD00531190 ends -->
+	</portType>
+	<binding name="ProviderAppeals_Binding"
+		type="tns:ProviderAppeals_Service">
+		<portlet:binding />
+		
+			<operation name="SearchCase">
+			<portlet:action name="sendCaseDetailsAction"
+				actionNameParameter="com.ibm.portal.propertybroker.action"
+				type="standard" />
+			<output>
+				<portlet:param name="CaseDetails"
+					partname="CMCaseSearchDataType_Output" 
+					class="com.acs.enterprise.common.view.vo.CommonCMCaseDetailsVO"
+					boundTo="request-attribute"
+					caption="CaseDetails.Caption" />
+			</output>
+		</operation>
+		
+		<operation name="ProviderAppeals">
+			<portlet:action name="receiveProviderAppealsAction"
+				actionNameParameter="receive.ProviderAppeals.Action" 
+                caption="receive.Provider.Appeals.Action"
+				type="standard" />
+			<input>
+				<portlet:param name="ProviderAppeals"
+					class="com.acs.enterprise.common.view.vo.CommonProviderDetailsVO"
+					partname="ProviderAppealsDatatype_Input"
+					boundTo="request-attribute" caption="ProviderAppeals.Caption" />
+			</input>
+		</operation>
+		 <operation name="CaseTrackingProvider">
+			<portlet:action name="SendCaseTrackingProviderSk"
+				actionNameParameter="Send.CaseTracking.ProviderCaseSk" type="standard" />
+			<output>
+				<portlet:param name="CaseTrackingProviderSk"
+					partname="CaseTrackingDatatype_Output" boundTo="request-attribute"
+					caption="Send.casetracking.providercaseSk" />
+				<portlet:param name="CrspdGenAppealSK"
+					partname="CrspdGenAppealDatatype_Output" boundTo="request-attribute"
+					caption="CrspdGenAppeal.CrspdSK" description="CrspdGen.appeal.details" />		
+			</output>
+		</operation>
+      
+      <operation name="AddAppeals1">
+			<portlet:action name="sendInternalServiceAuthIDAction"
+				actionNameParameter="com.ibm.portal.propertybroker.action" type="standard" />
+			<output>
+				<portlet:param name="InternalServiceAuthID"
+					partname="InternalServiceAuthIDType_Output" boundTo="request-attribute"
+					caption="InternalServiceAuthID.Caption" />
+				<portlet:param name="dentalTcnInfo" partname="DentalTcnInfo_Output" 
+					boundTo="request-attribute" caption="dental.tcn.info" description="Dental.Tcn.param"
+					class="java.util.List" />
+				<portlet:param name="instiTcnInfo" partname="InstitutionalTcnInfo_Output" 
+					boundTo="request-attribute" caption="institutional.tcn.info" description="Institutional.Tcn.param"
+					class="java.util.List" />	 
+				<portlet:param name="profTcnInfo" partname="ProfessionalTcnInfo_Output" 
+					boundTo="request-attribute" caption="professional.tcn.info" description="professional.Tcn.param"
+					class="java.util.List" />	                       
+				<portlet:param name="voidReplaceTcnInfo" partname="VoidReplaceTcnInfo_Output" 
+					boundTo="request-attribute" caption="voidReplace.tcn.info" description="voidReplace.Tcn.param"
+					class="java.util.List" />
+				
+			</output>
+		</operation>
+		<!-- ESPRD00529011 starts -->
+		<operation name="ClaimsInquiry">
+			<portlet:action name="send.ClaimsInternalInquiryAction"
+				actionNameParameter="action.param.send.ClaimsInternalInquiryAction"
+				type="standard" caption="send.ClaimsInternalInquiryAction" />
+			<output>
+			<!-- Commented for the Defect ESPRD00731985 -->
+				<!--<portlet:param name="invokeDetails"
+					partname="ClaimInternalInquiryType_Output"	
+					boundTo="request-attribute" caption="send.invokeDetails" />
+			-->
+			<!-- Added for the Defect ESPRD00731985 -->
+			<portlet:param name="objInvokeDetails"
+					class="com.acs.enterprise.mmis.operations.common.vo.ClaimInquirySearchResultsVO"
+					partname="ObjClaimInternalInquiryType_Output"
+					boundTo="request-attribute" caption="send.objInvokeDetails" />
+			</output>
+		</operation>
+	   <!-- ESPRD00529011 ends -->
+	   <!-- ESPRD00531190 starts -->
+	   <operation name="SendInstiCorrInfo">
+			<portlet:action name="sendInstiClaimCorrInfo"
+				actionNameParameter="send.insti.claimCorr.info"
+				caption="send.InstiCorr.info" type="standard" />
+			<output>
+					<portlet:param name="recieveVO"
+					boundTo="request-attribute" partname="ServiceAuthInquiry_Output"
+					caption="Send.Insti.Service.AuthID" />
+
+			</output>
+		</operation>
+		<!-- ESPRD00531190 ends -->
+	</binding>
+</definitions>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+<tiles-definitions>
+
+    <definition name="base" template="/WEB-INF/views/jsp/layout/layout.jsp">
+        <put-attribute name="title" value="Xerox - MMIS Health Care" />
+        <put-attribute name="styles" value="/WEB-INF/views/jsp/layout/styles.jsp" />
+        <put-attribute name="scripts" value="/WEB-INF/views/jsp/layout/scripts.jsp" />
+        <put-attribute name="header" value="/WEB-INF/views/jsp/layout/header.jsp" />
+        <put-attribute name="navigation" value="/WEB-INF/views/jsp/layout/navigation.jsp" />
+        <put-attribute name="content" value="" />
+        <put-attribute name="footer" value="/WEB-INF/views/jsp/layout/footer.jsp" />
+    </definition>
+    
+    
+    <definition name="login" extends="base">
+        <put-attribute name="title" value="Login MMIS" />      
+        <put-attribute name="content" value="/WEB-INF/views/jsp/common/login.jsp" />
+    </definition>  
+    
+    <definition name="memberLandingPage" extends="base">
+        <put-attribute name="title" value="Member Landing in MMIS" />
+        <put-attribute name="content" value="/WEB-INF/views/jsp/common/members_landing.jsp" />        
+    </definition>
+    
+    <definition name="displayClaims" extends="base">
+        <put-attribute name="title" value="Display Claims" />
+        <put-attribute name="content" value="/WEB-INF/views/jsp/member/support/displayClaims.jsp" />        
+    </definition>
+    
+    <definition name="claimDetails" extends="base">
+        <put-attribute name="title" value="Claim Details" />
+        <put-attribute name="content" value="/WEB-INF/views/jsp/member/support/claimDetails.jsp" />        
+    </definition>       
+    
+    
+    <definition name="memberEligibility" extends="base">
+        <put-attribute name="title" value="Member Eligibility" />
+        <put-attribute name="content" value="/WEB-INF/views/jsp/provider/member/checkEligibility.jsp" />        
+    </definition> 
+    
+    <definition name="createDentalClaim" extends="base">
+        <put-attribute name="title" value="Create Dental Claim" />
+        <put-attribute name="content" value="/WEB-INF/views/jsp/provider/member/createDentalClaim.jsp" />        
+    </definition>    
+    
+    
+ 
+</tiles-definitions>

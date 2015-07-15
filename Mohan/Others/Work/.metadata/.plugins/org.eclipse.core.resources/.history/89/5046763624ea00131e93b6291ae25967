@@ -1,0 +1,23 @@
+package com.test.Properties;
+
+import java.io.IOException;
+import java.util.Properties;
+
+public class PropertiesHandler {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+		Properties prop=new Properties();
+		try {
+			
+			prop.load(PropertiesHandler.class.getClass().getResourceAsStream("/testProperties.properties"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
+
+}

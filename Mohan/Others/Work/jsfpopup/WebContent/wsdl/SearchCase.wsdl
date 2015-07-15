@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?><definitions name="SearchCase_Service" targetNamespace="http://enterprise.ipc" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:portlet="http://www.ibm.com/wps/c2a" xmlns:tns="http://enterprise.ipc" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<types>
+		<xsd:schema targetNamespace="http://enterprise.ipc">
+			<xsd:complexType name="CMCaseSearchDataType">
+			</xsd:complexType>
+			<xsd:simpleType name="MemberLogCase">
+				<xsd:restriction base="xsd:string"/>
+			</xsd:simpleType>
+			<xsd:simpleType name="CaseTrackingDatatype">
+				<xsd:restriction base="xsd:string"/>
+		   </xsd:simpleType>
+		    <xsd:simpleType name="CaseTrackingAppealDatatype">
+				<xsd:restriction base="xsd:string"/>
+		   </xsd:simpleType>
+		 
+		  <xsd:complexType name="MyDatatype">
+			</xsd:complexType>		
+            <xsd:complexType name="EntSrchCaseSrchDataType"/>
+        </xsd:schema>
+		
+	</types>
+	<message name="CMCaseSearchDataType_Response">
+		<part name="CMCaseSearchDataType_Output" type="tns:CMCaseSearchDataType"/>
+	</message>
+	<message name="MemberLogCase_Request">
+		<part name="MemberLogCase_Input" type="tns:MemberLogCase"/>
+	</message>
+	<message name="CaseTrackingDatatype_Request">
+		<part name="CaseTrackingDatatype_Input" type="tns:CaseTrackingDatatype"/>
+	</message>
+	<message name="CaseTrackingAppealDatatype_Request">
+		<part name="CaseTrackingAppealDatatype_Input" type="tns:CaseTrackingAppealDatatype"/>
+	</message>
+	<message name="SearchCaseEnty_Request">
+		<part name="MyDatatype_Output" type="tns:MyDatatype"/>
+	</message>
+	
+    <message name="EntSrchCaseSrchDataType_Request">
+    <part name="EntSrchCaseSrchDataType_Input" type="tns:EntSrchCaseSrchDataType"/>
+  </message>
+    <portType name="SearchCase_Service">
+		<operation name="SearchCase">
+			<output message="tns:CMCaseSearchDataType_Response"/>
+		</operation>
+		<operation name="MemberLogCase">
+			<input message="tns:MemberLogCase_Request"/>
+		</operation>
+		<operation name="CaseTrackingProvider">
+			<input message="tns:CaseTrackingDatatype_Request"/>
+		</operation>
+		<operation name="CaseTrackingAppeal">
+			<input message="tns:CaseTrackingAppealDatatype_Request"/>
+		</operation>
+		<operation name="SearchCaseEnty">
+			<output message="tns:SearchCaseEnty_Request"/>
+		</operation>
+        <operation name="SearchCase0">
+      <input message="tns:EntSrchCaseSrchDataType_Request"/>
+    </operation>
+    </portType>
+	<binding name="SearchCase_Binding" type="tns:SearchCase_Service">
+		<portlet:binding/>
+		<operation name="SearchCase">
+			<portlet:action actionNameParameter="com.ibm.portal.propertybroker.action" name="sendCaseDetailsAction" type="standard"/>
+			<output>
+				<portlet:param boundTo="request-attribute" caption="CaseDetails.Caption" class="com.acs.enterprise.common.view.vo.CommonCMCaseDetailsVO" name="CaseDetails" partname="CMCaseSearchDataType_Output"/>
+			</output>
+		</operation>
+		<operation name="MemberLogCase">
+			<portlet:action name="receiveMemberLogCaseAction" type="standard"/>
+			<input>
+				<portlet:param caption="MemberLogCase.Type" name="MemberLogCase" partname="MemberLogCase_Input"/>
+			</input>
+		</operation>
+		<operation name="CaseTrackingProvider">
+			<portlet:action actionNameParameter="recieve.CaseTracking.ProviderSk" name="recieveCaseTrackingProviderSk" type="standard"/>
+			<input>
+				<portlet:param boundTo="request-attribute" caption="recieve.casetracking.providercaseSk" name="CaseTrackingProviderSk" partname="CaseTrackingDatatype_Input"/>
+			</input>
+		</operation>
+		<operation name="CaseTrackingAppeal">
+			<portlet:action actionNameParameter="recieve.CaseTracking.AppealSk" name="recieveCaseTrackingAppealSk" type="standard"/>
+			<input>
+				<portlet:param boundTo="request-attribute" caption="recieve.casetracking.appealcaseSk" name="CaseTrackingAppealSK" partname="CaseTrackingAppealDatatype_Input"/>
+			</input>
+		</operation>
+		<operation name="SearchCaseEnty">
+			<portlet:action actionNameParameter="SrchCaseEntSrch_ACTION" name="SrchCaseEntSrch_SOURCE_ACTION" type="standard"/>
+			<output>
+				<portlet:param boundTo="request-attribute" class="com.acs.enterprise.common.program.contactmanagement.common.vo.CaseRecordSearchCriteriaVO" name="CaseSearchVO" partname="MyDatatype_Output"/>
+			</output>
+		</operation>
+        <operation name="SearchCase0">
+      <portlet:action actionNameParameter="EntSrchCrsSrch_ACTION" caption="EntSrchToSrchCase" name="EntSrchCrsSrch_SOURCE_ACTION" type="standard"/>
+      <input>
+        <portlet:param boundTo="request-attribute" caption="Property.Caption" class="java.util.Map" name="EntitySearchMap2" partname="EntSrchCaseSrchDataType_Input"/>
+      </input>
+    </operation>
+    </binding>
+</definitions>

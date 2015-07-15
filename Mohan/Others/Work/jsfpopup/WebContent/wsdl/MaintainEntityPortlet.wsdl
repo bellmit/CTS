@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="MaintainEntityPortlet_Service"
+	targetNamespace="http://enterprise.ipc"
+	xmlns="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:portlet="http://www.ibm.com/wps/c2a"
+	xmlns:tns="http://enterprise.ipc"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<types>
+		<xsd:schema targetNamespace="http://enterprise.ipc">
+			<xsd:simpleType name="MaintainEntityId">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+			
+			<xsd:simpleType name="MaintainSearchId">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+			
+		    <xsd:simpleType name="MaintainInquirySearchId">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+			
+			<xsd:simpleType name="AddEntity">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+			
+			<xsd:simpleType name="CorrespondenceEntity">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+			
+				<xsd:simpleType name="SearchCREntity">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="SearchEntity">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+			
+			<xsd:simpleType name="InquiryEntityData">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+			
+		</xsd:schema>
+	</types>
+	<message name="MaintainEntityId_Request">
+		<part name="MaintainEntityId_Input" type="tns:MaintainEntityId" />
+	</message>
+	
+	<message name="AddEntity_Request">
+		<part name="AddEntity_Input" type="tns:AddEntity" />
+	</message>
+	
+	<message name="CorrespondenceEntity_Response">
+		<part name="CorrespondenceEntity_Output"
+			type="tns:CorrespondenceEntity" />
+	</message>
+	
+	<message name="SearchCREntity_Response">
+		<part name="SearchCREntity_Output"
+			type="tns:SearchCREntity" />
+			<part name="SearchEntity_Output"
+			type="tns:SearchEntity" />
+	</message>
+
+	<message name="InquiryEntityData_Response">
+		<part name="InquiryEntityData_Output"
+			type="tns:InquiryEntityData" />
+	</message>
+	
+	<message name="MaintainSearchId_Response">
+		<part name="MaintainSearchId_Output" type="tns:MaintainSearchId" />
+	</message>
+	
+	<message name="MaintainInquirySearchId_Response">
+		<part name="MaintainInquirySearchId_Output" type="tns:MaintainInquirySearchId" />
+	</message>
+	
+	<portType name="MaintainEntityPortlet_Service">
+		<operation name="MaintainEntityPortlet">
+			<input message="tns:MaintainEntityId_Request" />
+		</operation>
+		
+		
+	    <operation name="CaseSearchportlets">
+			<output message="tns:MaintainSearchId_Response" />
+		</operation>
+		
+		<operation name="CaseInquirySearchportlets">
+			<output message="tns:MaintainInquirySearchId_Response" />
+		</operation>
+		
+		
+		<operation name="ToMaintainEntity">
+			<input message="tns:AddEntity_Request" />
+		</operation>
+		
+		<operation name="EntitySearch">
+			<output message="tns:CorrespondenceEntity_Response" />
+		</operation>
+		
+		<operation name="GoToCREntitySearch">
+			<output message="tns:SearchCREntity_Response" />
+		</operation>
+
+		<operation name="InquiringAboutEntitySearch">
+			<output message="tns:InquiryEntityData_Response" />
+		</operation>
+		
+	</portType>
+	
+	<binding name="MaintainEntityPortlet_Binding"
+		type="tns:MaintainEntityPortlet_Service">
+		<portlet:binding />
+		
+		<operation name="CaseSearchportlets">
+			<portlet:action name="sendSearchId" actionNameParameter="send.Search.Id"
+				description="Send.Search.Id"  type="standard" />
+			<output>
+				<portlet:param name="MaintainSearchId"
+					partname="MaintainSearchId_Output" boundTo="request-attribute"
+					caption="send.Maintain.Search.Id" />
+			</output>
+		</operation>
+		
+		
+		<operation name="CaseInquirySearchportlets">
+			<portlet:action name="sendInquirySearchId" actionNameParameter="send.InquirySearch.Id"
+				description="Send.InquirySearch.Id"  type="standard" />
+			<output>
+				<portlet:param name="MaintainInquirySearchId"
+					partname="MaintainInquirySearchId_Output" boundTo="request-attribute"
+					caption="send.Maintain.InquirySearch.Id" />
+			</output>
+		</operation>
+		
+		
+		<operation name="MaintainEntityPortlet">
+			<portlet:action name="receiveMaintainEntityId"
+			                actionNameParameter="receive.MaintainEntity.Id"
+				             type="standard" 
+				             caption="receive.Maintain.Entity.Id"
+				            description="Receive.Maintain.EntityId" />
+			<input>
+				<portlet:param name="maintainEntityId"
+					partname="MaintainEntityId_Input" boundTo="request-attribute"
+					caption="receive.Maintain.EntityId" />
+			</input>
+		</operation>
+		
+		<operation name="ToMaintainEntity">
+			<portlet:action name="receiveFromPage"
+			                actionNameParameter="Receive.From.Page"
+				             type="standard" 
+				             caption="receive.from.page.name"
+				            description="Receive.From.PortletName" />
+			<input>
+				<portlet:param name="MaintainEntity"
+					partname="AddEntity_Input" boundTo="request-attribute"
+					caption="receive.from.page" />
+			</input>
+		</operation>
+		
+		<operation name="EntitySearch">
+			<portlet:action name="sendCorrespondenceEntity"
+				actionNameParameter="send.Correspondence.Entity"
+				caption="send.Correspondence.Entity" type="standard" />
+			<output>
+				<portlet:param name="correspondenceEntity"
+					partname="CorrespondenceEntity_Output" boundTo="request-attribute" />
+			</output>
+		</operation>
+		
+		<operation name="GoToCREntitySearch">
+			<portlet:action name="gotoCREntitySearch"
+				actionNameParameter="go.to.CR.Entity.Search"
+				caption="go.to.CRSearchEntity" type="standard" />
+			<output>
+				<portlet:param name="SearchCorrespondenceEntity"
+					partname="SearchCREntity_Output" boundTo="request-attribute" />
+			
+				<portlet:param name="SearchEntityPage"
+					partname="SearchEntity_Output" boundTo="request-attribute" />
+			</output>
+		</operation>
+		
+		<operation name="InquiringAboutEntitySearch">
+			<portlet:action name="sendinquiryaboutEntityData"
+				actionNameParameter="send.InquiryaboutEntity.Data" type="standard" />
+			<output>
+				<portlet:param name="inquiryaboutEntityData"
+					partname="InquiryEntityData_Output" boundTo="request-attribute"
+					caption="send.inquiry.aboutEntityData" />
+			</output>
+		</operation>
+
+	</binding>
+</definitions>

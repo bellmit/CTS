@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<faces-config
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
+   version="2.0">
+
+	<managed-bean>
+		<managed-bean-name>
+			cs_searchCorrespondenceDataBean
+		</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.bean.SearchCorrespondenceDataBean
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+		<managed-property>
+			<property-name>
+				correspondenceSearchCriteriaVO
+			</property-name>
+			<value>#{CorrespondenseSearchCriteriaVO}</value>
+		</managed-property>
+	</managed-bean>
+
+	<managed-bean>
+		<managed-bean-name>
+			cs_searchCorrespondenceControllerBean
+		</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.bean.SearchCorrespondenceControllerBean
+		</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+		
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>
+			CorrespondenseSearchCriteriaVO
+		</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.common.vo.CorrespondenceSearchCriteriaVO
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+		<managed-property>
+			<property-name>advSearchCriteria</property-name>
+			<value>#{CRAdvanceSearchCriteriaVO}</value>
+		</managed-property>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>CRAdvanceSearchCriteriaVO</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.common.vo.CRAdvanceSearchCriteriaVO
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<navigation-rule>
+		<from-view-id>/jsp/searchcorrespondence/searchCorrespondence.jsp</from-view-id>
+			<navigation-case>
+				<from-action>#{cs_searchCorrespondenceControllerBean.getCorrespondence}</from-action>
+				<from-outcome>success</from-outcome>
+				<to-view-id>/jsp/searchcorrespondence/searchCorrespondence.jsp</to-view-id>
+			</navigation-case>
+			<!--Note:Added for Search Correspondance Page -->
+			<navigation-case>
+				<from-outcome>success</from-outcome>
+			<to-view-id>/jsp/searchcorrespondence/searchCorrespondence.jsp</to-view-id>
+		</navigation-case>
+		
+	</navigation-rule>
+	<application>
+		
+		
+		<locale-config>
+			<default-locale>en</default-locale>
+			<supported-locale>es</supported-locale>
+		</locale-config>
+		<message-bundle>com.acs.enterprise.common.program.contactmanagement.view.nl.PGM_IN_ContactCorrespondenceSearch</message-bundle>
+	</application>
+</faces-config>

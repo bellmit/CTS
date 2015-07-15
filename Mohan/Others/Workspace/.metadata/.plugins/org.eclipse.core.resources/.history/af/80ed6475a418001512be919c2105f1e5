@@ -1,0 +1,9 @@
+package com.study.spring.app;
+
+public class ConstructorMSG {
+
+	public ConstructorMSG() {
+		// TODO Auto-generated constructor stub
+	}
+
+}

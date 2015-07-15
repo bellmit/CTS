@@ -1,0 +1,295 @@
+package com.xerox.enterprise.ghs.mmis.rif.rules.blaze;
+
+
+import java.io.Serializable;
+import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.Properties;
+import java.util.StringTokenizer;
+import javax.ejb.CreateException;
+import org.apache.log4j.Logger;
+
+import com.acs.enterprise.common.base.common.exception.EnterpriseSystemException;
+import com.acs.enterprise.common.cache.util.facade.EnterpriseCacheInvalidator;
+import com.acs.enterprise.common.cache.util.facade.EnterpriseCacheInvalidatorHome;
+import com.acs.enterprise.common.util.config.ConfigurationLoader;
+import com.acs.enterprise.common.util.helper.EnterpriseCommonConstants;
+import com.acs.enterprise.common.util.service.EnterpriseServiceFactory;
+import com.xerox.enterprise.ghs.mmis.rif.core.Rule;
+
+
+/**
+ * POJO for the rule "BlazeRule"
+ * @author $authorName
+ * @source EnterpriseRuleDelegate
+ */
+public class BlazeRule extends Rule implements Serializable {
+	
+    /* Static logger to log a message */
+    private transient static final Logger LOG = Logger.getLogger(BlazeRule.class);
+	
+    /**
+     * This methods uses the EnterpriseServiceFactory to returns an instance 
+     * of Service Facade bean based on the reference name and home interface.
+     *  
+     * @param referenceName : The JNDI name of the service facade bean reference.
+     * @param homeInterface : The home interface class for the service facade bean.
+     * @return Object : The instance of the facade bean.
+     * @throws EnterpriseSystemException : It throws Enterprise System Exception if it is 
+     * unable to find or create an instance of Facade bean. 
+     */
+    protected Object getServiceHome(String referenceName, Class homeInterface)
+            throws EnterpriseSystemException
+    {
+        if (referenceName == null || homeInterface == null)
+        {
+            return null;
+        }
+        return EnterpriseServiceFactory.getInstance().getServiceHome(
+                referenceName, homeInterface);
+    }
+    /**
+     * This method is used to invalidate cache. 
+     * @param key
+     * @param caller
+     */
+    public void invalidateCache(String key,String caller)
+    {
+    	LOG.debug("Inside invalidateCache() EBD");
+    	String value = (String) ConfigurationLoader.getInstance()
+                .getCacheInvalidatorProperties().get(caller);
+        LOG.debug("value in invalidateCache():::" + value);
+        LOG.debug("key in invalidateCache():::" + key);
+        LOG.debug("caller in invalidateCache():::" + caller);
+        StringTokenizer st = new StringTokenizer(value, ",");
+        while (st.hasMoreElements())
+        {
+            try
+            {
+                String location = (String) st.nextToken();
+                LOG.debug("location in invalidateCache():::" + location);
+                EnterpriseCacheInvalidatorHome enterpriseCacheInvalidatorHome = (EnterpriseCacheInvalidatorHome) EnterpriseServiceFactory
+                        .getInstance().getCacheServiceHome(
+                                "EnterpriseCacheInvalidator",
+                                EnterpriseCacheInvalidatorHome.class, location);
+                if (enterpriseCacheInvalidatorHome != null)
+                {
+                    // Modified for the defect#ESPRD00847775 Start
+                    if(EnterpriseCommonConstants.CACHE_VALID_VALUE_KEY
+                            .equals(caller))
+                    {
+                        LOG
+                                .debug("Inside  caller is VV:::");
+                        reform(key, 3, enterpriseCacheInvalidatorHome,
+                                ConfigurationLoader.getInstance()
+                                        .getClaimsCacheClearListProperties());
+                    }
+                    else
+                    {
+                        String key1 = key;
+                        LOG.debug("key1 ::: " + key1);
+                        if (EnterpriseCommonConstants.CACHE_SYSTEM_LIST_KEY
+                                .equals(caller))
+                        {
+                            LOG.debug("Inside Caller is equal to SL:::");
+                            key1 = reform(key, 1,
+                                    enterpriseCacheInvalidatorHome, null);
+                        }
+                        LOG.debug("key1 ::: " + key1);
+
+                        EnterpriseCacheInvalidator enterpriseCacheInvalidator = enterpriseCacheInvalidatorHome
+                                .create();
+                        LOG.debug("enterpriseCacheInvalidator ::: "+enterpriseCacheInvalidator);
+                        enterpriseCacheInvalidator.invalidateCache(key1);
+
+                        if (location.equals("WSRP"))
+                        {
+                            LOG.debug("Inside location is equal to WSRP:::");
+                            reform(key, 2, enterpriseCacheInvalidatorHome,
+                                    ConfigurationLoader.getInstance()
+                                            .getSaCacheClearListProperties());
+
+                        }
+                        if (EnterpriseCommonConstants.CACHE_SYSTEM_LIST_KEY
+                                .equals(caller)
+                                && location.equals("WSRP"))
+                        {
+                            LOG
+                                    .debug("Inside location is equal to WSRP and caller is SL:::");
+                            reform(
+                                    key,
+                                    2,
+                                    enterpriseCacheInvalidatorHome,
+                                    ConfigurationLoader
+                                            .getInstance()
+                                            .getClaimsCacheClearListProperties());
+                        }
+                        // Modified for the defect#ESPRD00847775 End
+                    }
+                }
+                else
+                {
+                    LOG
+                            .debug("Home object not received moving for next deployed locaiton "
+                                    + location);
+                }
+            }
+            catch (RemoteException e)
+            {
+                LOG.error("Error in invalidateCache() method:::" + e);
+                e.printStackTrace();
+            }
+            catch (CreateException e)
+            {
+                LOG.error("Error in invalidateCache() method:::" + e);
+            }
+        }
+    }
+ //Added for the Defect# ESPRD00847775 Start
+    private String reform(String key, int occurence,
+            EnterpriseCacheInvalidatorHome enterpriseCacheInvalidatorHome,
+            Properties uicacheproperties)
+    {
+        try
+        {
+            EnterpriseCacheInvalidator enterpriseCacheInvalidator = null;
+            LOG.debug("Inside reform method Key.." + key);
+            StringTokenizer st = new StringTokenizer(key, "#");
+            if (st.countTokens() == 4)
+            {
+                ArrayList slist = new ArrayList();
+                while (st.hasMoreElements())
+                {
+                    String keyValue = (String) st.nextToken();
+                    LOG.debug("keyValue in reform method while loop.."
+                            + keyValue);
+                    slist.add(keyValue);
+                }
+
+                if (occurence == 1)
+                {
+                    key = slist.get(0) + "#" + slist.get(1) + "#"
+                            + slist.get(2);
+                    LOG.debug("Key in reform method occurence@1.." + key);
+
+                }
+                else if (occurence == 2 && uicacheproperties != null)
+                {
+                    String value = (String) uicacheproperties.get(slist.get(3));
+                    LOG
+                            .debug("value in reform method occurence@2.."
+                                    + value);
+                    slist = new ArrayList();
+                    if (null != value)
+                    {
+                        st = new StringTokenizer(value, ",");
+                        if (st.countTokens() > 1)
+                        {
+                            while (st.hasMoreElements())
+                            {
+                                String keyValue = (String) st.nextToken();
+                                LOG.debug("keyValue multiple ::: "
+                                        + keyValue);
+                                enterpriseCacheInvalidator = enterpriseCacheInvalidatorHome
+                                        .create();
+                                enterpriseCacheInvalidator
+                                        .invalidateCache(keyValue);
+                            }
+                        }
+                        else
+                        {
+                            String keyValue = (String) st.nextToken();
+                            LOG.debug("keyValue  ::: " + keyValue);
+                            enterpriseCacheInvalidator = enterpriseCacheInvalidatorHome
+                                    .create();
+                            enterpriseCacheInvalidator
+                                    .invalidateCache(keyValue);
+
+                        }
+                    }
+
+                }
+
+            }
+            else if (st.countTokens() == 1 && occurence == 3)
+            {
+                LOG.debug("Key in reform method occurence@3.." + key);
+
+                String value = (String) uicacheproperties.get(key);
+                LOG.debug("value in reform method occurence@2.." + value);
+                if (null != value)
+                {
+                    st = new StringTokenizer(value, ",");
+                    if (st.countTokens() > 1)
+                    {
+                        while (st.hasMoreElements())
+                        {
+                            String keyValue = (String) st.nextToken();
+                            LOG.debug("keyValue multiple ::: " + keyValue);
+                            enterpriseCacheInvalidator = enterpriseCacheInvalidatorHome
+                                    .create();
+                            enterpriseCacheInvalidator
+                                    .invalidateCache(keyValue);
+                        }
+                    }
+                    else
+                    {
+                        String keyValue = (String) st.nextToken();
+                        LOG.debug("keyValue  ::: " + keyValue);
+                        enterpriseCacheInvalidator = enterpriseCacheInvalidatorHome
+                                .create();
+                        enterpriseCacheInvalidator.invalidateCache(keyValue);
+
+                    }
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            LOG.error("Error in invalidating moving forward " + e);
+            e.printStackTrace();
+        }
+        LOG.debug("Before Exit from reform ");
+        return key;
+    }
+	//Added for the Defect# ESPRD00847775 End
+    
+    /**
+     * This method is used to invalidate cache.
+     * @param cachekey
+     * @param caller
+     * @param mapKey
+     */
+    public void updateCacheMap(String cachekey,String caller,String mapKey)
+    {
+        String value = (String) ConfigurationLoader.getInstance()
+                .getCacheInvalidatorProperties().get(caller);
+        LOG.debug("value in invalidateCache():::"+value);
+        LOG.debug("key in invalidateCache():::"+cachekey);
+        LOG.debug("caller in invalidateCache():::"+caller);
+        LOG.debug("mapKey in invalidateCache():::"+mapKey);
+        StringTokenizer st = new StringTokenizer(value, ",");
+        while (st.hasMoreElements())
+        {
+            try
+            {
+                EnterpriseCacheInvalidatorHome enterpriseCacheInvalidatorHome = (EnterpriseCacheInvalidatorHome) EnterpriseServiceFactory
+                        .getInstance().getCacheServiceHome(
+                                "EnterpriseCacheInvalidator",
+                                EnterpriseCacheInvalidatorHome.class,
+                                (String) st.nextToken());
+                EnterpriseCacheInvalidator enterpriseCacheInvalidator = enterpriseCacheInvalidatorHome
+                        .create();
+                enterpriseCacheInvalidator.updateCacheMap(cachekey,mapKey);
+            }
+            catch (RemoteException e)
+            {
+                LOG.error("Error in updateCacheMap() method:::"+e);
+            }
+            catch (CreateException e)
+            {
+                LOG.error("Error in updateCacheMap() method:::"+e);
+            }
+        }
+    }
+}

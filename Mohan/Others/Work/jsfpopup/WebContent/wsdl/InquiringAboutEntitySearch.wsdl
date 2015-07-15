@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="InquiringAboutEntitySearch_Service"
+	targetNamespace="http://enterprise.ipc"
+	xmlns="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:portlet="http://www.ibm.com/wps/c2a"
+	xmlns:tns="http://enterprise.ipc"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<types>
+		<xsd:schema targetNamespace="http://enterprise.ipc">
+			<xsd:simpleType name="InquiryEntityData">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+
+		<xsd:simpleType name="AddEntity">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+		</xsd:schema>
+	</types>
+	
+	<message name="InquiryEntityData_Response">
+		<part name="InquiryEntityData_Output"
+			type="tns:InquiryEntityData" />
+	</message>
+
+	<message name="CorrespondenceEntity_Response">
+		<part name="AddEntity_Output"
+			type="tns:AddEntity" />			
+	</message>
+	
+	<portType name="InquiringAboutEntitySearch_Service">
+
+		<operation name="InquiringAboutEntitySearch">
+			<output message="tns:InquiryEntityData_Response" />
+		</operation>
+
+		<operation name="EntitySearch">
+			<output message="tns:CorrespondenceEntity_Response" />
+		</operation>
+		
+	</portType>
+	
+	<binding name="InquiringAboutEntitySearch_Binding"
+		type="tns:InquiringAboutEntitySearch_Service">
+		<portlet:binding />
+		<operation name="InquiringAboutEntitySearch">
+			<portlet:action name="sendinquiryaboutEntityData"
+				actionNameParameter="send.InquiryaboutEntity.Data" type="standard" />
+			<output>
+				<portlet:param name="inquiryaboutEntityData"
+					partname="InquiryEntityData_Output" boundTo="request-attribute"
+					caption="send.inquiry.aboutEntityData" />
+			</output>
+		</operation>
+		
+		<operation name="EntitySearch">
+			<portlet:action name="sendCorrespondenceEntity"
+				actionNameParameter="send.Correspondence.Entity"
+				caption="send.Correspondence.Entity" type="standard" />
+				
+			<output>
+				<portlet:param name="MaintainEntity"
+					partname="AddEntity_Output" boundTo="request-attribute" />
+			</output>
+		</operation>
+		
+	</binding>
+</definitions>

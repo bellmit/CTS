@@ -1,0 +1,451 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="LogCase_Service"
+	targetNamespace="http://enterprise.ipc"
+	xmlns="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:portlet="http://www.ibm.com/wps/c2a"
+	xmlns:tns="http://enterprise.ipc"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<types>
+		<xsd:schema targetNamespace="http://enterprise.ipc">
+			<xsd:complexType name="EDMSSearchCriteriaDataType">
+			</xsd:complexType>
+			
+			<xsd:simpleType name="MaintainSearchId">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+			
+			<xsd:simpleType name="MaintainInquirySearchId">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+			
+			<xsd:complexType name="logCaseEDMSSearchResultsDataType">
+			</xsd:complexType>
+			<xsd:complexType name="CMCaseSearchDataType">
+			</xsd:complexType>
+			<xsd:simpleType name="CaseEntityDetails">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+			<xsd:complexType name="AddAppealDetailsDataType">
+			</xsd:complexType>
+			<xsd:complexType name="MyTaskCaseSk"></xsd:complexType>
+			<xsd:simpleType name="MyTaskClaimCase">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="inqAbtCaseEntityDetailsDataType">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+			<xsd:complexType name="GlobalCaseSearchResultsDataType">
+			</xsd:complexType>
+			<xsd:simpleType name="LetterGenerationCaseData">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+			<xsd:complexType name="CommonLetterInputVO_SRC">
+			</xsd:complexType>
+			<xsd:simpleType name="LogCasePage">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="AssociateCaseDataType">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+			<xsd:complexType name="CorrespondenceResultsDataType">
+			</xsd:complexType>
+			<xsd:simpleType name="CaseSk">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="MyAlertSk">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+			<xsd:complexType name="MyDatatypeLogCase"></xsd:complexType>
+			<xsd:complexType name="EntSrchtoLogCaseDataType">
+			</xsd:complexType>
+			<!-- added for ESPRD00659735 -->
+			<xsd:simpleType name="CorrespondenceSk">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+			<!-- ADD end -->
+
+		</xsd:schema>
+	</types>
+	
+	<!-- added for ESPRD00659735 -->
+	<message name="LetterGenerationCaseSKCreatedDataType_Request"> 		
+	<part name="LetterGenerationCaseSKCreatedDataType_Input" 			
+	type="tns:CorrespondenceSk" /> 	
+	</message>
+	<!-- add end -->
+	<message name="EDMSSearchCriteriaDataType_Response">
+		<part name="EDMSSearchCriteriaDataType_Output"
+			type="tns:EDMSSearchCriteriaDataType" />
+		<part name="AddAppealDetailsDataType_Output"
+			type="tns:AddAppealDetailsDataType" />
+		<part name="AssociateCaseDataType_Output"
+			type="tns:AssociateCaseDataType" />
+		<part name="LetterGenerationCaseData_Output"
+			type="tns:LetterGenerationCaseData" />
+	</message>
+	
+	<message name="MaintainSearchId_Request">
+		<part name="MaintainSearchId_Input"
+			type="tns:MaintainSearchId" />
+	</message>
+	
+	<message name="MaintainInquirySearchId_Request">
+		<part name="MaintainInquirySearchId_Input"
+			type="tns:MaintainInquirySearchId" />
+	</message>
+	
+	<message name="CommonLetterInputDataType_Response">
+		<part name="CommonLetterInputVO_SRC_Output"
+			type="tns:CommonLetterInputVO_SRC" />
+	</message>
+	<message name="logCaseEDMSSearchResultsDataType_Request">
+		<part name="logCaseEDMSSearchResultsDataType_Input"
+			type="tns:logCaseEDMSSearchResultsDataType" />
+	</message>
+	<message name="CMCaseSearchDataType_Request">
+		<part name="CMCaseSearchDataType_Input"
+			type="tns:CMCaseSearchDataType" />
+	</message>
+	<message name="CaseEntityDetails_Request">
+		<part name="CaseEntityDetails_Input"
+			type="tns:CaseEntityDetails" />
+	</message>
+	<message name="MyTaskCaseSk_Request">
+		<part name="MyTaskCaseSk_Input" type="tns:MyTaskCaseSk" />
+	</message>
+	<message name="MyTaskClaimCase_Request">
+		<part name="MyTaskClaimCase_Input" type="tns:MyTaskClaimCase" />
+	</message>
+	<message name="inqAbtCaseEntityDetailsDataType_Request">
+		<part name="inqAbtCaseEntityDetailsDataType_Input"
+			type="tns:inqAbtCaseEntityDetailsDataType" />
+	</message>
+	<message name="GlobalCaseSearchResultsDataType_Request">
+		<part name="GlobalCaseSearchResultsDataType_Input"
+			type="tns:GlobalCaseSearchResultsDataType" />
+	</message>
+	<message name="LogCasePage_Request">
+		<part name="LogCasePage_Input" type="tns:LogCasePage" />
+	</message>
+	<message name="CorrespondenceResultsDataType_Request">
+		<part name="CorrespondenceResultsDataType_Input"
+			type="tns:CorrespondenceResultsDataType" />
+	</message>
+	<message name="CaseSk_Request">
+		<part name="CaseSk_Input" type="tns:CaseSk" />
+	</message>
+
+	<message name="SendLetterRequestSK_Response">
+		<part name="LetterRequestSK_Output" type="tns:MyAlertSk" />
+	</message>
+	<message name="MyDatatypeLogCase_Response">
+		<part name="MyDatatypeLogCase_Output"
+			type="tns:MyDatatypeLogCase" />
+	</message>
+
+	<message name="EntSrchtoLogCaseDataType_Request">
+		<part name="EntSrchtoLogCaseDataType_Input"
+			type="tns:EntSrchtoLogCaseDataType" />
+	</message>
+	<portType name="LogCase_Service">
+	
+	<!-- added for ESPRD00659735 -->
+	<operation name="FromLetterGenerationToCase"> 			
+	<input   message="tns:LetterGenerationCaseSKCreatedDataType_Request" /> 		
+	</operation> 
+	<!-- add  end -->
+	
+		<operation name="LogCase">
+			<output message="tns:EDMSSearchCriteriaDataType_Response" />
+		</operation>
+		<operation name="LogCase0">
+			<input
+				message="tns:logCaseEDMSSearchResultsDataType_Request" />
+		</operation>
+		
+		<operation name="CaseSearchportlet">
+			<input message="tns:MaintainSearchId_Request" />
+		</operation>
+		
+		<operation name="CaseInquirySearchportlet">
+			<input message="tns:MaintainInquirySearchId_Request" />
+		</operation>
+		
+		<operation name="LogCase1">
+			<input message="tns:CMCaseSearchDataType_Request" />
+		</operation>
+		<operation name="LogCase2">
+			<input message="tns:CaseEntityDetails_Request" />
+		</operation>
+		<operation name="ReceiveMyTaskCaseSk">
+			<input message="tns:MyTaskCaseSk_Request" />
+		</operation>
+		<operation name="ReceiveMyTaskClaimCase">
+			<input message="tns:MyTaskClaimCase_Request" />
+		</operation>
+		<operation name="LogCase3">
+			<input
+				message="tns:inqAbtCaseEntityDetailsDataType_Request" />
+		</operation>
+		<operation name="LogCase4">
+			<input
+				message="tns:GlobalCaseSearchResultsDataType_Request" />
+		</operation>
+		<operation name="ReceiveLetterGenerationSkForCase">
+			<input message="tns:LogCasePage_Request" />
+		</operation>
+		<operation name="LogCase6">
+			<input message="tns:CorrespondenceResultsDataType_Request" />
+		</operation>
+
+		<operation name="ReceiveLogCaseSkForCase">
+			<input message="tns:CaseSk_Request" />
+		</operation>
+
+		<operation name="SendCommonLetterInputDataType">
+			<output message="tns:CommonLetterInputDataType_Response" />
+		</operation>
+
+		<operation name="SendLetterRequestSK">
+			<output message="tns:SendLetterRequestSK_Response" />
+		</operation>
+		<operation name="LogCasetoEntySrch">
+			<output message="tns:MyDatatypeLogCase_Response" />
+		</operation>
+
+		<operation name="EntySearchLogCase">
+			<input message="tns:EntSrchtoLogCaseDataType_Request" />
+		</operation>
+	</portType>
+	<binding name="LogCase_Binding" type="tns:LogCase_Service">
+		<portlet:binding />
+		
+		<!--  added new operation for ESPRD00659735 -->
+			<operation name="FromLetterGenerationToCase"> 	
+			<portlet:action
+				name="FromLetterGenerationToCase" type="standard"
+				actionNameParameter="receive.fromletterGeneration.toCase"
+				description="from letter GenerationSk to Case" />
+			<input>
+				<portlet:param name="LetterGenerationForCase" 
+				boundTo="request-attribute" 
+				caption="receive.fromLetterGenerationToCase" 
+				partname="LetterGenerationCaseSKCreatedDataType_Input"/>
+				</input> 			 			 		
+				</operation> 
+		<!--ADD end -->
+		
+		
+		
+		<operation name="LogCase">
+			<portlet:action name="sendLogCaseAction"
+				actionNameParameter="com.ibm.portal.propertybroker.action"
+				type="standard" />
+			<output>
+				<portlet:param name="EDMSSearchCriteria"
+					class="com.acs.enterprise.common.cots.edms.application.common.vo.EnterpriseEDMSSearchCriteriaVO"
+					partname="EDMSSearchCriteriaDataType_Output"
+					boundTo="request-attribute" caption="send.EDMSSearchCriteria" />
+				<portlet:param name="AddAppealDetails"
+					class="com.acs.enterprise.common.view.vo.CommonCMCaseDetailsVO"
+					partname="AddAppealDetailsDataType_Output"
+					boundTo="request-attribute" caption="AddAppealDetails.Caption" />
+				<portlet:param name="AssociateCaseData"
+					partname="AssociateCaseDataType_Output" boundTo="request-attribute"
+					caption="send.caseData.Caption" />
+				<portlet:param name="LetterGenerationRequest"
+					partname="LetterGenerationCaseData_Output"
+					boundTo="request-attribute"
+					caption="send.Letter.generation.caption" />
+
+			</output>
+		</operation>
+		
+		
+		
+		<operation name="LogCase0">
+			<portlet:action name="receiveEDMSSearchResultsAction"
+				type="standard"
+				actionNameParameter="receive.EDMSSearchResults.Action"
+				description="EDMS Search Results" />
+			<input>
+				<portlet:param name="logCaseEDMSSearchResultsList"
+					partname="logCaseEDMSSearchResultsDataType_Input"
+					class="com.acs.enterprise.common.cots.edms.application.common.vo.EnterpriseEDMSSearchResultsVO"
+					boundTo="request-attribute" caption="logCaseEDMSSearchResultsList" />
+			</input>
+		</operation>
+		
+		<operation name="CaseSearchportlet">
+			<portlet:action name="receiveMaintainSearchId"
+			  actionNameParameter="receive.MaintainSearch.Id"
+			    description="Receive.Maintain.SearchId"
+				type="standard" caption="receive.Maintain.Search.Id"  />
+			<input>
+				<portlet:param name="MaintainSearchId"
+					partname="MaintainSearchId_Input" boundTo="request-attribute"
+					 caption="receive.Maintain.SearchId"
+					 />
+			</input>
+		</operation>
+		
+		
+		<operation name="CaseInquirySearchportlet">
+			<portlet:action name="receiveMaintainInquirySearchId"
+			  actionNameParameter="receive.MaintainInquirySearch.Id"
+			    description="Receive.Maintain.InquirySearchId"
+				type="standard" caption="receive.Maintain.InquirySearch.Id"  />
+			<input>
+				<portlet:param name="MaintainInquirySearchId"
+					partname="MaintainInquirySearchId_Input" boundTo="request-attribute"
+					 caption="receive.Maintain.InquirySearchId"
+					 />
+			</input>
+		</operation>
+		
+		<operation name="LogCase1">
+			<portlet:action name="receiveCaseDetailsAction"
+				type="standard" actionNameParameter="recive.CaseDetails.Action"
+				description="Receive Case Details" />
+			<input>
+				<portlet:param name="CaseDetails"
+					class="com.acs.enterprise.common.view.vo.CommonCMCaseDetailsVO"
+					partname="CMCaseSearchDataType_Input" boundTo="request-attribute"
+					caption="CaseDetails.Caption" />
+			</input>
+		</operation>
+		<operation name="LogCase2">
+			<portlet:action name="receiveCaseEntityDetails"
+				actionNameParameter="recive.case.entity.details" type="standard"
+				description="Case Entity details" />
+			<input>
+				<portlet:param name="CaseEntityDetails"
+					partname="CaseEntityDetails_Input" boundTo="request-attribute"
+					caption="CaseEntityDetails.Caption" />
+			</input>
+		</operation>
+		<operation name="ReceiveMyTaskCaseSk">
+			<portlet:action name="receiveMyTaskCaseSk"
+				actionNameParameter="receive.mytask.case.sk" type="standard"
+				description="Recieve CaseRecord" />
+			<input>
+				<portlet:param name="MyTaskCaseSk"
+					class="com.acs.enterprise.common.view.vo.CommonCMCaseDetailsVO"
+					partname="MyTaskCaseSk_Input" boundTo="request-attribute"
+					caption="receive.mytask.casesk" />
+			</input>
+		</operation>
+		<operation name="ReceiveMyTaskClaimCase">
+			<portlet:action name="receiveMyTaskClaimCaseSk"
+				actionNameParameter="receive.mytask.claimcase.sk" type="standard"
+				description="Recieve CaseRecord" />
+			<input>
+				<portlet:param name="MyTaskClaimCaseSK"
+					partname="MyTaskClaimCase_Input" boundTo="request-attribute"
+					caption="receive.mytask.claimcasesk" />
+			</input>
+		</operation>
+		<operation name="LogCase3">
+			<portlet:action name="receiveInqAbtCaseEntityDetailsAction"
+				type="standard"
+				actionNameParameter="recive.inqAbt.case.entity.details"
+				description="inqAbt CaseEntity Details" />
+			<input>
+				<portlet:param name="inqAbtCaseEntityDetails"
+					partname="inqAbtCaseEntityDetailsDataType_Input"
+					boundTo="request-attribute"
+					caption="inqAbtCaseEntityDetails.caption" />
+			</input>
+		</operation>
+		<operation name="LogCase4">
+			<portlet:action name="receiveGlobalCaseSearchResults"
+				actionNameParameter="receive.GlobalCaseSearch.Results"
+				type="standard" description="For Global case search" />
+			<input>
+				<portlet:param name="GlobalCaseSearchResult"
+					partname="GlobalCaseSearchResultsDataType_Input"
+					class="com.acs.enterprise.common.view.vo.CommonCMCaseDetailsVO"
+					boundTo="request-attribute"
+					caption="GlobalCaseSearchResult.Caption" />
+			</input>
+		</operation>
+
+
+		<operation name="ReceiveLetterGenerationSkForCase">
+			<portlet:action name="receiveLetterGenerationSkForCase"
+				type="standard"
+				actionNameParameter="receive.letterGeneration.skCase"
+				description="Recieve letterGenerationSk" />
+			<input>
+				<portlet:param name="LetterGenerationSKAdded"
+					partname="LogCasePage_Input" boundTo="request-attribute"
+					caption="receive.Letter.Generation.skCase" />
+			</input>
+		</operation>
+
+		<operation name="LogCase6">
+			<portlet:action name="receiveCorrespondenceResultsAction"
+				type="standard"
+				actionNameParameter="receive.CorrespondenceResults.Action"
+				description="Correspondence Results" />
+			<input>
+				<portlet:param name="CorrespondenceResultsList"
+					partname="CorrespondenceResultsDataType_Input"
+					class="com.acs.enterprise.common.program.contactmanagement.view.vo.CorrespondenceRecordVO"
+					boundTo="request-attribute"
+					caption="receive.CorrespondenceResults.Caption" />
+			</input>
+		</operation>
+		<operation name="SendCommonLetterInputDataType">
+			<portlet:action name="SendCommonLetterInputAction"
+				actionNameParameter="send.CommonLetterInputData.Action"
+				type="standard" />
+			<output>
+				<portlet:param name="CommonLetterInput"
+					class="com.acs.enterprise.common.cots.lettergeneration.vo.CommonLetterInputVO"
+					partname="CommonLetterInputVO_SRC_Output"
+					boundTo="request-attribute"
+					caption="send.CommonLetterInput.Caption" />
+			</output>
+		</operation>
+		<operation name="ReceiveLogCaseSkForCase">
+			<portlet:action name="receiveLogCaseSkForCase"
+				type="standard" actionNameParameter="receive.logcase.sk"
+				description="Receive LogCaseSkForCaseSk" />
+			<input>
+				<portlet:param name="caseSk" partname="CaseSk_Input"
+					boundTo="request-attribute" caption="receive.LogcaseCase.sk" />
+			</input>
+		</operation>
+		<operation name="SendLetterRequestSK">
+			<portlet:action name="SendMyAlertSk"
+				actionNameParameter="Send.MyAlerts.AlertSk" type="standard" />
+			<output>
+				<portlet:param name="myAlertSk"
+					partname="LetterRequestSK_Output" boundTo="request-attribute"
+					caption="send.ltr.request.sk" />
+			</output>
+		</operation>
+
+		<operation name="LogCasetoEntySrch">
+			<portlet:action name="SrchCaseEntSrch_SOURCE_ACTION"
+				actionNameParameter="SrchCaseEntSrch_ACTION" type="standard" />
+			<output>
+				<portlet:param name="CaseSearchVO"
+					partname="MyDatatypeLogCase_Output" boundTo="request-attribute"
+					class="com.acs.enterprise.common.program.contactmanagement.common.vo.CaseRecordSearchCriteriaVO" />
+			</output>
+		</operation>
+		
+		<operation name="EntySearchLogCase">
+			<portlet:action name="EntSrchtoLogCase_TARGET_ACTION"
+				type="standard" actionNameParameter="EntSrchtoLogCase_ACTION"/>
+			<input>
+				<portlet:param name="SrchLogCaseMap" class="java.util.Map" 
+					partname="EntSrchtoLogCaseDataType_Input" 
+					boundTo="request-attribute" caption="EntSrchToCaseSrch"/>
+			</input>
+		</operation>
+
+	</binding>
+</definitions>

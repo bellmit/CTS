@@ -1,0 +1,17 @@
+package com.cognizant.designproject.main;
+
+import org.junit.Test;
+
+public class TestRuleExtract {
+	
+	@Test
+	public void testRuleExtraction_CategoryH()
+		throws Exception {
+		//String filenameWithPath = BASE_DIR+"operations//ServiceAuthorization//ServiceAuthorizationComponents//com//acs//enterprise//mmis//operations//serviceauthorization//application//domainmanager//ServiceAuthDomainManager.java";
+		String filenameWithPath = "D:\\RuleExtract_TestData\\ServiceAuthDomainManager_CatH.java";
+		RuleExtractor.testRuleExtraction(filenameWithPath);
+
+		// add additional test code here
+	}
+
+}

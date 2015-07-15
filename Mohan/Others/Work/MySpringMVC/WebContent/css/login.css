@@ -1,0 +1,232 @@
+/** styles for login page **/
+h1, h2, h3, h4, h5{ 
+    font-weight: 400; 
+} 
+#inner-Container .innerContent
+{
+background-color: transparent;
+padding: 0;
+}
+#menu
+{
+padding-top: 4.0625em;
+}
+.mobile-view #inner-Container .innerContent {
+    padding: 0;
+}
+#top-nav .searchbtn {
+	right:0;
+}
+#top-nav label[for="websiteSearch"]{
+    font-size: 0;
+    float: left;
+}
+/*ACC: search button*/
+#top-nav .searchbtn .glyphicon.glyph-search{
+    text-indent: -9999px;
+}
+
+.container-fluid.hcontainer-lgScreen{
+	margin:0;
+	padding:0px;
+}
+.hcontainer-lgScreen .row
+{
+	margin:0;
+}
+.slide-text{
+	position:absolute;
+	width:70%;
+	padding:35px 25px;
+	color:#333333;
+}
+.slide-text h3 {
+    font-size: 1.0855em;
+	text-shadow: 1px 1px 10px #FFFFFF;
+}
+.slide-text p {
+    font-size: 0.65131em;
+	line-height:1.7142em;
+	text-shadow: 1px 1px 10px #FFFFFF;
+}
+.login-div {
+    -webkit-box-shadow: 0 2px 3px 0 #c5c5c5;
+	box-shadow: 0 2px 3px 0 #c5c5c5;
+	border:1px solid #fff;
+	background-color:#FFF;
+	margin:5px;
+	margin-top:-5px;
+}
+.login-div h2{
+	color:#464646;
+	font-size:1.375em;
+	margin-top:10px;
+	margin-bottom:0px;
+	padding: 0 20px;
+	display:block;
+	font-weight:200;
+}
+.login-div .form-group{
+    padding: 0 20px;
+}
+.login-div .form-group label{
+	color:#464646;
+	font-size:0.875em;
+	font-weight:normal;
+	margin-bottom:0px;
+}
+.addition-login-links{
+	display:table;
+	width:100%;
+	padding: 0 20px 10px 20px;
+}
+.addition-login-links+.addition-login-links{
+	border-top:1px solid #dcdddf;
+	padding: 10px 20px;
+}
+.addition-login-links label+input,.addition-login-links input+input{
+	display:table-cell;
+	text-align:right;
+}
+.addition-login-links .btn-link{
+	padding-left:0px;
+	padding-right:0px;
+	color:#2a96d0;
+	font-size:0.75em;
+}
+.addition-login-links label{
+	color:#3e3e3e;
+	font-size:1em;
+	font-weight:normal;
+}
+/*  chnages in wireframes*/
+.more-login-links{
+    border-top: 1px solid #dcdddf;
+}
+.more-login-links ul{
+    display: table;
+    width:100%;
+}
+.more-login-links ul li{
+    width:50%;
+    padding:10px 20px;	
+    display:table-cell;
+    line-height: 1em;
+}
+.more-login-links ul li+li{
+    border-left: 1px solid #dcdddf;
+}
+.more-login-links a{
+    font-size: 0.75em;
+}
+.login_form{
+	float:none;
+}
+.quick-links h3{
+	font-size:1.1875em;
+	margin:15px 0px;
+	color:#2A96D0;
+	cursor:pointer;
+	font-size:1.1579em;
+	padding:8px 20px;
+	background:url('../images/quick-links-arrow.png') no-repeat right 15px center;
+}
+.quick-links ul{
+	display:none;
+}
+.quick-links li a{
+font-size:0.875em;
+	color:#2a96d0;
+}
+.container-carousel{
+	/*margin:-15px;*/
+}
+.container-carousel .carousel-inner > .item > img{
+	width:100%;
+	max-width:none;
+	visibility:hidden;
+	min-width:500px;
+}
+.container-carousel .carousel-indicators{
+	right:15px;
+	margin-left:0px;
+	width:auto;
+	left:auto;
+	margin-bottom:0px;
+	bottom:30px;
+}
+/*.container-carousel .carousel-inner > .item.banner-1{
+	background:url("../images/banner.png") no-repeat left center;
+	background-size:cover;
+}
+.container-carousel .carousel-inner > .item.banner-2{
+	background:url("../images/banner2.png") no-repeat left center;
+	background-size:cover;
+}
+.container-carousel .carousel-inner > .item.banner-3{
+	background:url("../images/banner3.png") no-repeat left center;
+	background-size:cover;
+}*/
+.container-carousel .carousel-indicators li.active{
+	border-radius:0px;
+	-webkit-border-radius:0px;
+	border:1px solid #666666;
+	background-color:#fff;
+}
+.container-carousel .carousel-indicators li{
+	border-radius:0px;
+	-webkit-border-radius:0px;
+	border:1px solid #666666;
+	background-color:#d7d7d7;
+}
+.login-welcome{
+	padding:15px;
+}
+@media (min-width:768px){
+.quick-links h3{
+	color:#464646;
+	cursor:auto;
+	font-size:1.1875em;
+	margin-top:30px;
+	margin-bottom:5px;
+	padding:8px 0px;
+	background-image:none;
+}
+.quick-links ul{
+	display:block
+}
+.quick-links a{
+	display:table;
+}
+
+.slide-text{
+	width:46%;
+	padding:20px 45px;
+}
+.slide-text h3{
+	font-size:1.5em;
+}
+.slide-text p{
+	font-size:0.875em;
+	line-height:1.285;
+}
+.login_form{
+	float:left;
+}
+
+.login-div{
+	margin:-55px 0px 55px 30px;
+}
+.login-div .help-icon
+{
+margin-bottom:-2px;
+}
+
+.container-carousel .carousel-inner > .item > img{
+	visibility:visible;
+	min-width:none;
+}
+.container-carousel .carousel-indicators{
+	bottom:15px;
+}
+}

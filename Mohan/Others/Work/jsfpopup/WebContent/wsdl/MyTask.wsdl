@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="MyTask_Service"
+	targetNamespace="http://enterprise.ipc"
+	xmlns="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:portlet="http://www.ibm.com/wps/c2a"
+	xmlns:tns="http://enterprise.ipc"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<types>
+		<xsd:schema targetNamespace="http://enterprise.ipc">
+			<xsd:simpleType name="MyTaskCorrespondenceSk">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+			
+			<!-- For Ipc From Alert to Letter generation page -->
+			<xsd:simpleType name="MyAlertSk">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+						
+			<xsd:simpleType name="BackFromLetterPage">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>						
+			
+			<xsd:complexType name="MyTaskCaseSk">
+			</xsd:complexType>
+			<xsd:simpleType name="MyTaskClaimCorrespondenceSk">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="MyTaskClaimCase">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+
+			<xsd:complexType name="TPLRecoverySearch_Result" />
+			<xsd:simpleType name="ServiceAuthInquiry">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+			
+			<xsd:complexType name="SearchType"></xsd:complexType>	
+		
+			<xsd:complexType name="MSQSearchType"></xsd:complexType>
+			
+		</xsd:schema>
+	</types>
+	<message name="MyTaskCorrespondenceSk_Response">
+		<part name="MyTaskCorrespondenceSk_Output"
+			type="tns:MyTaskCorrespondenceSk" />
+		<part name="MyTaskClaimCorrespondenceSk_Output"
+			type="tns:MyTaskClaimCorrespondenceSk" />
+		<part name="MyTaskCaseSk_Output" type="tns:MyTaskCaseSk" />
+		<part name="MyTaskClaimCase_Output" type="tns:MyTaskClaimCase" />
+	</message>
+	
+	<message name="MyAlertSk_Response">
+		<part name="MyAlertSk_Output"
+			type="tns:MyAlertSk" />
+	</message>
+	
+	<message name="BackFromLetterPage_Request">
+		<part name="BackFromLetterPage_Input"
+			type="tns:BackFromLetterPage" />
+	</message>
+
+	<message name="TPLRecoverySearch_Result_Response">
+		<part name="TPLRecoverySearch_Result_Output"
+			type="tns:TPLRecoverySearch_Result" />
+	</message>
+	<message name="ServiceAuthInquiry_Response">
+		<part name="ServiceAuthInquiry_Output"
+			type="tns:ServiceAuthInquiry" />
+	</message>
+
+	<message name="SearchType_Response">
+		<part name="SearchType_Output" type="tns:SearchType" />
+	</message>
+
+	
+	<message name="MSQDataFromMNT_Response">
+		<part name="MSQDataFromMNT_Output" type="tns:MSQSearchType" />
+	</message>
+	
+	<portType name="MyTask_Service">
+		<operation name="MyTask">
+			<output message="tns:MyTaskCorrespondenceSk_Response" />
+		</operation>
+		
+		<operation name="MyAlerts">
+			<output message="tns:MyAlertSk_Response" />
+		</operation>
+		
+		<operation name="RecieveFromLetterGeneration">
+			<input message="tns:BackFromLetterPage_Request" />
+		</operation>
+			
+
+		<operation name="TPLRecoverySearchportlet1">
+			<output message="tns:TPLRecoverySearch_Result_Response" />
+		</operation>
+		<operation name="ServiceAuthorizationInquiry">
+			<output message="tns:ServiceAuthInquiry_Response" />
+		</operation>
+		
+		<operation name="MEM_IN_MemberSearchportlet">
+			<output message="tns:SearchType_Response" />
+		</operation>		
+		
+		<operation name="MEM_IN_MemberDetailsMaintenanceportlet8">
+					<output message="tns:MSQDataFromMNT_Response" />
+		</operation>
+
+		
+	</portType>
+	<binding name="MyTask_Binding" type="tns:MyTask_Service">
+		<portlet:binding />
+		<operation name="MyTask">
+			<portlet:action name="SendMyTaskCorrespondenceSk"
+				actionNameParameter="Send.MyTask.CorrespondenceSk" type="standard" />
+			<output>
+				<portlet:param name="mytaskcorrespondenceSk"
+					partname="MyTaskCorrespondenceSk_Output"
+					boundTo="request-attribute"
+					caption="send.mytask.correspondence.sk" />
+				<portlet:param name="myTaskClaimCorrespondenceSk"
+					partname="MyTaskClaimCorrespondenceSk_Output"
+					boundTo="request-attribute"
+					caption="send.MyTaskClaim.CorrespondenceSk" />
+				<portlet:param name="MyTaskCaseSk"
+					class="com.acs.enterprise.common.view.vo.CommonCMCaseDetailsVO"
+					partname="MyTaskCaseSk_Output" boundTo="request-attribute"
+					caption="send.mytask.casesk" />
+				<portlet:param name="MyTaskClaimCaseSK"
+					partname="MyTaskClaimCase_Output" boundTo="request-attribute"
+					caption="send.MyTaskClaim.CaseSk" />
+			</output>
+		</operation>
+		
+		
+		<operation name="MyAlerts">
+			<portlet:action name="SendMyAlertSk"
+				actionNameParameter="Send.MyAlerts.AlertSk" type="standard" />
+			<output>
+				<portlet:param name="myAlertSk"
+					partname="MyAlertSk_Output"
+					boundTo="request-attribute"
+					caption="send.mytask.alerts.sk" />
+			</output>
+		</operation>
+		
+		<operation name="RecieveFromLetterGeneration">
+			<portlet:action name="recieveFromLetterGeneration"
+			                actionNameParameter="back.from.letter.generation"
+				             caption="receive.from.letter.generation"
+				             type="standard"  />
+			<input>
+				<portlet:param name="LetterSkForMytask"
+					partname="BackFromLetterPage_Input" 
+					boundTo="request-attribute"
+					caption="back.from.letter.Generation.Caption" />
+			</input>
+		</operation>		
+		
+		<operation name="TPLRecoverySearchportlet1">
+			<portlet:action name="sourceAction1"
+				class="com.acs.enterprise.mmis.operations.tpladministration.common.vo.TPLRecoverySearchResultVO"
+				actionNameParameter="ACTION_NAME" type="standard" />
+			<output>
+				<portlet:param name="sendVO1"
+					partname="TPLRecoverySearch_Result_Output"
+					boundTo="request-attribute" caption="TPLRecoverySearchResultVoWithCaseID" />
+			</output>
+		</operation>
+		<operation name="ServiceAuthorizationInquiry">
+			<portlet:action  name="sourceAction" actionNameParameter="ACTION_NAME" type="standard" />
+			<output>
+				<portlet:param name="sourceSID"
+					partname="ServiceAuthInquiry_Output" boundTo="request-attribute" caption="MytaskOpen.SA.ID" />
+			</output>
+		</operation>
+
+		<operation name="MEM_IN_MemberSearchportlet">
+			<portlet:action name="sendMemberSysIDAction"
+				actionNameParameter="com.ibm.portal.propertybroker.action"
+				type="standard" />
+			<output>
+				<portlet:param name="MemberDetail"
+					class="com.acs.enterprise.common.view.vo.CommonMemberDetailsVO"
+					partname="SearchType_Output" boundTo="request-attribute"
+					caption="Mytask.MSQ.MemberDetailVo" description="Member Detail Type" />
+			</output>
+		</operation>		
+	
+		<operation name="MEM_IN_MemberDetailsMaintenanceportlet8">
+			<portlet:action name="sendMSQDetails" 
+			                actionNameParameter="com.ibm.portal.propertybroker.action" 
+			                type="standard"  />
+			<output>
+				<portlet:param name="MSQSearch" caption="MSQSearchFromMNT" 
+					class="com.acs.enterprise.common.view.vo.CommonMemberDetailsVO"
+					partname="MSQDataFromMNT_Output" boundTo="request-attribute" />
+			</output>
+		</operation>
+	
+	</binding>
+</definitions>

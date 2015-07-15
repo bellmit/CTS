@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<faces-config
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
+    version="1.2">
+	<application>
+		<message-bundle>properties.Message</message-bundle>
+		<locale-config>
+			<default-locale>en</default-locale>
+			<supported-locale>es</supported-locale>
+		</locale-config>
+	</application>
+	
+	<managed-bean>
+		<managed-bean-name>employeeBean</managed-bean-name>
+		<managed-bean-class>com.jsf.javabean.EmployeeBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+		
+	</managed-bean>
+	
+	
+
+
+	<managed-bean>
+		<managed-bean-name>employeeDetails</managed-bean-name>
+		<managed-bean-class>com.jsf.controller.EmployeeDetails</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>		
+		<managed-property>
+			<property-name>employeeBean</property-name>
+			<value>#{employeeBean}</value>
+		</managed-property>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>languageBean</managed-bean-name>
+		<managed-bean-class>com.jsf.javabean.LanguageBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	
+	<navigation-rule>
+		<display-name>Employee Search</display-name>
+		<from-view-id>/jsp/index.jsp</from-view-id>
+		<navigation-case > 
+			<from-outcome>employeeSearch</from-outcome>
+			<to-view-id>/jsp/employee/employee.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case > 
+			<from-outcome>employeeRegister</from-outcome>
+			<to-view-id>/jsp/employee/employeeNew.jsp</to-view-id>
+		</navigation-case>
+	
+	</navigation-rule>
+	<navigation-rule>
+		<display-name>Employee Details</display-name>
+		<from-view-id>/jsp/employee/employee.jsp</from-view-id>
+			<navigation-case>
+			<from-action>#{employeeDetails.getEmployee}</from-action>
+			<from-outcome>search</from-outcome>
+			<to-view-id>/jsp/employee/employee.jsp</to-view-id>
+			</navigation-case>
+			<navigation-case>
+			 <from-action>#{employeeDetails.updateEmployee}</from-action>
+			<from-outcome>update</from-outcome>
+			<to-view-id>/jsp/employee/employeeDetails.jsp</to-view-id>
+			</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<display-name>Employee Register</display-name>
+		<from-view-id>/jsp/employee/employeeNew.jsp</from-view-id>
+			<navigation-case>
+			<from-action>#{employeeDetails.registerEmployee}</from-action>
+			<from-outcome>success</from-outcome>
+			<to-view-id>/jsp/employee/employeeConfirmation.jsp</to-view-id>
+			</navigation-case>
+			
+	</navigation-rule>
+	<navigation-rule>
+		<display-name>Employee Update</display-name>
+		<navigation-case>
+			<from-action>#{employeeDetails.updateEmployee}</from-action>
+			<from-outcome>update</from-outcome>
+			<to-view-id>/jsp/employee/employeeDetails.jsp</to-view-id>
+			</navigation-case>
+	</navigation-rule>
+</faces-config>

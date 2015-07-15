@@ -1,0 +1,165 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.xerox.enterprise.ghs.mmis.ruleexternalizer</groupId>
+  <artifactId>RulesExternalizer</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>RulesMessageExternalizer</name>
+  <dependencies>
+<dependency>
+	<groupId>org.apache.maven.plugins</groupId>
+	<artifactId>maven-jar-plugin</artifactId>
+	<version>2.4</version>
+</dependency>              
+<dependency>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-resources-plugin</artifactId>
+    <version>2.4.3</version>
+</dependency>
+<dependency>
+	<groupId>org.apache.maven.plugins</groupId>
+	<artifactId>maven-compiler-plugin</artifactId>
+	<version>3.1</version>
+</dependency>
+<dependency>
+	<groupId>net.sf.ehcache</groupId>
+	<artifactId>ehcache</artifactId>
+	<version>2.8.3</version>
+</dependency>
+<dependency>
+  <groupId>org.mockito</groupId>
+  <artifactId>mockito-all</artifactId>
+  <version>1.9.5</version>
+</dependency>
+<dependency>
+	<groupId>org.slf4j</groupId>
+	<artifactId>slf4j-api</artifactId>
+	<version>1.7.7</version>
+</dependency>
+<dependency>
+	<groupId>log4j</groupId>
+	<artifactId>log4j</artifactId>
+	<version>1.2.16</version>
+</dependency>
+<dependency>
+	<groupId>junit</groupId>
+	<artifactId>junit</artifactId>
+	<version>4.8.1</version>
+</dependency>
+<dependency>
+	<groupId>org.apache.poi</groupId>
+	<artifactId>poi</artifactId>
+	<version>3.8</version>
+</dependency>
+<dependency>
+    <groupId>org.apache.poi</groupId>
+    <artifactId>poi-ooxml</artifactId>
+    <version>3.10-FINAL</version>
+</dependency>
+</dependencies>
+
+
+<build>
+  <plugins>
+   <plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-surefire-plugin</artifactId>
+    <version>2.17</version>
+    <dependencies>
+      <dependency>
+        <groupId>org.apache.maven.surefire</groupId>
+        <artifactId>surefire-junit47</artifactId>
+        <version>2.17</version>
+      </dependency>
+    </dependencies>
+   </plugin>
+	   <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <executions>
+                <execution>
+                    <id>copy-dependencies</id>
+                    <phase>prepare-package</phase>
+                    <goals>
+                        <goal>copy-dependencies</goal>
+                    </goals>
+                    <configuration>
+                        <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                        <overWriteReleases>false</overWriteReleases>
+                        <overWriteSnapshots>false</overWriteSnapshots>
+                        <overWriteIfNewer>true</overWriteIfNewer>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <configuration>
+                <archive>
+                    <manifest>
+                        <addClasspath>true</addClasspath>
+                        <classpathPrefix>lib/</classpathPrefix>
+                        <mainClass>com.cognizant.tool.main.TestMessageReader</mainClass>
+                    </manifest>
+                    <addMavenDescriptor>false</addMavenDescriptor>
+                </archive>
+            </configuration>
+        </plugin>	   
+   
+	<!-- Maven compiler plugin-->
+		
+		<plugin>
+            <artifactId>maven-compiler-plugin</artifactId>
+            
+            <configuration>
+                <source>1.6</source>
+                <target>1.6</target>
+            </configuration>
+        </plugin>
+	   </plugins>
+	   <pluginManagement>  
+  <plugins>
+    <plugin>
+      <groupId>org.eclipse.m2e</groupId>
+      <artifactId>lifecycle-mapping</artifactId>
+      <version>1.0.0</version>
+      <configuration>
+        <lifecycleMappingMetadata>
+          <pluginExecutions>
+            <pluginExecution>
+              <pluginExecutionFilter>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <versionRange>[2.0,)</versionRange>
+                <goals>
+                  <goal>copy-dependencies</goal>
+                </goals>
+              </pluginExecutionFilter>
+              <action>
+                <execute />
+              </action>
+            </pluginExecution>
+            <pluginExecution>
+            	<pluginExecutionFilter>
+            		<groupId>org.apache.maven.plugins</groupId>
+            		<artifactId>maven-compiler-plugin</artifactId>
+            		<versionRange>[2.3.2,)</versionRange>
+            		<goals>
+            			<goal>compile</goal>
+            		</goals>
+            	</pluginExecutionFilter>
+            	<action>
+            		<ignore></ignore>
+            	</action>
+            </pluginExecution>
+          </pluginExecutions>
+        </lifecycleMappingMetadata>
+      </configuration>
+    </plugin> 
+  </plugins>
+</pluginManagement>	   
+</build>
+  
+  
+  
+</project>

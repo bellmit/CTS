@@ -1,0 +1,3077 @@
+/**
+ * Copyright (c) 2005 Affiliated Computer Services, Inc.
+ */
+
+package com.acs.enterprise.common.program.benefitadministration.view.bean;
+
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.Format;
+import java.text.MessageFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.ResourceBundle;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
+import javax.faces.model.SelectItem;
+import javax.portlet.ActionRequest;
+import javax.portlet.ActionResponse;
+//import javax.portlet.PortletSession;
+import javax.portlet.RenderRequest;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.lang.StringUtils;
+
+import com.acs.enterprise.common.audit.common.delegate.GlobalAuditsDelegate;
+import com.acs.enterprise.common.base.common.vo.EnterpriseSearchResultsVO;
+import com.acs.enterprise.common.base.view.bean.EnterpriseBaseControllerBean;
+import com.acs.enterprise.common.program.administration.application.exception.ClaimExceptionNotFoundException;
+import com.acs.enterprise.common.program.administration.application.exception.ProcedureCodeNotFoundException;
+import com.acs.enterprise.common.program.administration.application.exception.ReferenceServiceRequestException;
+import com.acs.enterprise.common.program.administration.application.exception.SystemListNotFoundException;
+import com.acs.enterprise.common.program.administration.common.delegate.ClaimExceptionCodeDelegate;
+import com.acs.enterprise.common.program.administration.common.delegate.ProcedureCodeDelegate;
+import com.acs.enterprise.common.program.administration.common.delegate.ReferenceServiceDelegate;
+import com.acs.enterprise.common.program.administration.common.delegate.SystemListDelegate;
+import com.acs.enterprise.common.program.administration.common.domain.ClaimException;
+import com.acs.enterprise.common.program.administration.common.vo.InputCriteria;
+import com.acs.enterprise.common.program.administration.common.vo.ProcedureCodeSearchCriteriaVO;
+import com.acs.enterprise.common.program.administration.common.vo.ReferenceDataListVO;
+import com.acs.enterprise.common.program.administration.common.vo.ReferenceDataSearchVO;
+import com.acs.enterprise.common.program.administration.common.vo.ReferenceServiceVO;
+import com.acs.enterprise.common.program.administration.util.helper.FunctionalAreaConstants;
+import com.acs.enterprise.common.program.administration.util.helper.ProgramConstants;
+import com.acs.enterprise.common.program.administration.util.helper.ProgramNumberConstants;
+import com.acs.enterprise.common.program.administration.util.helper.ReferenceServiceDataConstants;
+import com.acs.enterprise.common.program.benefitadministration.application.exception.BenefitPlanNotFoundException;
+import com.acs.enterprise.common.program.benefitadministration.application.exception.LineOfBusinessNotFoundException;
+import com.acs.enterprise.common.program.benefitadministration.application.exception.MapDefinitionNotFoundException;
+import com.acs.enterprise.common.program.benefitadministration.common.delegate.BenefitPlanDelegate;
+import com.acs.enterprise.common.program.benefitadministration.common.delegate.LineOfBusinessDelegate;
+import com.acs.enterprise.common.program.benefitadministration.common.delegate.MapDefinitionDelegate;
+import com.acs.enterprise.common.program.benefitadministration.common.domain.BenefitPlanMain;
+import com.acs.enterprise.common.program.benefitadministration.common.domain.LineOfBusiness;
+import com.acs.enterprise.common.program.benefitadministration.common.domain.MapSetDefinition;
+import com.acs.enterprise.common.program.benefitadministration.common.domain.MapSetDetail;
+import com.acs.enterprise.common.program.benefitadministration.common.domain.MapSetHeader;
+import com.acs.enterprise.common.program.benefitadministration.common.vo.MapSearchCriteriaVO;
+import com.acs.enterprise.common.program.benefitadministration.common.vo.MapSearchResultsVO;
+import com.acs.enterprise.common.program.benefitadministration.util.helper.BenefitPlanConstants;
+import com.acs.enterprise.common.program.benefitadministration.view.helper.BenefitPlanHelper;
+import com.acs.enterprise.common.program.benefitadministration.view.vo.BenefitPlanCaseMgmtVO;
+import com.acs.enterprise.common.program.benefitadministration.view.vo.BenefitPlanCohortVO;
+import com.acs.enterprise.common.program.benefitadministration.view.vo.BenefitPlanMainVO;
+import com.acs.enterprise.common.program.benefitadministration.view.vo.BenefitPlanNwAssocVO;
+import com.acs.enterprise.common.program.benefitadministration.view.vo.MapDefDetailVO;
+import com.acs.enterprise.common.program.commonentities.view.bean.CommonEntityDataBean;
+import com.acs.enterprise.common.program.commonentities.view.helper.ContactHelper;
+import com.acs.enterprise.common.security.services.fieldlevelservice.FieldAccessControl;
+import com.acs.enterprise.common.security.services.fieldlevelservice.SecurityFLSServiceException;
+import com.acs.enterprise.common.security.services.userprofile.EnterpriseUserProfile;
+import com.acs.enterprise.common.util.helper.ValidatorConstants;
+import com.acs.enterprise.common.util.logger.EnterpriseLogFactory;
+import com.acs.enterprise.common.util.logger.EnterpriseLogger;
+import com.acs.enterprise.common.util.validator.EnterpriseCommonValidator;
+import com.xerox.enterprise.ghs.mmis.rif.common.exception.RIFException;
+import com.xerox.enterprise.ghs.mmis.rif.core.RulesContext;
+import com.xerox.enterprise.ghs.mmis.rif.core.RulesResult;
+import com.xerox.enterprise.ghs.mmis.rif.core.api.RulesManager;
+
+/**
+ * @author: wipro This Class will hold all the common methods for the
+ *          BenefitPlan Functionality.
+ */
+public class BenefitPlanControllerBean extends EnterpriseBaseControllerBean {
+	/*
+	 * holds loadValidValues
+	 */
+	private String loadValidValues;
+
+	/** holds Link2Show var. */
+	private String link2Show;
+
+	
+	/**
+	 * EnterpriseLogger Name for Logging.
+	 */
+	static final EnterpriseLogger logger = EnterpriseLogFactory
+			.getLogger(BenefitPlanControllerBean.class);
+
+	/**
+	 * For Validation.
+	 */
+	private boolean flag = true;
+	//private MapDefinitionDelegate mapDefinitionDelegate = new MapDefinitionDelegate();
+	
+	private String loadCarryOverPlans;
+
+	/**
+	 * This method is used to set the error messages.
+	 * 
+	 * @param message
+	 *            holds the message.
+	 */
+	public void setErrorMessage(String message) {
+		FacesContext fc = FacesContext.getCurrentInstance();
+		fc.getApplication().setMessageBundle(
+				BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES);
+		//ResourceBundle bundle = resourceBundle(fc);
+		String errorMsg = resourceBundle(fc).getString(message);
+		//FacesMessage fm = new FacesMessage(errorMsg);
+		fc.addMessage(null, new FacesMessage(errorMsg));
+	}
+
+	/**
+	 * This method is used to set the general messages.
+	 * 
+	 * @param message
+	 *            holds the message.
+	 */
+	public void setMessage(String message) {
+		FacesContext fc = FacesContext.getCurrentInstance();
+		fc.getApplication().setMessageBundle(
+				BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES);
+		//ResourceBundle bundle = resourceBundle(fc);
+		String msg =  resourceBundle(fc).getString(message);
+		//FacesMessage fm = new FacesMessage(msg);
+		fc.addMessage(null, new FacesMessage(msg));
+	}
+
+	/**
+	 * This method is used for populating Resource Bundle.
+	 * 
+	 * @param facesContext
+	 *            holds faces context.
+	 * @return ResourceBundle
+	 */
+	public static ResourceBundle resourceBundle(FacesContext facesContext) {
+		facesContext = FacesContext.getCurrentInstance();
+		//UIViewRoot root = facesContext.getViewRoot();
+		String messageBundle = facesContext.getApplication().getMessageBundle();
+		Locale locale = facesContext.getViewRoot().getLocale();
+		ResourceBundle bundle = ResourceBundle.getBundle(messageBundle, locale);
+		return bundle;
+	}
+
+	/**
+	 * This method will get the Map ID's for a corresponding LOB.
+	 * 
+	 * @param lobCode
+	 *            holds the lobcode.
+	 */
+	public void getMapID(final String lobCode) {
+		BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+		List mapIDList = new ArrayList();
+		// Modified for CPRIC126_UIS-PGM-BP-012
+		MapSearchCriteriaVO mapSearchCriteriaVO = (MapSearchCriteriaVO) getDataBean (BenefitPlanConstants.MAP_SEARCH_CRI_VO);
+		MapSearchResultsVO mapSearchResultsVO = null;
+		MapSetHeader mapSetHeader = null;
+		List mapResultList = null;
+		Iterator mapIterator =  null;
+		//set criteria as R_LOB_CD = 'MED' AND R_MAP_TY_CD = 'BPT' order by R_MPST_ID asc
+				mapSearchCriteriaVO.setLob(lobCode);
+				mapSearchCriteriaVO.setMapType(BenefitPlanConstants.MAPDEF_BPT);
+				mapSearchCriteriaVO.setAscending(true);
+				mapSearchCriteriaVO.setSortColumn(BenefitPlanConstants.ORDERBY_MAPID);
+				mapSearchCriteriaVO.setRowsPerPage(BenefitPlanConstants.INT_ZERO);
+		EnterpriseSearchResultsVO enterpriseSearchResultsVO = null;
+		try {
+			enterpriseSearchResultsVO = new MapDefinitionDelegate().getEligibilityMapDetails(mapSearchCriteriaVO);
+			mapResultList = enterpriseSearchResultsVO.getSearchResults();
+			mapIterator = mapResultList.iterator();
+			while(mapIterator.hasNext())
+			{
+				mapSetHeader = (MapSetHeader) mapIterator.next();
+				mapSearchResultsVO = new BenefitPlanHelper().convertMapsetDOToVO(mapSetHeader);
+				mapIDList.add(mapSearchResultsVO.getMapSetID() + BenefitPlanConstants.DELIMITER
+						+ mapSearchResultsVO.getMapDesc());
+			}
+			// Changed for Performance
+		/*	List listOfMapHeaders = new MapDefinitionDelegate()
+					.getAllMapHeaders(lobCode);
+			//List mapHeaderMapSetIDList = new MapDefinitionDelegate()
+			//			.getAllMapHeaderMapSetID(lobCode);
+			
+			//ListSort(mapHeaderMapSetIDList);
+			Iterator it = listOfMapHeaders.iterator();
+			while (it.hasNext()) {
+				 mapSetHeader = (MapSetHeader) it.next();
+				//String mapSetID = (String) it.next();
+				if(mapSetHeader.getMapTypeCode().equals("BPT")){
+				mapIDList.add(new SelectItem(mapSetHeader.getMapSetID()
+						.toString()+BenefitPlanConstants.DELIMITER+mapSetHeader.getMapSetID()
+						.toString()));
+				}
+				//mapIDList.add(new SelectItem(mapSetID));
+			}*/
+			bpCommonDataBean.setListMapID(mapIDList);
+		} catch (MapDefinitionNotFoundException e2) {
+			logger.error("MapDefinitionNotFoundException:" + e2.getMessage());
+			setErrorMessage(BenefitPlanConstants.MAP_ID_NOT_FOUND);
+		}
+	}
+
+	/**
+	 * This method will return the reference of the data bean.
+	 * 
+	 * @return BenefitPlanDataBean
+	 */
+
+	public void ListSort(List list) {
+		Comparator comparator = new Comparator() {
+			public int compare(Object obj1, Object obj2) {
+				//MapSetHeader data1 = (MapSetHeader) obj1;
+				String data1 = (String) obj1;
+				String data2 = (String) obj2;
+				//MapSetHeader data2 = (MapSetHeader) obj2;
+				//return data1.getMapSetID().compareTo(data2.getMapSetID());
+				return data1.compareTo(data2);
+			}
+		};
+		Collections.sort(list, comparator);
+
+	}
+
+	/**
+	 * This method will return the reference of the data bean.
+	 * 
+	 * @return BenefitPlanDataBean
+	 */
+
+	public Object getDataBean(String dataBeanName)
+	{
+		FacesContext fc = FacesContext.getCurrentInstance();
+		String valueBindingStr = BenefitPlanConstants.HASH_BRACES_TEXT + dataBeanName + BenefitPlanConstants.BRACES_TEXT;
+		Object dataBeanObj = null;
+		dataBeanObj = fc.getApplication().getVariableResolver()
+				.resolveVariable(fc, dataBeanName);
+		if (dataBeanObj == null)
+		{
+			dataBeanObj = fc.getApplication().createValueBinding(
+					valueBindingStr).getValue(fc);
+		}
+		return dataBeanObj;
+
+	}
+
+	/**
+	 * This method is used to convert Date object to String object.
+	 * 
+	 * @param date
+	 *            This contains the date to be converted.
+	 * @return String
+	 */
+	public static String dateConverter(Date date) {
+		Format formatter = new SimpleDateFormat(BenefitPlanConstants.DATE_FORMAT);
+		String strDate = null;
+		if (date != null) {
+			strDate = formatter.format(date);
+		}
+		return strDate;
+	}
+
+	/**
+	 * This method is used to convert String object to Date object.
+	 * 
+	 * @param strdate
+	 *            This contains the date to be converted.
+	 * @return Date
+	 */
+	public static Date dateConverter(String strdate) {
+		Date date = new Date();
+		SimpleDateFormat sdf1 = new SimpleDateFormat(
+				BenefitPlanConstants.DATE_FORMAT);
+		if (strdate != null) {
+			if (strdate.indexOf('/') != -1) {
+				try {
+					date = new Date(sdf1.parse(strdate).getTime());
+				} catch (ParseException e) {
+					logger.error("ParseException:" + e.getMessage(), e);
+				}
+			}
+		}
+		return date;
+	}
+
+	/**
+	 * validates the limits.
+	 * 
+	 * @param value
+	 *            holds the limit value.
+	 * @param message1
+	 *            error message for invalid limits.
+	 * @param message2
+	 *            error message for invalid limits.
+	 * @return boolean
+	 */
+	public boolean validateLimits(String value, String message1, String message2) {
+		boolean flag = true;
+		if (value != null && value.trim().length() != 0) {
+			if (!EnterpriseCommonValidator.validateFloatValue(value)) {
+				flag = false;
+				/** validates for negative values. */
+				if (EnterpriseCommonValidator.validateNegFloatValue(value)) {
+					setErrorMessage(message1);
+				} else {
+					setErrorMessage(message1);
+				}
+			} else {
+				/** validates for the maximum allowed limits. */
+				Double maxLimit = Double.valueOf(value);
+				maxLimit.compareTo(new Double(
+						BenefitPlanConstants.MAX_ALLOW_LMT));
+				if (maxLimit.compareTo(new Double(
+						BenefitPlanConstants.MAX_ALLOW_LMT)) > 0) {
+					flag = false;
+					setErrorMessage(message2);
+				}
+			}
+		}
+		return flag;
+	}
+
+	/**
+	 * validates the limits.
+	 * 
+	 * @param value
+	 *            holds the limit value.
+	 * @param message1
+	 *            error message for invalid limits.
+	 * @param message2
+	 *            error message for invalid limits.
+	 * @param id
+	 *            holds the id value.
+	 * @return boolean
+	 */
+	public boolean validateLimits(String value, String message1,
+			String message2, String id) {
+		boolean flag = true;
+		if (value != null && value.trim().length() != 0) {
+			if (!EnterpriseCommonValidator.validateFloatValue(value)) {
+				flag = false;
+				if (EnterpriseCommonValidator.validateNegFloatValue(value)) {
+					setErrorMessage(message1, new Object[] {},
+							BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, id);
+				} else {
+					setErrorMessage(message1, new Object[] {},
+							BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, id);
+				}
+			} else {
+				Double maxLimit = Double.valueOf(value);
+				maxLimit.compareTo(new Double(
+						BenefitPlanConstants.MAX_ALLOW_LMT));
+				if (maxLimit.compareTo(new Double(
+						BenefitPlanConstants.MAX_ALLOW_LMT)) > 0) {
+					flag = false;
+					setErrorMessage(message2, new Object[] {},
+							BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, id);
+				}
+			}
+		}
+		return flag;
+	}
+
+	/**
+	 * validates amount and percent.
+	 * 
+	 * @param value
+	 *            holds the amount or percent value.
+	 * @param message1
+	 *            holds the error message for invalid data.
+	 * @param message2
+	 *            holds the error message for invalid data.
+	 * @return boolean
+	 */
+	public boolean validateAmntAndPct(String value, String message1,
+			String message2) {
+		boolean flag = true;
+		if (value != null && value.trim().length() != 0) {
+			if (!EnterpriseCommonValidator.validateFloatValue(value)) {
+				flag = false;
+				if (EnterpriseCommonValidator.validateNegFloatValue(value)) {
+					setErrorMessage(message1);
+				} else {
+					setErrorMessage(message1);
+				}
+			} else {
+				Double maxLimit = Double.valueOf(value);
+				maxLimit.compareTo(new Double(
+						BenefitPlanConstants.MAX_ALLOW_AMNT_PCT));
+				if (maxLimit.compareTo(new Double(
+						BenefitPlanConstants.MAX_ALLOW_AMNT_PCT)) > 0) {
+					flag = false;
+					setErrorMessage(message2);
+				}
+			}
+		}
+		return flag;
+	}
+
+	/**
+	 * validates amount and percent.
+	 * 
+	 * @param value
+	 *            holds the amount or percent value.
+	 * @param message1
+	 *            holds the error message for invalid data.
+	 * @param message2
+	 *            holds the error message for invalid data.
+	 * @param id
+	 *            holds the id value.
+	 * @return boolean
+	 */
+	public boolean validateAmntAndPct(String value, String message1,
+			String message2, String id) {
+		boolean flag = true;
+		if (value != null && value.trim().length() != 0) {
+			if (!EnterpriseCommonValidator.validateFloatValue(value)) {
+				flag = false;
+				/** validating for negative values. */
+				if (EnterpriseCommonValidator.validateNegFloatValue(value)) {
+					setErrorMessage(message1, new Object[] {},
+							BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, id);
+				} else {
+					setErrorMessage(message1, new Object[] {},
+							BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, id);
+				}
+			} else {
+				/** validating for maximum allowed limits. */
+				Double maxLimit = Double.valueOf(value);
+				maxLimit.compareTo(new Double(
+						BenefitPlanConstants.MAX_ALLOW_AMNT_PCT));
+				if (maxLimit.compareTo(new Double(
+						BenefitPlanConstants.MAX_ALLOW_AMNT_PCT)) > 0) {
+					flag = false;
+					setErrorMessage(message2, new Object[] {},
+							BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, id);
+				}
+			}
+		}
+		return flag;
+	}
+
+	/**
+	 * validates amount and percent.
+	 * 
+	 * @param value
+	 *            holds the amount or percent value.
+	 * @param message1
+	 *            holds the error message for invalid data.
+	 * @param message2
+	 *            holds the error message for invalid data.
+	 * @return boolean
+	 */
+	public boolean validateAmntForCoins(String value, String message1,
+			String message2) {
+		boolean flag = true;
+		if (value != null && value.trim().length() != 0) {
+			if (!EnterpriseCommonValidator.validateFloatValue(value)) {
+				flag = false;
+				if (EnterpriseCommonValidator.validateNegFloatValue(value)) {
+					setErrorMessage(message1);
+				} else {
+					setErrorMessage(message1);
+				}
+			} else {
+				Double maxLimit = Double.valueOf(value);
+				//maxLimit.compareTo(new Double(
+				//		BenefitPlanConstants.MAX_ALLOW_AMNT));
+				if (maxLimit.compareTo(new Double(
+						BenefitPlanConstants.MAX_ALLOW_AMNT)) > 0) {
+					flag = false;
+					setErrorMessage(message2);
+				}
+			}
+		}
+		return flag;
+	}
+
+	/**
+	 * Checks if the entered proc code is valid or not.
+	 * 
+	 * @param procCode
+	 *            holds the procedurecode to be validated.
+	 * @param message
+	 *            holds the error message.
+	 * @return boolean
+	 */
+	public boolean validateProcedureCode(String procCode, String message) {
+		boolean invalidProcCode = false;
+		//ProcedureCodeDelegate procedureCodeDelegate = new ProcedureCodeDelegate();
+		ProcedureCodeSearchCriteriaVO procedureCodeSearchCriteriaVO = new ProcedureCodeSearchCriteriaVO();
+		procedureCodeSearchCriteriaVO.setProcedureCode(procCode);
+		try {
+			new ProcedureCodeDelegate()
+					.getProcedureCode(procedureCodeSearchCriteriaVO);
+		} catch (ProcedureCodeNotFoundException e) {
+			logger.error("ProcedureCodeNotFoundException:" + e.getMessage());
+			setErrorMessage(message);
+			invalidProcCode = true;
+		}
+		return invalidProcCode;
+	}
+
+	/** AUDIT LOGGING * */
+
+	/**
+	 * This operation will show audit log.
+	 * 
+	 * @return String
+	 */
+	public String showCVGAuditLog() {
+		BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+		BPCovDataBean bpCovDataBean = (BPCovDataBean) getDataBean(BenefitPlanConstants.BP_COV_DB_NAME);
+		bpCommonDataBean.setFocusThisId("auditLog");
+		bpCommonDataBean.setAuditLogRendered(true);
+		bpCovDataBean.setShowCoverageAuditLog(true);
+		return ProgramConstants.RETURN_SUCCESS;
+	}
+
+	public String showPlanLimitsAuditLog() {
+		BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+		BPPlanLmtDataBean bpPlanLmtDataBean = (BPPlanLmtDataBean) getDataBean(BenefitPlanConstants.BP_PLAN_LIMIT_DB_NAME);
+		bpCommonDataBean.setFocusThisId("auditLog");
+		bpCommonDataBean.setAuditLogRendered(true);
+		bpPlanLmtDataBean.setShowPlanLimitAuditLog(true);
+		return ProgramConstants.RETURN_SUCCESS;
+	}
+
+	public String showSAAuditLog() {
+		BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+		BPSAReqDataBean bpSAReqDataBean = (BPSAReqDataBean) getDataBean(BenefitPlanConstants.BP_SA_REQ_DB_NAME);
+		bpCommonDataBean.setFocusThisId("auditLog");
+		bpCommonDataBean.setAuditLogRendered(true);
+		bpSAReqDataBean.setShowSAAuditLog(true);
+		return ProgramConstants.RETURN_SUCCESS;
+	}
+
+	public String showCutbackAuditLog() {
+		BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+		BPCutBackDataBean bpCutBackDataBean = (BPCutBackDataBean) getDataBean(BenefitPlanConstants.BP_CUT_DB_NAME);
+		bpCommonDataBean.setFocusThisId("auditLog");
+		bpCutBackDataBean.setShowCutbackCntlAuditLog(true);
+		bpCommonDataBean.setAuditLogRendered(true);
+		return ProgramConstants.RETURN_SUCCESS;
+	}
+
+	public String showCopayAuditLog() {
+		BPCoPayDataBean bpCoPayDataBean = (BPCoPayDataBean) getDataBean(BenefitPlanConstants.BP_COPAY_DB_NAME);
+		BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+		bpCommonDataBean.setAuditLogRendered(true);
+		bpCommonDataBean.setFocusThisId("auditLog");
+		//" Issues Fix April 19 2012 Sart"
+		bpCommonDataBean.setDeleteDetailSuccess(false);
+		bpCommonDataBean.setDeleteDetailSuccessOther(false);
+		//" Issues Fix April 19 2012 End"
+		bpCoPayDataBean.setShowCoPayAuditLog(true);
+		bpCoPayDataBean.setShowCoPayLimitAuditLog(true);
+		return ProgramConstants.RETURN_SUCCESS;
+	}
+
+	public String showCoInsurenceAuditLog() {
+		BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+		BPCoInsDataBean bpCoInsDataBean = (BPCoInsDataBean) getDataBean(BenefitPlanConstants.BP_COINS_DB_NAME);
+		bpCommonDataBean.setFocusThisId("auditLog");
+		bpCommonDataBean.setAuditLogRendered(true);
+		//" Issues Fix April 19 2012 Sart"
+		bpCommonDataBean.setDeleteDetailSuccess(false);
+		bpCommonDataBean.setDeleteDetailSuccessOther(false);
+		//" Issues Fix April 19 2012 End"
+		bpCoInsDataBean.setShowCoInsuranceAuditLog(true);
+		bpCoInsDataBean.setShowCoInsuranceLimitAuditLog(true);
+
+		return ProgramConstants.RETURN_SUCCESS;
+	}
+
+	public String showOOPAuditLog() {
+		BPOOPDataBean bpOOPDataBean = (BPOOPDataBean) getDataBean(BenefitPlanConstants.BP_OOP_DB_NAME);
+		BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+		bpCommonDataBean.setAuditLogRendered(true);
+		bpCommonDataBean.setFocusThisId("auditLog");
+		bpOOPDataBean.setShowOOPAuditLog(true);
+		
+		return ProgramConstants.RETURN_SUCCESS;
+	}
+
+	public String showDeductibleAuditLog() {
+		BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+		BPDedDataBean bpDedDataBean = (BPDedDataBean) getDataBean(BenefitPlanConstants.BP_DED_DB_NAME);
+		bpCommonDataBean.setFocusThisId("auditLog");
+		bpDedDataBean.setShowPlanDeductibleAuditLog(true);
+		bpCommonDataBean.setAuditLogRendered(true);
+
+		return ProgramConstants.RETURN_SUCCESS;
+	}
+
+	public String showAuditLog() {
+		BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+		BPMainDataBean bpMainDataBean = (BPMainDataBean) getDataBean(BenefitPlanConstants.BP_MAIN_DB_NAME);
+		bpCommonDataBean.setFocusThisId("auditLog");
+		bpCommonDataBean.setAuditLogRendered(true);
+		bpMainDataBean.setShowCohortAuditLog(true);
+		bpMainDataBean.setShowNWAuditLog(true);
+		
+		bpCommonDataBean.setDeleteDetailSuccess(false);
+		bpCommonDataBean.setNwDeleteDetailSuccess(false);
+		
+		return ProgramConstants.RETURN_SUCCESS;
+	}
+
+	/*private AuditableField createAuditableFeild(String feildName,
+			String domainAttributeName) {
+		logger.info("Inside createAuditableFeild");
+
+		AuditableField auditableField = new AuditableField();
+		auditableField.setFieldName(feildName);
+		auditableField.setDomainAttributeName(domainAttributeName);
+		return auditableField;
+
+	}*/
+
+	/**
+	 * This operation will close audit log.
+	 * 
+	 * @return String
+	 */
+	public String closeAuditLog() {
+		BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+		bpCommonDataBean.setAuditLogRendered(false);
+		return ProgramConstants.RETURN_SUCCESS;
+	}
+
+	/**
+	 * showing audit Parent history.
+	 * 
+	 * @return String
+	 */
+	public String showParentAuditHistory() {
+		//final List list = new ArrayList();
+		//try {
+			//BenefitPlanHelper benefitPlanHelper = new BenefitPlanHelper();
+			// BenefitPlanDataBean benefitPlanDataBean =(BenefitPlanDataBean)
+			// getDataBean(BENEFITPLAN_DATABEAN_NAME);
+			//BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+			//BenefitPlanMain benefitPlanMain = benefitPlanHelper
+			//		.convertBenefitPlanVOToDO(bpCommonDataBean
+			//				.getBenefitPlanMainVO(), getUserID());
+			//list.add(benefitPlanMain);
+		//} catch (Exception e) {
+		//	logger
+		//			.error("Error in show Parent audit history:"
+		//					+ e.getMessage());
+		//}
+		return ProgramConstants.RETURN_SUCCESS;
+	}
+
+	/**
+	 * showing audit child history.
+	 * 
+	 * @return String
+	 */
+	public String showAuditHistory() {
+		//GlobalAuditsDelegate audit;
+		final List list = new ArrayList();
+		try {
+			//audit = new GlobalAuditsDelegate();
+			BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+			//BenefitPlanHelper benefitPlanHelper = new BenefitPlanHelper();
+			BenefitPlanMain benefitPlanMain = new BenefitPlanHelper()
+					.convertBenefitPlanVOToDO(bpCommonDataBean
+							.getBenefitPlanMainVO(), getUserID());
+			list.add(benefitPlanMain);
+			HashMap hm = new GlobalAuditsDelegate().getAuditLogInfo(list);
+			final ArrayList auditlist = (ArrayList) hm.get(benefitPlanMain);
+			bpCommonDataBean.setAuditHistoryList(auditlist);
+			bpCommonDataBean.setAuditHistoryRender(true);
+			bpCommonDataBean.setAuditOpen(true);
+		} catch (Exception e) {
+			logger.error("Error in show child audit history:" + e.getMessage());
+		}
+
+		return ProgramConstants.RETURN_SUCCESS;
+	}
+
+	// Added by infinite
+	/**
+	 * Will get the BenefitPlan Main object.
+	 * @param lobcode,bpId
+	 * @return BenefitPlanMain
+	 */
+
+	public BenefitPlanMain getUpdatedBPMain(String lobCode, String bpId) {
+		//BenefitPlanDelegate benefitPlanDelegate = new BenefitPlanDelegate();
+		BenefitPlanMain bpMain = null;
+		try {
+			List list = new BenefitPlanDelegate().viewBenefitPlan(
+					BenefitPlanConstants.BENEFIT_PLAN_MAIN, bpId, lobCode);
+			bpMain = (BenefitPlanMain) list.get(0);
+		} catch (BenefitPlanNotFoundException e) {
+			logger.error("BenefitPlanNotFoundException:" + e.getMessage(), e);
+		}
+		return bpMain;
+	}
+	// added to avoid unnecessary query like cohort,network association etc start 
+	/**
+	 * Will get the BenefitPlan MainHeader object.
+	 * 
+	 * @param lobcode
+	 *            ,bpId
+	 * @return BenefitPlanMain
+	 */
+	public BenefitPlanMain getUpdatedBPMainHeader(String lobCode, String bpId) {		
+		BenefitPlanMain bpMain = null;
+		try {
+			List list = new BenefitPlanDelegate().viewBenefitPlan(
+					BenefitPlanConstants.BENEFIT_PLAN_MAIN_HEADER, bpId, lobCode);
+			bpMain = (BenefitPlanMain) list.get(0);
+		} catch (BenefitPlanNotFoundException e) {
+			logger.error("BenefitPlanNotFoundException:" + e.getMessage(), e);
+		}
+		return bpMain;
+	}
+	// added to avoid unnecessary query like cohort,network association etc end
+	/**
+	 * returns the BenefitPlanMain object.
+	 * 
+	 * @return BenefitPlanMain
+	 */
+	public BenefitPlanMain getBenefitPlanMain() {
+		//BenefitPlanDelegate benefitPlanDelegate = new BenefitPlanDelegate();
+		BenefitPlanMain benefitPlanMain = new BenefitPlanMain();
+		BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+		String bpid = bpCommonDataBean.getBenefitPlanMainVO()
+				.getBenefitPlanID();
+		String lobcode = bpCommonDataBean.getBenefitPlanMainVO().getLobId();
+		try {
+			List list = new BenefitPlanDelegate().viewBenefitPlan(
+					BenefitPlanConstants.BENEFIT_PLAN_MAIN, bpid, lobcode);
+			benefitPlanMain = (BenefitPlanMain) list.get(0);
+		} catch (BenefitPlanNotFoundException e) {
+			logger.error("BenefitPlanNotFoundException:" + e.getMessage());
+		}
+		return benefitPlanMain;
+	}
+
+	/**
+	 * returns the claim exception description.
+	 * 
+	 * @param claimException
+	 *            holds the claimexception code.
+	 * @return String
+	 */
+	public String getClaimExcDesc(String claimException) {
+		//ClaimExceptionCodeDelegate claimExceptionCodeDelegate = new ClaimExceptionCodeDelegate();
+		ClaimException claimExcn = new ClaimException();
+		try {
+			claimExcn = new ClaimExceptionCodeDelegate()
+					.getClaimExcCodeDesc(claimException);
+		} catch (ClaimExceptionNotFoundException e) {
+			logger.error("ClaimExceptionNotFoundException:" + e.getMessage());
+		}
+		//String clmException = claimExcn.getShortDescription();
+		return claimExcn.getShortDescription();
+	}
+
+	/**
+	 * Validates the date format.
+	 * 
+	 * @param Date
+	 *            input date.
+	 * @return boolean true when date is in correct format.
+	 */
+	public boolean validateDateFormat(String Date) {
+		boolean flag = true;
+		if (Date != null && Date.toString().trim().length() != 0) {
+			flag = EnterpriseCommonValidator.validateDate(Date);
+		}
+		return flag;
+	}
+
+	/**
+	 * This method is used to reset the CaseManagement Details.
+	 */
+	public void resetBPCaseManagment() {
+		BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+		BPMainDataBean bpMainDataBean = (BPMainDataBean) getDataBean(BenefitPlanConstants.BP_MAIN_DB_NAME);
+		bpCommonDataBean.setFocusThisId("resetBPCaseManagment");
+		bpMainDataBean.getBenefitPlanCohortVO().setBegDate(null);
+		bpMainDataBean.getBenefitPlanCohortVO().setEndDate(null);
+		bpMainDataBean.getBenefitPlanCohortVO().setMapID(null);
+		bpMainDataBean.getBenefitPlanCohortVO().setNwStatCode(null);
+		bpMainDataBean.getBenefitPlanCohortVO().setRate(null);
+		bpMainDataBean.getBenefitPlanCohortVO().setSeqNum(null);
+		bpCommonDataBean.setDetailssuccess(false);
+	}
+
+	/**
+	 * This method is used to reset the Network Association Details.
+	 */
+	public void resetBPNetworkAssoc() {
+		BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+		BPMainDataBean bpMainDataBean = (BPMainDataBean) getDataBean(BenefitPlanConstants.BP_MAIN_DB_NAME);
+		bpCommonDataBean.setFocusThisId("resetBPNetworkAssoc");
+		bpCommonDataBean.setNwDetailsuccess(false);
+		bpMainDataBean.getBenefitPlanNwAssocVO().setBeginDate(null);
+		bpMainDataBean.getBenefitPlanNwAssocVO().setNwEndDate(null);
+		bpMainDataBean.getBenefitPlanNwAssocVO().setNwID(null);
+		bpMainDataBean.getBenefitPlanNwAssocVO().setNwStatCode(null);
+		bpMainDataBean.getBenefitPlanNwAssocVO().setSeqNum(null);
+	}
+
+	/**
+	 * This method is used to cancel the CaseManagement details.
+	 */
+	public void cancelBPCaseManagment() {
+		BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+		BPMainDataBean bpMainDataBean = (BPMainDataBean) getDataBean(BenefitPlanConstants.BP_MAIN_DB_NAME);
+		bpCommonDataBean.setFocusThisId("showCaseMgnt");
+		bpMainDataBean.setShowCaseMgt(false);
+		bpCommonDataBean.setCapedit(false);
+	}
+
+	/**
+	 * This method is used to cancel the Network Association details.
+	 */
+	public void cancelBPNetworkAssoc() {
+		BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+		BPMainDataBean bpMainDataBean = (BPMainDataBean) getDataBean(BenefitPlanConstants.BP_MAIN_DB_NAME);
+		bpCommonDataBean.setFocusThisId("addNtwAssoc");
+		bpMainDataBean.setShowNwAssc(false);
+		bpCommonDataBean.setNwEdit(false);
+	}
+
+	/**
+	 * This method is used to convert date format of type MM-DD-CCYY or MMDDCCYY
+	 * to MM/DD/CCYY.
+	 * 
+	 * @param date
+	 *            : String date to be converted
+	 * @return String : Converted date in MM/DD/CCYY format
+	 */
+	public String modifyDateFormat(String date) {
+		boolean validPattern1 = false;
+		boolean validPattern2 = false;
+		boolean validPattern3 = false;
+
+		//Pattern p = Pattern.compile(ValidatorConstants.DATE_PATTERN);
+		Matcher m = Pattern.compile(ValidatorConstants.DATE_PATTERN).matcher(date);
+		validPattern1 = m.matches();
+
+		if (!validPattern1) {
+			Pattern p1 = Pattern.compile(ValidatorConstants.DATE_PATTERN1);
+			Matcher m1 = p1.matcher(date);
+			validPattern2 = m1.matches();
+		}
+
+		if (!validPattern1 && !validPattern2) {
+			//Pattern p2 = Pattern.compile(ValidatorConstants.DATE_PATTERN2);
+			Matcher m2 = Pattern.compile(ValidatorConstants.DATE_PATTERN2).matcher(date);
+			validPattern3 = m2.matches();
+		}
+
+		if (validPattern2) {
+			date = date.replace(ProgramConstants.CHAR_HYPHEN,
+					ProgramConstants.CHAR_SLASH);
+		} else if (validPattern3) {
+			date = date.substring(ProgramNumberConstants.INT_ZERO,
+					ProgramNumberConstants.INT_TWO)
+					+ ProgramConstants.SLASH_SEPARATOR
+					+ date.substring(ProgramNumberConstants.INT_TWO,
+							ProgramNumberConstants.INT_FOUR)
+					+ ProgramConstants.SLASH_SEPARATOR
+					+ date.substring(ProgramNumberConstants.INT_FOUR);
+		}
+		return date;
+	}
+
+	/**
+	 * used to navigate to the BP Page.
+	 * 
+	 * @return Returns String
+	 */
+	public String cancel() throws IOException{		
+		/*
+		
+		BPMainDataBean bpMainDataBean = (BPMainDataBean) getDataBean(BenefitPlanConstants.BP_MAIN_DB_NAME);
+		bpMainDataBean.setShowBenefitPlan(false);
+		
+
+		// For Defect ESPRD00652530 Start
+		CommonEntityDataBean commonEntityDataBean = ContactHelper
+				.getCommonEntityDataBean();
+		commonEntityDataBean.getCommonEntityVO().getCommonNotesVO()
+				.setCurrentNote(null);
+		
+		//ESPRD00728909
+		
+		Object obj = FacesContext.getCurrentInstance().getExternalContext()
+		.getRequest();
+		ActionRequest request = (ActionRequest) obj;
+		//ESPRD00744568
+		String myMode = request.getParameter("mode");
+		if(myMode.equals("addMode"))
+		{
+		String s = request.getParameter("com.ibm.faces.portlet.page.view");
+		Object object = FacesContext.getCurrentInstance().getExternalContext()
+		.getResponse();
+		ActionResponse response = (ActionResponse) object;
+
+		//response.sendRedirect(s);
+		
+		//======================= WSRP Fix Start =====================//
+		ActionRequest actionRequest=(ActionRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        String redirectCosumerContext=actionRequest.getParameter("redirectPortalPageContext");
+        logger.debug("redirectCosumerContext="+redirectCosumerContext);
+        if(redirectCosumerContext!=null){
+                response.sendRedirect(redirectCosumerContext+s);
+        }else{
+		response.sendRedirect(s);
+        }
+		//======================= WSRP Fix End   =====================//
+        
+		FacesContext.getCurrentInstance().responseComplete();
+		}
+		//ESPRD00728909
+		
+	*/	return BenefitPlanConstants.CANCEL;
+	}
+
+	/**
+	 * This method will show the BenefitPlanMain Details.
+	 */
+	public void refreshBPMain() {
+		BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+		BPMainDataBean bpMainDataBean = (BPMainDataBean) getDataBean(BenefitPlanConstants.BP_MAIN_DB_NAME);
+		try {
+			String bpid = bpCommonDataBean.getBenefitPlanMainVO()
+					.getBenefitPlanID();
+			String lobcode = bpCommonDataBean.getBenefitPlanMainVO().getLobId();
+			bpCommonDataBean.setLobCode(lobcode);
+			bpCommonDataBean.setBpId(bpid);
+
+			List list = new BenefitPlanDelegate().viewBenefitPlan(
+					BenefitPlanConstants.BENEFIT_PLAN_MAIN, bpid, lobcode);
+			if (!list.isEmpty()) {
+				BenefitPlanMain benefitPlanMain = (BenefitPlanMain) list.get(0);
+				if (benefitPlanMain.getTypeCode() != null) {
+					if (benefitPlanMain.getTypeCode().equals(
+							BenefitPlanConstants.ManagedCare)
+							|| benefitPlanMain.getOptionsCode().equals(
+									BenefitPlanConstants.NO)) {
+						bpMainDataBean.setShowCase(true);
+					} else {
+						bpMainDataBean.setShowCase(false);
+					}
+				}
+				BenefitPlanMainVO benefitPlanMainVO = new BenefitPlanHelper()
+						.convertBenefitPlanDOToVO(benefitPlanMain);
+				// Added to avoid HeapDump start
+				benefitPlanMain = null;
+				List nwList = new ArrayList();
+				Iterator it1 = benefitPlanMainVO.getBenefitPlanNwAssoc()
+						.iterator();
+				while (it1.hasNext()) {
+					BenefitPlanNwAssocVO benefitPlanNwAssocVO = (BenefitPlanNwAssocVO) it1
+							.next();
+					nwList.add(benefitPlanNwAssocVO);
+					bpMainDataBean
+							.setBenefitPlanNwAssocVO(benefitPlanNwAssocVO);
+				}
+				bpMainDataBean.setNwAsscList(nwList);
+
+				bpMainDataBean.getCapitationList().clear();
+				Iterator it2 = benefitPlanMainVO.getBenefitPlanCohort()
+						.iterator();
+				while (it2.hasNext()) {
+					BenefitPlanCohortVO benefitPlanCapitationVO = (BenefitPlanCohortVO) it2
+							.next();
+					bpMainDataBean.getCapitationList().add(
+							benefitPlanCapitationVO);
+					bpMainDataBean
+							.setBenefitPlanCohortVO(benefitPlanCapitationVO);
+				}
+
+				Iterator it3 = benefitPlanMainVO.getCaseMgmnt().iterator();
+				while (it3.hasNext()) {
+					BenefitPlanCaseMgmtVO benefitPlanCaseMgmtVO = (BenefitPlanCaseMgmtVO) it3
+							.next();
+					bpMainDataBean
+							.setBenefitPlanCaseManagementVO(benefitPlanCaseMgmtVO);
+				}
+				bpCommonDataBean.setBenefitPlanMainVO(benefitPlanMainVO);
+			}
+			// Added to avoid HeapDump start
+			list = null;
+			if (bpMainDataBean.getCapitationList().isEmpty()) {
+				bpCommonDataBean.setNoData(true);
+			} else {
+				bpCommonDataBean.setNoData(false);
+			}
+			if (bpMainDataBean.getNwAsscList().isEmpty()) {
+				bpCommonDataBean.setNoOtherData(true);
+			} else {
+				bpCommonDataBean.setNoOtherData(false);
+			}
+		} catch (BenefitPlanNotFoundException e) {
+			logger.error("BenefitPlanNotFoundException:" + e.getMessage(), e);
+		}
+
+		bpMainDataBean.setShowNwAssc(false);
+		bpMainDataBean.setShowCaseMgt(false);
+
+		bpCommonDataBean.setEdit(false);
+		bpCommonDataBean.setEditOther(false);
+		bpCommonDataBean.setNwEdit(false);
+		bpCommonDataBean.setSuccess(false);
+		bpCommonDataBean.setDetailssuccess(false);
+		bpCommonDataBean.setOtherdetailsuccess(false);
+		bpCommonDataBean.setNwDetailsuccess(false);
+		bpCommonDataBean.setEditdetailssuccess(false);
+		bpCommonDataBean.setEditotherdetailsuccess(false);
+		bpCommonDataBean.setNwEditdetailsuccess(false);
+		bpCommonDataBean.getDeletedList().clear();
+		bpCommonDataBean.getDeleteOtherList().clear();
+	}
+
+	// added to avoid unnecessary query like cohort,network association etc start
+	/**
+	 * This method will show the BenefitPlanMainHeader Details Only.
+	 */
+	public void getBenefitPlanHeader() {
+
+		BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+		BPMainDataBean bpMainDataBean = (BPMainDataBean) getDataBean(BenefitPlanConstants.BP_MAIN_DB_NAME);
+
+		try {
+			String bpid = bpCommonDataBean.getBenefitPlanMainVO()
+					.getBenefitPlanID();
+			String lobcode = bpCommonDataBean.getBenefitPlanMainVO().getLobId();
+			bpCommonDataBean.setLobCode(lobcode);
+			bpCommonDataBean.setBpId(bpid);
+
+			List list = new BenefitPlanDelegate().viewBenefitPlan(
+					BenefitPlanConstants.BENEFIT_PLAN_MAIN_HEADER, bpid,
+					lobcode);
+			if (!list.isEmpty()) {
+				BenefitPlanMain benefitPlanMain = (BenefitPlanMain) list.get(0);
+
+				BenefitPlanMainVO benefitPlanMainVO = new BenefitPlanMainVO();
+				benefitPlanMainVO.setBeginDate(dateConverter(benefitPlanMain
+						.getBeginDate()));
+				benefitPlanMainVO.setEndDate(dateConverter(benefitPlanMain
+						.getEndDate()));
+				if (benefitPlanMain.getLob() != null) {
+					benefitPlanMainVO.setLobId(benefitPlanMain.getLob()
+							.getLobCode());
+					benefitPlanMainVO.setLobDesc(benefitPlanMain.getLob()
+							.getLobName());
+				}
+				/* Added for the defect: ESPRD00834442 */
+			/*	benefitPlanMainVO.setDbBeginDate(dateConverter(benefitPlanMain.getBeginDate()));
+				benefitPlanMainVO.setDbEndDate(dateConverter(benefitPlanMain.getEndDate()));
+				benefitPlanMainVO.setDbAddlDesc(benefitPlanMain.getBenefitPlanAddlDesc());
+				benefitPlanMainVO.setDbDesc(benefitPlanMain.getBenefitPlanDesc());*/
+				
+				benefitPlanMainVO.setBenefitPlanID(benefitPlanMain
+						.getBenefitPlanID());
+				benefitPlanMainVO.setBenefitPlanAddlDesc(benefitPlanMain
+						.getBenefitPlanAddlDesc());
+				benefitPlanMainVO.setBenefitPlanDesc(benefitPlanMain
+						.getBenefitPlanDesc());
+				benefitPlanMainVO.setOptionsCode(benefitPlanMain
+						.getOptionsCode());
+				// Commented for BP45 status remove change
+				/*benefitPlanMainVO.setBenefitPlanStatCode(benefitPlanMain
+					.getBenefitPlanStatCode());*/
+				benefitPlanMainVO.setCode(benefitPlanMain.getTypeCode());
+				benefitPlanMainVO.setAddedAuditTimeStamp(benefitPlanMain
+						.getAddedAuditTimeStamp());
+				benefitPlanMainVO.setAddedAuditUserID(benefitPlanMain
+						.getAddedAuditUserID());
+				benefitPlanMainVO.setAuditTimeStamp(benefitPlanMain
+						.getAuditTimeStamp());
+				benefitPlanMainVO.setAuditUserID(benefitPlanMain
+						.getAuditUserID());
+				benefitPlanMainVO.setVersionNo(benefitPlanMain.getVersionNo());
+				new BenefitPlanHelper().setAuditKeyListForBPMain(
+						benefitPlanMain, benefitPlanMainVO);
+				bpCommonDataBean.setBenefitPlanMainVO(benefitPlanMainVO);
+			}
+		} catch (BenefitPlanNotFoundException e) {
+			logger.error("BenefitPlanNotFoundException:" + e.getMessage(), e);
+		}
+		bpMainDataBean.setShowNwAssc(false);
+		bpMainDataBean.setShowCaseMgt(false);
+
+		bpCommonDataBean.setEdit(false);
+		bpCommonDataBean.setEditOther(false);
+		bpCommonDataBean.setSuccess(false);
+		bpCommonDataBean.setDetailssuccess(false);
+		bpCommonDataBean.setOtherdetailsuccess(false);
+		bpCommonDataBean.setEditdetailssuccess(false);
+		bpCommonDataBean.setEditotherdetailsuccess(false);
+		bpCommonDataBean.getDeletedList().clear();
+		bpCommonDataBean.getDeleteOtherList().clear();
+	}
+
+	// added to avoid unnecessary query like cohort,network association etc end
+	/**
+	 * This method used for setting error display messages.
+	 * 
+	 * @param errorName
+	 *            : String errorName.
+	 * @param arguments
+	 *            : Array of Object. Parameters to be passed to the message
+	 * @param messageBundle
+	 *            : String messageBundle.
+	 * @param componentId
+	 *            : String componentId.
+	 */
+	public void setErrorMessage(String errorName, Object[] arguments,
+			String messageBundle, String componentId) {
+
+		FacesContext facesContext = FacesContext.getCurrentInstance();
+		//UIViewRoot root = facesContext.getViewRoot();
+		Locale locale = facesContext.getViewRoot().getLocale();
+		String clientId = null;
+
+		facesContext.getApplication().setMessageBundle(messageBundle);
+		String errorMsg = format(messageBundle, errorName, arguments, locale);
+
+		FacesMessage fc = new FacesMessage();
+		fc.setDetail(errorMsg);
+
+		if (componentId != null) {
+			//UIComponent uiComponent = findComponentInRoot(componentId);
+			clientId = findComponentInRoot(componentId).getClientId(facesContext);
+		}
+
+		facesContext.addMessage(clientId, fc);
+	}
+
+	/**
+	 * This operation will return the corresponding formatted error message from
+	 * the specified bundle.
+	 * 
+	 * @param bundleName
+	 *            : Name of the bundle from which the error message to be
+	 *            displayed.
+	 * @param errorName
+	 *            : String object of errorname to fetch corresponding message.
+	 * @param arguments
+	 *            : Object array with dynamic values to be inserted.
+	 * @param locale
+	 *            : Locale object to support internationalization.
+	 * @return String: Formatted string value
+	 */
+	public static String format(String bundleName, String errorName,
+			Object[] arguments, Locale locale) {
+		ResourceBundle myResources = ResourceBundle.getBundle(bundleName,
+				locale);
+		return MessageFormat
+				.format(myResources.getString(errorName), arguments);
+	}
+
+	/**
+	 * This operation is used to find the component in root by passing id.
+	 * 
+	 * @param id
+	 *            : String object.
+	 * @return UIComponent : UIComponent object.
+	 */
+	public UIComponent findComponentInRoot(String id) {
+		UIComponent component = null;
+		FacesContext context = FacesContext.getCurrentInstance();
+		if (context != null) {
+			//UIComponent root = context.getViewRoot();
+			component = findComponent(context.getViewRoot(), id);
+		}
+		return component;
+	}
+
+	/**
+	 * This operation is used to find the component by passing id.
+	 * 
+	 * @param base
+	 *            : View root component of the jsp.
+	 * @param id
+	 *            : Id of the component from jsp.
+	 * @return UIComponent object.
+	 */
+	public UIComponent findComponent(UIComponent base, String id) {
+
+		if (id.equals(base.getId())) {
+			return base;
+		}
+		UIComponent component = null;
+		UIComponent result = null;
+		Iterator cmpIterator = base.getFacetsAndChildren();
+		while (cmpIterator.hasNext() && (result == null)) {
+			component = (UIComponent) cmpIterator.next();
+
+			if (id.equals(component.getId())) {
+				result = component;
+				break;
+			}
+			result = findComponent(component, id);
+			if (result != null) {
+				break;
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * This method is used to convert String object to Date object
+	 * 
+	 * @param strdate
+	 *            This contains the begin Date.
+	 * @return Date
+	 */
+	public boolean isExpired(String strdate) {
+		Date date = null;
+		//Modified for Defect ESPRD00898366
+		Date currentDate=null;
+		String newDate=null;
+		SimpleDateFormat sdf1 = new SimpleDateFormat(BenefitPlanConstants.DATE_FORMAT);
+		if (strdate != null && strdate.indexOf('/') != -1) {
+			try {
+				date = new Date(sdf1.parse(strdate).getTime());
+				currentDate= new Date();
+				//Defect_Fixed_ESPRD00850655_10-09-2012
+				//if ((date != null) && (date.before(new Date()))) {
+				if ((date != null) && (date.before(sdf1.parse(sdf1.format(new Date()))))) {
+					return true;
+				}
+			} catch (ParseException e) {
+				logger.error("ParseException:" + e.getMessage(), e);
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * This method is used to convert String object to Date object
+	 * 
+	 * @param strdate
+	 *            This contains the begin Date.
+	 * @return Date
+	 */
+	public boolean isBeforeCurrentDate(String strdate) {
+		Date date = null;
+
+		SimpleDateFormat sdf1 = new SimpleDateFormat(BenefitPlanConstants.DATE_FORMAT);
+		 
+          //Rule Invocation Context object holds object arrays used in rule execution.
+	    String ruleId = "PGM4005.9002.NH01";
+	    logger.info("Started Rule Execution::::"+ruleId);
+	    RulesContext ric = new RulesContext();
+	    //Adding object into rule invocation context.
+	 	
+		ric.addObject(sdf1);
+		ric.addObject(strdate);
+		//Invoke RIF with rulename and rule invocation objects.
+		RulesResult rulesResult = null;
+		
+		try {
+			RulesManager rulesManager = RulesManager.getRIFInstance();
+	  		rulesResult = rulesManager.execute(ruleId, ric);
+		} catch (RIFException re){
+			logger.debug("RIFException::::"+re);
+		}
+		logger.info("Rule Execution Ended::::"+ruleId+"\n");
+		if (rulesResult.isReturnBooleanValue()) {
+		  return true;
+		}
+          
+		return false;
+	}
+
+	/**
+	 * This method is used to validate Map end Date with the Benefitplan begin
+	 * date
+	 * 
+	 * @param lobId
+	 *            This contains the Lob Id
+	 * @param mapId
+	 *            This contains the Map Id
+	 * @param bpBeginDate
+	 *            This contains the BenefitPlan Begin Date
+	 * @return Date
+	 */
+	public boolean validateMapId(String lobId, String mapId, String bpBeginDate) {
+		boolean returnFlag = false;
+		MapSetHeader mapSetHeader = null;
+		List mapDetailsList = new ArrayList();
+		DateFormat dateFormat = new SimpleDateFormat(BenefitPlanConstants.DATE_FORMAT);
+		//MapDefinitionHelper mapDefinitionHelper = new MapDefinitionHelper();
+		try {
+			mapSetHeader = new MapDefinitionDelegate().getMapDefinitionDetails(lobId,
+					mapId);
+			
+			/*Changes for Preformance start*/
+			Set setOfMapSet = mapSetHeader.getMapSet();
+			for (Iterator iter = setOfMapSet.iterator(); iter.hasNext();) {
+				MapSetDefinition mapSet = (MapSetDefinition) iter.next();
+	            Set setOfMapSetDetail = mapSet.getMapSetDetail();
+	            for (Iterator iterator = setOfMapSetDetail.iterator(); iterator.hasNext();) {
+	            		MapSetDetail mapSetDetail = (MapSetDetail) iterator.next();
+	            		MapDefDetailVO mapDetailsVO = new MapDefDetailVO();
+	            		mapDetailsVO.setBeginDate(dateFormat.format(mapSetDetail.getMapDetailBeginDt()));
+	            		mapDetailsVO.setEndDate(dateFormat.format(mapSetDetail.getMapDetailEndDt()));
+	            		mapDetailsList.add(mapDetailsVO);
+	            }
+			}
+			/*Changes for Preformance end*/
+			
+			//MapDefHeaderVO mapHeaderVO = new MapDefinitionHelper()
+			//		.convertMapSetHeaderDOToVO(mapSetHeader);
+			//List mapDetailsList = mapHeaderVO.getMapDefDetail();
+			Date mapEndDate = null, bpBegDate = null;
+			if (mapDetailsList != null && mapDetailsList.size() > 0) {
+				for (int i = 0; i < mapDetailsList.size(); i++) {
+					MapDefDetailVO mapDetailsVO = (MapDefDetailVO) mapDetailsList
+							.get(i);
+					mapEndDate = dateConverter(mapDetailsVO.getEndDate());
+					bpBegDate = dateConverter(bpBeginDate);
+					if (EnterpriseCommonValidator.compareGreaterDate(bpBegDate,
+							mapEndDate)
+							&& !mapEndDate.equals(bpBegDate)) {
+						returnFlag = true;
+					} else {
+						returnFlag = false;
+					}
+					if (!returnFlag)
+						break;
+				}
+			}
+		} catch (Exception e) {
+			logger.error("Validation during Map Id span:" + e.getMessage(), e);
+		}
+
+		return returnFlag;
+	}
+
+	/**
+	 * PGM4005.9003.NH01 LOGIC is Implemented
+	 * 
+	 * @param lobId
+	 *            This contains the Lob Id
+	 * @param mapId
+	 *            This contains the Map Id
+	 * @param bpBeginDate
+	 *            This contains the BenefitPlan Begin Date
+	 * @param bpEndDate
+	 *            This contains the BenefitPlan End Date
+	 * @return Date
+	 */
+	public boolean validateMapId(String lobId, String mapId,
+			String bpBeginDate, String bpEndDate, String mapPageId) {
+		boolean returnFlag = false;
+		MapSetHeader mapSetHeader = null;
+		//MapDefinitionHelper mapDefinitionHelper = new MapDefinitionHelper();
+		DateFormat dateFormat = new SimpleDateFormat(BenefitPlanConstants.DATE_FORMAT);
+			Date mapEndDate = null, bpBegDate = null, mapBginDate = null, bpEdDate = null;
+		List mapDetailsList = new ArrayList();
+		try {
+					bpBegDate = dateConverter(bpBeginDate);
+					bpEdDate = dateConverter(bpEndDate);
+			
+			/*mapSetHeader = new MapDefinitionDelegate().getMapDefinitionDetails(lobId,mapId);
+			
+			//Changes for Preformance start
+			Set setOfMapSet = mapSetHeader.getMapSet();
+			for (Iterator iter = setOfMapSet.iterator(); iter.hasNext();) {
+				MapSetDefinition mapSet = (MapSetDefinition) iter.next();
+	            Set setOfMapSetDetail = mapSet.getMapSetDetail();
+	            for (Iterator iterator = setOfMapSetDetail.iterator(); iterator.hasNext();) {
+	            		MapSetDetail mapSetDetail = (MapSetDetail) iterator.next();
+	            		MapDefDetailVO mapDetailsVO = new MapDefDetailVO();
+	            		mapDetailsVO.setBeginDate(dateFormat.format(mapSetDetail.getMapDetailBeginDt()));
+	            		mapDetailsVO.setEndDate(dateFormat.format(mapSetDetail.getMapDetailEndDt()));
+	            		
+	            		mapDetailsList.add(mapDetailsVO);
+	            }
+			}*/
+			/*Changes for Preformance end*/
+		    // New API for performance	
+			List mapsetDetailDates = new MapDefinitionDelegate().getMapSetDetailDates(lobId,mapId);
+			
+			//MapDefHeaderVO mapHeaderVO = new MapDefinitionHelper()
+			//		.convertMapSetHeaderDOToVO(mapSetHeader);
+			//List mapDetailsList = mapHeaderVO.getMapDefDetail();
+			
+			//if (mapDetailsList != null && mapDetailsList.size() > 0) {
+			if (mapsetDetailDates != null && mapsetDetailDates.size() > 0) {
+				
+				//for (int i = 0; i < mapDetailsList.size(); i++) {
+				for (int i = 0; i < mapsetDetailDates.size(); i++) {
+					//MapDefDetailVO mapDetailsVO = (MapDefDetailVO) mapDetailsList	.get(i);
+					Object[] objDates = (Object[])mapsetDetailDates.get(i);
+					//mapEndDate = dateConverter(mapDetailsVO.getEndDate());
+					//mapBginDate = dateConverter(mapDetailsVO.getBeginDate());
+					mapBginDate = (Date)objDates[0];
+					mapEndDate = (Date)objDates[1];
+					//bpBegDate = dateConverter(bpBeginDate);
+					//bpEdDate = dateConverter(bpEndDate);
+					if (EnterpriseCommonValidator.compareGreaterDate(bpBegDate,
+							mapEndDate)
+							&& !mapEndDate.equals(bpBegDate)) {
+						returnFlag = true;
+					} else {
+						if (EnterpriseCommonValidator.compareGreaterDate(
+								mapBginDate, bpEdDate)
+								&& !mapBginDate.equals(bpEdDate)) {
+							returnFlag = true;
+						} else {
+							returnFlag = false;
+						}
+					}
+					if (!returnFlag)
+						break;
+				}
+			}
+		} catch (Exception e) {
+			mapInvalidFlag = false;
+			setErrorMessage(BenefitPlanConstants.BENEFIT_PLAN_INVALID_MAPID,
+					new Object[] {},
+					BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, mapPageId);
+			logger.error("Validation during Map Id span:" + e.getMessage(), e);
+		}
+
+		return returnFlag;
+	}
+
+	/**
+	 * This method is used to validate the Benefitplan header in every page of
+	 * Benefitplan
+	 * 
+	 * @return
+	 */
+	public boolean validateBenefitPlanHeader() {
+		BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+		BenefitPlanMainVO benefitPlanMainVO = bpCommonDataBean
+				.getBenefitPlanMainVO();
+		SimpleDateFormat sdf = new SimpleDateFormat(
+				BenefitPlanConstants.DATE_FORMAT);
+		Date planBeginDate = null;
+		Date planEndDate = null;
+		if (!validateDateFormat(benefitPlanMainVO.getBeginDate())) {
+
+			setErrorMessage(BenefitPlanConstants.INCORRECT_BEG_DATE_FORMAT,
+					new Object[] {},
+					BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES,
+					"begindatetxt");
+			flag = false;
+		} else {
+			String begDate = modifyDateFormat(benefitPlanMainVO.getBeginDate());
+			if (begDate != null && begDate.trim().length() != 0) {
+				benefitPlanMainVO.setBeginDate(begDate);
+			}
+		}
+		if (!validateDateFormat(benefitPlanMainVO.getEndDate())) {
+			setErrorMessage(BenefitPlanConstants.INCORRECT_END_DATE_FORMAT,
+					new Object[] {},
+					BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "enddatetxt");
+			flag = false;
+		} else {
+			String endDate = modifyDateFormat(benefitPlanMainVO.getEndDate());
+			if (endDate != null && endDate.trim().length() != 0) {
+				benefitPlanMainVO.setEndDate(endDate);
+			}
+		}
+
+		if (benefitPlanMainVO.getBenefitPlanDesc() == null
+				|| benefitPlanMainVO.getBenefitPlanDesc().trim().length() == 0) {
+			setErrorMessage(BenefitPlanConstants.BENEFIT_PLAN_DESC_REQ,
+					new Object[] {},
+					BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "bpdesctxt");
+			flag = false;
+		}
+		if (benefitPlanMainVO.getBenefitPlanAddlDesc() != null
+				&& !(benefitPlanMainVO.getBenefitPlanAddlDesc().equals(BenefitPlanConstants.EMPTY_STRING))) {
+			if (!EnterpriseCommonValidator
+					.validateAlphaSpecialCharacters(benefitPlanMainVO
+							.getBenefitPlanAddlDesc())) {
+				setErrorMessage(
+						BenefitPlanConstants.BP_NAVIGATOR_BUSINESSUNIT_SPCHAR_CHCK,
+						new Object[] {},
+						BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES,
+						"bpaddldesctxt");
+				flag = false;
+			}
+		}
+		if (benefitPlanMainVO.getBenefitPlanDesc() != null
+				&& !(benefitPlanMainVO.getBenefitPlanDesc().equals(BenefitPlanConstants.EMPTY_STRING))) {
+			if (!EnterpriseCommonValidator
+					.validateAlphaSpecialCharacters(benefitPlanMainVO
+							.getBenefitPlanDesc())) {
+				setErrorMessage(
+						BenefitPlanConstants.BP_NAVIGATOR_BPDESCRIPTION_SPCHAR_CHCK,
+						new Object[] {},
+						BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES,
+						"bpdesctxt");
+				flag = false;
+			}
+		}
+
+		try {
+			if (benefitPlanMainVO.getBeginDate().trim().length() != 0) {
+				planBeginDate = new Date(sdf.parse(
+						benefitPlanMainVO.getBeginDate()).getTime());
+			}
+			if (benefitPlanMainVO.getEndDate().trim().length() != 0) {
+				planEndDate = new Date(sdf
+						.parse(benefitPlanMainVO.getEndDate()).getTime());
+			}
+		} catch (ParseException e2) {
+			logger.error("ParseException:" + e2.getMessage(), e2);
+		}
+
+		if (benefitPlanMainVO.getBeginDate() == null
+				|| benefitPlanMainVO.getBeginDate().trim().length() == 0) {
+			setErrorMessage(BenefitPlanConstants.BENEFIT_PLAN_BEGDATE_REQ,
+					new Object[] {},
+					BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES,
+					"begindatetxt");
+			flag = false;
+		}
+// New API for performance
+		//LineOfBusiness lineOfBusiness = getLineOfBussiness(bpCommonDataBean
+		//		.getBenefitPlanMainVO().getLobId());
+		List lobDatesList = getLOBDates(bpCommonDataBean.getBenefitPlanMainVO().getLobId());
+		
+		//if (lineOfBusiness != null) {
+		if (lobDatesList != null && !lobDatesList.isEmpty()) {
+			boolean equals1 = false;
+			boolean equals2 = false;
+			boolean equals3 = false;
+			Object lobDates[] =  (Object[])lobDatesList.get(0);
+			Date lobBeginDate =  (Date)lobDates[0];
+			Date lobEndDate =  (Date)lobDates[1];
+			if (planBeginDate != null && lobBeginDate != null) {
+				equals1 = planBeginDate.equals(lobBeginDate);
+			}
+			if (planBeginDate != null && planEndDate != null) {
+				equals2 = planBeginDate.equals(planEndDate);
+			}
+			if (planEndDate != null && lobEndDate != null) {
+				equals3 = planEndDate.equals(lobEndDate);
+			}
+			if (benefitPlanMainVO.getBeginDate() != null
+					&& benefitPlanMainVO.getBeginDate().trim().length() != 0) {
+				if (EnterpriseCommonValidator.compareLesserDate(planBeginDate,
+						lobBeginDate)
+						&& (!equals1)) {
+					setErrorMessage(
+							BenefitPlanConstants.BENEFIT_PLAN_BEG_DATE_PRIOR_LOB_DATE,
+							new Object[] {},
+							BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES,
+							"begindatetxt");
+					flag = false;
+				} else if (EnterpriseCommonValidator.compareGreaterDate(
+						planEndDate, lobEndDate)
+						&& (!equals3)) {
+					setErrorMessage(
+							BenefitPlanConstants.BENEFIT_PLAN_END_DATE_AFTER_LOB_DATE,
+							new Object[] {},
+							BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES,
+							"enddatetxt");
+					flag = false;
+				} else if (EnterpriseCommonValidator.compareGreaterDate(
+						planBeginDate, planEndDate)
+						&& (!equals2)) {
+					setErrorMessage(
+							BenefitPlanConstants.BENEFIT_PLAN_INVALID_PLAN_BEG_DATE,
+							new Object[] {},
+							BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES,
+							"begindatetxt");
+					flag = false;
+				}
+			}
+			SimpleDateFormat dateFormat = new SimpleDateFormat(
+					BenefitPlanConstants.DATE_FORMAT);
+			Calendar cal = new GregorianCalendar(BenefitPlanConstants.MAX_YEAR,
+					BenefitPlanConstants.MAX_MONTH,
+					BenefitPlanConstants.MAX_DATE);
+			if (benefitPlanMainVO.getEndDate() == null
+					|| benefitPlanMainVO.getEndDate().trim().length() == 0) {
+				try {
+					bpCommonDataBean.getBenefitPlanMainVO().setEndDate(
+							dateConverter(dateFormat.parse(dateFormat
+									.format(cal.getTime()))));
+				} catch (ParseException e) {
+					logger.error("ParseException:" + e.getMessage(), e);
+				}
+			}
+		} else {
+			flag = false;
+			setErrorMessage(BenefitPlanConstants.BENEFIT_PLAN_LOB_INVALID,
+					new Object[] {},
+					BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "lobidtxt");
+
+		}
+		return flag;
+	}
+
+	/**
+	 * This method will fetch the LOB detail based on the LOBcode.
+	 * 
+	 * @param lobCode
+	 *            holds the lobcode.
+	 * @return lob
+	 */
+	public LineOfBusiness getLineOfBussiness(String lobCode) {
+		LineOfBusiness lob = new LineOfBusiness();
+		//LineOfBusinessDelegate lineOfBusinessDelegate = new LineOfBusinessDelegate();
+		try {
+			if (lobCode != null && !(lobCode.equals(BenefitPlanConstants.EMPTY_STRING))) {
+				//Changed for Performance
+				//lob = new LineOfBusinessDelegate().getLineOfBusinessDetail(lobCode);
+				lob = new LineOfBusinessDelegate().getLineOfBusiness(lobCode);
+			}
+		} catch (LineOfBusinessNotFoundException e1) {
+			logger.error("LineOfBusinessNotFoundException:" + e1.getMessage(),
+					e1);
+			flag = false;
+		}
+		return lob;
+	}
+
+	//Added for Performance
+	public List getLOBDates(String lobCode) {
+		//LineOfBusiness lob = new LineOfBusiness();
+		List lobDates = new ArrayList();
+		//LineOfBusinessDelegate lineOfBusinessDelegate = new LineOfBusinessDelegate();
+		try {
+			if (lobCode != null && !(lobCode.equals(BenefitPlanConstants.EMPTY_STRING))) {
+				//lob = new LineOfBusinessDelegate().getLineOfBusinessDetail(lobCode);
+				lobDates = new LineOfBusinessDelegate().getLOBDates(lobCode);
+			}
+		} catch (LineOfBusinessNotFoundException e1) {
+			logger.error("LineOfBusinessNotFoundException:" + e1.getMessage(),
+					e1);
+			flag = false;
+		}
+		return lobDates;
+	}
+	
+	/**
+	 * This method will fetch the LOB Name based on the LOBcode.
+	 * 
+	 * @param lobCode
+	 *            holds the lobcode.
+	 * @return lob
+	 */
+	public String getLineOfBussinessName(String lobCode) {
+		String lobName = BenefitPlanConstants.EMPTY;
+		//LineOfBusinessDelegate lineOfBusinessDelegate = new LineOfBusinessDelegate();
+		try {
+			if (lobCode != null && !(lobCode.equals(BenefitPlanConstants.EMPTY_STRING))) {
+				lobName = new LineOfBusinessDelegate().getLineOfBusinessName(lobCode);
+			}
+		} catch (LineOfBusinessNotFoundException e1) {
+			logger.error("LineOfBusinessNotFoundException:" + e1.getMessage(),
+					e1);
+			flag = false;
+		}
+		return lobName;
+	}
+	
+	/**
+	 * This method is used to converting String into date
+	 * 
+	 * @param stringDate
+	 * @return
+	 */
+	public Date convertingStringToDate(String stringDate) {
+		SimpleDateFormat sdf = new SimpleDateFormat(
+				BenefitPlanConstants.DATE_FORMAT);
+		Date convertedDate = null;
+		try {
+			if (stringDate != null) {
+				convertedDate = new Date(sdf.parse(stringDate).getTime());
+			}
+		} catch (ParseException e) {
+			logger.error("Parsing Exception:" + e.getMessage(), e);
+		}
+		return convertedDate;
+	}
+
+	public boolean mapInvalidFlag = true;
+
+	/**
+	 * @return Returns the mapInvalidFlag.
+	 */
+	public boolean isMapInvalidFlag() {
+		return mapInvalidFlag;
+	}
+
+	/**
+	 * @param mapInvalidFlag
+	 *            The mapInvalidFlag to set.
+	 */
+	public void setMapInvalidFlag(boolean mapInvalidFlag) {
+		this.mapInvalidFlag = mapInvalidFlag;
+	}
+
+	public boolean validatePlanExpiry() {
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(true);
+		String dbDate = (String) session
+				.getAttribute(BenefitPlanConstants.BENEFIT_PLAN_END_DATE_IN_SESSION);
+         //Modified for Defect ESPRD00898366
+		BenefitPlanMainVO benefitPlanMainVO; 
+		/* Added for the defect: ESPRD00834442 */
+		BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+		benefitPlanMainVO= bpCommonDataBean.getBenefitPlanMainVO();
+		//if (isExpired(dbDate)
+		if (isExpired(benefitPlanMainVO.getEndDate())
+				&&(!bpCommonDataBean.isNextPrevClicked() || /*isHeaderDataChanged() ||*/ bpCommonDataBean.isChildDataModified() || bpCommonDataBean.isChildDataDeleted()))
+		{
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * @return Returns the loadValidValues.
+	 */
+	public String getLoadValidValues() {
+		InputCriteria inputCriteria = null;
+		List list = new ArrayList();
+		List lobList = new ArrayList();
+		// PMD fix
+		//HashMap map1 = new HashMap();
+		HashMap map = new HashMap();
+		List list1 = new ArrayList();
+		
+		//ReferenceDataListVO referenceDataListVO1 = new ReferenceDataListVO();
+		ReferenceDataSearchVO referenceDataSearchVO1 = new ReferenceDataSearchVO();
+		final ReferenceServiceDelegate referenceServiceDelegate1 = new ReferenceServiceDelegate();
+		
+		ReferenceDataSearchVO referenceDataSearch = new ReferenceDataSearchVO();
+		//ReferenceServiceDelegate referenceServiceDelegate = new ReferenceServiceDelegate();
+		BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+		BPMainDataBean bpMainDataBean = (BPMainDataBean) getDataBean(BenefitPlanConstants.BP_MAIN_DB_NAME);
+		BPSAReqDataBean bpSAReqDataBean = (BPSAReqDataBean) getDataBean(BenefitPlanConstants.BP_SA_REQ_DB_NAME);
+		BPCoPayDataBean bpCoPayDataBean = (BPCoPayDataBean) getDataBean(BenefitPlanConstants.BP_COPAY_DB_NAME);
+		BPPlanLmtDataBean bpPlanLmtDataBean = (BPPlanLmtDataBean) getDataBean(BenefitPlanConstants.BP_PLAN_LIMIT_DB_NAME);
+		BPCoInsDataBean bpCoInsDataBean = (BPCoInsDataBean) getDataBean(BenefitPlanConstants.BP_COINS_DB_NAME);
+		BPDedDataBean bpDedDataBean = (BPDedDataBean) getDataBean(BenefitPlanConstants.BP_DED_DB_NAME);
+		BPOOPDataBean bpOOPDataBean = (BPOOPDataBean) getDataBean(BenefitPlanConstants.BP_OOP_DB_NAME);
+		BPCovDataBean bpCovDataBean = (BPCovDataBean) getDataBean(BenefitPlanConstants.BP_COV_DB_NAME);
+		BPCutBackDataBean bpCutBackDataBean = (BPCutBackDataBean) getDataBean(BenefitPlanConstants.BP_CUT_DB_NAME);
+		BPEligibilityDataBean bpEligibilityDataBean = (BPEligibilityDataBean) getDataBean(BenefitPlanConstants.BP_ELIGI_DB_NAME);
+
+		inputCriteria = new InputCriteria();
+		inputCriteria.setFunctionalArea(FunctionalAreaConstants.REFERENCE);
+		inputCriteria.setElementName(ReferenceServiceDataConstants.R_LOB_CD);
+		list.add(inputCriteria);
+
+		inputCriteria = new InputCriteria();
+		inputCriteria.setFunctionalArea(FunctionalAreaConstants.REFERENCE);
+		inputCriteria.setElementName(ReferenceServiceDataConstants.BP_TY_CD);
+		list.add(inputCriteria);
+		
+		inputCriteria = new InputCriteria();
+		inputCriteria.setFunctionalArea(FunctionalAreaConstants.REFERENCE);
+		inputCriteria.setElementName(ReferenceServiceDataConstants.R_BP_ADDL_DESC);
+		list.add(inputCriteria);
+		
+		//Added for BP47
+		inputCriteria = new InputCriteria();
+		inputCriteria.setFunctionalArea(FunctionalAreaConstants.REFERENCE1);
+		inputCriteria.setElementName(ReferenceServiceDataConstants.R_BP_OOP_EXC_CD);
+		list.add(inputCriteria);
+		
+		//Added for BP48
+		inputCriteria = new InputCriteria();
+		inputCriteria.setFunctionalArea(FunctionalAreaConstants.REFERENCE1);
+		inputCriteria.setElementName(ReferenceServiceDataConstants.R_BP_CVG_EXC_CD);
+		list.add(inputCriteria);
+				
+		//Added for BP49
+		inputCriteria = new InputCriteria();
+		inputCriteria.setFunctionalArea(FunctionalAreaConstants.REFERENCE1);
+		inputCriteria.setElementName(ReferenceServiceDataConstants.R_BP_SA_MET_EXC_CD);
+		list.add(inputCriteria);
+		
+		/*MT Code Changes - GAP BP50- Changed By : 464235 Starts */
+		inputCriteria = new InputCriteria();
+		inputCriteria.setFunctionalArea(FunctionalAreaConstants.REFERENCE1);
+		inputCriteria
+				.setElementName(ReferenceServiceDataConstants.R_BP_LMT_MET_EXC_CD);
+		list.add(inputCriteria);
+		
+		inputCriteria = new InputCriteria();
+		inputCriteria.setFunctionalArea(FunctionalAreaConstants.REFERENCE1);
+		inputCriteria
+				.setElementName(ReferenceServiceDataConstants.R_BP_LMT_EXCD_EXC_CD);
+		list.add(inputCriteria);
+		/*MT Code Changes - GAP BP50- Changed By : 464235 Ends */
+		
+		inputCriteria = new InputCriteria();
+		inputCriteria.setFunctionalArea(FunctionalAreaConstants.REFERENCE1);
+		inputCriteria.setElementName(ReferenceServiceDataConstants.R_BP_SA_EXCD_EXC_CD);
+		list.add(inputCriteria);
+		
+		//Added for UIS-PGM-BP-012_BP32
+		inputCriteria = new InputCriteria();
+		inputCriteria.setFunctionalArea(FunctionalAreaConstants.REFERENCE);
+		inputCriteria.setElementName(ReferenceServiceDataConstants.R_PMT_CYCLE_CD);
+		list.add(inputCriteria);
+
+		inputCriteria = new InputCriteria();
+		inputCriteria.setFunctionalArea(FunctionalAreaConstants.REFERENCE);
+		inputCriteria
+				.setElementName(ReferenceServiceDataConstants.BP_NW_STAT_CD);
+		list.add(inputCriteria);
+
+		// Commented for BP45-BP status remove change
+		/*inputCriteria = new InputCriteria();
+		inputCriteria.setFunctionalArea(FunctionalAreaConstants.REFERENCE);
+		inputCriteria.setElementName(ReferenceServiceDataConstants.BP_STAT_CD);
+		list.add(inputCriteria);*/
+		
+		inputCriteria = new InputCriteria();
+		inputCriteria.setFunctionalArea(FunctionalAreaConstants.REFERENCE);
+		inputCriteria.setElementName(ReferenceServiceDataConstants.NW_ID);
+		list.add(inputCriteria);
+		inputCriteria = new InputCriteria();
+		inputCriteria.setFunctionalArea(FunctionalAreaConstants.REFERENCE);
+		inputCriteria
+				.setElementName(ReferenceServiceDataConstants.R_BP_OPTNS_CD);
+		list.add(inputCriteria);
+
+		//referenceDataSearch.setInputList(list);
+
+		// for SARuleCode
+		inputCriteria = new InputCriteria();
+		inputCriteria.setFunctionalArea(FunctionalAreaConstants.REFERENCE);
+		inputCriteria
+				.setElementName(ReferenceServiceDataConstants.R_BP_SA_RULE_CD);
+		list.add(inputCriteria);
+		//referenceDataSearch.setInputList(list);
+
+		// for LimitTypeCode.
+		inputCriteria = new InputCriteria();
+		inputCriteria.setFunctionalArea(FunctionalAreaConstants.REFERENCE);
+		inputCriteria
+				.setElementName(ReferenceServiceDataConstants.R_BP_LMT_TY_CD);
+		list.add(inputCriteria);
+		//referenceDataSearch.setInputList(list);
+
+		// for copaytypecode.
+		inputCriteria = new InputCriteria();
+		inputCriteria.setFunctionalArea(FunctionalAreaConstants.REFERENCE);
+		inputCriteria
+				.setElementName(ReferenceServiceDataConstants.R_BP_COPAY_LMT_TY_CD);
+		list.add(inputCriteria);
+		//referenceDataSearch.setInputList(list);
+		//Defect fix ESPRD00825703
+		inputCriteria = new InputCriteria();
+		inputCriteria.setFunctionalArea(FunctionalAreaConstants.REFERENCE);
+		inputCriteria
+				.setElementName(ReferenceServiceDataConstants.R_BP_COPAY_TY_CD);
+		list.add(inputCriteria);
+		
+		inputCriteria = new InputCriteria();
+		inputCriteria.setFunctionalArea(FunctionalAreaConstants.REFERENCE);
+		inputCriteria
+				.setElementName(ReferenceServiceDataConstants.R_BP_COINS_TY_CD);
+		list.add(inputCriteria);
+
+		// for coinstypecode.
+		inputCriteria = new InputCriteria();
+		inputCriteria.setFunctionalArea(FunctionalAreaConstants.REFERENCE);
+		inputCriteria
+				.setElementName(ReferenceServiceDataConstants.R_BP_COINS_LMT_TY_CD);
+		list.add(inputCriteria);
+		//referenceDataSearch.setInputList(list);
+
+		// for dedtypecode.
+		inputCriteria = new InputCriteria();
+		inputCriteria.setFunctionalArea(FunctionalAreaConstants.REFERENCE);
+		inputCriteria
+				.setElementName(ReferenceServiceDataConstants.R_BP_DED_TY_CD);
+		list.add(inputCriteria);
+		//referenceDataSearch.setInputList(list);
+
+		// for ooptypecode.
+		inputCriteria = new InputCriteria();
+		inputCriteria.setFunctionalArea(FunctionalAreaConstants.REFERENCE);
+		inputCriteria
+				.setElementName(ReferenceServiceDataConstants.R_BP_OOP_TY_CD);
+		list.add(inputCriteria);
+		//referenceDataSearch.setInputList(list);
+
+		// for ruletype.
+		inputCriteria = new InputCriteria();
+		inputCriteria.setFunctionalArea(FunctionalAreaConstants.REFERENCE);
+		inputCriteria
+				.setElementName(ReferenceServiceDataConstants.R_BP_SEQ_BP_RULE_TY_CD);
+		list.add(inputCriteria);
+
+		// ADDED BY ICS
+		inputCriteria = new InputCriteria();
+		inputCriteria.setFunctionalArea(FunctionalAreaConstants.REFERENCE);
+		inputCriteria
+				.setElementName(ReferenceServiceDataConstants.R_FUNC_AREA_CD);
+		list.add(inputCriteria);
+		
+		//added for functional area 
+		inputCriteria = new InputCriteria();
+		inputCriteria.setFunctionalArea(FunctionalAreaConstants.REFERENCE);
+		inputCriteria
+				.setElementName(ReferenceServiceDataConstants.R_BP_FUN_AREA);
+		list.add(inputCriteria);
+		
+		// Added for UIS-PGM-BP-012_BP25
+		inputCriteria = new InputCriteria();
+		inputCriteria.setFunctionalArea(FunctionalAreaConstants.REFERENCE);
+		inputCriteria
+				.setElementName(ReferenceServiceDataConstants.R_MAP_TY_CD);
+		list.add(inputCriteria);
+		
+	
+		
+		//added for system parameter
+		inputCriteria = new InputCriteria();
+		inputCriteria.setFunctionalArea(FunctionalAreaConstants.REFERENCE);
+		inputCriteria
+				.setElementName(ReferenceServiceDataConstants.R_BP_SYS_PARAM);
+		list1.add(inputCriteria);
+		
+		//added for system parameter2
+		inputCriteria = new InputCriteria();
+		inputCriteria.setFunctionalArea(FunctionalAreaConstants.REFERENCE);
+		inputCriteria
+				.setElementName(ReferenceServiceDataConstants.R_BP_SYS_PARAM2);
+		list1.add(inputCriteria);
+
+		referenceDataSearch.setInputList(list);
+		referenceDataSearchVO1.setInputList(list1);
+
+		ReferenceDataListVO referenceDataListVO = new ReferenceDataListVO();
+		try {
+			referenceDataListVO = new ReferenceServiceDelegate()
+					.getReferenceData(referenceDataSearch);
+		} catch (ReferenceServiceRequestException e) {
+			logger.error("ReferenceServiceRequestException:" + e.getMessage());
+		} catch (SystemListNotFoundException e) {
+			logger.error("SystemListNotFoundException:" + e.getMessage());
+		}
+		map = referenceDataListVO.getResponseMap();
+		if (map != null) {
+			bpMainDataBean.setLob(new ArrayList());
+			bpMainDataBean.setLob1(new ArrayList());
+			list = (List) map.get(FunctionalAreaConstants.REFERENCE + BenefitPlanConstants.HASH_TEXT
+					+ ReferenceServiceDataConstants.R_LOB_CD);
+			bpMainDataBean.setLob1(list);
+			for (int i = 0; i < list.size(); i++) {
+				ReferenceServiceVO refVo = (ReferenceServiceVO) list.get(i);
+				String codesDesc = refVo.getValidValueCode() + BenefitPlanConstants.DELIMITER
+						+ refVo.getShortDescription();
+				//PMD Fix
+				lobList.add(getSelectItem(refVo.getValidValueCode(),
+								codesDesc));
+			}
+			bpMainDataBean.setLob(lobList);
+		}
+		if (map != null) {
+			bpMainDataBean.setBenefitPlanType(new ArrayList());
+			list = (List) map.get(FunctionalAreaConstants.REFERENCE + BenefitPlanConstants.HASH_TEXT
+					+ ReferenceServiceDataConstants.BP_TY_CD);
+			for (int i = 0; i < list.size(); i++) {
+				ReferenceServiceVO refVo = (ReferenceServiceVO) list.get(i);
+				String codesDesc = refVo.getValidValueCode() + BenefitPlanConstants.DELIMITER
+						+ refVo.getShortDescription();
+				//PMD Fix
+				bpMainDataBean.getBenefitPlanType().add(
+						getSelectItem(refVo.getValidValueCode(), codesDesc));
+			}
+		}
+		
+		/**
+		 * Added as part of BP46 
+		 */
+		if (map != BenefitPlanConstants.NULL) {
+			
+			bpMainDataBean.setBusinessUnitList(new ArrayList());
+			list = (List) map.get(FunctionalAreaConstants.REFERENCE + BenefitPlanConstants.HASH_TEXT
+					+ ReferenceServiceDataConstants.R_BP_ADDL_DESC);
+			for (int i = 0; i < list.size(); i++) {
+				ReferenceServiceVO refVo = (ReferenceServiceVO) list.get(i);
+				String codesDesc = refVo.getValidValueCode() + BenefitPlanConstants.DELIMITER
+						+ refVo.getLongDescription();
+				//PMD Fix
+				bpMainDataBean.getBusinessUnitList().add(
+						getSelectItem(refVo.getValidValueCode(), codesDesc));
+			}
+		}
+		/**
+		 * End of Bp46
+		 */
+		
+		/**
+		 * Added as part of BP47
+		 */
+		if (map != BenefitPlanConstants.NULL) {
+			
+			bpOOPDataBean.setOopMetExcCDList(new ArrayList());
+			list = (List) map.get(FunctionalAreaConstants.REFERENCE1 + BenefitPlanConstants.HASH_TEXT
+					+ ReferenceServiceDataConstants.R_BP_OOP_EXC_CD);
+			for (int i = 0; i < list.size(); i++) {
+				ReferenceServiceVO refVo = (ReferenceServiceVO) list.get(i);
+				String codesDesc = refVo.getValidValueCode() + BenefitPlanConstants.DELIMITER
+						+ refVo.getLongDescription();
+				//PMD Fix
+				bpOOPDataBean.getOopMetExcCDList().add(
+						getSelectItem(refVo.getValidValueCode(), codesDesc));
+			}
+		}
+		
+		/**
+		 * End of Bp47
+		 */
+		
+		/**
+		 * Added as part of BP48
+		 */
+		if (map != BenefitPlanConstants.NULL) {
+			
+			bpCovDataBean.setCovExeCodeList(new ArrayList());
+			list = (List) map.get(FunctionalAreaConstants.REFERENCE1 + BenefitPlanConstants.HASH_TEXT
+					+ ReferenceServiceDataConstants.R_BP_CVG_EXC_CD);
+			for (int i = 0; i < list.size(); i++) {
+				ReferenceServiceVO refVo = (ReferenceServiceVO) list.get(i);
+				String codesDesc = refVo.getValidValueCode() + BenefitPlanConstants.DELIMITER
+						+ refVo.getLongDescription();
+				//PMD Fix
+				bpCovDataBean.getCovExeCodeList().add(
+						getSelectItem(refVo.getValidValueCode(), codesDesc));
+			}
+		}
+	
+		/*MT Code Changes - GAP BP50- Changed By : 464235 Starts */
+		if (map != BenefitPlanConstants.NULL) {
+			bpPlanLmtDataBean.setBpLimitMetExceptionCode(new ArrayList());
+			list = (List) map.get(FunctionalAreaConstants.REFERENCE1 + BenefitPlanConstants.HASH_TEXT
+					+ ReferenceServiceDataConstants.R_BP_LMT_MET_EXC_CD);
+			for (int i = 0; i < list.size(); i++) {
+				ReferenceServiceVO refVo = (ReferenceServiceVO) list.get(i);
+				String codesDesc = refVo.getValidValueCode() + BenefitPlanConstants.DELIMITER
+						+ refVo.getShortDescription();
+				bpPlanLmtDataBean.getBpLimitMetExceptionCode().add(
+						getSelectItem(refVo.getValidValueCode(), codesDesc));
+			}
+		}
+		
+		if (map != BenefitPlanConstants.NULL) {
+			bpPlanLmtDataBean.setBpLimitOverExceptionCode(new ArrayList());
+			list = (List) map.get(FunctionalAreaConstants.REFERENCE1 + BenefitPlanConstants.HASH_TEXT
+					+ ReferenceServiceDataConstants.R_BP_LMT_EXCD_EXC_CD);
+			for (int i = 0; i < list.size(); i++) {
+				ReferenceServiceVO refVo = (ReferenceServiceVO) list.get(i);
+				String codesDesc = refVo.getValidValueCode() + BenefitPlanConstants.DELIMITER
+						+ refVo.getShortDescription();
+				bpPlanLmtDataBean.getBpLimitOverExceptionCode().add(
+						getSelectItem(refVo.getValidValueCode(), codesDesc));
+			}
+		}
+		/*MT Code Changes - GAP BP50- Changed By : 464235 ends */
+		
+		/**
+		 * Added as part of BP49
+		 */
+		if (map != BenefitPlanConstants.NULL) {
+			
+			bpSAReqDataBean.setSalmtMetExcCDList(new ArrayList());
+			list = (List) map.get(FunctionalAreaConstants.REFERENCE1 + BenefitPlanConstants.HASH_TEXT
+					+ ReferenceServiceDataConstants.R_BP_SA_MET_EXC_CD);
+			for (int i = 0; i < list.size(); i++) {
+				ReferenceServiceVO refVo = (ReferenceServiceVO) list.get(i);
+				String codesDesc = refVo.getValidValueCode() + BenefitPlanConstants.DELIMITER
+						+ refVo.getLongDescription();
+				//PMD Fix
+				bpSAReqDataBean.getSalmtMetExcCDList().add(
+						getSelectItem(refVo.getValidValueCode(), codesDesc));
+			}
+		}
+		
+		if (map != BenefitPlanConstants.NULL) {
+			
+			bpSAReqDataBean.setSalmtExceedExcCDList(new ArrayList());
+			list = (List) map.get(FunctionalAreaConstants.REFERENCE1 + BenefitPlanConstants.HASH_TEXT
+					+ ReferenceServiceDataConstants.R_BP_SA_EXCD_EXC_CD);
+			for (int i = 0; i < list.size(); i++) {
+				ReferenceServiceVO refVo = (ReferenceServiceVO) list.get(i);
+				String codesDesc = refVo.getValidValueCode() + BenefitPlanConstants.DELIMITER
+						+ refVo.getLongDescription();
+				//PMD Fix
+				bpSAReqDataBean.getSalmtExceedExcCDList().add(
+						getSelectItem(refVo.getValidValueCode(), codesDesc));
+			}
+		}
+		/**
+		 * End of Bp49
+		 */
+		
+		//Added for UIS-PGM-BP-012_BP32 
+		if (map != BenefitPlanConstants.NULL) {
+			
+			bpMainDataBean.setPaymentCycleList(new ArrayList());
+			list = (List) map.get(FunctionalAreaConstants.REFERENCE + BenefitPlanConstants.HASH_TEXT
+					+ ReferenceServiceDataConstants.R_PMT_CYCLE_CD);
+			for (int i = 0; i < list.size(); i++) {
+				ReferenceServiceVO refVo = (ReferenceServiceVO) list.get(i);
+				String codesDesc = refVo.getValidValueCode() + BenefitPlanConstants.DELIMITER
+						+ refVo.getLongDescription();
+				//PMD Fix
+				bpMainDataBean.getPaymentCycleList().add(
+						getSelectItem(refVo.getValidValueCode(), codesDesc));
+			}
+		}
+		if (map != null) {
+			bpCommonDataBean.setBenefitPlanNwStatus(new ArrayList());
+			list = (List) map.get(FunctionalAreaConstants.REFERENCE + BenefitPlanConstants.HASH_TEXT
+					+ ReferenceServiceDataConstants.BP_NW_STAT_CD);
+			for (int i = 0; i < list.size(); i++) {
+				ReferenceServiceVO refVo = (ReferenceServiceVO) list.get(i);
+				String codesDesc = refVo.getValidValueCode() + BenefitPlanConstants.DELIMITER
+						+ refVo.getShortDescription();
+				//PMD Fix
+				bpCommonDataBean.getBenefitPlanNwStatus().add(
+						getSelectItem(refVo.getValidValueCode(), codesDesc));
+			}
+		}
+		// Added for UIS-PGM-BP-012_BP25
+		if (map != BenefitPlanConstants.NULL) {
+			bpEligibilityDataBean.setMapTYCode(new ArrayList());
+			list = (List) map.get(FunctionalAreaConstants.REFERENCE + BenefitPlanConstants.HASH_TEXT
+					+ ReferenceServiceDataConstants.R_MAP_TY_CD);
+			for (int i = 0; i < list.size(); i++) {
+				ReferenceServiceVO refVo = (ReferenceServiceVO) list.get(i);
+				String codesDesc = refVo.getValidValueCode() + BenefitPlanConstants.DELIMITER
+						+ refVo.getShortDescription();
+				//PMD Fix
+				bpEligibilityDataBean.getMapTYCode().add(
+						getSelectItem(refVo.getValidValueCode(), codesDesc));
+			}
+		}
+		
+		// Commented for BP45-BP status remove change
+		/*if (map != null) {
+			bpMainDataBean.setBenefitPlanStatus(new ArrayList());
+			list = (List) map.get(FunctionalAreaConstants.REFERENCE + BenefitPlanConstants.HASH_TEXT
+					+ ReferenceServiceDataConstants.BP_STAT_CD);
+			for (int i = 0; i < list.size(); i++) {
+				ReferenceServiceVO refVo = (ReferenceServiceVO) list.get(i);
+				String codesDesc = refVo.getValidValueCode() + BenefitPlanConstants.DELIMITER
+						+ refVo.getShortDescription();
+				bpMainDataBean.getBenefitPlanStatus().add(
+						new SelectItem(refVo.getValidValueCode(), codesDesc));
+			}
+		}*/
+
+		if (map != null) {
+			bpMainDataBean.setBenefitPlanOption(new ArrayList());
+			list = (List) map.get(FunctionalAreaConstants.REFERENCE + BenefitPlanConstants.HASH_TEXT
+					+ ReferenceServiceDataConstants.R_BP_OPTNS_CD);
+			for (int i = 0; i < list.size(); i++) {
+				ReferenceServiceVO refVo = (ReferenceServiceVO) list.get(i);
+				String codesDesc = refVo.getValidValueCode() + BenefitPlanConstants.DELIMITER
+						+ refVo.getShortDescription();
+				//PMD Fix
+				bpMainDataBean.getBenefitPlanOption().add(
+						getSelectItem(refVo.getValidValueCode(), codesDesc));
+			}
+		}
+		if (map != null) {
+			bpSAReqDataBean.setSaRuleCode(new ArrayList());
+			list = (List) map.get(FunctionalAreaConstants.REFERENCE + BenefitPlanConstants.HASH_TEXT
+					+ ReferenceServiceDataConstants.R_BP_SA_RULE_CD);
+			for (int i = 0; i < list.size(); i++) {
+				ReferenceServiceVO refVo = (ReferenceServiceVO) list.get(i);
+				String codesDesc = refVo.getValidValueCode() + BenefitPlanConstants.DELIMITER
+						+ refVo.getShortDescription();
+				//PMD Fix
+				bpSAReqDataBean.getSaRuleCode().add(
+						getSelectItem(refVo.getValidValueCode(), codesDesc));
+			}
+		}
+
+		if (map != null) {
+			bpCommonDataBean.setLmtTYCode(new ArrayList());
+			list = (List) map.get(FunctionalAreaConstants.REFERENCE + BenefitPlanConstants.HASH_TEXT
+					+ ReferenceServiceDataConstants.R_BP_LMT_TY_CD);
+			for (int i = 0; i < list.size(); i++) {
+				ReferenceServiceVO refVo = (ReferenceServiceVO) list.get(i);
+				String codesDesc = refVo.getValidValueCode() + BenefitPlanConstants.DELIMITER
+						+ refVo.getShortDescription();
+				//PMD Fix
+				bpCommonDataBean.getLmtTYCode().add(
+						getSelectItem(refVo.getValidValueCode(), codesDesc));
+			}
+		}
+		// for copay type code.
+		if (map != null) {
+			bpCoPayDataBean.setCopayTYCode(new ArrayList());
+			list = (List) map.get(FunctionalAreaConstants.REFERENCE + BenefitPlanConstants.HASH_TEXT
+					+ ReferenceServiceDataConstants.R_BP_COPAY_LMT_TY_CD);
+			for (int i = 0; i < list.size(); i++) {
+				ReferenceServiceVO refVo = (ReferenceServiceVO) list.get(i);
+				String codesDesc = refVo.getValidValueCode() + BenefitPlanConstants.DELIMITER
+						+ refVo.getShortDescription();
+				//PMD Fix
+				bpCoPayDataBean.getCopayTYCode().add(
+						getSelectItem(refVo.getValidValueCode(), codesDesc));
+			}
+		}
+		//Defect fix ESPRD00825703
+		if (map != null) {
+			bpCoPayDataBean.setCopayTYCodeMain(new ArrayList());
+			list = (List) map.get(FunctionalAreaConstants.REFERENCE + BenefitPlanConstants.HASH_TEXT
+					+ ReferenceServiceDataConstants.R_BP_COPAY_TY_CD);
+		
+			for (int i = 0; i < list.size(); i++) {
+				ReferenceServiceVO refVo = (ReferenceServiceVO) list.get(i);
+				String codesDesc = refVo.getValidValueCode() + BenefitPlanConstants.DELIMITER
+						+ refVo.getShortDescription();
+				//PMD Fix
+				bpCoPayDataBean.getCopayTYCodeMain().add(
+						getSelectItem(refVo.getValidValueCode(), codesDesc));
+			}
+		}
+		
+		if (map != null) {
+			bpCoInsDataBean.setCoinsTYCodeMain(new ArrayList());
+			list = (List) map.get(FunctionalAreaConstants.REFERENCE + BenefitPlanConstants.HASH_TEXT
+					+ ReferenceServiceDataConstants.R_BP_COINS_TY_CD);
+			for (int i = 0; i < list.size(); i++) {
+				ReferenceServiceVO refVo = (ReferenceServiceVO) list.get(i);
+				String codesDesc = refVo.getValidValueCode() + BenefitPlanConstants.DELIMITER
+						+ refVo.getShortDescription();
+				//PMD Fix
+				bpCoInsDataBean.getCoinsTYCodeMain().add(
+						getSelectItem(refVo.getValidValueCode(), codesDesc));
+			}
+		}
+
+		// for coins type code.
+		if (map != null) {
+			bpCoInsDataBean.setCoinsTYCode(new ArrayList());
+			list = (List) map.get(FunctionalAreaConstants.REFERENCE + BenefitPlanConstants.HASH_TEXT
+					+ ReferenceServiceDataConstants.R_BP_COINS_LMT_TY_CD);
+			for (int i = 0; i < list.size(); i++) {
+				ReferenceServiceVO refVo = (ReferenceServiceVO) list.get(i);
+				String codesDesc = refVo.getValidValueCode() + BenefitPlanConstants.DELIMITER
+						+ refVo.getShortDescription();
+				//PMD Fix
+				bpCoInsDataBean.getCoinsTYCode().add(
+						getSelectItem(refVo.getValidValueCode(), codesDesc));
+			}
+		}
+
+		// for deductible type code.
+		if (map != null) {
+			bpDedDataBean.setDedTYCode(new ArrayList());
+			list = (List) map.get(FunctionalAreaConstants.REFERENCE + BenefitPlanConstants.HASH_TEXT
+					+ ReferenceServiceDataConstants.R_BP_DED_TY_CD);
+			for (int i = 0; i < list.size(); i++) {
+				ReferenceServiceVO refVo = (ReferenceServiceVO) list.get(i);
+				String codesDesc = refVo.getValidValueCode() + BenefitPlanConstants.DELIMITER
+						+ refVo.getShortDescription();
+				//PMD Fix
+				bpDedDataBean.getDedTYCode().add(
+						getSelectItem(refVo.getValidValueCode(), codesDesc));
+			}
+		}
+
+		// for ooptype code.
+		if (map != null) {
+			bpOOPDataBean.setOopTYCode(new ArrayList());
+			list = (List) map.get(FunctionalAreaConstants.REFERENCE + BenefitPlanConstants.HASH_TEXT
+					+ ReferenceServiceDataConstants.R_BP_OOP_TY_CD);
+			for (int i = 0; i < list.size(); i++) {
+				ReferenceServiceVO refVo = (ReferenceServiceVO) list.get(i);
+				String codesDesc = refVo.getValidValueCode() + BenefitPlanConstants.DELIMITER
+						+ refVo.getShortDescription();
+				//PMD Fix
+				bpOOPDataBean.getOopTYCode().add(
+						getSelectItem(refVo.getValidValueCode(), codesDesc));
+			}
+		}
+
+		// for rule code.
+		if (map != null) {
+			bpCutBackDataBean.setRuleType(new ArrayList());
+			list = (List) map.get(FunctionalAreaConstants.REFERENCE + BenefitPlanConstants.HASH_TEXT
+					+ ReferenceServiceDataConstants.R_BP_SEQ_BP_RULE_TY_CD);
+			for (int i = 0; i < list.size(); i++) {
+				ReferenceServiceVO refVo = (ReferenceServiceVO) list.get(i);
+				String codesDesc = refVo.getValidValueCode() + BenefitPlanConstants.DELIMITER
+						+ refVo.getShortDescription();
+				//PMD Fix
+				bpCutBackDataBean.getRuleType().add(
+						getSelectItem(refVo.getValidValueCode(), codesDesc));
+			}
+		}
+
+		// added by ics
+		if (map != null) {
+			bpPlanLmtDataBean
+					.setBenefitPlanEligFunctionlAreaList(new ArrayList());
+			bpPlanLmtDataBean
+					.setBenefitPlanNursFunctionlAreaList(new ArrayList());
+			list = (List) map.get(FunctionalAreaConstants.REFERENCE + BenefitPlanConstants.HASH_TEXT
+					+ ReferenceServiceDataConstants.R_FUNC_AREA_CD);
+			for (int i = 0; i < list.size(); i++) {
+				ReferenceServiceVO refVo = (ReferenceServiceVO) list.get(i);
+				String codesDesc = refVo.getValidValueCode() + BenefitPlanConstants.DELIMITER
+						+ refVo.getShortDescription();
+				//PMD Fix
+				bpPlanLmtDataBean.getBenefitPlanEligFunctionlAreaList().add(
+						getSelectItem(refVo.getValidValueCode(), codesDesc));
+				bpPlanLmtDataBean.getBenefitPlanNursFunctionlAreaList().add(
+						getSelectItem(refVo.getValidValueCode(), codesDesc));
+			}
+		}
+		
+		
+		
+		//SystemListDelegate sysListDelegate = new SystemListDelegate();
+		/* Changes As Per New API*/
+		try {
+			//SystemList sysList = new SystemListDelegate().getSystemListDetail(Long
+			List sysList = new SystemListDelegate().getSystemListDtlStrtVal(Long		
+					.valueOf(20), BenefitPlanConstants.FUNC_AREA_CD);
+			if (sysList != null && sysList.size() > 0) {
+				//Set systemDetails = sysList.getSystemListDetails();
+
+				//Iterator it = systemDetails.iterator();
+				Iterator it =  sysList.iterator();
+				bpMainDataBean.setCurProceCode(new ArrayList());
+				while (it.hasNext()) {
+					//SystemListDetail sysDetail = (SystemListDetail) it.next();
+					String codesDesc = (String) it.next();
+
+					//String codesDesc = sysDetail.getStartingValue();
+					//PMD Fix
+					bpMainDataBean.getCurProceCode().add(
+							getSelectItem(codesDesc,codesDesc));
+				}
+			}
+			//SystemList sysList1 = new SystemListDelegate().getSystemListDetail(Long
+			List sysList1 = new SystemListDelegate().getSystemListDtlStrtVal(Long	
+					.valueOf(21), BenefitPlanConstants.FUNC_AREA_CD);
+			if (sysList1 != null && sysList1.size() > 0) {
+				//Set systemDetails1 = sysList1.getSystemListDetails();
+
+				//Iterator it1 = systemDetails1.iterator();
+				Iterator it1 =  sysList1.iterator();
+				bpMainDataBean.setRetProceCode(new ArrayList());
+				while (it1.hasNext()) {
+					//SystemListInfo sysDetail = (SystemListInfo) it1.next();
+					String codesDesc = (String) it1.next();
+
+					//String codesDesc = sysDetail.getStartingValue();
+					//PMD Fix
+					bpMainDataBean.getRetProceCode().add(
+							getSelectItem(codesDesc,
+									codesDesc));
+				}
+			}
+			List lobList2 = bpMainDataBean.getLob1();
+			List lobList1 = new ArrayList();
+			if (lobList2 != null && lobList2.size() > 0) {
+				for (int i = 0; i < lobList2.size(); i++) {
+					ReferenceServiceVO refVo = (ReferenceServiceVO) lobList2
+							.get(i);
+					String codesDesc = refVo.getValidValueCode() + BenefitPlanConstants.DELIMITER
+							+ refVo.getShortDescription();
+					if (new AddBenefitPlanControllerBean().validateLob(refVo
+							.getValidValueCode())) {
+						//PMD Fix
+						lobList1.add(getSelectItem(refVo.getValidValueCode(),
+								codesDesc));
+					}
+				}
+				bpMainDataBean.setLob(lobList1);
+			}
+
+			bpMainDataBean.setValidValuesFlag(false);
+			
+			try {
+				/**
+				 * Calling the getReferenceDataForSystemListDetails method which
+				 * retreives the valid values.
+				 */
+				 referenceServiceDelegate1
+						.getReferenceDataForSystemListDetails(referenceDataSearchVO1);
+			} catch (ReferenceServiceRequestException referenceServiceRequestException) {
+				logger
+						.error("ReferenceServiceRequestException while retreiving the valid values"
+								+ referenceServiceRequestException.getMessage());
+			} catch (SystemListNotFoundException systemListNotFoundException) {
+				logger
+						.error("SystemListNotFoundException while retreiving the valid values"
+								+ systemListNotFoundException.getMessage());
+			}
+			// Commented for BP25
+			/*map1 = referenceDataListVO1.getResponseMap();
+			//added for functional area CR_ESPRD00851524
+			if (map != null) {
+				bpMainDataBean.setFunAreaCode(new ArrayList());
+				bpMainDataBean.setFunAreaCode2(new ArrayList());
+				list = (List) map.get(FunctionalAreaConstants.REFERENCE + BenefitPlanConstants.HASH_TEXT
+						+ ReferenceServiceDataConstants.R_BP_FUN_AREA);
+				for (int i = 0; i < list.size(); i++) {
+					ReferenceServiceVO refVo = (ReferenceServiceVO) list.get(i);
+					String codesDesc = refVo.getValidValueCode() + BenefitPlanConstants.DELIMITER
+							+ refVo.getShortDescription();
+					bpMainDataBean.getFunAreaCode().add((new SelectItem(refVo.getValidValueCode(),
+									codesDesc)));
+					bpMainDataBean.getFunAreaCode2().add((new SelectItem(refVo.getValidValueCode(),
+							codesDesc)));
+					
+				}
+				
+			}
+			
+			//added for system parameter CR_ESPRD00851524
+			if (map1 != null) {
+				bpMainDataBean.setSysParamNumber(new ArrayList());
+				list = (List) map1.get(FunctionalAreaConstants.REFERENCE + BenefitPlanConstants.HASH_TEXT
+						+ ReferenceServiceDataConstants.R_BP_SYS_PARAM);
+				for (int i = 0; i < list.size(); i++) {
+					ReferenceServiceVO refVo = (ReferenceServiceVO) list.get(i);
+					
+					bpMainDataBean.getSysParamNumber()
+							.add(new SelectItem(refVo.getStartingValue(),
+									refVo.getStartingValue()));
+				}
+			}
+			
+			
+			//added for system parameter 2 CR_ESPRD00851524
+			if (map1 != null) {
+				bpMainDataBean.setSysParamNumber2(new ArrayList());
+				list = (List) map1.get(FunctionalAreaConstants.REFERENCE + BenefitPlanConstants.HASH_TEXT
+						+ ReferenceServiceDataConstants.R_BP_SYS_PARAM2);
+				for (int i = 0; i < list.size(); i++) {
+					ReferenceServiceVO refVo = (ReferenceServiceVO) list.get(i);
+					bpMainDataBean.getSysParamNumber2()
+							.add(new SelectItem(refVo.getStartingValue(),
+									refVo.getStartingValue()));
+				}
+			}*/
+		} catch (SystemListNotFoundException e1) {
+			logger.error("SystemListNotFoundException:" + e1.getMessage(), e1);
+		} catch (NumberFormatException e1) {
+			logger.error("NumberFormatException:" + e1.getMessage(), e1);
+		}
+		
+		// Added for UIS-PGM-BP-012_BP32 - Setting Constant D-Daily for Payment cycle
+		bpCommonDataBean.getBenefitPlanMainVO().setPaymentCycle(BenefitPlanConstants.PMT_CYL_DAILY);
+
+		getNavigatorDetails();
+		
+		//Added for BP18 
+		try {
+			getLoadCarryOverPlans();
+		} catch (BenefitPlanNotFoundException e) {
+			logger.error("BenefitPlanNotFoundException:" + e.getMessage(), e);
+		}
+		
+		// Added for UIS-PGM-BP-012_BP25
+		BenefitPlanEligibilityControllerBean benefitPlanEligibilityControllerBean = new BenefitPlanEligibilityControllerBean();
+		benefitPlanEligibilityControllerBean.getMapDetailsForEligibility();
+		/**
+		 * Method called for gapId - ARCH56(UIS-PGM-BP-012 Add-Update Benefit Plan)
+		 */
+		getMapID(BenefitPlanConstants.DEFAULT_LOB_CD);
+		/**
+		 * End of ARCH56
+		 */
+		return null;
+	}
+
+	/**
+	 * @param loadValidValues
+	 *            The loadValidValues to set.
+	 */
+	public void setLoadValidValues(String loadValidValues) {
+	}
+
+	/**
+	 * This method will get userid from Security.
+	 * 
+	 * @return String
+	 */
+	public String getUserID() { 
+		String userId = "Testuserid";
+	  FacesContext fc = FacesContext.getCurrentInstance();
+		EnterpriseUserProfile eup = getUserData((HttpServletRequest) fc
+				.getExternalContext().getRequest(), (HttpServletResponse) fc
+				.getExternalContext().getResponse());
+		if (eup != null && eup.getUserId() != null
+				&& !eup.getUserId().trim().equals(BenefitPlanConstants.EMPTY_STRING)) {
+			userId = eup.getUserId();
+		}
+		return userId;
+	}
+
+	/**
+	 * This is getter method for link2Show
+	 * 
+	 * @return Returns the link2Show.
+	 */
+	public String getLink2Show() {
+	
+		BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+		BPCovDataBean bpCovDataBean = (BPCovDataBean) getDataBean(BenefitPlanConstants.BP_COV_DB_NAME);
+		BPMainDataBean bpMainDataBean = (BPMainDataBean) getDataBean(BenefitPlanConstants.BP_MAIN_DB_NAME);
+		BPSAReqDataBean bpSAReqDataBean = (BPSAReqDataBean) getDataBean(BenefitPlanConstants.BP_SA_REQ_DB_NAME);
+		BPCoPayDataBean bpCoPayDataBean = (BPCoPayDataBean) getDataBean(BenefitPlanConstants.BP_COPAY_DB_NAME);
+		BPPlanLmtDataBean bpPlanLmtDataBean = (BPPlanLmtDataBean) getDataBean(BenefitPlanConstants.BP_PLAN_LIMIT_DB_NAME);
+		BPCoInsDataBean bpCoInsDataBean = (BPCoInsDataBean) getDataBean(BenefitPlanConstants.BP_COINS_DB_NAME);
+		BPDedDataBean bpDedDataBean = (BPDedDataBean) getDataBean(BenefitPlanConstants.BP_DED_DB_NAME);
+		BPOOPDataBean bpOOPDataBean = (BPOOPDataBean) getDataBean(BenefitPlanConstants.BP_OOP_DB_NAME);
+		BPCutBackDataBean bpCutBackDataBean = (BPCutBackDataBean) getDataBean(BenefitPlanConstants.BP_CUT_DB_NAME);
+
+		CommonEntityDataBean commonEntityDataBean = ContactHelper
+				.getCommonEntityDataBean();
+		Map links2Hide = getPermissions();
+		Set keys = links2Hide.entrySet();
+		Iterator keyitr = keys.iterator();
+		while (keyitr.hasNext()) {
+			Map.Entry linkPermission = (Map.Entry) keyitr.next();
+			if (linkPermission.getKey().toString() != null) {
+				
+				if (links2Hide.size() > 0
+						&& ((BenefitPlanConstants.INQUIRY_CONSTANT)
+								.equals(links2Hide.get(linkPermission.getKey()
+										.toString())) || BenefitPlanConstants.INQUIRY_CONSTANT_SMALL
+								.equals(links2Hide.get(linkPermission.getKey()
+										.toString())))) {
+
+					bpCommonDataBean
+							.setDisableAddBP(ProgramConstants.BOOLEAN_TRUE);
+					bpCommonDataBean
+							.setDisableBPSave(ProgramConstants.BOOLEAN_TRUE);
+					bpCommonDataBean
+							.setDisableBPAdd(ProgramConstants.BOOLEAN_TRUE);
+					bpMainDataBean
+							.setDisableBPAddCCM(ProgramConstants.BOOLEAN_TRUE);
+					bpMainDataBean
+							.setDisableBPAddNWAssoc(ProgramConstants.BOOLEAN_TRUE);
+					bpMainDataBean
+							.setDisableBPCCMSave(ProgramConstants.BOOLEAN_TRUE);
+					bpMainDataBean
+							.setDisableBPNWAssocSave(ProgramConstants.BOOLEAN_TRUE);
+					bpMainDataBean
+							.setDisableBPCCMReset(ProgramConstants.BOOLEAN_TRUE);
+					bpMainDataBean
+							.setDisableBPNWAssocReset(ProgramConstants.BOOLEAN_TRUE);
+					bpCovDataBean
+							.setDisableBPAddCoverage(ProgramConstants.BOOLEAN_TRUE);
+					bpCovDataBean
+							.setDisableBPCoverageSave(ProgramConstants.BOOLEAN_TRUE);
+					bpCovDataBean
+							.setDisableBPCoverageReset(ProgramConstants.BOOLEAN_TRUE);
+					bpSAReqDataBean
+							.setDisableBPAddSA(ProgramConstants.BOOLEAN_TRUE);
+					bpSAReqDataBean
+							.setDisableBPSASave(ProgramConstants.BOOLEAN_TRUE);
+					bpSAReqDataBean
+							.setDisableBPSAReset(ProgramConstants.BOOLEAN_TRUE);
+					bpPlanLmtDataBean
+							.setDisableBPAddPlanLimit(ProgramConstants.BOOLEAN_TRUE);
+					bpPlanLmtDataBean
+							.setDisableBPPlanLimitSave(ProgramConstants.BOOLEAN_TRUE);
+					bpPlanLmtDataBean
+							.setDisableBPPlanLimitReset(ProgramConstants.BOOLEAN_TRUE);
+					bpCoPayDataBean
+							.setDisableBPAddCoPay(ProgramConstants.BOOLEAN_TRUE);
+					bpCoPayDataBean
+							.setDisableBPCoPaySave(ProgramConstants.BOOLEAN_TRUE);
+					bpCoPayDataBean
+							.setDisableBPCoPayReset(ProgramConstants.BOOLEAN_TRUE);
+					bpCoPayDataBean
+							.setDisableAddCoPayLimit(ProgramConstants.BOOLEAN_TRUE);
+					bpCoPayDataBean
+							.setDisableBPCoPayLimitSave(ProgramConstants.BOOLEAN_TRUE);
+					bpCoPayDataBean
+							.setDisableBPCoPayLimitReset(ProgramConstants.BOOLEAN_TRUE);
+					bpCoInsDataBean
+							.setDisableBPAddCoInsu(ProgramConstants.BOOLEAN_TRUE);
+					bpCoInsDataBean
+							.setDisableBPCoInsuSave(ProgramConstants.BOOLEAN_TRUE);
+					bpCoInsDataBean
+							.setDisableBPCoInsuReset(ProgramConstants.BOOLEAN_TRUE);
+					bpCoInsDataBean
+							.setDisableBPAddCoInsuLimit(ProgramConstants.BOOLEAN_TRUE);
+					bpCoInsDataBean
+							.setDisableBPCoInsuLimitSave(ProgramConstants.BOOLEAN_TRUE);
+					bpCoInsDataBean
+							.setDisableBPCoInsuLimitReset(ProgramConstants.BOOLEAN_TRUE);
+					bpSAReqDataBean
+							.setDisableBPSAReset(ProgramConstants.BOOLEAN_TRUE);
+					bpDedDataBean
+							.setDisableBPAddDeductible(ProgramConstants.BOOLEAN_TRUE);
+					bpDedDataBean
+							.setDisableBPDeductibleSave(ProgramConstants.BOOLEAN_TRUE);
+					bpDedDataBean
+							.setDisableBPDeductibleReset(ProgramConstants.BOOLEAN_TRUE);
+					bpOOPDataBean
+							.setDisableBPAddOutPacket(ProgramConstants.BOOLEAN_TRUE);
+					bpOOPDataBean
+							.setDisableBPOutPacketSave(ProgramConstants.BOOLEAN_TRUE);
+					bpOOPDataBean
+							.setDisableBPOutPacketReset(ProgramConstants.BOOLEAN_TRUE);
+					bpCutBackDataBean
+							.setDisableBPAddRuleSeq(ProgramConstants.BOOLEAN_TRUE);
+					bpCutBackDataBean
+							.setDisableBPRuleSeqSave(ProgramConstants.BOOLEAN_TRUE);
+					bpCutBackDataBean
+							.setDisableBPRuleSeqReset(ProgramConstants.BOOLEAN_TRUE);
+					bpCutBackDataBean
+							.setDisableBPAddRuleType(ProgramConstants.BOOLEAN_TRUE);
+					bpCutBackDataBean
+							.setDisableBPRuleTypeSave(ProgramConstants.BOOLEAN_TRUE);
+					bpCutBackDataBean
+							.setDisableBPRuleTypeReset(ProgramConstants.BOOLEAN_TRUE);
+					bpCommonDataBean
+							.setDisableBPNextSave(ProgramConstants.BOOLEAN_TRUE);
+					bpCommonDataBean
+							.setDisableBPrevSave(ProgramConstants.BOOLEAN_TRUE);
+					commonEntityDataBean.setDisableAddNotes(true);
+					commonEntityDataBean.setDisableFilterNotes(true);
+					commonEntityDataBean.setDisablePrintNotes(true);
+				}
+			}
+		}
+
+		return link2Show;
+	}
+
+	/**
+	 * @param link2Show
+	 *            The link2Show to set.
+	 */
+	public void setLink2Show(String link2Show) {
+
+	}
+
+	/**
+	 * 
+	 * @return Map linksMap.
+	 */
+
+	public Map getPermissions() {
+
+		Map linksMap = new HashMap();
+		//String userid = getUserID();
+		//FieldAccessControl fieldAccessControlImpl = new FieldAccessControl();
+		ArrayList linksList2Pass = new ArrayList();
+		linksList2Pass.add(BenefitPlanConstants.BENEFIT_PLAN_CONSTANT);
+		try {
+			linksMap = new FieldAccessControl().getActionLinkPermission(
+					linksList2Pass, getUserID());
+		} catch (SecurityFLSServiceException e) {
+			e.getCause();
+			//e.printStackTrace();
+		}
+		return linksMap;
+	}
+
+	/**
+	 * This method is called when a mapId is changed in Edit mode.
+	 */
+	public void changeMapID(ValueChangeEvent vce) {
+		BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+		//bpCommonDataBean.setFocusThisId("changeMapID");
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(true);
+		String mapID = (String) vce.getNewValue();
+		String lobID = (String) session.getAttribute("LobID");
+		if (StringUtils.isNotBlank(mapID) && StringUtils.isNotBlank(lobID)) {
+			session.setAttribute("newMapSetID", mapID + BenefitPlanConstants.DELMTR + lobID);
+		}
+	}
+
+	public String getNavigatorDetails() {
+		ExternalContext context = FacesContext.getCurrentInstance()
+				.getExternalContext();
+		Object request = context.getRequest();
+		if (request instanceof RenderRequest) {
+
+			RenderRequest portletRequest = (RenderRequest) request;
+			String bpId = (String) portletRequest.getPortletSession()
+					.getAttribute("BenefitID");
+			String lobCode = (String) portletRequest.getPortletSession()
+					.getAttribute("lobCode");
+			if (lobCode != null && bpId != null) {
+				BPMainDataBean bpMainDataBean = (BPMainDataBean) getDataBean(BenefitPlanConstants.BP_MAIN_DB_NAME);
+				//String bpOption = bpMainDataBean.getBpOption();
+				//UpdateBenefitPlanControllerBean updatebenefit = new UpdateBenefitPlanControllerBean();
+				new UpdateBenefitPlanControllerBean().viewBenefitPlan(bpId, bpMainDataBean.getBpOption(), lobCode);
+			}
+		}
+		return BenefitPlanConstants.EMPTY_STRING;
+
+	}
+
+	/**
+	 * This method navigate the user to the AddPage.
+	 * 
+	 * @return String
+	 */
+	public String navAddBP() {
+		BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+		BPMainDataBean bpMainDataBean = (BPMainDataBean) getDataBean(BenefitPlanConstants.BP_MAIN_DB_NAME);
+		cleanAllBeansForNewBP();
+		bpCommonDataBean.setBenefitPlanMainVO(new BenefitPlanMainVO());
+		bpMainDataBean.setBenefitPlanCohortVO(new BenefitPlanCohortVO());
+		bpMainDataBean
+				.setBenefitPlanCaseManagementVO(new BenefitPlanCaseMgmtVO());
+		bpMainDataBean.setBenefitPlanNwAssocVO(new BenefitPlanNwAssocVO());
+		bpMainDataBean.getNwAsscList().clear();
+		bpMainDataBean.getCapitationList().clear();
+		bpMainDataBean.setShowBenefitPlan(true);
+		bpCommonDataBean.setNoData(true);
+		bpCommonDataBean.setNoOtherData(true);
+		/**Hide Case n Network*/
+		bpMainDataBean.setShowCase(false);
+		bpCommonDataBean.setEditOther(false);
+		bpMainDataBean.setShowNwAssc(false);
+		/*Code to enable LOB Code dropdown always*/
+		bpMainDataBean.setProtectBP(false);
+		bpMainDataBean.setBenefitPlanExists(false);
+		bpCommonDataBean.setFocusThisId(BenefitPlanConstants.EMPTY);
+		return BenefitPlanConstants.NAV_ADD_BENEFIT_PLAN;
+	}
+
+	public void cleanAllBeans() {
+		 BenefitPlanHelper benefitPlanHelper = new BenefitPlanHelper();
+		BPCovDataBean bpCovDataBean = (BPCovDataBean) getDataBean(BenefitPlanConstants.BP_COV_DB_NAME);
+		BPSAReqDataBean bpSAReqDataBean = (BPSAReqDataBean) getDataBean(BenefitPlanConstants.BP_SA_REQ_DB_NAME);
+		BPPlanLmtDataBean bpPlanLmtDataBean = (BPPlanLmtDataBean) getDataBean(BenefitPlanConstants.BP_PLAN_LIMIT_DB_NAME);
+		BPCoPayDataBean bpCoPayDataBean = (BPCoPayDataBean) getDataBean(BenefitPlanConstants.BP_COPAY_DB_NAME);
+		BPCoInsDataBean bpCoInsDataBean = (BPCoInsDataBean) getDataBean(BenefitPlanConstants.BP_COINS_DB_NAME);
+		BPDedDataBean bpDedDataBean = (BPDedDataBean) getDataBean(BenefitPlanConstants.BP_DED_DB_NAME);
+		BPOOPDataBean bpOOPDataBean = (BPOOPDataBean) getDataBean(BenefitPlanConstants.BP_OOP_DB_NAME);
+		BPCutBackDataBean bpCutBackDataBean = (BPCutBackDataBean) getDataBean(BenefitPlanConstants.BP_CUT_DB_NAME);
+
+		benefitPlanHelper.cleanBPCovDataBean(bpCovDataBean);
+		benefitPlanHelper.cleanBPSADataBean(bpSAReqDataBean);
+		benefitPlanHelper.cleanBPPlanLmtDataBean(bpPlanLmtDataBean);
+		benefitPlanHelper.cleanBPCoPayDataBean(bpCoPayDataBean);
+		benefitPlanHelper.cleanBPCoInsDataBean(bpCoInsDataBean);
+		benefitPlanHelper.cleanBPDedDataBean(bpDedDataBean);
+		benefitPlanHelper.cleanBPOOPDataBean(bpOOPDataBean);
+		benefitPlanHelper.cleanBPCutBackDataBean(bpCutBackDataBean);
+	}
+
+	public void cleanAllBeansForNewBP() {
+		BenefitPlanHelper benefitPlanHelper = new BenefitPlanHelper();
+		BPCovDataBean bpCovDataBean = (BPCovDataBean) getDataBean(BenefitPlanConstants.BP_COV_DB_NAME);
+		BPSAReqDataBean bpSAReqDataBean = (BPSAReqDataBean) getDataBean(BenefitPlanConstants.BP_SA_REQ_DB_NAME);
+		BPPlanLmtDataBean bpPlanLmtDataBean = (BPPlanLmtDataBean) getDataBean(BenefitPlanConstants.BP_PLAN_LIMIT_DB_NAME);
+		BPCoPayDataBean bpCoPayDataBean = (BPCoPayDataBean) getDataBean(BenefitPlanConstants.BP_COPAY_DB_NAME);
+		BPCoInsDataBean bpCoInsDataBean = (BPCoInsDataBean) getDataBean(BenefitPlanConstants.BP_COINS_DB_NAME);
+		BPDedDataBean bpDedDataBean = (BPDedDataBean) getDataBean(BenefitPlanConstants.BP_DED_DB_NAME);
+		BPOOPDataBean bpOOPDataBean = (BPOOPDataBean) getDataBean(BenefitPlanConstants.BP_OOP_DB_NAME);
+		BPCutBackDataBean bpCutBackDataBean = (BPCutBackDataBean) getDataBean(BenefitPlanConstants.BP_CUT_DB_NAME);
+
+		benefitPlanHelper.cleanBPCovDataBean(bpCovDataBean);
+		benefitPlanHelper.cleanBPSADataBean(bpSAReqDataBean);
+		benefitPlanHelper.cleanBPPlanLmtDataBean(bpPlanLmtDataBean);
+		benefitPlanHelper.cleanBPCoPayDataBean(bpCoPayDataBean);
+		benefitPlanHelper.cleanBPCoInsDataBean(bpCoInsDataBean);
+		benefitPlanHelper.cleanBPDedDataBean(bpDedDataBean);
+		benefitPlanHelper.cleanBPOOPDataBean(bpOOPDataBean);
+		benefitPlanHelper.cleanBPCutBackDataBean(bpCutBackDataBean);
+		bpCovDataBean.getBpCoverageList().clear();
+		bpSAReqDataBean.getBpSAList().clear();
+		bpPlanLmtDataBean.getBpLimit().clear();
+		bpCoPayDataBean.getCoPayLimits().clear();
+		bpCoPayDataBean.getCoPayList().clear();
+		bpCoInsDataBean.getCoIns().clear();
+		bpCoInsDataBean.getCoInsLmts().clear();
+		bpDedDataBean.getDeductible().clear();
+		bpOOPDataBean.getOopList().clear();
+		bpCutBackDataBean.getCutbackRuleList().clear();
+		bpCutBackDataBean.getCutbackCntlList().clear();
+	}
+	// Added for Performance
+	public boolean isLobExists(String lobCode) {
+		boolean isLOBExist = false;
+		try {
+			if (lobCode != null && !(lobCode.equals(BenefitPlanConstants.EMPTY_STRING))) {
+				isLOBExist = new LineOfBusinessDelegate().isLobExists(lobCode);
+			}
+		} catch (LineOfBusinessNotFoundException e1) {
+			logger.error("LineOfBusinessNotFoundException:" + e1.getMessage(),
+					e1);
+			flag = false;
+		}
+		return isLOBExist;
+	}
+	 /* Added for the defect: ESPRD00834442 */
+/*	 public boolean isHeaderDataChanged(){
+		 boolean isHeaderDataChanged = true;
+		 
+		 BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+		 BenefitPlanMainVO benefitPlanMainVO = bpCommonDataBean.getBenefitPlanMainVO();
+		 
+		 if(benefitPlanMainVO.getBeginDate().equals(benefitPlanMainVO.getDbBeginDate())
+			&& benefitPlanMainVO.getEndDate().equals(benefitPlanMainVO.getDbEndDate())
+			&& benefitPlanMainVO.getBenefitPlanDesc().equals(benefitPlanMainVO.getDbDesc())
+			&& ((benefitPlanMainVO.getDbAddlDesc() == null && (benefitPlanMainVO.getBenefitPlanAddlDesc() == null || benefitPlanMainVO.getBenefitPlanAddlDesc().equals(BenefitPlanConstants.EMPTY)))
+			|| 	benefitPlanMainVO.getBenefitPlanAddlDesc().equals(benefitPlanMainVO.getDbAddlDesc())))
+		 {
+			 isHeaderDataChanged = false;
+		 }
+		 return isHeaderDataChanged;
+	 }
+	 public boolean isMainDataChanged(){
+		 boolean isMainDataChanged = true;
+		 BPMainDataBean bpMainDataBean = (BPMainDataBean) getDataBean(BenefitPlanConstants.BP_MAIN_DB_NAME);
+		 BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+		 BenefitPlanMainVO benefitPlanMainVO = bpCommonDataBean.getBenefitPlanMainVO();
+		 if(benefitPlanMainVO.getCode().equals(benefitPlanMainVO.getDbTypeCode())
+			&& benefitPlanMainVO.getOptionsCode().equals(benefitPlanMainVO.getDbOptionsCode())
+			&& ((bpMainDataBean.getBenefitPlanCaseManagementVO().getCurrentProcCode() ==null && bpMainDataBean.getBenefitPlanCaseManagementVO().getDbCurrentProcCode() == null)
+					|| bpMainDataBean.getBenefitPlanCaseManagementVO().getCurrentProcCode().equals(bpMainDataBean.getBenefitPlanCaseManagementVO().getDbCurrentProcCode()))
+			&& ((bpMainDataBean.getBenefitPlanCaseManagementVO().getRetroProcCode()==null && bpMainDataBean.getBenefitPlanCaseManagementVO().getDbRetroProcCode() == null)
+					|| bpMainDataBean.getBenefitPlanCaseManagementVO().getRetroProcCode().equals(bpMainDataBean.getBenefitPlanCaseManagementVO().getDbRetroProcCode()))
+			)
+		 {
+			 isMainDataChanged = false;
+		 }
+		 return isMainDataChanged;
+	 }*/
+	 
+	 
+	 
+	 /*  MT Code Changes - GAP BP18 - Changed By : 428836 Starts */
+	 
+	 /**
+	 	 * This method is to get all the available Benefit plans
+	 	 * @return String
+	 	 * @throws BenefitPlanNotFoundException
+	 	 */
+	 
+	 	public String getLoadCarryOverPlans() throws BenefitPlanNotFoundException {
+			BPMainDataBean bpMainDataBean = (BPMainDataBean) getDataBean(BenefitPlanConstants.BP_MAIN_DB_NAME);
+			BenefitPlanDelegate bpDelegate = new BenefitPlanDelegate();
+			List<BenefitPlanMain> carryOverBenefitPlans = bpDelegate.getCarryOverBenefitPlans();
+			List<SelectItem> carryOverList= createCarryOverSelectItemList(carryOverBenefitPlans);
+			bpMainDataBean.setAvailableCarryOverBp(carryOverList);
+			//PMD Fix
+			loadCarryOverPlans= "";
+			return loadCarryOverPlans;
+		}
+
+		/**
+		 * @param the loadCarryOverPlans to set
+		 */
+	 	//PMD Fix
+		public void setLoadCarryOverPlans(final String loadCarryOverPlans) {
+			this.loadCarryOverPlans = loadCarryOverPlans;
+		}
+		
+	/**
+	 * 
+	 * @param carryOverList
+	 * @return
+	 */
+		//PMD Fix
+	public List<SelectItem> createCarryOverSelectItemList(final List<BenefitPlanMain> carryOverList){
+		List<SelectItem> selectItemList = new ArrayList<SelectItem>();
+		try{
+		if(carryOverList != null && !carryOverList.isEmpty()) {
+			for(BenefitPlanMain main : carryOverList){
+				String value= main.getBenefitPlanID() + BenefitPlanConstants.DELIMITER + main.getLobCode() + 
+						BenefitPlanConstants.DELIMITER + main.getBenefitPlanDesc() + BenefitPlanConstants.DELIMITER + main.getVersionNo();
+				String label= main.getBenefitPlanID() + BenefitPlanConstants.DELIMITER + main.getBenefitPlanDesc();
+				//PMD Fix
+				SelectItem item = getSelectItem(value, label);
+				selectItemList.add(item);
+			}
+		}
+		}catch(Exception e){
+			//PMD Fix
+			logger.error("Exception:" + e.getMessage(), e);
+		}
+		return selectItemList;
+	}
+	
+	
+	
+	/**
+     * This method is to move selected items from available list to selected
+     * list.
+     * 
+      * @param selectedItems
+     *            selectedItems is the parameter.
+     * @param availableList
+     *            availableList is the parameter.
+     * @param selectedList
+     *            selectedList is the parameter.
+     */
+		//PMD Fix
+     private void moveSelected(final List<String> selectedItems, final List availableList,
+                  final List selectedList) {
+    	 	//PMD Fix
+            if (selectedItems != BenefitPlanConstants.NULL) {
+                  int length = selectedItems.size();
+                  for (int i = 0; i < length; i++) {
+                         selectedList.add(removeItem(selectedItems.get(i), availableList));
+                  }
+            }
+     }
+     
+     /**
+     * This method is to move selected items from selected list box to available
+     * list box.
+     * 
+      * @param removeItems
+     *            removeItems is the parameter.
+     * @param availableList
+     *            availableList is the parameter.
+     * @param selectedList
+     *            selectedList is the parameter.
+     * @return Returns List
+     */
+     //PMD Fix
+     private List removeSelected(final List<String> removeItems, final List availableList,
+                  final List selectedList) {
+    	 	//PMD Fix
+            if (selectedList != BenefitPlanConstants.NULL) {
+                  int length = removeItems.size();
+                  for (int i = 0; i < length; i++) {
+                         availableList.add(removeItem(removeItems.get(i), selectedList));
+                  }
+            }
+            return availableList;
+     }
+
+     /**
+     * This method is to remove the selected or deselected item from the
+     * corresponding list.
+     * 
+      * @param value
+     *            value is the parameter.
+     * @param filterList
+     *            filterList is the parameter.
+     * @return Returns SelectItem
+     */
+     //PMD Fix
+     private SelectItem removeItem(final String value, final List filterList) {
+            SelectItem result = null;
+            int size = filterList.size();
+            for (int i = 0; i < size; i++) {
+                  SelectItem item = (SelectItem) filterList.get(i);
+                  if (value.equals(item.getValue())) {
+                         result = (SelectItem) filterList.remove(i);
+                         break;
+                  }
+            }
+            return result;
+     }
+     
+     /**
+		 * This method is to move selected elements of CarryOver Accumulator from
+		 * available to selected.
+		 * 
+		 * @return Returns String
+		 */
+     public String carryoverAccMoveSelected() {
+            
+            BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+        	BPMainDataBean bpMainDataBean = (BPMainDataBean) getDataBean(BenefitPlanConstants.BP_MAIN_DB_NAME);
+			moveSelected(bpMainDataBean.getCarryoverSelectedList(),
+					bpMainDataBean.getAvailableCarryOverBp(),
+					bpCommonDataBean.getBenefitPlanMainVO().getSelectedList());
+			return "carryoverAccMoveSelected";
+		}
+		
+		/**
+		 * This method is to remove selected elements of CarryOver Accumulator from
+		 * selected to available.
+		 * 
+		 * @return Returns String
+		 */
+     public String carryoverAccRemoveSelected() {
+			BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+			BPMainDataBean bpMainDataBean = (BPMainDataBean) getDataBean(BenefitPlanConstants.BP_MAIN_DB_NAME);
+			removeSelected(bpMainDataBean.getCarryoverRemovedList(),
+					bpMainDataBean.getAvailableCarryOverBp(),
+					bpCommonDataBean.getBenefitPlanMainVO().getSelectedList());
+//			bpCommonDataBean.setDeletedCarryOverList(deletedCarryOverList);
+			return "carryoverAccRemoveSelected";
+     }
+     
+     //PMD Fix
+     public void loadCarryOverBenefitPlans(final String bpId, final String lobCode){
+ 		BenefitPlanDelegate benefitPlanDelegate = new BenefitPlanDelegate();
+ 		BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+		BPMainDataBean bpMainDataBean = (BPMainDataBean) getDataBean(BenefitPlanConstants.BP_MAIN_DB_NAME);
+ 		try {
+ 			List<BenefitPlanMain> carryOverBenefitPlansForUpdate = benefitPlanDelegate.getCarryOverBenefitPlansForUpdate(bpId, lobCode);
+ 			List<BenefitPlanMain> selectedCarryOverBenefitPlans = benefitPlanDelegate.getSelectedCarryOverBenefitPlans(bpId, lobCode);
+ 			List<SelectItem> availList = createCarryOverSelectItemList(carryOverBenefitPlansForUpdate);
+ 			List<SelectItem> selectedList = createCarryOverSelectItemList(selectedCarryOverBenefitPlans);
+ 			bpMainDataBean.setAvailableCarryOverBp(availList);
+ 			//PMD Fix
+ 			bpCommonDataBean.getBenefitPlanMainVO().setSelectedList(selectedList);
+ 		} catch (BenefitPlanNotFoundException e) {
+ 			logger.error("BenefitPlanNotFoundException:" + e.getMessage(), e);
+ 		}
+ 	}
+     
+ 	//Added for UIS-PGM-BP-012_BP18 CarryOver Accumulator component added
+    //PMD Fix
+ 	public void showCryOverOnChange(final ValueChangeEvent e) {
+ 		BPMainDataBean bpMainDataBean = (BPMainDataBean) getDataBean(BenefitPlanConstants.BP_MAIN_DB_NAME);
+ 		String ieiCode = (String) e.getNewValue();
+ 		if(!(ieiCode.equals(BenefitPlanConstants.IEI_IGNORE))){
+ 			bpMainDataBean.setShowCryOvrAcc(true);
+ 		}
+ 		else{
+ 			bpMainDataBean.setShowCryOvrAcc(false);
+ 		}
+ 	}
+     
+     /*  MT Code Changes - GAP BP18 - Changed By : 428836 Ends */
+ 	
+ 	//PMD Fix
+ 	private SelectItem getSelectItem(final String value, final String code){
+ 		return new SelectItem(value, code);
+ 	}
+
+}

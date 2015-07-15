@@ -1,0 +1,460 @@
+package com.cognizant.designproject.rules.extraction;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.VelocityEngine;
+import org.xml.sax.SAXException;
+
+import com.cognizant.designproject.dto.MetaDataInfo;
+import com.cognizant.designproject.dto.RuleDescriptionInfo;
+import com.cognizant.designproject.dto.RuleDescriptor;
+import com.cognizant.designproject.listeners.ExtractMethodNamesListener;
+import com.cognizant.designproject.utilities.MetaData;
+import com.cognizant.designproject.utilities.RuleTemplateUtility;
+import com.cognizant.designproject.utilities.RulesExtXMLConfigReader;
+import com.cognizant.javagrammar.JavaLexer;
+import com.cognizant.javagrammar.JavaParser;
+
+
+/**
+ * @author 396662
+ * 
+ */
+public class RuleExternalizer {
+	
+	private static String FILE_SOURCE_BASE_URL;
+	private static String ROOT_DIRECTORY;
+	private static String RULE_POJO_TEMPLATE="\\src\\rule_pojo.vm";
+	private final String RULE_INVOKE_TEMPLATE="\\src\\invoke_rule.vm";
+	private final String RULE_EXTERNALIZE_XML="src\\RulesExternalize.xml";
+	
+	static
+	{
+		System.out.println("Static block ==>URL==>"+RuleExternalizer.class.getResource("/"+"rule_pojo.vm"));
+		RULE_POJO_TEMPLATE=RuleExternalizer.class.getResource("/"+"rule_pojo.vm").toString();
+	}
+	
+	public RuleExternalizer(String fileSourceBaseURL, String rootDirectory) {
+		RuleExternalizer.FILE_SOURCE_BASE_URL=fileSourceBaseURL;
+		RuleExternalizer.ROOT_DIRECTORY=rootDirectory;
+		
+	}
+
+	/**
+	 * To externalize Simple Rule
+	 * 
+	 * @param extractText
+	 * @param importsList
+	 * @param ruleContextParams
+	 * @param methodListMap
+	 * @param object 
+	 * @return
+	 */
+	public String externalizeRule(String extractText, List<String> importsList,
+			Map<String, String> ruleContextParams,String ruleId, String returnBoolean) {
+		/*
+		 * first, get and initialize an engine
+		 */
+
+		VelocityEngine ve = new VelocityEngine();
+
+		ve.init();
+
+		/*
+		 * organize our data
+		 */
+
+		RuleDescriptor ruleDescriptor = new RuleDescriptor();
+
+		String ruleInvokeCode = null;
+
+		try {
+			// Getting rule details from XML file
+			RuleDescriptionInfo ruleDescInfo=new RuleDescriptionInfo();
+			
+			getRuleDescriptionInfo(ruleDescInfo,ruleId);
+			//Below code used to copy method inside rule implementation class to POJO.- Starts
+			List<String> methodList = new ArrayList<String>();
+			
+			//need to remove code once Internal method find automatically
+			if(ruleDescInfo.getInternalMethodtoExtract()!=null && ruleDescInfo.getInternalMethodtoExtract().size()>0)
+				getMethodDetails(ruleDescInfo.getInternalMethodtoExtract(),methodList,importsList);
+			
+			if(ruleDescInfo.getExternalMethodtoExtract()!=null && ruleDescInfo.getExternalMethodtoExtract().size()>0)
+				getMethodDetails(ruleDescInfo.getExternalMethodtoExtract(),methodList,importsList);
+			
+			
+			ruleDescriptor.setImportsList(importsList);
+			ruleDescriptor.setRuleContextParams(ruleContextParams);
+			ruleDescriptor.setRuleText(extractText);
+			ruleDescriptor.setRuleId(ruleDescInfo.getMetaDataInfo().getRuleID());
+			ruleDescriptor.setRuleName(ruleDescInfo.getMetaDataInfo().getRuleName());
+			ruleDescriptor.setRulePackageName(ruleDescInfo.getPackageName());
+			ruleDescriptor.setRuleClassName(ruleDescInfo.getClassName());
+			ruleDescriptor.setRuleReturnField(returnBoolean);			
+			ruleDescriptor.setRuleMethods(methodList);
+			System.out.println("Method list==>" + methodList.size());
+
+			RuleTemplateUtility ruleTempUtility = new RuleTemplateUtility();
+
+			/*
+			 * add that list to a VelocityContext
+			 */
+
+			VelocityContext context = new VelocityContext();
+			List<RuleDescriptor> ruleDescriptorList = new ArrayList<RuleDescriptor>();
+			ruleDescriptorList.add(ruleDescriptor);
+			context.put("ruleDescriptorList", ruleDescriptorList);
+			context.put("ruleDescriptor", ruleDescriptor);
+			context.put("ruleTempUtility", ruleTempUtility);
+			context.put("isBatchRule", false);
+
+			String filepath = FILE_SOURCE_BASE_URL
+					+ getClassPath(ruleDescriptor.getRulePackageName(),
+							ruleDescriptor.getRuleClassName());
+
+			File file = new File(filepath);
+			BufferedWriter ruleExtractionWriter = new BufferedWriter(
+					new FileWriter(file));
+
+			System.out.println("=========================================================================");
+			System.out.println("Output file path==>"+file.getAbsolutePath());
+			System.out.println("=========================================================================");
+			
+			/*
+			 * get the Template
+			 */
+			Template t = ve.getTemplate(RULE_POJO_TEMPLATE);
+			StringWriter writer = new StringWriter();
+			t.merge(context, writer);
+			ruleExtractionWriter.write(writer.toString());
+			ruleExtractionWriter.close();
+			System.out.println(writer.toString());
+
+			// Adding metadata info in XML
+			//String mitaMapping = "Provider";// TODO to update the parameter
+			MetaDataInfo metaInfo = ruleDescInfo.getMetaDataInfo(); 
+					/*getMetaDataInfo(
+					ruleDescriptor.getRuleClassName(), mitaMapping,
+					ruleDescriptor.getRuleId(), ruleDescriptor.getRuleName());*/
+			MetaData.updateMetaDataInfo(metaInfo);
+
+			// get the invoke code
+			t = ve.getTemplate(RULE_INVOKE_TEMPLATE);
+			writer = new StringWriter();
+			t.merge(context, writer);
+
+			System.out.println(writer.toString());
+			ruleInvokeCode = writer.toString();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception ex) {
+			System.out.println("Exception==>" + ex.toString());
+			ex.printStackTrace();
+		}
+		return ruleInvokeCode;
+
+	}
+
+	/**
+	 * To externalize Batch Rules
+	 * 
+	 * @param rules
+	 * @param methodListMap
+	 * @return
+	 */
+	public String externalizeBatchRule(List<Map<String, Object>> rules) {
+		/*
+		 * first, get and initialize an engine
+		 */
+
+		VelocityEngine ve = new VelocityEngine();
+
+		ve.init();
+
+		/*
+		 * organize our data
+		 */
+
+		RuleDescriptor ruleDescriptor = null;
+
+		String ruleInvokeCode = null;
+
+		try {
+			String ruleId;
+			String extractText = null;
+			String returnBoolean=null;
+			List<String> importsList = null;
+			Map<String, String> ruleContextParams = null;
+			List<RuleDescriptor> ruleDescriptorList = null;
+			ruleDescriptorList = new ArrayList<RuleDescriptor>();
+			List<String> methodList = null;
+			RuleDescriptionInfo ruleDescInfo;
+
+			for (Map<String, Object> rule : rules) {
+
+				ruleDescriptor = new RuleDescriptor();
+				ruleDescInfo=new RuleDescriptionInfo();
+				ruleId = (String) rule.get("ruleId");
+				extractText = (String) rule.get("extractText");
+				importsList = (List<String>) rule.get("importsList");
+				ruleContextParams = (Map<String, String>) rule.get("ruleContextParams");
+				returnBoolean=(String)rule.get("returnBoolean");
+				System.out.println("ruleProperty==> " + ruleId);
+				System.out.println("ruleContextParams==>" + ruleContextParams.size());
+				
+				// to get externalize methods
+				methodList = new ArrayList<String>();
+				
+				// Getting rule details from XML file
+				getRuleDescriptionInfo(ruleDescInfo,ruleId);
+				
+				//need to remove code once Internal method identification completed automatically
+				if(ruleDescInfo.getInternalMethodtoExtract()!=null && ruleDescInfo.getInternalMethodtoExtract().size()>0)
+					getMethodDetails(ruleDescInfo.getInternalMethodtoExtract(),methodList,importsList);
+				
+				if(ruleDescInfo.getExternalMethodtoExtract()!=null && ruleDescInfo.getExternalMethodtoExtract().size()>0)
+					getMethodDetails(ruleDescInfo.getExternalMethodtoExtract(),methodList,importsList);
+				
+				
+				ruleDescriptor.setImportsList(importsList);
+				ruleDescriptor.setRuleContextParams(ruleContextParams);
+				ruleDescriptor.setRuleText(extractText);
+				ruleDescriptor.setRuleId(ruleDescInfo.getRuleID());
+				ruleDescriptor.setRuleName(ruleDescInfo.getMetaDataInfo().getRuleName());
+				//ruleDescriptor.setRuleDescription();
+				ruleDescriptor.setRulePackageName(ruleDescInfo.getPackageName());
+				ruleDescriptor.setRuleClassName(ruleDescInfo.getClassName());
+				ruleDescriptor.setRuleReturnField(returnBoolean);
+
+				ruleDescriptor.setRuleMethods(methodList);
+				System.out.println("Method list size==>" + methodList.size());
+
+				ruleDescriptorList.add(ruleDescriptor);
+				
+				// Adding metadata info in XML
+				MetaDataInfo metaInfo = ruleDescInfo.getMetaDataInfo();
+				MetaData.updateMetaDataInfo(metaInfo);
+
+			}
+
+			RuleTemplateUtility ruleTempUtility = new RuleTemplateUtility();
+
+			/*
+			 * add that list to a VelocityContext
+			 */
+
+			VelocityContext context = new VelocityContext();
+
+			context.put("ruleDescriptorList", ruleDescriptorList);
+			context.put("ruleDescriptor", ruleDescriptor);
+			context.put("ruleTempUtility", ruleTempUtility);
+			context.put("isBatchRule", true);
+
+			Template t;
+			StringWriter writer = new StringWriter();
+			BufferedWriter ruleExtractionWriter = null;
+			// Iteration to create pojos
+
+			for (RuleDescriptor ruleDesc : ruleDescriptorList) {
+
+				String filepath = FILE_SOURCE_BASE_URL
+						+ getClassPath(ruleDesc.getRulePackageName(),ruleDesc.getRuleClassName());
+				System.out.println("filepath==> " + filepath);
+				File file = new File(filepath);
+				ruleExtractionWriter = new BufferedWriter(new FileWriter(file));
+				context.put("ruleDescriptor", ruleDesc);
+
+				/*
+				 * get the Template
+				 */
+				t = ve.getTemplate(RULE_POJO_TEMPLATE);
+				writer = new StringWriter();
+				t.merge(context, writer);
+				ruleExtractionWriter.write(writer.toString());
+				// System.out.println( writer.toString() );
+
+				if (ruleExtractionWriter != null)
+					ruleExtractionWriter.close();
+				
+				
+			}
+
+			t = ve.getTemplate(RULE_INVOKE_TEMPLATE);
+			writer = new StringWriter();
+			t.merge(context, writer);
+
+			// System.out.println( writer.toString() );
+			ruleInvokeCode = writer.toString();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+		return ruleInvokeCode;
+
+	}
+	
+	
+	private void getMethodDetails(List<String> methodtoExtract,
+			List<String> methodList, List<String> importsList) throws Exception {
+		String classFile =null;
+		//String methodName;
+		for(String methodName:methodtoExtract)
+		{
+			classFile=methodName.substring(0,methodName.lastIndexOf("."));
+			methodName=methodName.substring(methodName.lastIndexOf(".")+1);
+			
+			classFile=classFile+".java";
+			List<File> fileList=new ArrayList<File>();
+			getFileObject(new File(ROOT_DIRECTORY),classFile,fileList);
+			if(fileList.size()==0){
+				throw new Exception("File Not Found. fileName :"+classFile);
+			}
+				
+			for (File file:fileList){
+				ANTLRInputStream input = new ANTLRInputStream(new FileInputStream(
+						file));
+				JavaLexer lexer = new JavaLexer(input);
+				CommonTokenStream tokens = new CommonTokenStream(lexer);
+				JavaParser parser = new JavaParser(tokens);
+				ParseTree tree = parser.compilationUnit();
+				ParseTreeWalker walker = new ParseTreeWalker();				
+
+				StringBuffer methodContent = new StringBuffer();
+				List<String> methodImports = new ArrayList<String>();
+				
+				//ExtractMethodNamesListener ext =new ExtractMethodNamesListener(tokens,methodMap);
+				ExtractMethodNamesListener ext =new ExtractMethodNamesListener(tokens,methodName,methodContent,methodImports);
+				walker.walk(ext, tree);	
+				if(!methodList.contains(methodContent.toString())){
+					methodList.add(methodContent.toString());	
+				}
+//				System.out.println("====================================");
+				System.out.println("Method data==>"+methodContent);
+				System.out.println("Method Imports==>"+methodImports);
+//				System.out.println("====================================");	
+				importsList.addAll(methodImports);
+			}
+		}
+		
+	}
+
+	private void getRuleDescriptionInfo(RuleDescriptionInfo ruleDescInfo,
+			String ruleID) throws Exception {
+		System.out.println("<<<getRuleDescriptionInfo method Call>>>");
+		SAXParserFactory saxParserFactory = null;
+		
+		SAXParser saxParser = null;
+		
+		RulesExtXMLConfigReader configReader = null;
+		
+		saxParserFactory = SAXParserFactory.newInstance();
+		
+		try {
+			saxParser = saxParserFactory.newSAXParser();
+		
+			configReader = new RulesExtXMLConfigReader(ruleDescInfo,ruleID);
+		
+		
+			saxParser.parse(new File(RULE_EXTERNALIZE_XML), configReader);
+			
+		} catch (ParserConfigurationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (SAXException sax) {
+			sax.printStackTrace();
+		}
+		catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
+		 if(ruleDescInfo==null || ruleDescInfo.getMetaDataInfo()==null)
+		 {
+			 System.out.println("Ruleid"+ruleID);
+			 System.out.println("Rule ID==>"+ruleID+"not found in XML File");
+			 throw new Exception("RuleId not found in XML File");
+		 }
+		 String implClass=ruleDescInfo.getMetaDataInfo().getImplementationClass();
+		 String packageName=implClass.substring(0, implClass.lastIndexOf('.'));
+		 String className=implClass.substring(implClass.lastIndexOf('.')+1);
+		 ruleDescInfo.setPackageName(packageName);
+		 ruleDescInfo.setClassName(className);
+	}
+
+	
+
+	/**
+	 * To get Rule Property
+	 * 
+	 * @param token
+	 * @return
+	 */
+	public String getRuleId(Token token) {
+
+		System.out.println("getRuleProperty==>Token=>" + token.getText());
+		String comments[] = token.getText().split(" ");
+		String ruleId = null;
+
+		if (comments.length > 1)
+			ruleId = comments[1];
+		System.out.println("rule id==> " + ruleId);
+
+		return ruleId.trim();
+	}
+
+	/**
+	 * To get POJO class path
+	 * 
+	 * @param packageName
+	 * @param className
+	 * @return
+	 */
+	private String getClassPath(String packageName, String className) {
+
+		String path = null;
+		path = packageName.replace(".", "\\");
+		// System.out.println(new File(FILE_SOURCE_BASE_URL+path).exists());
+		new File(FILE_SOURCE_BASE_URL + path).mkdirs();
+		path = path + "\\" + className + ".java";
+		System.out.println("Class Path ==> " + path);
+
+		return path;
+	}
+	
+	private void getFileObject(File rootDir,String fileName, List<File> list) {		
+		File[] files = rootDir.listFiles();
+		for (int i = 0; i < files.length; i++) {			
+			if (files[i].isDirectory())
+				getFileObject(files[i],fileName,list);
+			else {
+				String name=files[i].getAbsolutePath().replaceAll("\\\\",".");									
+				if(name.indexOf(fileName)!=-1){
+					list.add(files[i]);
+				}
+			}
+		}
+	}
+
+}

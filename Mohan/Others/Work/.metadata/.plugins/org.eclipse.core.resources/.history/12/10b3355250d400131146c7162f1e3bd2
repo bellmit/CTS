@@ -1,0 +1,288 @@
+package com.xerox.ghs.mmis.rif.rules.operations;
+
+import java.util.Date;
+import org.junit.*;
+import static org.junit.Assert.*;
+import com.xerox.ghs.mmis.rif.core.RuleInvocationContext;
+
+/**
+ * The class <code>SALineItemStatusChangeTest</code> contains tests for the class <code>{@link SALineItemStatusChange}</code>.
+ *
+ * @generatedBy CodePro at 5/5/14 5:55 PM
+ * @author 396662
+ * @version $Revision: 1.0 $
+ */
+public class SALineItemStatusChangeTest {
+	/**
+	 * Run the SALineItemStatusChange() constructor test.
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testSALineItemStatusChange_1()
+		throws Exception {
+		SALineItemStatusChange result = new SALineItemStatusChange();
+		assertNotNull(result);
+		// add additional test code here
+	}
+
+	/**
+	 * Run the int exec() method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testExec_1()
+		throws Exception {
+		SALineItemStatusChange fixture = new SALineItemStatusChange();
+		SALineItemInfo sALineItemInfo = new SALineItemInfo();
+		sALineItemInfo.setApprovalDate(new Date());
+		sALineItemInfo.setLineItemStatusCode("");
+		fixture.saLineItemInfo = sALineItemInfo;
+
+		int result = fixture.exec();
+
+		// add additional test code here
+		assertEquals(2, result);
+	}
+
+	/**
+	 * Run the int exec() method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testExec_2()
+		throws Exception {
+		SALineItemStatusChange fixture = new SALineItemStatusChange();
+		SALineItemInfo sALineItemInfo = new SALineItemInfo();
+		sALineItemInfo.setLineItemStatusCode("A");
+		fixture.saLineItemInfo = sALineItemInfo;
+
+		int result = fixture.exec();
+
+		// add additional test code here
+		assertEquals(2, result);
+	}
+
+	/**
+	 * Run the int exec() method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testExec_3()
+		throws Exception {
+		SALineItemStatusChange fixture = new SALineItemStatusChange();
+		SALineItemInfo sALineItemInfo = new SALineItemInfo();
+		sALineItemInfo.setApprovalDate((Date) null);
+		sALineItemInfo.setLineItemStatusCode("A");
+		fixture.saLineItemInfo = sALineItemInfo;
+
+		int result = fixture.exec();
+
+		// add additional test code here
+		assertEquals(2, result);
+	}
+
+	/**
+	 * Run the String getRuleDescription() method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testGetRuleDescription_1()
+		throws Exception {
+		SALineItemStatusChange fixture = new SALineItemStatusChange();
+		fixture.saLineItemInfo = new SALineItemInfo();
+
+		String result = fixture.getRuleDescription();
+
+		// add additional test code here
+		assertEquals("When line item status changes to approved, populate approval date to current system date.", result);
+	}
+
+	/**
+	 * Run the String getRuleId() method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testGetRuleId_1()
+		throws Exception {
+		SALineItemStatusChange fixture = new SALineItemStatusChange();
+		fixture.saLineItemInfo = new SALineItemInfo();
+
+		String result = fixture.getRuleId();
+
+		// add additional test code here
+		assertEquals("BR9482", result);
+	}
+
+	/**
+	 * Run the String getRuleName() method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testGetRuleName_1()
+		throws Exception {
+		SALineItemStatusChange fixture = new SALineItemStatusChange();
+		fixture.saLineItemInfo = new SALineItemInfo();
+
+		String result = fixture.getRuleName();
+
+		// add additional test code here
+		assertEquals("/operations/serviceauth/SALineItemStatusChange", result);
+	}
+
+	/**
+	 * Run the int init(RuleInvocationContext) method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testInit_1()
+		throws Exception {
+		SALineItemStatusChange fixture = new SALineItemStatusChange();
+		fixture.saLineItemInfo = null;
+		RuleInvocationContext ctx = new RuleInvocationContext(1);
+
+		int result = fixture.init(ctx);
+
+		// add additional test code here
+		assertEquals(0, result);
+	}
+
+	/**
+	 * Run the int init(RuleInvocationContext) method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testInit_2()
+		throws Exception {
+		SALineItemStatusChange fixture = new SALineItemStatusChange();
+		fixture.saLineItemInfo = null;
+		RuleInvocationContext ctx = new RuleInvocationContext(1);
+
+		int result = fixture.init(ctx);
+
+		// add additional test code here
+		assertEquals(0, result);
+	}
+
+	/**
+	 * Run the int init(RuleInvocationContext) method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testInit_3()
+		throws Exception {
+		SALineItemStatusChange fixture = new SALineItemStatusChange();
+		fixture.saLineItemInfo = new SALineItemInfo();
+		RuleInvocationContext ctx = null;
+
+		int result = fixture.init(ctx);
+
+		// add additional test code here
+		assertEquals(0, result);
+	}
+
+	/**
+	 * Run the int init(RuleInvocationContext) method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testInit_4()
+		throws Exception {
+		SALineItemStatusChange fixture = new SALineItemStatusChange();
+		fixture.saLineItemInfo = new SALineItemInfo();
+		RuleInvocationContext ctx = new RuleInvocationContext(1);
+
+		int result = fixture.init(ctx);
+
+		// add additional test code here
+		assertEquals(2, result);
+	}
+
+	/**
+	 * Run the int post() method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testPost_1()
+		throws Exception {
+		SALineItemStatusChange fixture = new SALineItemStatusChange();
+		fixture.saLineItemInfo = new SALineItemInfo();
+
+		int result = fixture.post();
+
+		// add additional test code here
+		assertEquals(2, result);
+	}
+
+	/**
+	 * Perform pre-test initialization.
+	 *
+	 * @throws Exception
+	 *         if the initialization fails for some reason
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Before
+	public void setUp()
+		throws Exception {
+		// add additional set up code here
+	}
+
+	/**
+	 * Perform post-test clean-up.
+	 *
+	 * @throws Exception
+	 *         if the clean-up fails for some reason
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@After
+	public void tearDown()
+		throws Exception {
+		// Add additional tear down code here
+	}
+
+	/**
+	 * Launch the test.
+	 *
+	 * @param args the command line arguments
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	public static void main(String[] args) {
+		new org.junit.runner.JUnitCore().run(SALineItemStatusChangeTest.class);
+	}
+}

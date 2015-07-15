@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Rules META DATA Details -->
+<RulesConfig> 
+	<Rule id="PGM4005.9001.NH01"> 
+	<name>benefitadministration</name>
+		<type>2</type>
+		<implement>com.xerox.enterprise.ghs.mmis.rif.rules.pojo.PGM4005_9001_NH01</implement>
+		<effectivestartdate>05-01-2014</effectivestartdate>
+		<effectiveenddate>05-10-2016</effectiveenddate>
+		<MITAMapping>Program</MITAMapping>
+		<sla>
+			<RedThresholdInMilliSeconds>50</RedThresholdInMilliSeconds>
+			<AmberThresholdInMilliSeconds>25</AmberThresholdInMilliSeconds>
+		</sla>
+	</Rule>
+	<Rule id="PGM4005.9002.NH01"> 
+	<name>benefitadministration</name>
+		<type>2</type>
+		<implement>com.xerox.enterprise.ghs.mmis.rif.rules.pojo.PGM4005_9002_NH01</implement>
+		<effectivestartdate>05-01-2014</effectivestartdate>
+		<effectiveenddate>05-10-2016</effectiveenddate>
+		<MITAMapping>Program</MITAMapping>
+		<sla>
+			<RedThresholdInMilliSeconds>50</RedThresholdInMilliSeconds>
+			<AmberThresholdInMilliSeconds>25</AmberThresholdInMilliSeconds>
+		</sla>
+	</Rule>
+	<Rule id="PGM4004.9005.NH01"> 
+	<name>benefitadministration</name>
+		<type>2</type>
+		<implement>com.xerox.enterprise.ghs.mmis.rif.rules.pojo.PGM4004_9005_NH01</implement>
+		<effectivestartdate>05-01-2014</effectivestartdate>
+		<effectiveenddate>05-10-2016</effectiveenddate>
+		<MITAMapping>Program</MITAMapping>
+		<sla>
+			<RedThresholdInMilliSeconds>50</RedThresholdInMilliSeconds>
+			<AmberThresholdInMilliSeconds>25</AmberThresholdInMilliSeconds>
+		</sla>
+	</Rule>
+</RulesConfig>

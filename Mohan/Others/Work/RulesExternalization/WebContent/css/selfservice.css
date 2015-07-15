@@ -1,0 +1,8 @@
+/* CSS for Self Service */
+
+body {background-image:none;}
+#wrapper {width:95%; margin:5px auto 5px auto; border-style:none; background-color:#fff;}
+#footer {width:60%; border-top-style:none; border-top-width:1px; border-top-color:#999; text-align:center;}
+#head, #head_internal, #headImg, #headTxt, #headLine2, #headTxt a, #headTxt a:visited {background-color:#fff;}
+
+.viewTable label {color:#000; text-align:left; font-family:Verdana,Arial;  font-size:11px;}

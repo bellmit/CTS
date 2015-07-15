@@ -1,0 +1,35 @@
+Hibernate
+
+
+one-one--done
+one-many--done
+many-many
+many-any--done
+composite ID--done
+component--done
+
+generator
+	Foriegn	==> onetoone mapping we can use
+optimistic--done
+SQlQuery
+queryparam
+hql
+inverse
+	To define which class takes the owner of the relationship.
+
+lazy
+	True	==>Fetches sub records from db only when respective object is accessed.
+	False	==>All records are fetched from db 
+abstract
+discriminator
+subclass
+fetch
+	JOIN	==>Forms single Query and executes
+	SELECT	==>executes as two different queries
+
+polmorphism
+filter
+TablePerClass
+TablePerConcerteClass
+TablePerSubClass
+SessionFactory listener

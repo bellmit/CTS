@@ -1,0 +1,3150 @@
+/**
+ * Copyright (c) 2005 Affiliated Computer Services, Inc.
+ */
+
+package com.acs.enterprise.common.program.benefitadministration.view.bean;
+
+//import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
+import javax.faces.event.ValueChangeEvent;
+import javax.faces.model.SelectItem;
+import javax.portlet.PortletRequest;
+import javax.portlet.PortletSession;
+import javax.portlet.RenderRequest;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.lang.ObjectUtils;
+import org.apache.myfaces.custom.tabbedpane.HtmlPanelTabbedPane;
+
+import com.acs.enterprise.common.program.administration.application.exception.NetworkNotFoundBusinessException;
+import com.acs.enterprise.common.program.administration.common.delegate.NetworkDelegate;
+import com.acs.enterprise.common.program.administration.common.vo.NetworkSearchResultsVO;
+import com.acs.enterprise.common.program.benefitadministration.application.exception.BenefitPlanEditException;
+import com.acs.enterprise.common.program.benefitadministration.application.exception.BenefitPlanNotFoundException;
+import com.acs.enterprise.common.program.benefitadministration.common.delegate.BenefitPlanDelegate;
+import com.acs.enterprise.common.program.benefitadministration.common.domain.BenefitPlanCoIns;
+import com.acs.enterprise.common.program.benefitadministration.common.domain.BenefitPlanCoInsLMT;
+import com.acs.enterprise.common.program.benefitadministration.common.domain.BenefitPlanCoPay;
+import com.acs.enterprise.common.program.benefitadministration.common.domain.BenefitPlanCopayLMT;
+import com.acs.enterprise.common.program.benefitadministration.common.domain.BenefitPlanCoverage;
+import com.acs.enterprise.common.program.benefitadministration.common.domain.BenefitPlanDeductable;
+import com.acs.enterprise.common.program.benefitadministration.common.domain.BenefitPlanLimit;
+import com.acs.enterprise.common.program.benefitadministration.common.domain.BenefitPlanMain;
+import com.acs.enterprise.common.program.benefitadministration.common.domain.BenefitPlanOOP;
+import com.acs.enterprise.common.program.benefitadministration.common.domain.BenefitPlanSA;
+import com.acs.enterprise.common.program.benefitadministration.util.helper.BenefitPlanConstants;
+import com.acs.enterprise.common.program.benefitadministration.view.helper.BenefitPlanHelper;
+import com.acs.enterprise.common.program.benefitadministration.view.vo.BenefitPlanCaseMgmtVO;
+import com.acs.enterprise.common.program.benefitadministration.view.vo.BenefitPlanCoInsuranceLimitVO;
+import com.acs.enterprise.common.program.benefitadministration.view.vo.BenefitPlanCoInsuranceVO;
+import com.acs.enterprise.common.program.benefitadministration.view.vo.BenefitPlanCoPayLimitVO;
+import com.acs.enterprise.common.program.benefitadministration.view.vo.BenefitPlanCoPayVO;
+import com.acs.enterprise.common.program.benefitadministration.view.vo.BenefitPlanCohortVO;
+import com.acs.enterprise.common.program.benefitadministration.view.vo.BenefitPlanCoverageVO;
+import com.acs.enterprise.common.program.benefitadministration.view.vo.BenefitPlanDeductibleVO;
+import com.acs.enterprise.common.program.benefitadministration.view.vo.BenefitPlanLimitsVO;
+import com.acs.enterprise.common.program.benefitadministration.view.vo.BenefitPlanMainVO;
+import com.acs.enterprise.common.program.benefitadministration.view.vo.BenefitPlanNwAssocVO;
+import com.acs.enterprise.common.program.benefitadministration.view.vo.BenefitPlanOOPVO;
+import com.acs.enterprise.common.program.benefitadministration.view.vo.BenefitPlanSAVO;
+import com.acs.enterprise.common.program.commonentities.common.domain.NoteSet;
+import com.acs.enterprise.common.program.commonentities.view.bean.CommonEntityDataBean;
+import com.acs.enterprise.common.program.commonentities.view.exception.CommonEntityUIException;
+import com.acs.enterprise.common.program.commonentities.view.helper.ContactHelper;
+import com.acs.enterprise.common.program.commonentities.view.validator.CommonEntityValidator;
+import com.acs.enterprise.common.util.logger.EnterpriseLogFactory;
+import com.acs.enterprise.common.util.logger.EnterpriseLogger;
+import com.acs.enterprise.common.util.validator.EnterpriseCommonValidator;
+//import java.util.Map;
+//import com.acs.enterprise.common.base.common.vo.EnterpriseSearchResultsVO;
+//import com.acs.enterprise.common.program.administration.common.vo.NetworkSearchCriteriaVO;
+//import com.acs.enterprise.common.program.administration.util.helper.ProgramConstants;
+//import com.acs.enterprise.common.program.benefitadministration.common.domain.LineOfBusiness;
+//import com.acs.enterprise.common.program.commonentities.view.helper.ContactHelper;
+//import com.acs.enterprise.common.program.commonentities.view.vo.NoteSetVO;
+import com.xerox.enterprise.ghs.mmis.rif.common.exception.RIFException;
+import com.xerox.enterprise.ghs.mmis.rif.core.RulesContext;
+import com.xerox.enterprise.ghs.mmis.rif.core.RulesResult;
+import com.xerox.enterprise.ghs.mmis.rif.core.api.RulesManager;
+
+
+/**
+ * @author: wipro This class is a controller bean which will be used for adding
+ *          BenefitPlanMain functionality.
+ */ 
+public class AddBenefitPlanControllerBean extends BenefitPlanControllerBean {
+
+	/**
+	 * EnterpriseLogger Name for Logging.
+	 */
+	static final EnterpriseLogger logger = EnterpriseLogFactory
+			.getLogger(AddBenefitPlanControllerBean.class);
+
+	/** Date format. */
+	//private SimpleDateFormat sdf = new SimpleDateFormat(BenefitPlanConstants.DATE_FORMAT);
+
+	/**
+	 * For Validation.
+	 */
+	private boolean flag = true;
+
+	/**
+	 * Used to maintain the rank unique.
+	 */
+	private Set validateRank = null;// new HashSet();
+	
+	private String ipcAddBP;
+	
+	private String ipcUpdateMode;
+
+	private BenefitPlanDeductibleControllerBean bpDeductibleControllerBean = new BenefitPlanDeductibleControllerBean();
+	
+	private BenefitPlanCoInsuranceControllerBean bpCoInsuranceControllerBean = new BenefitPlanCoInsuranceControllerBean();
+	
+	private BenefitPlanCoPayControllerBean bpCoPayControllerBean =new BenefitPlanCoPayControllerBean();
+
+	private BenefitPlanCoverageControllerBean bpCoverageControllerBean =new BenefitPlanCoverageControllerBean();
+	
+	private BenefitPlanOOPControllerBean bpOopControllerBean = new  BenefitPlanOOPControllerBean();
+	
+	private BenefitPlanLimitControllerBean bplimitControllerBean = new BenefitPlanLimitControllerBean();
+	 
+	private BenefitPlanSAControllerBean bpSAControllerBean = new BenefitPlanSAControllerBean();
+
+	//private BenefitPlanDelegate benefitPlanDelegate = new BenefitPlanDelegate();
+
+	// ADDED FOR UC-PGM-BP-012_BP25 START
+	public String getIpcUpdateMode() {
+		ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
+        PortletRequest portletRequest = (PortletRequest) context.getRequest();      
+        String idn = (String)portletRequest.getPortletSession().getAttribute("BenefitPlanConstants.BP_IPC_EDIT_NAV");
+		if(idn!=BenefitPlanConstants.NULL){		
+			viewBenefitPlan();
+			portletRequest.getPortletSession().removeAttribute("BenefitPlanConstants.BP_IPC_EDIT_NAV");
+		}
+		ipcUpdateMode="";
+		return ipcUpdateMode;
+	}
+	// ADDED FOR UC-PGM-BP-012_BP25 END
+	
+
+	/**
+	 * @param ipcUpdateMode the ipcUpdateMode to set
+	 */
+	//PMD Fix
+	public void setIpcUpdateMode(final String ipcUpdateMode) {
+		this.ipcUpdateMode = ipcUpdateMode;
+	}
+
+	/**
+	 * This method will create benefit plan details.
+	 * 
+	 * @return ret String
+	 */
+	public String createBenefitPlan() {
+		//logger.info("inside create benefitplan");
+		//Commented For PMD Fix
+		//String ret = BenefitPlanConstants.EMPTY;
+		BPMainDataBean bpMainDataBean = (BPMainDataBean) getDataBean(BenefitPlanConstants.BP_MAIN_DB_NAME);
+		BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+		bpCommonDataBean.setFocusThisId("bpOnclick");
+
+		/*
+		 * Added smallSaveSuccessflag variable to check whether small save done
+		 * successfully , If the small save has done successfully and big save
+		 * validation return then only hit to the database
+		 */
+		boolean smallSaveSuccessflag = true;
+		
+		bpCommonDataBean.setDeleteDetailSuccess(false);
+		bpCommonDataBean.setNwDeleteDetailSuccess(false);
+		// Commented for Find Bug
+		// String temp = new String();
+		//Commented for PMD Fix 
+		//String temp = BenefitPlanConstants.EMPTY;
+		// Added by infinte
+		if (bpMainDataBean.isShowCase()) {
+			if (bpMainDataBean.getBenefitPlanCaseManagementVO()
+					.getCurrentProcCode() == null
+					|| bpMainDataBean.getBenefitPlanCaseManagementVO()
+							.getCurrentProcCode().trim().length() == 0) {
+				setErrorMessage(
+						BenefitPlanConstants.BENEFIT_PLAN_CURR_PROC_CODE_REQ,
+						new Object[] {},
+						BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES,
+						"curproccode");
+				flag = false;
+			}
+
+			if (bpMainDataBean.getBenefitPlanCaseManagementVO()
+					.getRetroProcCode() == null
+					|| bpMainDataBean.getBenefitPlanCaseManagementVO()
+							.getRetroProcCode().trim().length() == 0) {
+				setErrorMessage(
+						BenefitPlanConstants.BENEFIT_PLAN_RETRO_PROC_CODE_REQ,
+						new Object[] {},
+						BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES,
+						"retproccode");
+				flag = false;
+			}
+
+		}
+		/*
+		 * Checking whether any changes made in the Show case management
+		 * part .If any changes made then calling the small save method
+		 * other wise small save method will not call
+		 */
+		
+		//commented this code to disable the validations of Network Association and Case Management.
+		/*if (bpMainDataBean.isShowCaseMgt()) {
+			addBPCaseManagment();
+			temp = BenefitPlanConstants.ONE;
+		}
+    
+		if (bpCommonDataBean.isEdit()) {
+			boolean isCapCaseMgmtValueChange = isCapCaseMgmtValueChange(bpMainDataBean,bpCommonDataBean.getIndex());
+			if (isCapCaseMgmtValueChange) {
+				addBPCaseManagment();
+				temp = BenefitPlanConstants.ONE;
+			}
+		}
+		
+		if (bpMainDataBean.isShowNwAssc()) {
+			addBPNetworkAssoc();
+			temp = BenefitPlanConstants.TWO;
+		}
+		// Added for the defect ESPRD00914227
+		 if (bpCommonDataBean.isEditOther()&& !bpCommonDataBean.isEditotherdetailsuccess()) {
+			 boolean isValueChange = isNtkAssociationValueChange(bpMainDataBean,bpCommonDataBean.getOtherIndex());
+			 if (isValueChange) {
+					addBPNetworkAssoc();
+					temp = BenefitPlanConstants.TWO;
+				}
+			}
+		if (temp.indexOf('1') >= 0) {
+			if (!bpCommonDataBean.isDetailssuccess() && smallSaveSuccessflag)
+				smallSaveSuccessflag = false;
+		}
+
+		if (temp.indexOf('2') >= 0) {
+			if (!bpCommonDataBean.isOtherdetailsuccess()
+					&& smallSaveSuccessflag)
+				smallSaveSuccessflag = false;
+		}*/
+
+		/* Small and Big Save End */
+		validateBenefitPlanMain();
+		if (bpCommonDataBean.getBenefitPlanMainVO().getCode() != null
+				&& bpCommonDataBean.getBenefitPlanMainVO().getCode().trim()
+						.length() != 0) {
+			/**
+			 * if the BenefitPlanType is ManagedCR then one NWAsscn record is
+			 * required.
+			 */
+			/*if (bpCommonDataBean.getBenefitPlanMainVO().getCode().equals(
+					BenefitPlanConstants.ManagedCare)
+					&& bpMainDataBean.getNwAsscList().size() > 1) {
+				setErrorMessage(BenefitPlanConstants.BENEFIT_PLAN_ONE_NW_ASSCN_IS_REQUIRED);
+				flag = false;
+			}*/
+		}
+
+		/* Added for Defect ESPRD00329357 */
+	/*	if (bpMainDataBean.getCapitationList() != null
+				&& bpMainDataBean.getCapitationList().size() > 0
+				&& !bpMainDataBean.isShowCase()) {
+			setErrorMessage(BenefitPlanConstants.CAPT_CASE_MGMT_DATA_ERROR);
+			flag = false;
+		}*/
+		
+		//Modified For Defect Id 894047
+		
+		if(bpCommonDataBean.getBenefitPlanMainVO().getCode().equals("M") || bpCommonDataBean.getBenefitPlanMainVO().getOptionsCode().equals("1"))
+		{
+			bpMainDataBean.setShowCase(true);			
+		}
+		
+		//Added for BP18
+		if(bpCommonDataBean.getBenefitPlanMainVO().getIeiCode().equals(BenefitPlanConstants.IEI_IGNORE))
+		{
+			bpCommonDataBean.getBenefitPlanMainVO().getSelectedList().clear();
+		}
+		//BP18 ends 
+		
+		if(!bpMainDataBean.isShowCase())
+		{
+			/*if((bpMainDataBean.getBenefitPlanCaseManagementVO().getCurrentProcCode()!=null && StringUtils.isNotEmpty(bpMainDataBean.getBenefitPlanCaseManagementVO().getCurrentProcCode()))
+					||( bpMainDataBean.getBenefitPlanCaseManagementVO().getRetroProcCode()!=null && StringUtils.isNotEmpty(bpMainDataBean.getBenefitPlanCaseManagementVO().getRetroProcCode()))
+					|| (bpMainDataBean.getCapitationList() != null && bpMainDataBean.getCapitationList().size() > 0))
+			{
+				setErrorMessage(BenefitPlanConstants.CAPT_CASE_MGMT_DATA_ERROR);
+				flag = false;
+				
+			}*/
+			String ruleId = "PGM4005_9001_NH01";
+            logger.info("Started Rule Execution::::"+ruleId);
+             
+            //Rule Invocation Context object holds object arrays used in rule execution.
+		    RulesContext ric = new RulesContext();
+		    //Adding object into rule invocation context.
+		 	ric.addObject(flag);
+			ric.addObject(bpMainDataBean);
+			//Invoke RIF with rulename and rule invocation objects.
+		    RulesResult rulesResult = null;
+		    try {
+		    	RulesManager rulesManager = RulesManager.getRIFInstance();
+             
+		    	rulesResult = rulesManager.execute(ruleId, ric);	
+				flag=rulesResult.isReturnBooleanValue(); 
+				if(rulesResult.getReturnValue()!=null)
+				{
+					setErrorMessage(rulesResult.getReturnValue());
+				}
+		    } catch (RIFException re){
+                    
+		    }
+		    
+            logger.info("Rule Execution Ended::::"+ruleId+"\n");
+			
+		}
+		
+		
+
+		if (flag && smallSaveSuccessflag) {
+			//BenefitPlanHelper benefitPlanHelper = new BenefitPlanHelper();
+			BenefitPlanCohortVO benefitPlanCohortVO = new BenefitPlanCohortVO();
+			BenefitPlanCaseMgmtVO benefitPlanCaseMgmtVO = new BenefitPlanCaseMgmtVO();
+			BenefitPlanNwAssocVO benefitPlanNwAssocVO = new BenefitPlanNwAssocVO();
+			Set bpCohort = new HashSet();
+			Set bpCaseMgnt = new HashSet();
+			Set bpNWAssc = new HashSet();
+			Iterator it = bpMainDataBean.getCapitationList().iterator();
+			while (it.hasNext()) {
+				benefitPlanCohortVO = (BenefitPlanCohortVO) it.next();
+				bpCohort.add(benefitPlanCohortVO);
+			}
+			bpCommonDataBean.getBenefitPlanMainVO().setBenefitPlanCohort(
+					bpCohort);
+			Iterator nwAsscnItr = bpMainDataBean.getNwAsscList().iterator();
+			while (nwAsscnItr.hasNext()) {
+				benefitPlanNwAssocVO = (BenefitPlanNwAssocVO) nwAsscnItr.next();
+				bpNWAssc.add(benefitPlanNwAssocVO);
+			}
+			bpCommonDataBean.getBenefitPlanMainVO().setBenefitPlanNwAssoc(
+					bpNWAssc);
+			if (bpMainDataBean.isShowCase()) {
+				benefitPlanCaseMgmtVO = bpMainDataBean
+						.getBenefitPlanCaseManagementVO();
+				bpCaseMgnt.add(benefitPlanCaseMgmtVO);
+				bpCommonDataBean.getBenefitPlanMainVO()
+						.setCaseMgmnt(bpCaseMgnt);
+			}
+			/*List allBenefitPlanIds = new ArrayList();
+			try {
+					// Code replced for Performance
+					//allBenefitPlans = new BenefitPlanDelegate().getAllBenefitPlans();
+					allBenefitPlanIds = new BenefitPlanDelegate().getAllBenefitPlanIds();
+			} catch (BenefitPlanNotFoundException e1) {
+				logger.error("BenefitPlanNotFoundException" + e1.getMessage());
+			}*/
+			/** Validating for Duplicate BenefitPlan. */
+			/*Iterator itr = allBenefitPlanIds.iterator();
+			while (itr.hasNext()) {
+				//BenefitPlanMain benefitPlanMain = (BenefitPlanMain) itr.next();
+				String benefitPlanID = (String) itr.next();
+				//if (benefitPlanMain.getBenefitPlanID().trim().length() != 0
+				if (benefitPlanID.trim().length() != 0
+						&& bpCommonDataBean.getBenefitPlanMainVO()
+								.getBenefitPlanID().trim().length() != 0) {
+					//if (benefitPlanMain.getBenefitPlanID().equals(
+					if (benefitPlanID.equals(
+							bpCommonDataBean.getBenefitPlanMainVO()
+									.getBenefitPlanID())) {
+						flag = false;
+						setErrorMessage(BenefitPlanConstants.BP_DUP_NOTALLOWED);
+						break;
+					}
+				}
+			}*/
+			//New API for performance 
+			BenefitPlanMainVO benefitPlanMainVO = bpCommonDataBean
+			.getBenefitPlanMainVO();
+			/** Converting benefitPlanMainVO to benefitPlanMain. */
+			BenefitPlanMain benefitPlanMain = new BenefitPlanHelper()
+					.convertBenefitPlanVOToDO(benefitPlanMainVO, getUserID());
+			// checking for BP already Exist
+			try{
+				if (new BenefitPlanDelegate().isBPExists(benefitPlanMainVO.getLobId(),
+						bpCommonDataBean.getBenefitPlanMainVO().getBenefitPlanID().trim())) {
+							flag = false;
+							setErrorMessage(BenefitPlanConstants.BP_DUP_NOTALLOWED);
+				}else{
+			
+				flag = getBpDeductibleControllerBean().saveBenefitPlanDeductible(benefitPlanMain);
+				//PMD Fix
+				/*if( !flag ){
+					//PMD Fix
+					return BenefitPlanConstants.BP_SUCCESS;
+				}*/
+				flag = getBpCoInsuranceControllerBean().saveBenefitPlanCoInsurance(benefitPlanMain);
+				//PMD Fix
+				/*if( !flag ){
+					//PMD Fix
+					return BenefitPlanConstants.BP_SUCCESS;
+				}*/
+				flag = getBpCoPayControllerBean().saveBenefitPlanCoPay(benefitPlanMain);
+				//PMD Fix
+				/*if( !flag ){
+					//PMD Fix
+					return BenefitPlanConstants.BP_SUCCESS;
+				}*/
+				flag = getBpOopControllerBean().saveBenefitPlanOOP(benefitPlanMain);
+				//PMD Fix
+				/*if(!flag){
+					//PMD Fix
+					return BenefitPlanConstants.BP_SUCCESS;
+				}*/
+				flag = getBpCoverageControllerBean().saveBenefitPlanCoverage(benefitPlanMain);
+				//PMD Fix
+				/*if(!flag){
+					//PMD Fix
+					return BenefitPlanConstants.BP_SUCCESS;
+				}*/
+				flag = getBplimitControllerBean().saveBenefitPlanLimits(benefitPlanMain);
+				//PMD Fix
+				/*if(!flag){
+					//PMD Fix
+					return BenefitPlanConstants.BP_SUCCESS;
+				}*/
+				flag = getBpSAControllerBean().saveBenefitPlanSA(benefitPlanMain);
+				if (flag) {
+					//CommonEntityValidator commonEntityValidator = new CommonEntityValidator();
+					NoteSet noteSet = new CommonEntityValidator().getNoteSetDO();
+					benefitPlanMain.setNoteSet(noteSet);
+					
+					
+					flag = new BenefitPlanDelegate()
+							.updateBenefitPlan(benefitPlanMain);
+					//added this flag to temporary disabled the edit functionality start.
+					bpMainDataBean.setShowBenefitPlan(false);
+					//added this flag to temporary disabled the edit functionality end.
+				}
+			 }
+			} catch (BenefitPlanEditException e) {
+				logger.error("BenefitPlanUpdateException" + e.getMessage(), e);
+				flag = false;
+
+				setErrorMessage(BenefitPlanConstants.BP_CREATE_FAILED);
+			} catch (CommonEntityUIException e) {
+				if(logger.isErrorEnabled()) {
+					logger.error(e.getMessage(), e);
+				}
+				// Commented to avoid 2 msga in header at a time
+				//setErrorMessage(ProgramConstants.UPDATE_FAILED);
+			} /*catch (SystemListCreateException e) {
+				flag = false;
+				setErrorMessage(BenefitPlanConstants.BP_CREATE_FAILED);
+			}*/
+			catch (Exception e) {
+
+				//PMD Fix
+				if(logger.isErrorEnabled()) {
+					logger.error(e.getMessage(), e);
+					//e.printStackTrace();
+				}
+				// Commented to avoid 2 msga in header at a time
+				//setErrorMessage(ProgramConstants.UPDATE_FAILED);
+			}
+			if (flag) {
+				//Commented for PMD Fix
+				//ret = BenefitPlanConstants.BP_SUCCESS;
+				bpMainDataBean.setProtectBP(true);
+				setMessage(BenefitPlanConstants.BP_SAVE_SUCCESSFULL);
+				bpMainDataBean.setShowNwAssc(false);
+				bpMainDataBean.setShowCaseMgt(false);
+				HttpSession session = (HttpSession) FacesContext
+						.getCurrentInstance().getExternalContext().getSession(
+								true);
+				//String dbDate = benefitPlanMainVO.getEndDate();
+				session.setAttribute(
+						BenefitPlanConstants.BENEFIT_PLAN_END_DATE_IN_SESSION,
+						benefitPlanMainVO.getEndDate());
+				if (isExpired(benefitPlanMainVO.getEndDate())) {
+					bpCommonDataBean.setBpExpired(true);
+				} else {
+					bpCommonDataBean.setBpExpired(false);
+				}
+				// defect ESPRD00305001 ends
+				try {
+					/**
+					 * Fetching the saved record so as to navigate to the update
+					 * page after initial save.
+					 */
+					List list = new BenefitPlanDelegate().viewBenefitPlan(
+							BenefitPlanConstants.BENEFIT_PLAN_MAIN,
+							benefitPlanMain.getBenefitPlanID(), benefitPlanMain
+									.getLobCode());
+					benefitPlanMain = (BenefitPlanMain) list.get(0);
+					BenefitPlanMainVO benPlanMainVO = new BenefitPlanHelper()
+							.convertBenefitPlanDOToVO(benefitPlanMain);
+					// Added to avoid HeapDump start
+					benefitPlanMain=null;
+					list=null;
+					bpMainDataBean.getCapitationList().clear();
+					bpMainDataBean.getNwAsscList().clear();
+					Iterator nwAssocnItr = benPlanMainVO
+							.getBenefitPlanNwAssoc().iterator();
+					while (nwAssocnItr.hasNext()) {
+						BenefitPlanNwAssocVO benPlanNwAssocVO = (BenefitPlanNwAssocVO) nwAssocnItr
+								.next();
+						bpMainDataBean.getNwAsscList().add(benPlanNwAssocVO);
+						bpMainDataBean
+								.setBenefitPlanNwAssocVO(benPlanNwAssocVO);
+					}
+					/*Commented as per the defect : ESPRD00838308*/
+					//bpCommonDataBean.setDeleteOtherList(bpMainDataBean
+						//	.getNwAsscList());
+					if (bpMainDataBean.getNwAsscList().isEmpty()) {
+						bpCommonDataBean.setNoOtherData(true);
+					}
+
+					// Added by ICS
+					String sortColumn = "begDT";
+					String sortOrder = BenefitPlanConstants.ASC;
+					benefitPlanNWAsscComparator(sortColumn, sortOrder,
+							bpMainDataBean.getNwAsscList());
+					// End
+
+					bpMainDataBean.getCapitationList().clear();
+					Iterator cohortItr = benPlanMainVO.getBenefitPlanCohort()
+							.iterator();
+					while (cohortItr.hasNext()) {
+						BenefitPlanCohortVO benefitPlanCapitationVO = (BenefitPlanCohortVO) cohortItr
+								.next();
+						bpMainDataBean.getCapitationList().add(
+								benefitPlanCapitationVO);
+						bpMainDataBean
+								.setBenefitPlanCohortVO(benefitPlanCapitationVO);
+					}
+					/*Commented as per the defect : ESPRD00838308*/
+					//bpCommonDataBean.setDeletedList(bpMainDataBean
+					//		.getCapitationList());
+
+					if (bpMainDataBean.getCapitationList().isEmpty()) {
+						bpCommonDataBean.setNoData(true);
+					}
+					Iterator caseMgmtItr = benPlanMainVO.getCaseMgmnt()
+							.iterator();
+					while (caseMgmtItr.hasNext()) {
+						BenefitPlanCaseMgmtVO benPlanCaseMgmtVO = (BenefitPlanCaseMgmtVO) caseMgmtItr
+								.next();
+						bpMainDataBean
+								.setBenefitPlanCaseManagementVO(benPlanCaseMgmtVO);
+					}
+
+					// NoteSet Integration
+					//NoteSet noteSet = benefitPlanMain.getNoteSet();
+					//ContactHelper contactHelper = new ContactHelper();
+					//NoteSetVO noteSetVO =  new ContactHelper().convertNoteSetDomainToVO(noteSet);
+
+					//CommonEntityDataBean commonEntityDataBean = new CommonEntityDataBean();
+					// ADDED BY ICS DEFECT -ESPRD00242862
+					//commonEntityDataBean = ContactHelper
+					//		.getCommonEntityDataBean();
+					// END
+					bpCommonDataBean.setBenefitPlanMainVO(benPlanMainVO);
+					/*  MT Code Changes - GAP BP18 - Changed By : 428836 Starts */
+					loadCarryOverBenefitPlans(benPlanMainVO.getBenefitPlanID(), "MED");
+					/*  MT Code Changes - GAP BP18 - Changed By : 428836 Ends */
+				} catch (BenefitPlanNotFoundException e2) {
+					logger.error("BenefitPlanNotFoundException"
+							+ e2.getMessage(), e2);
+				}
+				bpMainDataBean.setBenefitPlanExists(true);
+			}
+		}
+			UIComponent tabsPaneComponent = findComponentInRoot(BenefitPlanConstants.AddDiag_UIComponent);         
+	        if (tabsPaneComponent instanceof HtmlPanelTabbedPane) 
+	        {
+	        	int newTabindex=  ((HtmlPanelTabbedPane) tabsPaneComponent).getSelectedIndex(); 
+	        	((HtmlPanelTabbedPane) tabsPaneComponent).setSelectedIndex(newTabindex);
+	        	bpMainDataBean.setTabIndex(newTabindex);
+	        }
+	    //PMD Fix
+		return BenefitPlanConstants.BP_SUCCESS;
+	}
+
+	/**
+	 * This method will add Benefit Plan Case Managment details.
+	 * 
+	 * @return String AddBPCaseManagment
+	 */
+	public String addBPCaseManagment() {
+		BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+		BPMainDataBean bpMainDataBean = (BPMainDataBean) getDataBean(BenefitPlanConstants.BP_MAIN_DB_NAME);
+
+		bpCommonDataBean.setFocusThisId("showCaseMgnt");
+		bpCommonDataBean.setDetailssuccess(false);
+		BenefitPlanCohortVO benefitPlanCohortVO = bpMainDataBean
+				.getBenefitPlanCohortVO();
+		if (!bpCommonDataBean.isCapedit()) {
+			/** For AddCase. */
+			if (validateBenefitPlanCaseCapitation()) {
+				BenefitPlanHelper.setDescForCaseMgmnt(benefitPlanCohortVO);
+				bpMainDataBean.getCapitationList().add(benefitPlanCohortVO);
+				bpCommonDataBean.setNoData(false);
+				bpCommonDataBean.setDetailssuccess(true);
+				//bpMainDataBean.setBenefitPlanCohortVO(new BenefitPlanCohortVO());
+				bpMainDataBean.setShowCaseMgt(false);
+				bpCommonDataBean.setCapedit(true);
+				bpCommonDataBean.setEditdetailssuccess(true);
+			}
+			// Added for the defect
+			bpMainDataBean.setChangeTypeCode(true);
+			bpMainDataBean
+					.setSelectedTypeCode(BenefitPlanConstants.ManagedCare);
+			bpMainDataBean
+					.setSelectdTypeOption(BenefitPlanConstants.PCPRequired);
+
+		} else {
+			/** For UpdateCase. */
+			if (validateBenefitPlanCaseCapitation()) {
+				BenefitPlanHelper.setDescForCaseMgmnt(benefitPlanCohortVO);
+				bpMainDataBean.getCapitationList().set(
+						bpCommonDataBean.getIndex(), benefitPlanCohortVO);
+				bpCommonDataBean.setDetailssuccess(true);
+			}
+			bpCommonDataBean.setCapedit(false);
+			bpMainDataBean.setChangeTypeCode(true);
+			bpMainDataBean
+					.setSelectedTypeCode(BenefitPlanConstants.ManagedCare);
+			bpMainDataBean
+					.setSelectdTypeOption(BenefitPlanConstants.PCPRequired);
+
+		}
+		
+		//Added for Reset and minor save issue Start
+		BenefitPlanCohortVO tempVo = new BenefitPlanCohortVO();
+		tempVo.setBegDate(benefitPlanCohortVO.getBegDate());
+		tempVo.setCohortRateSK(benefitPlanCohortVO.getCohortRateSK());
+		tempVo.setEndDate(benefitPlanCohortVO.getEndDate());
+		tempVo.setMapID(benefitPlanCohortVO.getMapID());
+		tempVo.setNwStatCode(benefitPlanCohortVO.getNwStatCode());
+		tempVo.setRate(benefitPlanCohortVO.getRate());
+		tempVo.setSeqNum(benefitPlanCohortVO.getSeqNum());
+		tempVo.setCohortRateSK(benefitPlanCohortVO.getCohortRateSK());
+		tempVo.setVersionNo(benefitPlanCohortVO.getVersionNo());
+		bpMainDataBean.setBenefitPlanCohortVO(tempVo);
+		//Added for Reset and minor save issue End
+		
+		return BenefitPlanConstants.ADDBPCASEMGMNT;
+	}
+
+	/**
+	 * This method will add Benefit Plan Network Association Details.
+	 * 
+	 * @return String
+	 */
+	public String addBPNetworkAssoc() {
+		BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+		BPMainDataBean bpMainDataBean = (BPMainDataBean) getDataBean(BenefitPlanConstants.BP_MAIN_DB_NAME);
+		SimpleDateFormat sdf = new SimpleDateFormat(BenefitPlanConstants.DATE_FORMAT);
+		bpCommonDataBean.setFocusThisId("addNtwAssoc");
+		bpCommonDataBean.setNwDetailsuccess(false);
+		BenefitPlanNwAssocVO benefitPlanNwAssocVO = bpMainDataBean
+				.getBenefitPlanNwAssocVO();
+		if (!bpCommonDataBean.isEdit()) {
+			validateRank = new HashSet();
+			/** For Add NWAsscn. */
+			if (bpCommonDataBean.getBenefitPlanMainVO().getCode().equals(
+					BenefitPlanConstants.ManagedCare)
+					&& (bpMainDataBean.getNwAsscList().size() >= 1)) {
+				Date currentSysDate = dateConverter(dateConverter(new Date()));
+				//int listSize = bpMainDataBean.getNwAsscList().size();
+				BenefitPlanNwAssocVO benefitPlanNwAssocVO1 = (BenefitPlanNwAssocVO) bpMainDataBean
+						.getNwAsscList().get(bpMainDataBean.getNwAsscList().size() - 1);
+				Date prevDate = null;
+				try {
+					if (benefitPlanNwAssocVO1.getNwEndDate() != null) {
+						prevDate = new Date(sdf.parse(
+								benefitPlanNwAssocVO1.getNwEndDate()).getTime());
+					}
+				} catch (ParseException e1) {
+					logger.error("ParseException:" + e1.getMessage());
+				}
+				Date currentDate = null;
+				try {
+					if (benefitPlanNwAssocVO1.getNwEndDate() != null) {
+						currentDate = new Date(sdf.parse(
+								bpMainDataBean.getBenefitPlanNwAssocVO()
+										.getNwEndDate()).getTime());
+					}
+				} catch (ParseException e1) {
+					logger.error("ParseException:" + e1.getMessage());
+				}
+				/**
+				 * only one valid record is allowed for NWAsscn if
+				 * BenefitPlanType is ManagedCr.
+				 */
+				boolean equals = false;
+				if (currentDate != null && currentSysDate != null) {
+					equals = currentDate.equals(currentSysDate);
+				}
+				if (EnterpriseCommonValidator.compareLesserDate(currentSysDate,
+						prevDate)
+						|| EnterpriseCommonValidator.compareLesserDate(
+								currentDate, currentSysDate)) {
+					/*if (!equals) {
+						setErrorMessage(BenefitPlanConstants.BENEFIT_PLAN_ONLY_ONE_NW_ASSCN_IS_ALLOWED);
+					}*/  if (validateBenefitPlanNwAssc()) {
+						BenefitPlanHelper.setDescForNWAsscn(benefitPlanNwAssocVO);
+						bpMainDataBean.getNwAsscList().add(benefitPlanNwAssocVO);
+						validateRank.add(benefitPlanNwAssocVO);
+						bpCommonDataBean.setNoOtherData(false);
+						//bpCommonDataBean.setOtherdetailsuccess(true);
+						//bpMainDataBean.setBenefitPlanNwAssocVO(new BenefitPlanNwAssocVO());
+						bpMainDataBean.setShowNwAssc(false);
+						bpCommonDataBean.setNwEdit(true);
+						bpCommonDataBean.setNwDetailsuccess(true);
+					}
+				} else if (validateBenefitPlanNwAssc()) {
+					BenefitPlanHelper.setDescForNWAsscn(benefitPlanNwAssocVO);
+					bpMainDataBean.getNwAsscList().add(benefitPlanNwAssocVO);
+					validateRank.add(benefitPlanNwAssocVO);
+					bpCommonDataBean.setNoOtherData(false);
+					//bpCommonDataBean.setOtherdetailsuccess(true);
+					//bpMainDataBean.setBenefitPlanNwAssocVO(new BenefitPlanNwAssocVO());
+					bpMainDataBean.setShowNwAssc(false);
+					bpCommonDataBean.setNwEdit(true);
+					bpCommonDataBean.setNwDetailsuccess(true);
+				}
+			} else if (validateBenefitPlanNwAssc()) {
+				BenefitPlanHelper.setDescForNWAsscn(benefitPlanNwAssocVO);
+				bpMainDataBean.getNwAsscList().add(benefitPlanNwAssocVO);
+				validateRank.add(benefitPlanNwAssocVO);
+				bpCommonDataBean.setNoOtherData(false);
+				//bpMainDataBean.setBenefitPlanNwAssocVO(new BenefitPlanNwAssocVO());
+				bpMainDataBean.setShowNwAssc(false);
+				bpCommonDataBean.setNwEdit(true);
+				bpCommonDataBean.setNwDetailsuccess(true);
+				bpCommonDataBean.setNwEditdetailsuccess(true);
+			}
+		} else {
+			/** For Update NWAsscn. */
+			if (validateBenefitPlanNwAssc()) {
+				BenefitPlanHelper.setDescForNWAsscn(benefitPlanNwAssocVO);
+				bpMainDataBean.getNwAsscList().set(bpCommonDataBean.getOtherIndex(),
+						benefitPlanNwAssocVO);
+				bpCommonDataBean.setNwDetailsuccess(true);
+				bpCommonDataBean.setNwEdit(true);
+			}
+		}
+		//Added for Reset and minor save issue Start
+		BenefitPlanNwAssocVO tempVO = new BenefitPlanNwAssocVO();
+		tempVO.setBeginDate(benefitPlanNwAssocVO.getBeginDate());
+		tempVO.setNwEndDate(benefitPlanNwAssocVO.getNwEndDate());
+		tempVO.setNwID(benefitPlanNwAssocVO.getNwID());
+		tempVO.setNwStatCode(benefitPlanNwAssocVO.getNwStatCode());
+		tempVO.setSeqNum(benefitPlanNwAssocVO.getSeqNum());
+		tempVO.setAssociationSK(benefitPlanNwAssocVO.getAssociationSK());
+		tempVO.setVersionNo(benefitPlanNwAssocVO.getVersionNo());
+		bpMainDataBean.setBenefitPlanNwAssocVO(tempVO);
+		//Added for Reset and minor save issue End
+		
+		
+		return BenefitPlanConstants.ADDBPNWASSCN;
+	}
+
+	/**
+	 * This method will show the Newtwork Associationdetails.
+	 */
+	public void getNetworkAssocDetails() {
+		BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+		BPMainDataBean bpMainDataBean = (BPMainDataBean) getDataBean(BenefitPlanConstants.BP_MAIN_DB_NAME);
+
+		bpCommonDataBean.setFocusThisId("addNtwAssoc");
+		
+		bpCommonDataBean.setDeleteDetailSuccess(false);
+		bpCommonDataBean.setNwDeleteDetailSuccess(false);
+		
+		bpMainDataBean.setBenefitPlanNwAssocVO(new BenefitPlanNwAssocVO());
+		//FacesContext fc = FacesContext.getCurrentInstance();
+		//Map map = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+		String indexCode = (String) (FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get(BenefitPlanConstants.INDEX_CODE));
+		if (indexCode != null) {
+			int index = Integer.parseInt(indexCode);
+			//bpCommonDataBean.setIndex(index);
+			bpCommonDataBean.setOtherIndex(index);
+			BenefitPlanNwAssocVO benefitPlanNwAssocVO = (BenefitPlanNwAssocVO) bpMainDataBean
+					.getNwAsscList().get(index);
+			//Added for Reset and minor save issue Start
+			//bpMainDataBean.setBenefitPlanNwAssocVO(benefitPlanNwAssocVO);
+			BenefitPlanNwAssocVO tempVO = new BenefitPlanNwAssocVO();
+			tempVO.setBeginDate(benefitPlanNwAssocVO.getBeginDate());
+			tempVO.setNwEndDate(benefitPlanNwAssocVO.getNwEndDate());
+			tempVO.setNwID(benefitPlanNwAssocVO.getNwID());
+			tempVO.setNwStatCode(benefitPlanNwAssocVO.getNwStatCode());
+			tempVO.setSeqNum(benefitPlanNwAssocVO.getSeqNum());
+			tempVO.setAssociationSK(benefitPlanNwAssocVO.getAssociationSK());
+			tempVO.setVersionNo(benefitPlanNwAssocVO.getVersionNo());
+			bpMainDataBean.setBenefitPlanNwAssocVO(tempVO);
+			//Added for Reset and minor save issue Start
+		}
+		/** To hide network */
+		bpMainDataBean.setShowNwAssc(false);
+		
+		bpCommonDataBean.setNwEdit(true);
+		bpCommonDataBean.setNwEditdetailsuccess(false);
+		
+	}
+
+	/**
+	 * This method will show the Case details.
+	 */
+	public void getCaseDetails() {
+		BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+		BPMainDataBean bpMainDataBean = (BPMainDataBean) getDataBean(BenefitPlanConstants.BP_MAIN_DB_NAME);
+		bpCommonDataBean.setFocusThisId("showCaseMgnt");
+		
+		bpCommonDataBean.setCapEditDeletesuccess(false);
+		bpCommonDataBean.setNwDeleteDetailSuccess(false);
+		
+		bpMainDataBean.setBenefitPlanCohortVO(new BenefitPlanCohortVO());
+		//FacesContext fc = FacesContext.getCurrentInstance();
+		//Map map = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+		String indexCode = (String) (FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get(BenefitPlanConstants.INDEX_CODE));
+	//	logger.debug(BenefitPlanConstants.INDEX_CODE + indexCode);
+		if (indexCode != null) {
+			int index = Integer.parseInt(indexCode);
+			bpCommonDataBean.setIndex(index);
+			BenefitPlanCohortVO benefitPlanCohortVO = (BenefitPlanCohortVO) bpMainDataBean
+					.getCapitationList().get(index);
+			//Added for Reset and minor save issue Start
+			//bpMainDataBean.setBenefitPlanCohortVO(benefitPlanCohortVO);
+			BenefitPlanCohortVO tempVo = new BenefitPlanCohortVO();
+			tempVo.setBegDate(benefitPlanCohortVO.getBegDate());
+			tempVo.setCohortRateSK(benefitPlanCohortVO.getCohortRateSK());
+			tempVo.setEndDate(benefitPlanCohortVO.getEndDate());
+			tempVo.setMapID(benefitPlanCohortVO.getMapID());
+			tempVo.setNwStatCode(benefitPlanCohortVO.getNwStatCode());
+			tempVo.setRate(benefitPlanCohortVO.getRate());
+			tempVo.setSeqNum(benefitPlanCohortVO.getSeqNum());
+			tempVo.setCohortRateSK(benefitPlanCohortVO.getCohortRateSK());
+			tempVo.setVersionNo(benefitPlanCohortVO.getVersionNo());
+			bpMainDataBean.setBenefitPlanCohortVO(tempVo);
+			//Added for Reset and minor save issue End
+		}
+		bpCommonDataBean.setCapedit(true);
+		/**Hide Case*/ 
+		//bpMainDataBean.setShowCaseMgt(true);
+		bpMainDataBean.setShowCaseMgt(false);
+		bpCommonDataBean.setDetailssuccess(false);
+		bpCommonDataBean.setEditdetailssuccess(false);
+
+	}
+
+	/**
+	 * This method will save bp and navigate to the coverage page.
+	 * 
+	 * @return ret
+	 */
+	public String next() {
+		String ret = "FAIL";
+		BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+		bpCommonDataBean.setFocusThisId("COVERAGE_MENU");
+		BPCovDataBean bpCovDataBean = (BPCovDataBean) getDataBean(BenefitPlanConstants.BP_COV_DB_NAME);
+		BPMainDataBean bpMainDataBean = (BPMainDataBean) getDataBean(BenefitPlanConstants.BP_MAIN_DB_NAME);
+		
+		bpCommonDataBean.setDeleteDetailSuccess(false);
+		bpCommonDataBean.setNwDeleteDetailSuccess(false);
+		
+		String created = BenefitPlanConstants.EMPTY;
+		if (!bpMainDataBean.isBenefitPlanExists()) {
+			created = createBenefitPlan();
+		} else {
+			ret = BenefitPlanConstants.BP_CVG;
+		}
+		if (flag) {
+			if (BenefitPlanConstants.BP_SUCCESS.equals(created)) {
+				ret = BenefitPlanConstants.BP_CVG;
+			}
+			if (bpCovDataBean.getBpCoverageList().isEmpty()) {
+				bpCommonDataBean.setNoData(true);
+			} else {
+				bpCommonDataBean.setNoData(false);
+			}
+		}
+		bpCommonDataBean.setEdit(false);
+		bpCommonDataBean.setEditOther(false);
+		bpCommonDataBean.setSuccess(false);
+		bpCommonDataBean.setDetailssuccess(false);
+		bpCommonDataBean.setOtherdetailsuccess(false);
+		bpMainDataBean.setBenefitPlanExists(false);
+		
+		bpCommonDataBean.setDeleteDetailSuccess(false);
+		bpCommonDataBean.setNwDeleteDetailSuccess(false);
+		
+		/** save the state of the tree. */
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(true);
+		BenefitPlanTree benefitPlanTree = (BenefitPlanTree) session
+				.getAttribute(BenefitPlanConstants.BENEFIT_PLAN_TREE);
+		session.setAttribute(BenefitPlanConstants.BENEFIT_PLAN_TREE_STATE,
+				benefitPlanTree.getTreeModel().getTreeState());
+		return ret;
+	}
+
+	/**
+	 * This method is used to render the case mgmt details.
+	 */
+	public void showCaseMgnt() {
+		BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+		BPMainDataBean bpMainDataBean = (BPMainDataBean) getDataBean(BenefitPlanConstants.BP_MAIN_DB_NAME);
+
+		bpCommonDataBean.setFocusThisId("resetBPCaseManagment");
+		bpCommonDataBean.setEditdetailssuccess(false);
+		
+		bpCommonDataBean.setCapEditDeletesuccess(false);
+		bpCommonDataBean.setNwDeleteDetailSuccess(false);
+		//Added to remove success message from New Capitation/Case Management. Start
+		bpCommonDataBean.setDetailssuccess(false);
+		//Added to remove success message from New Capitation/Case Management. End
+		if (bpCommonDataBean.getBenefitPlanMainVO().getBeginDate() == null
+				|| bpCommonDataBean.getBenefitPlanMainVO().getBeginDate()
+						.trim().length() == 0) {
+			setErrorMessage(BenefitPlanConstants.BENEFIT_PLAN_BEGDATE_REQ,
+					new Object[] {},
+					BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "date1x");
+			flag = false;
+		}
+		if (flag) {
+			bpMainDataBean.setShowCaseMgt(true);
+		}
+		bpMainDataBean.setBenefitPlanCohortVO(new BenefitPlanCohortVO());
+		bpCommonDataBean.setCapedit(false);
+	}
+
+	/**
+	 * This method is used to render the Network Association details.
+	 */
+	public void showNetworkAssoc() {
+		BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+		BPMainDataBean bpMainDataBean = (BPMainDataBean) getDataBean(BenefitPlanConstants.BP_MAIN_DB_NAME);
+
+		bpCommonDataBean.setFocusThisId("addNtwAssoc");
+		
+		bpCommonDataBean.setDeleteDetailSuccess(false);
+		bpCommonDataBean.setNwDeleteDetailSuccess(false);
+		/** populating networkid's for the dropdown. */
+		//NetworkDelegate networkDelegate = new NetworkDelegate();
+		//EnterpriseSearchResultsVO enterpriseSearchResultsVO = new EnterpriseSearchResultsVO();
+		List networkIdNameList = new ArrayList();
+		
+		try {
+			// Replaced by new API for performance
+			//enterpriseSearchResultsVO = new NetworkDelegate()
+			//		.searchNetwork(new NetworkSearchCriteriaVO());
+			networkIdNameList = new NetworkDelegate().getAllNetworkIdsAndNames();
+		} catch (NetworkNotFoundBusinessException e) {
+			setErrorMessage(BenefitPlanConstants.NW_ID_NOT_FOUND);
+			logger.error("network not found:" + e.getMessage(), e);
+			flag = false;
+		}
+		if (networkIdNameList!= null && networkIdNameList.size() > 0) {
+
+			List nwID = new ArrayList();
+			Iterator it = networkIdNameList.iterator();
+			while (it.hasNext()) {
+				NetworkSearchResultsVO networkSearchResultsVO = (NetworkSearchResultsVO) it
+						.next();
+
+				String nwDesc = networkSearchResultsVO.getNetworkID() + BenefitPlanConstants.DELIMITER
+						+ networkSearchResultsVO.getNetworkName();
+				nwID.add(new SelectItem(networkSearchResultsVO.getNetworkID(),
+						nwDesc));
+			}
+			bpMainDataBean.setNetworkID(nwID);
+		}
+		bpCommonDataBean.setEdit(false);
+		if (bpCommonDataBean.getBenefitPlanMainVO().getBeginDate() == null
+				|| bpCommonDataBean.getBenefitPlanMainVO().getBeginDate()
+						.trim().length() == 0) {
+			setErrorMessage(BenefitPlanConstants.BENEFIT_PLAN_BEGDATE_REQ,
+					new Object[] {},
+					BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "date1x");
+			flag = false;
+		}
+		if (flag) {
+			bpMainDataBean.setShowNwAssc(true);
+			/** Hide success messages */
+			bpCommonDataBean.setNwEdit(false);
+			bpCommonDataBean.setNwDetailsuccess(false);
+		}
+		bpMainDataBean.setBenefitPlanNwAssocVO(new BenefitPlanNwAssocVO());
+	}
+
+	/**
+	 * This method will validate benefit plan details.
+	 * 
+	 * @return boolean
+	 */
+	private boolean validateBenefitPlanMain() {
+		BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+		BPMainDataBean bpMainDataBean = (BPMainDataBean) getDataBean(BenefitPlanConstants.BP_MAIN_DB_NAME);
+		SimpleDateFormat sdf = new SimpleDateFormat(BenefitPlanConstants.DATE_FORMAT);
+		BenefitPlanMainVO benefitPlanMainVO = bpCommonDataBean
+				.getBenefitPlanMainVO();
+		boolean planBeginDatefalse = true;
+		if (benefitPlanMainVO.getBeginDate() == null
+				|| benefitPlanMainVO.getBeginDate().trim().length() == 0) {
+			setErrorMessage(BenefitPlanConstants.BENEFIT_PLAN_BEGDATE_REQ,
+					new Object[] {},
+					BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "date1x");
+			flag = false;
+		} else {
+			if (!validateDateFormat(benefitPlanMainVO.getBeginDate())) {
+				setErrorMessage(BenefitPlanConstants.INCORRECT_BEG_DATE_FORMAT,
+						new Object[] {},
+						BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "date1x");
+				flag = false;
+				planBeginDatefalse = false;
+			} else {
+				String begDate = modifyDateFormat(benefitPlanMainVO
+						.getBeginDate());
+				if (begDate != null && begDate.trim().length() != 0) {
+					benefitPlanMainVO.setBeginDate(begDate);
+				}
+			}
+			if (!validateDateFormat(benefitPlanMainVO.getEndDate())) {
+				setErrorMessage(BenefitPlanConstants.INCORRECT_END_DATE_FORMAT,
+						new Object[] {},
+						BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "date2x");
+				flag = false;
+			} else {
+				String endDate = modifyDateFormat(benefitPlanMainVO
+						.getEndDate());
+				if (endDate != null && endDate.trim().length() != 0) {
+					benefitPlanMainVO.setEndDate(endDate);
+				}
+			}
+		}
+		/**
+		 * Commented For GapId - ARCH56(UIS-PGM-BP-012 Add-Update Benefit Plan)
+		 */
+		/*if (benefitPlanMainVO.getLobId() == null
+				|| benefitPlanMainVO.getLobId().trim().length() == 0) {
+			setErrorMessage(BenefitPlanConstants.LOB_IS_REQUIRED,
+					new Object[] {},
+					BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "lobid");
+			flag = false;
+		}*/
+		/**
+		 * End of ARCH56
+		 */
+		// Commented for BP45 status remove change
+//		if (benefitPlanMainVO.getBenefitPlanStatCode() == null
+//				|| benefitPlanMainVO.getBenefitPlanStatCode().trim().length() == 0) {
+//			setErrorMessage(BenefitPlanConstants.PLAN_STATUS_IS_REQUIRED,
+//					new Object[] {},
+//					BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "statcode");
+//			flag = false;
+//		}
+		if (benefitPlanMainVO.getOptionsCode() == null
+				|| benefitPlanMainVO.getOptionsCode().trim().length() == 0) {
+			setErrorMessage(BenefitPlanConstants.PLAN_OPTION_IS_REQUIRED,
+					new Object[] {},
+					BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "optnscode");
+			flag = false;
+		}
+		if (benefitPlanMainVO.getCode() == null
+				|| benefitPlanMainVO.getCode().trim().length() == 0) {
+			setErrorMessage(BenefitPlanConstants.PLAN_TYPE_IS_REQUIRED,
+					new Object[] {},
+					BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "captn");
+
+			flag = false;
+		}
+		Date planBeginDate = null;
+		try {
+			if (benefitPlanMainVO.getBeginDate() != null
+					&& benefitPlanMainVO.getBeginDate().trim().length() != 0) {
+				planBeginDate = new Date(sdf.parse(
+						benefitPlanMainVO.getBeginDate()).getTime());
+			}
+		} catch (ParseException e1) {
+			logger.error("ParseException:" + e1.getMessage(), e1);
+		}
+		Date planEndDate = null;
+		try {
+			if (benefitPlanMainVO.getEndDate() != null
+					&& benefitPlanMainVO.getEndDate().trim().length() != 0) {
+				planEndDate = new Date(sdf
+						.parse(benefitPlanMainVO.getEndDate()).getTime());
+			}
+		} catch (ParseException e2) {
+			logger.error("ParseException:" + e2.getMessage(), e2);
+		}
+		if (benefitPlanMainVO.getBenefitPlanID() == null
+				|| benefitPlanMainVO.getBenefitPlanID().trim().length() == 0) {
+			setErrorMessage(BenefitPlanConstants.BENEFIT_PLAN_ID_REQ,
+					new Object[] {},
+					BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "bpid");
+			flag = false;
+		}
+		if (benefitPlanMainVO.getBenefitPlanDesc() == null
+				|| benefitPlanMainVO.getBenefitPlanDesc().trim().length() == 0) {
+			setErrorMessage(BenefitPlanConstants.BENEFIT_PLAN_DESC_REQ,
+					new Object[] {},
+					BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "bpdesc");
+			flag = false;
+		}
+		
+		/**
+		 * Commented as part of Bp46
+		 */
+		/*if (benefitPlanMainVO.getBenefitPlanAddlDesc() != null
+				&& !(benefitPlanMainVO.getBenefitPlanAddlDesc().equals(BenefitPlanConstants.EMPTY))) {
+			if (!EnterpriseCommonValidator
+					.validateAlphaSpecialCharacters(benefitPlanMainVO
+							.getBenefitPlanAddlDesc())) {
+				setErrorMessage(
+						BenefitPlanConstants.BP_NAVIGATOR_BUSINESSUNIT_SPCHAR_CHCK,
+						new Object[] {},
+						BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES,
+						"addnldesc");
+				flag = false;
+			}
+		}*/
+		
+		if (benefitPlanMainVO.getBenefitPlanID() != null
+				&& !(benefitPlanMainVO.getBenefitPlanID().equals(BenefitPlanConstants.EMPTY))) {
+			if (!EnterpriseCommonValidator
+					.validateAlphaSpecialCharacters(benefitPlanMainVO
+							.getBenefitPlanID())) {
+				setErrorMessage(
+						BenefitPlanConstants.BP_NAVIGATOR_BPID_SPCHAR_CHCK,
+						new Object[] {},
+						BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "bpid");
+				flag = false;
+			}
+		}
+		if (benefitPlanMainVO.getBenefitPlanDesc() != null
+				&& !(benefitPlanMainVO.getBenefitPlanDesc().equals(BenefitPlanConstants.EMPTY))) {
+			if (!EnterpriseCommonValidator
+					.validateAlphaSpecialCharacters(benefitPlanMainVO
+							.getBenefitPlanDesc())) {
+				setErrorMessage(
+						BenefitPlanConstants.BP_NAVIGATOR_BPDESCRIPTION_SPCHAR_CHCK,
+						new Object[] {},
+						BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "bpdesc");
+				flag = false;
+			}
+		}
+		
+		/**
+		 * Added as part of Bp46
+		 */
+		
+		if (benefitPlanMainVO.getBenefitPlanAddlDesc() == null
+				|| benefitPlanMainVO.getBenefitPlanAddlDesc().trim().length() == 0) {
+			setErrorMessage(BenefitPlanConstants.BP_BUSINESSUNIT_REQ,
+					new Object[] {},
+					BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "addnldesc");
+			flag = false;
+		}
+		/**
+		 * End of Bp46
+		 */
+		
+		//Added for UIS-PGM-BP-012_BP53 
+		if(!EnterpriseCommonValidator.validateNumeric(benefitPlanMainVO.getMaxEnroll().toString())){
+			setErrorMessage(BenefitPlanConstants.BP_MAXENROLL_NUM,
+					new Object[] {},
+					BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "maxenroll");
+			flag = false;
+			
+		}
+		else if(benefitPlanMainVO.getCode().equals(BenefitPlanConstants.WEBSITE) && (benefitPlanMainVO.getMaxEnroll() == null
+				|| benefitPlanMainVO.getMaxEnroll().trim().length() == 0)){
+			setErrorMessage(BenefitPlanConstants.BP_MAXENROLL_REQ,
+					new Object[] {},
+					BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "maxenroll");
+			flag = false;
+			
+		}
+		
+		//Added for BP18
+		//PMD Fix
+		if(benefitPlanMainVO.getSelectedList().size()==BenefitPlanConstants.INT_ZERO && (benefitPlanMainVO.getIeiCode().equals("I") || benefitPlanMainVO.getIeiCode().equals("E"))){
+				setErrorMessage(BenefitPlanConstants.BP_CRYOVRACC_REQ,
+						new Object[] {},
+						BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "cryOvrList");
+				flag = false;
+		}
+				
+		// Changed for Performance
+		//LineOfBusiness lineOfBusiness = getLineOfBussiness(bpCommonDataBean
+		//		.getBenefitPlanMainVO().getLobId());
+		/*If condition added if user deseletcs the LOB code*/
+		if (benefitPlanMainVO.getLobId() != null
+				&& benefitPlanMainVO.getLobId().trim().length() != 0) 
+		{
+			List lobDatesList = getLOBDates(bpCommonDataBean.getBenefitPlanMainVO().getLobId());
+		//if (lineOfBusiness != null) {
+			if (lobDatesList != null && !lobDatesList.isEmpty()) {
+			boolean equals1 = false;
+			boolean equals2 = false;
+			boolean equals3 = false;
+			Object lobDates[] =  (Object[])lobDatesList.get(0);
+			Date lobBeginDate =  (Date)lobDates[0];
+			Date lobEndDate =  (Date)lobDates[1];
+			if (planBeginDate != null && lobBeginDate != null) {
+				equals1 = planBeginDate.equals(lobBeginDate);
+			}
+			if (planBeginDate != null && planEndDate != null) {
+				equals2 = planBeginDate.equals(planEndDate);
+			}
+			if (planEndDate != null && lobEndDate != null) {
+				equals3 = planEndDate.equals(lobEndDate);
+			}
+			if (benefitPlanMainVO.getBeginDate() != null
+					&& benefitPlanMainVO.getBeginDate().trim().length() != 0) {
+				if (EnterpriseCommonValidator.compareLesserDate(planBeginDate,
+						lobBeginDate)
+						&& (!equals1)) {
+					setErrorMessage(
+							BenefitPlanConstants.BENEFIT_PLAN_BEG_DATE_PRIOR_LOB_DATE,
+							new Object[] {},
+							BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES,
+							"date1x");
+					flag = false;
+				} else if (EnterpriseCommonValidator.compareGreaterDate(
+						planEndDate, lobEndDate)
+						&& (!equals3)) {
+					setErrorMessage(
+							BenefitPlanConstants.BENEFIT_PLAN_END_DATE_AFTER_LOB_DATE,
+							new Object[] {},
+							BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES,
+							"date2x");
+					flag = false;
+				} else if (EnterpriseCommonValidator.compareGreaterDate(
+						planBeginDate, planEndDate)
+						&& (!equals2) && planBeginDatefalse) {
+					setErrorMessage(
+							BenefitPlanConstants.BENEFIT_PLAN_INVALID_PLAN_BEG_DATE,
+							new Object[] {},
+							BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES,
+							"date1x");
+					flag = false;
+				}
+			}
+			SimpleDateFormat dateFormat = new SimpleDateFormat(
+					BenefitPlanConstants.DATE_FORMAT);
+			Calendar cal = new GregorianCalendar(BenefitPlanConstants.MAX_YEAR,
+					BenefitPlanConstants.MAX_MONTH,
+					BenefitPlanConstants.MAX_DATE);
+			if (benefitPlanMainVO.getEndDate() == null
+					|| benefitPlanMainVO.getEndDate().trim().length() == 0) {
+				try {
+					bpCommonDataBean.getBenefitPlanMainVO().setEndDate(
+							dateConverter(dateFormat.parse(dateFormat
+									.format(cal.getTime()))));
+				} catch (ParseException e) {
+					logger.error("ParseException" + e.getMessage(), e);
+				}
+			}
+		}
+		/**
+		 * Commented for GapId - ARCH56(UIS-PGM-BP-012 Add-Update Benefit Plan)
+		 */
+		/*else {
+			flag = false;
+			setErrorMessage(BenefitPlanConstants.BENEFIT_PLAN_LOB_INVALID,
+					new Object[] {},
+					BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "lobid");
+
+		}*/
+		/**
+		 * End of ARCH56
+		 */
+	}
+		if ((benefitPlanMainVO.getCode() != null && benefitPlanMainVO.getCode()
+				.equals(BenefitPlanConstants.ManagedCare))
+				|| (benefitPlanMainVO.getOptionsCode() != null && benefitPlanMainVO
+						.getOptionsCode().equals(
+								BenefitPlanConstants.PCPRequired))) {
+			BenefitPlanCaseMgmtVO benefitPlanCaseManagementVO = bpMainDataBean
+					.getBenefitPlanCaseManagementVO();
+			// Modified by infinite for the defect ID ESPRD00247764
+			if (bpMainDataBean.getCapitationList() != null
+					&& bpMainDataBean.getCapitationList().size() > 0) {
+				if (benefitPlanCaseManagementVO.getCurrentProcCode() == null
+						|| benefitPlanCaseManagementVO.getCurrentProcCode()
+								.trim().length() == 0) {
+					setErrorMessage(
+							BenefitPlanConstants.BENEFIT_PLAN_CURR_PROC_CODE_REQ,
+							new Object[] {},
+							BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES,
+							"curproccode");
+					flag = false;
+				}
+				if (benefitPlanCaseManagementVO.getRetroProcCode() == null
+						|| benefitPlanCaseManagementVO.getRetroProcCode()
+								.trim().length() == 0) {
+					setErrorMessage(
+							BenefitPlanConstants.BENEFIT_PLAN_RETRO_PROC_CODE_REQ,
+							new Object[] {},
+							BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES,
+							"retproccode");
+					flag = false;
+				}
+			}
+		}
+		// added for defectESPRD00882301
+		/*if(benefitPlanMainVO.getBenefitPlanMCOHoldbackVO1().getFuncAreaCode() != null 
+				&& benefitPlanMainVO.getBenefitPlanMCOHoldbackVO1().getSysParamNum() == null)
+		{
+			setErrorMessage(
+					BenefitPlanConstants.SystemParameter_Required,
+					new Object[] {},
+					BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "sysparam");
+		
+			flag =false;
+		}
+		if(benefitPlanMainVO.getBenefitPlanMCOHoldbackVO1().getSysParamNum() != null 
+				&& benefitPlanMainVO.getBenefitPlanMCOHoldbackVO1().getFuncAreaCode() == null)
+		{
+			setErrorMessage(
+					BenefitPlanConstants.FunctionalArea_Required,
+					new Object[] {},
+					BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "funarea");
+			flag =false;
+		}
+		if(benefitPlanMainVO.getBenefitPlanMCOHoldbackVO2().getSysParamNum() != null 
+				&& benefitPlanMainVO.getBenefitPlanMCOHoldbackVO2().getFuncAreaCode() == null)
+		{
+			setErrorMessage(
+					BenefitPlanConstants.FunctionalArea2_Required,
+					new Object[] {},
+					BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "funarea2");
+			flag =false;
+		}
+		if(benefitPlanMainVO.getBenefitPlanMCOHoldbackVO2().getSysParamNum() == null 
+				&& benefitPlanMainVO.getBenefitPlanMCOHoldbackVO2().getFuncAreaCode() != null)
+		{
+			setErrorMessage(
+					BenefitPlanConstants.SystemParameter2_Required,
+					new Object[] {},
+					BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "sysparam2");
+			flag =false;
+		}
+		if(benefitPlanMainVO.getBenefitPlanMCOHoldbackVO1().getSysParamNum() == null 
+				&& benefitPlanMainVO.getBenefitPlanMCOHoldbackVO1().getFuncAreaCode() == null)
+		{
+			benefitPlanMainVO.getBenefitPlanMCOHoldbackVO1().setUpdFlag(false);
+		}
+		else
+		{
+			benefitPlanMainVO.getBenefitPlanMCOHoldbackVO1().setUpdFlag(true);
+		}
+		if(benefitPlanMainVO.getBenefitPlanMCOHoldbackVO2().getSysParamNum() == null 
+				&& benefitPlanMainVO.getBenefitPlanMCOHoldbackVO2().getFuncAreaCode() == null)
+		{
+			benefitPlanMainVO.getBenefitPlanMCOHoldbackVO2().setUpdFlag(false);
+		}
+		else
+		{
+			benefitPlanMainVO.getBenefitPlanMCOHoldbackVO2().setUpdFlag(true);
+		}*/
+		return flag;
+	}
+
+	/**
+	 * This method will validate the benefitplan Case/Capitation details.
+	 * 
+	 * @return boolean
+	 */
+	private boolean validateBenefitPlanCaseCapitation() {
+		boolean beginDateflag = true;
+		boolean endDateflag = true;
+		BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+		BPMainDataBean bpMainDataBean = (BPMainDataBean) getDataBean(BenefitPlanConstants.BP_MAIN_DB_NAME);
+		SimpleDateFormat sdf = new SimpleDateFormat(BenefitPlanConstants.DATE_FORMAT);
+		BenefitPlanCohortVO benefitPlanCapitationVO = bpMainDataBean
+				.getBenefitPlanCohortVO();
+		BenefitPlanMainVO benefitPlanMainVO = bpCommonDataBean
+				.getBenefitPlanMainVO();
+		BenefitPlanCohortVO benPlanCapitationVO = bpMainDataBean
+				.getBenefitPlanCohortVO();
+		if (benefitPlanCapitationVO.getBegDate() == null
+				|| benefitPlanCapitationVO.getBegDate().trim().length() == 0) {
+			setErrorMessage(BenefitPlanConstants.BENEFIT_PLAN_CASE_BEGDATE_REQ,
+					new Object[] {},
+					BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "date3x");
+			flag = false;
+		} else {
+			if (!validateDateFormat(benPlanCapitationVO.getBegDate())) {
+				setErrorMessage(BenefitPlanConstants.INCORRECT_BEG_DATE_FORMAT,
+						new Object[] {},
+						BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "date3x");
+				beginDateflag = false;
+				flag = false;
+			} else {
+				String begDate = modifyDateFormat(benPlanCapitationVO
+						.getBegDate());
+				if (begDate != null && begDate.trim().length() != 0) {
+					benPlanCapitationVO.setBegDate(begDate);
+				}
+			}
+			if (!validateDateFormat(benPlanCapitationVO.getEndDate())) {
+				setErrorMessage(BenefitPlanConstants.INCORRECT_END_DATE_FORMAT,
+						new Object[] {},
+						BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "date4x");
+				endDateflag = false;
+				flag = false;
+			} else {
+				String endDat = modifyDateFormat(benPlanCapitationVO
+						.getEndDate());
+				if (endDat != null && endDat.trim().length() != 0) {
+					benPlanCapitationVO.setEndDate(endDat);
+				}
+			}
+		}
+		Date planBeginDate = null;
+		Date planEndDate = null;
+		Date beginDate = null;
+		Date endDate = null;
+		//SimpleDateFormat dateFormat = new SimpleDateFormat(
+		//		BenefitPlanConstants.DATE_FORMAT);
+		Calendar cal = new GregorianCalendar(BenefitPlanConstants.MAX_YEAR,
+				BenefitPlanConstants.MAX_MONTH, BenefitPlanConstants.MAX_DATE);
+		if (benefitPlanCapitationVO.getEndDate() == null
+				|| benefitPlanCapitationVO.getEndDate().trim().length() == 0) {
+			try {
+				endDate = sdf.parse(sdf.format(cal.getTime()));
+				bpMainDataBean.getBenefitPlanCohortVO().setEndDate(
+						dateConverter(endDate));
+			} catch (ParseException e) {
+				logger.error("ParseException:" + e.getMessage(), e);
+			}
+		}
+		try {
+			if (benefitPlanMainVO.getBeginDate() != null
+					&& benefitPlanMainVO.getBeginDate().trim().length() != 0) {
+				String begDate = modifyDateFormat(benefitPlanMainVO
+						.getBeginDate());
+				if (begDate != null && begDate.trim().length() != 0) {
+					planBeginDate = new Date(sdf.parse(begDate).getTime());
+				}
+			}
+			if (benefitPlanMainVO.getEndDate() != null
+					&& benefitPlanMainVO.getEndDate().trim().length() != 0) {
+				String endDat = modifyDateFormat(benefitPlanMainVO.getEndDate());
+				if (endDat != null && endDat.trim().length() != 0) {
+					planEndDate = new Date(sdf.parse(endDat).getTime());
+				}
+			}
+			if (benPlanCapitationVO.getBegDate() != null
+					&& benPlanCapitationVO.getBegDate().trim().length() != 0) {
+				beginDate = new Date(sdf
+						.parse(benPlanCapitationVO.getBegDate()).getTime());
+			}
+			if (benPlanCapitationVO.getEndDate() != null
+					&& benPlanCapitationVO.getEndDate().trim().length() != 0) {
+				endDate = new Date(sdf.parse(benPlanCapitationVO.getEndDate())
+						.getTime());
+			}
+		} catch (ParseException e2) {
+			logger.error("PareseException:" + e2.getMessage(), e2);
+		}
+		// Validate Capitation
+		//BenefitPlanCaseMgmtVO benefitPlanCaseManagementVO = bpMainDataBean
+		//		.getBenefitPlanCaseManagementVO();
+		if (benefitPlanCapitationVO.getMapID() == null
+				|| benefitPlanCapitationVO.getMapID().trim().length() == 0) {
+			setErrorMessage(
+					BenefitPlanConstants.BENEFIT_PLAN_MAPID_PROC_CODE_REQ,
+					new Object[] {},
+					BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "mapid");
+
+			flag = false;
+		} else {
+			// Modified for UIS-PGM-BP-012_CPRIC126 
+			if (validateMapId(benefitPlanMainVO.getLobId(),
+					benefitPlanCapitationVO.getMapIdCode(), benefitPlanMainVO
+							.getBeginDate(), benefitPlanMainVO.getEndDate(),
+					"mapid")) {
+				
+				setErrorMessage(BenefitPlanConstants.VALID_MAP_SPAN,
+						new Object[] {},
+						BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "mapid");
+				flag = false;
+			} else {
+				if (!mapInvalidFlag) {
+					flag = false;
+				}
+			}
+		}
+		boolean equals1 = false;
+		boolean equals2 = false;
+		boolean equals3 = false;
+		boolean equals4 = false;
+		if (beginDate != null && planBeginDate != null) {
+			equals1 = beginDate.equals(planBeginDate);
+		}
+		if (beginDate != null && endDate != null) {
+			equals2 = beginDate.equals(endDate);
+		}
+		if (endDate != null && planEndDate != null) {
+			equals3 = endDate.equals(planEndDate);
+		}
+		if (beginDate != null && planEndDate != null) {
+			equals4 = beginDate.equals(planEndDate);
+		}
+		if (endDate != null) {
+			if (beginDateflag) {
+				if ((EnterpriseCommonValidator.compareLesserDate(beginDate,
+						planBeginDate) || EnterpriseCommonValidator
+						.compareGreaterDate(beginDate, planEndDate))
+						&& (!equals1) && (!equals4)) {
+					setErrorMessage(
+							BenefitPlanConstants.BENEFIT_PLAN_INVALID_BEG_DATE,
+							new Object[] {},
+							BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES,
+							"date3x");
+					flag = false;
+				}
+			}
+			if (beginDateflag && endDateflag) {
+				if (EnterpriseCommonValidator.compareGreaterDate(beginDate,
+						endDate)
+						&& (!equals2)) {
+					setErrorMessage(
+							BenefitPlanConstants.BENEFIT_PLAN_BEG_DATE_AFTER_END_DATE,
+							new Object[] {},
+							BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES,
+							"date3x");
+					flag = false;
+				}
+			}
+		}
+
+		if (endDateflag) {
+			if (EnterpriseCommonValidator.compareGreaterDate(endDate,
+					planEndDate)
+					&& (!equals3)) {
+				setErrorMessage(
+						BenefitPlanConstants.BENEFIT_PLAN_INVALID_END_DATE,
+						new Object[] {},
+						BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "date4x");
+				flag = false;
+			}
+		}
+		if (benefitPlanCapitationVO.getNwStatCode() == null
+				|| benefitPlanCapitationVO.getNwStatCode().trim().length() == 0) {
+			setErrorMessage(
+					BenefitPlanConstants.BENEFIT_PLAN_NW_STATUS_CODE_REQ,
+					new Object[] {},
+					BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "nwstatus");
+			flag = false;
+		}
+		if (benefitPlanCapitationVO.getRate() == null
+				|| benefitPlanCapitationVO.getRate().trim().length() == 0) {
+			setErrorMessage(BenefitPlanConstants.BENEFIT_PLAN_RATE_REQ,
+					new Object[] {},
+					BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "rate1");
+			flag = false;
+		} else {
+			try {
+				Double dd = new Double(benefitPlanCapitationVO.getRate());
+				String testCurr = benefitPlanCapitationVO.getRate();
+
+				if (testCurr.indexOf(".") != -1) {
+					int lengofDecimal = testCurr.substring(
+							testCurr.indexOf(".") + 1, testCurr.length())
+							.length();
+
+					if (lengofDecimal > 2) {
+						setErrorMessage(
+								BenefitPlanConstants.BENEFIT_PLAN_INVALID_RATE,
+								new Object[] {},
+								BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES,
+								"rate1");
+						flag = false;
+
+					}
+				}
+				if (dd.doubleValue() < 0
+						|| dd.doubleValue() > BenefitPlanConstants.MAX_ALLOW_RATE
+						|| dd.doubleValue() > BenefitPlanConstants.MAX_ALLOW_RATE1) {
+					setErrorMessage(
+							BenefitPlanConstants.BENEFIT_PLAN_INVALID_RATE,
+							new Object[] {},
+							BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES,
+							"rate1");
+					flag = false;
+
+				}
+			} catch (NumberFormatException e) {
+				setErrorMessage(BenefitPlanConstants.BENEFIT_PLAN_INVALID_RATE,
+						new Object[] {},
+						BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "rate1");
+				logger.error("NumberFormatException:" + e.getMessage(), e);
+				flag = false;
+
+			}
+		}
+		if (benPlanCapitationVO != null
+				&& (benPlanCapitationVO.getSeqNum() == null 
+				|| benPlanCapitationVO.getSeqNum().trim().length() == 0)) {
+			int capitationListSize = bpMainDataBean.getCapitationList().size();
+			if ((!bpCommonDataBean.isCapedit() && capitationListSize == 0)
+					|| (bpCommonDataBean.isCapedit() && capitationListSize <= 1)) {
+				bpMainDataBean.getBenefitPlanCohortVO().setSeqNum(
+						new Integer(BenefitPlanConstants.DEFAULT_RANK)
+								.toString());
+			} else {
+				setErrorMessage(BenefitPlanConstants.BENEFIT_PLAN_SEQ_NUM,
+						new Object[] {},
+						BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "seqnum");
+				setErrorMessage(BenefitPlanConstants.BP_RANK_GREATER_THAN_ZERO,
+						new Object[] {},
+						BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "seqnum1");
+
+				flag = false;
+
+			}
+
+		}
+
+		else if (!EnterpriseCommonValidator.validateNumeric(benPlanCapitationVO
+				.getSeqNum().toString())) {
+			setErrorMessage(BenefitPlanConstants.BP_RANK_NUMERIC,
+					new Object[] {},
+					BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "seqnum");
+			flag = false;
+		} else if (Integer.parseInt(benPlanCapitationVO.getSeqNum()) == 0) {
+			setErrorMessage(BenefitPlanConstants.BP_RANK_GREATER_THAN_ZERO,
+					new Object[] {},
+					BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "seqnum");
+			flag = false;
+		}
+		/** validating for duplicate rank. */
+		String rank = bpMainDataBean.getBenefitPlanCohortVO().getSeqNum();
+		int capitationListSize = bpMainDataBean.getCapitationList().size();
+		for (int i = 0; i < capitationListSize; i++) {
+			BenefitPlanCohortVO temp = (BenefitPlanCohortVO) bpMainDataBean
+					.getCapitationList().get(i);
+			if (bpCommonDataBean.isCapedit()) {
+				if (i == bpCommonDataBean.getIndex()) {
+					continue;
+				}
+			}
+			String tempRank = temp.getSeqNum();
+			if (rank != null && tempRank != null) {
+				if (rank.equals(tempRank)) {
+					setErrorMessage(BenefitPlanConstants.BP_DUP_RANK,
+							new Object[] {},
+							BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES,
+							"seqnum");
+					flag = false;
+					break;
+				}
+			}
+		}
+		if (flag && bpMainDataBean.getCapitationList().size() > 0) {
+			int capitationSize = bpMainDataBean.getCapitationList().size();
+			for (int i = 0; i < capitationSize; i++) {
+				BenefitPlanCohortVO temp = (BenefitPlanCohortVO) bpMainDataBean
+						.getCapitationList().get(i);
+				if (bpCommonDataBean.isCapedit()) {
+					if (i == bpCommonDataBean.getIndex()) {
+						continue;
+					}
+				}
+				if (bpMainDataBean.getBenefitPlanCohortVO().equals(temp)) {
+					flag = false;
+					setErrorMessage(BenefitPlanConstants.DUPLICATE_RECORD_FOR_COHORT);
+					break;
+				}
+			}
+		}
+		return flag;
+	}
+
+	/**
+	 * This method will validate the BenefitPlan NetworkAssociation.
+	 * 
+	 * @return boolean
+	 */
+	private boolean validateBenefitPlanNwAssc() {
+		BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+
+		BPMainDataBean bpMainDataBean = (BPMainDataBean) getDataBean(BenefitPlanConstants.BP_MAIN_DB_NAME);
+		SimpleDateFormat sdf = new SimpleDateFormat(BenefitPlanConstants.DATE_FORMAT);
+		BenefitPlanNwAssocVO benefitPlanNwAssocVO = bpMainDataBean
+				.getBenefitPlanNwAssocVO();
+		BenefitPlanMainVO benefitPlanMainVO = bpCommonDataBean
+				.getBenefitPlanMainVO();
+		if (benefitPlanNwAssocVO.getBeginDate() == null
+				|| benefitPlanNwAssocVO.getBeginDate().trim().length() == 0) {
+			setErrorMessage(BenefitPlanConstants.BENEFIT_PLAN_NW_BEGDATE_REQ,
+					new Object[] {},
+					BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "nwAddBeginDt");
+			flag = false;
+		} else {
+			if (!validateDateFormat(benefitPlanNwAssocVO.getBeginDate())) {
+				setErrorMessage(BenefitPlanConstants.INCORRECT_BEG_DATE_FORMAT,
+						new Object[] {},
+						BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "nwAddBeginDt");
+				flag = false;
+			} else {
+				String begDat = modifyDateFormat(benefitPlanNwAssocVO
+						.getBeginDate());
+				if (begDat != null && begDat.trim().length() != 0) {
+					benefitPlanNwAssocVO.setBeginDate(begDat);
+				}
+			}
+			if (!validateDateFormat(benefitPlanNwAssocVO.getNwEndDate())) {
+				setErrorMessage(BenefitPlanConstants.INCORRECT_END_DATE_FORMAT,
+						new Object[] {},
+						BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "nwAddEndDt");
+				flag = false;
+			} else {
+				String endDat = modifyDateFormat(benefitPlanNwAssocVO
+						.getNwEndDate());
+				if (endDat != null && endDat.trim().length() != 0) {
+					benefitPlanNwAssocVO.setNwEndDate(endDat);
+				}
+			}
+		}
+		if (benefitPlanNwAssocVO.getNwID() == null
+				|| benefitPlanNwAssocVO.getNwID().trim().length() == 0) {
+			setErrorMessage(BenefitPlanConstants.NW_ID_REQD, new Object[] {},
+					BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "nwid");
+			flag = false;
+		}
+		if (benefitPlanNwAssocVO.getNwStatCode() == null
+				|| benefitPlanNwAssocVO.getNwStatCode().trim().length() == 0) {
+			setErrorMessage(BenefitPlanConstants.NTWRK_STATUS_REQD,
+					new Object[] {},
+					BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "nwAddstatcode");
+			flag = false;
+		}
+		Date planBeginDate = null;
+		Date planEndDate = null;
+		Date begDate = null;
+		Date endDate = null;
+		//SimpleDateFormat dateFormat = new SimpleDateFormat(
+		//		BenefitPlanConstants.DATE_FORMAT);
+		Calendar cal = new GregorianCalendar(BenefitPlanConstants.MAX_YEAR,
+				BenefitPlanConstants.MAX_MONTH, BenefitPlanConstants.MAX_DATE);
+		if (benefitPlanNwAssocVO.getNwEndDate() == null
+				|| benefitPlanNwAssocVO.getNwEndDate().trim().length() == 0) {
+			try {
+				endDate = sdf.parse(sdf.format(cal.getTime()));
+				bpMainDataBean.getBenefitPlanNwAssocVO().setNwEndDate(
+						dateConverter(endDate));
+			} catch (ParseException e) {
+				logger.error("ParseException:" + e.getMessage(), e);
+			}
+		}
+		try {
+			if (benefitPlanMainVO.getBeginDate() != null
+					&& benefitPlanMainVO.getBeginDate().trim().length() != 0) {
+				String begDat = modifyDateFormat(benefitPlanMainVO
+						.getBeginDate());
+				if (begDat != null && begDat.trim().length() != 0) {
+					planBeginDate = new Date(sdf.parse(begDat).getTime());
+				}
+			}
+			if (benefitPlanMainVO.getEndDate() != null
+					&& benefitPlanMainVO.getEndDate().trim().length() != 0) {
+				String endDat = modifyDateFormat(benefitPlanMainVO.getEndDate());
+				if (endDat != null && endDat.trim().length() != 0) {
+					planEndDate = new Date(sdf.parse(endDat).getTime());
+				}
+			}
+			if (benefitPlanNwAssocVO.getBeginDate() != null
+					&& benefitPlanNwAssocVO.getBeginDate().trim().length() != 0) {
+				begDate = new Date(sdf.parse(
+						benefitPlanNwAssocVO.getBeginDate()).getTime());
+			}
+			if (benefitPlanNwAssocVO.getNwEndDate() != null
+					&& benefitPlanNwAssocVO.getNwEndDate().trim().length() != 0) {
+				endDate = new Date(sdf.parse(
+						benefitPlanNwAssocVO.getNwEndDate()).getTime());
+			}
+		} catch (ParseException e2) {
+			logger.error("ParseException:" + e2.getMessage(), e2);
+		}
+		boolean equals1 = false;
+		boolean equals2 = false;
+		boolean equals3 = false;
+		boolean equals4 = false;
+		if (begDate != null && planBeginDate != null) {
+			equals1 = begDate.equals(planBeginDate);
+		}
+		if (begDate != null && endDate != null) {
+			equals2 = begDate.equals(endDate);
+		}
+		if (endDate != null && planEndDate != null) {
+			equals3 = endDate.equals(planEndDate);
+		}
+		if (begDate != null && planEndDate != null) {
+			equals4 = begDate.equals(planEndDate);
+		}
+		if (EnterpriseCommonValidator.compareGreaterDate(endDate, planEndDate)
+				&& (!equals3)) {
+			setErrorMessage(BenefitPlanConstants.BENEFIT_PLAN_INVALID_END_DATE,
+					new Object[] {},
+					BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "nwAddEndDt");
+			flag = false;
+		}
+		if (endDate != null) {
+			if (EnterpriseCommonValidator.compareLesserDate(begDate,
+					planBeginDate)
+					&& (!equals1) && (!equals4)) {
+				setErrorMessage(
+						BenefitPlanConstants.BENEFIT_PLAN_INVALID_BEG_DATE,
+						new Object[] {},
+						BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "nwAddBeginDt");
+				flag = false;
+			}
+			if (EnterpriseCommonValidator.compareGreaterDate(begDate,
+					planEndDate)
+					&& (!equals4)) {
+				setErrorMessage(
+						BenefitPlanConstants.BENEFIT_PLAN_INVALID_BEG_DATE,
+						new Object[] {},
+						BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "nwAddBeginDt");
+				flag = false;
+			}
+			if (EnterpriseCommonValidator.compareGreaterDate(begDate, endDate)
+					&& (!equals2)) {
+				setErrorMessage(
+						BenefitPlanConstants.BENEFIT_PLAN_BEG_DATE_AFTER_END_DATE,
+						new Object[] {},
+						BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "nwAddBeginDt");
+				flag = false;
+			}
+
+		}
+		if (benefitPlanNwAssocVO.getSeqNum().equals(BenefitPlanConstants.EMPTY) || benefitPlanNwAssocVO.getSeqNum().trim().length() == 0) {
+			int nwAsscListSize = bpMainDataBean.getNwAsscList().size();
+			if (nwAsscListSize == 0) {
+				bpMainDataBean.getBenefitPlanNwAssocVO().setSeqNum(
+						new Integer(BenefitPlanConstants.DEFAULT_RANK)
+								.toString());
+			} else if (nwAsscListSize > 0) {
+				setErrorMessage(BenefitPlanConstants.BENEFIT_PLAN_SEQ_NUM,
+						new Object[] {},
+						BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "nwaddRank");
+				flag = false;
+			}
+		} else if (!EnterpriseCommonValidator
+				.validateNumeric(benefitPlanNwAssocVO.getSeqNum().toString())) {
+			setErrorMessage(BenefitPlanConstants.BP_RANK_NUMERIC,
+					new Object[] {},
+					BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "nwaddRank");
+			flag = false;
+		} else if (Integer.parseInt(benefitPlanNwAssocVO.getSeqNum()) == 0) {
+			setErrorMessage(BenefitPlanConstants.BP_RANK_GREATER_THAN_ZERO,
+					new Object[] {},
+					BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "nwaddRank");
+			flag = false;
+		}
+		/** validating for duplicate rank. */
+		String rank = bpMainDataBean.getBenefitPlanNwAssocVO().getSeqNum();
+		int nwAsscListSize = bpMainDataBean.getNwAsscList().size();
+		// if (nwAsscListSize == 0)
+		if (nwAsscListSize != 0) {
+			for (int i = 0; i < nwAsscListSize; i++) {
+				BenefitPlanNwAssocVO temp = (BenefitPlanNwAssocVO) bpMainDataBean
+						.getNwAsscList().get(i);
+				if (bpCommonDataBean.isNwEdit()) {
+					//if (i == bpCommonDataBean.getIndex()) {
+					if (i == bpCommonDataBean.getOtherIndex()) {
+						continue;
+					}
+				}
+				String tempRank = temp.getSeqNum();
+				if (rank != null && tempRank != null) {
+					if (rank.equals(tempRank)) {
+						setErrorMessage(BenefitPlanConstants.BP_DUP_RANK,
+								new Object[] {},
+								BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES,
+								"nwaddRank");
+
+						flag = false;
+						break;
+					}
+				}
+			}
+		}
+		if (flag && nwAsscListSize > 0) {
+			for (int i = 0; i < nwAsscListSize; i++) {
+				BenefitPlanNwAssocVO temp = (BenefitPlanNwAssocVO) bpMainDataBean
+						.getNwAsscList().get(i);
+				if (bpCommonDataBean.isNwEdit()) {
+					//if (i == bpCommonDataBean.getIndex()) {
+					if (i == bpCommonDataBean.getOtherIndex()) {
+						continue;
+					}
+				}
+				if (bpMainDataBean.getBenefitPlanNwAssocVO().equals(temp)) {
+					flag = false;
+					setErrorMessage(BenefitPlanConstants.DUPLICATE_RECORD_FOR_NWASSCN);
+					break;
+				}
+			}
+		}
+		return flag;
+	}
+
+	/**
+	 * This method will display benefit plan details.
+	 * 
+	 * @return String
+	 */
+	public String viewBenefitPlan() {
+		
+		BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+		BPMainDataBean bpMainDataBean = (BPMainDataBean) getDataBean(BenefitPlanConstants.BP_MAIN_DB_NAME);		
+		BenefitPlanMain benefitPlanMain = new BenefitPlanMain();
+		
+	   //	ADDED FOR UC-PGM-BP-012_BP25 START
+        String idn = (String)((PortletRequest) FacesContext.getCurrentInstance().
+        		getExternalContext().getRequest()).getPortletSession().
+        		getAttribute("BenefitPlanConstants.BP_IPC_EDIT_NAV");
+		String[] str = idn.split(BenefitPlanConstants.DELIMITER);		
+		String bpId = str[0];
+		bpMainDataBean.setHideflag(true);
+		// ADDED FOR UC-PGM-BP-012_BP25 END
+		try {
+			benefitPlanMain = new BenefitPlanDelegate().getBenefitPlan(BenefitPlanConstants.DEFAULT_LOB_CD,bpId);			
+			
+		} catch (BenefitPlanNotFoundException e) {
+			logger.error("BenefitPlanNotFoundException:" + e.getMessage(), e);
+		}
+		//BenefitPlanHelper benefitPlanHelper = new BenefitPlanHelper();
+		BenefitPlanMainVO benefitPlanMainVO = new BenefitPlanHelper()
+				.convertBenefitPlanDOToVO(benefitPlanMain);
+		if(!BenefitPlanConstants.IEI_IGNORE.equalsIgnoreCase(benefitPlanMain.getAccumltCode())){
+			bpMainDataBean.setShowCryOvrAcc(true);
+		}
+
+		// ADDED FOR UC-PGM-BP-012_BP53
+		if(benefitPlanMainVO.getCode().equals(BenefitPlanConstants.WEBSITE)){
+				bpMainDataBean.setMaxEnrollFlag(true);
+		}else{
+				bpMainDataBean.setMaxEnrollFlag(false);
+		}
+		
+		loadBenefitPlanTabs(benefitPlanMain);
+		//PMD Fix
+		loadCopayAndCopayLmtTabs(benefitPlanMain);
+		loadSAAndPlanLimitTabs(benefitPlanMain);
+
+		/** Added for GAP - BP25 - Service Authorization - End **/
+		getAllLists(benefitPlanMainVO);
+		
+		bpCommonDataBean.setBenefitPlanMainVO(benefitPlanMainVO);
+		
+		/*  MT Code Changes - GAP BP18 - Changed By : 428836 Starts */
+		loadCarryOverBenefitPlans(bpId,"MED");
+		/*  MT Code Changes - GAP BP18 - Changed By : 428836 Ends */
+		
+		bpCommonDataBean.setEdit(false);
+		bpCommonDataBean.setEditOther(false);
+		bpMainDataBean.setShowNwAssc(false);
+		
+		//Pmd Fix - 423427
+		if(benefitPlanMain.getBenefitPlanMCOProcedure().isEmpty())
+		{
+			bpMainDataBean.setShowCase(false);
+			UIComponent tabsPaneComponent = findComponentInRoot(BenefitPlanConstants.AddDiag_UIComponent);         			
+	        if (tabsPaneComponent instanceof HtmlPanelTabbedPane) 
+	        {
+	        	int newTabindex=  ((HtmlPanelTabbedPane) tabsPaneComponent).getSelectedIndex(); 
+	        	((HtmlPanelTabbedPane) tabsPaneComponent).setSelectedIndex(newTabindex);
+	        	bpMainDataBean.setTabIndex(newTabindex);
+	        }
+		} else {
+			UIComponent tabsPaneComponent = findComponentInRoot(BenefitPlanConstants.AddDiag_UIComponent);         			
+	        if (tabsPaneComponent instanceof HtmlPanelTabbedPane) 
+	        {
+	        	//Pmd Fix - 423427
+	        	//int newTabindex=  ((HtmlPanelTabbedPane) tabsPaneComponent).getSelectedIndex(); 
+	        	((HtmlPanelTabbedPane) tabsPaneComponent).setSelectedIndex(0);
+	        	bpMainDataBean.setTabIndex(0);
+	        }
+	        bpMainDataBean.setShowCase(true);
+		}
+		return BenefitPlanConstants.BP_MAIN;
+	}
+	//PMD Fix
+	private void loadBenefitPlanTabs(final BenefitPlanMain benefitPlanMain) {
+		
+		//Added for UIS-PGM-BP-012_BP25
+		BenefitPlanHelper benefitPlanHelper = new BenefitPlanHelper();
+				/** Changes for Co ins Update  **/
+				if(benefitPlanMain.getBenefitPlanCoIns() != BenefitPlanConstants.NULL) {
+					
+					Set<BenefitPlanCoIns> benifitCoInsuranceSet = benefitPlanMain.getBenefitPlanCoIns();
+					List<BenefitPlanCoInsuranceVO> benefitPlanCoInsVo = new ArrayList<BenefitPlanCoInsuranceVO>(); 
+					
+					for(BenefitPlanCoIns coIns :  benifitCoInsuranceSet){
+						BenefitPlanCoInsuranceVO convertBPCoInsDOToVO = benefitPlanHelper.convertBPCoInsDOToVO(coIns);
+						benefitPlanCoInsVo.add(convertBPCoInsDOToVO);
+					}
+					//logger.info("benefirPlanCoInsVo list Size is : " + benefitPlanCoInsVo.size());
+					BPCoInsDataBean bpCoInsDataBean = (BPCoInsDataBean) getDataBean(BenefitPlanConstants.BP_COINS_DB_NAME);
+					bpCoInsDataBean.setCoIns(benefitPlanCoInsVo);
+					//logger.info("bpCoInsDataBean size is : " + bpCoInsDataBean.getCoIns().size());
+				}
+				
+				if(benefitPlanMain.getBenefitPlanCoInsLMT() != BenefitPlanConstants.NULL) {
+					
+					Set<BenefitPlanCoInsLMT> benifitCoInsuranceLMTSet = benefitPlanMain.getBenefitPlanCoInsLMT();
+					List<BenefitPlanCoInsuranceLimitVO> benefitPlanCoInsLMTVo = new ArrayList<BenefitPlanCoInsuranceLimitVO>(); 
+					
+					for(BenefitPlanCoInsLMT coInsLMT :  benifitCoInsuranceLMTSet) {
+						
+						BenefitPlanCoInsuranceLimitVO convertBPCoInsLMTDOToVO = benefitPlanHelper.convertBPCoInsLmtDOToVO(coInsLMT);
+						benefitPlanCoInsLMTVo.add(convertBPCoInsLMTDOToVO);
+					}
+					BPCoInsDataBean bpCoInsDataBean = (BPCoInsDataBean) getDataBean(BenefitPlanConstants.BP_COINS_DB_NAME);
+					bpCoInsDataBean.setCoInsLmts(benefitPlanCoInsLMTVo);
+				}
+				/** Changes End **/
+				
+					
+				/** Added for GAP - BP25 - Co-Pay/Cost Share Tab - End **/
+				
+				/** Added for GAP - BP25 - Coverage Tab - Start **/
+				if(!ObjectUtils.equals(benefitPlanMain.getBenefitPlanCoverage(), BenefitPlanConstants.NULL)) {
+					
+					Set<BenefitPlanCoverage> benifitCoverageSet = benefitPlanMain.getBenefitPlanCoverage();
+					List<BenefitPlanCoverageVO> benefitPlanCoverageVo = new ArrayList<BenefitPlanCoverageVO>(); 
+					
+					for(BenefitPlanCoverage coverage : benifitCoverageSet) {				
+						BenefitPlanCoverageVO convertBPCoverageDOToVO = benefitPlanHelper.convertBPCvgDOToVO(coverage);
+						benefitPlanCoverageVo.add(convertBPCoverageDOToVO);			
+					}			
+					BPCovDataBean bpCoverageDataBean = (BPCovDataBean) getDataBean(BenefitPlanConstants.BP_COV_DB_NAME);
+					bpCoverageDataBean.setBpCoverageList(benefitPlanCoverageVo);
+				}
+				
+				/** Added for GAP - BP25 - Out of Pocket - End **/
+	}
+	
+	private void loadCopayAndCopayLmtTabs(final BenefitPlanMain benefitPlanMain) {
+		
+		BenefitPlanHelper benefitPlanHelper = new BenefitPlanHelper();
+		/** Added for GAP - BP25 - Co-Pay/Cost Share Tab - Start **/
+		if(benefitPlanMain.getBenefitPlanCoPay() != BenefitPlanConstants.NULL) {
+			
+			Set<BenefitPlanCoPay> benifitCoPaySet = benefitPlanMain.getBenefitPlanCoPay();
+			List<BenefitPlanCoPayVO> benefitPlanCoPayVo = new ArrayList<BenefitPlanCoPayVO>(); 
+			
+			for(BenefitPlanCoPay copay : benifitCoPaySet) {				
+				BenefitPlanCoPayVO convertBPCoPayDOToVO = benefitPlanHelper.convertBPCoPayDOToVO(copay);
+				benefitPlanCoPayVo.add(convertBPCoPayDOToVO);			
+			}			
+
+			BPCoPayDataBean bpCoPayDataBean = (BPCoPayDataBean) getDataBean(BenefitPlanConstants.BP_COPAY_DB_NAME);
+			bpCoPayDataBean.setCoPayList(benefitPlanCoPayVo);
+			
+		}
+		
+		if(benefitPlanMain.getBenefitPlanCoPayLMT()!= BenefitPlanConstants.NULL) {
+			
+			Set<BenefitPlanCopayLMT> benifitCoPaylmtSet = benefitPlanMain.getBenefitPlanCoPayLMT();
+			List<BenefitPlanCoPayLimitVO> benefitPlanCoPayVo = new ArrayList<BenefitPlanCoPayLimitVO>(); 
+			
+			for(BenefitPlanCopayLMT limit :benifitCoPaylmtSet) {
+				
+				BenefitPlanCoPayLimitVO convertBPCoPayLMTDOToVO = benefitPlanHelper.convertBPCoPayLimitDOToVO(limit);
+				benefitPlanCoPayVo.add(convertBPCoPayLMTDOToVO);			
+			}
+			
+			BPCoPayDataBean bpCoPayDataBean = (BPCoPayDataBean) getDataBean(BenefitPlanConstants.BP_COPAY_DB_NAME);
+			bpCoPayDataBean.setCoPayLimits(benefitPlanCoPayVo);
+		}	
+	}
+	
+	//PMD Fix- 464235
+	private void getAllLists(final BenefitPlanMainVO benefitPlanMainVO){
+		BPMainDataBean bpMainDataBean = (BPMainDataBean) getDataBean(BenefitPlanConstants.BP_MAIN_DB_NAME);
+		BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+		Iterator it = benefitPlanMainVO.getBenefitPlanNwAssoc().iterator();
+		bpMainDataBean.getNwAsscList().clear();
+		while (it.hasNext()) {
+			BenefitPlanNwAssocVO benefitPlanNwAssocVO = (BenefitPlanNwAssocVO) it
+					.next();
+			bpMainDataBean.getNwAsscList().add(benefitPlanNwAssocVO);
+			bpMainDataBean.setBenefitPlanNwAssocVO(benefitPlanNwAssocVO);
+		}
+		if (bpMainDataBean.getNwAsscList().isEmpty()) {
+			bpCommonDataBean.setNoOtherData(true);
+		}
+		Iterator cohortItr = benefitPlanMainVO.getBenefitPlanCohort()
+				.iterator();
+		bpMainDataBean.getCapitationList().clear();
+		while (cohortItr.hasNext()) {
+			BenefitPlanCohortVO benefitPlanCapitationVO = (BenefitPlanCohortVO) cohortItr
+					.next();
+			bpMainDataBean.getCapitationList().add(benefitPlanCapitationVO);
+			bpMainDataBean.setBenefitPlanCohortVO(benefitPlanCapitationVO);
+		}
+		if (bpMainDataBean.getCapitationList().isEmpty()) {
+			bpCommonDataBean.setNoData(true);
+		}
+		Iterator caseMgmntItr = benefitPlanMainVO.getCaseMgmnt().iterator();
+		while (caseMgmntItr.hasNext()) {
+			BenefitPlanCaseMgmtVO benefitPlanCaseMgmtVO = (BenefitPlanCaseMgmtVO) caseMgmntItr
+					.next();
+			bpMainDataBean
+					.setBenefitPlanCaseManagementVO(benefitPlanCaseMgmtVO);
+		}
+	}
+	
+	private void loadSAAndPlanLimitTabs(final BenefitPlanMain benefitPlanMain) {
+		
+		BenefitPlanHelper benefitPlanHelper = new BenefitPlanHelper();
+		
+		/** Added for GAP - BP25 - Deductible - End **/
+		
+		/** Added for GAP - BP25 - Plan Limits Tab - Start **/
+		if(!ObjectUtils.equals(benefitPlanMain.getBenefitPlanLimit(), BenefitPlanConstants.NULL)) {
+			
+			Set<BenefitPlanLimit> benifitPlanLimitsSet = benefitPlanMain.getBenefitPlanLimit();
+			List<BenefitPlanLimitsVO> benefitPlanLimitsVo = new ArrayList<BenefitPlanLimitsVO>(); 
+			
+			for(BenefitPlanLimit bpLimit : benifitPlanLimitsSet) {				
+				BenefitPlanLimitsVO convertBPLimitsDOToVO = benefitPlanHelper.convertBPLimitDOToVO(bpLimit);
+				benefitPlanLimitsVo.add(convertBPLimitsDOToVO);			
+			}			
+			BPPlanLmtDataBean bpLmtDataBean = (BPPlanLmtDataBean) getDataBean(BenefitPlanConstants.BP_PLAN_LIMIT_DB_NAME);
+			bpLmtDataBean.setBpLimit(benefitPlanLimitsVo);
+		}
+		/** Added for GAP - BP25 - Plan Limits - End **/
+		
+		/** Added for GAP - BP25 - Service Authorization Tab - Start **/
+		if(!ObjectUtils.equals(benefitPlanMain.getBenefitPlanSA(), BenefitPlanConstants.NULL)) {
+			
+			Set<BenefitPlanSA> benifitPlanSASet = benefitPlanMain.getBenefitPlanSA();
+			List<BenefitPlanSAVO> benefitPlanSAVo = new ArrayList<BenefitPlanSAVO>(); 
+			
+			for(BenefitPlanSA bpSA : benifitPlanSASet) {				
+				BenefitPlanSAVO convertBPSADOToVO = benefitPlanHelper.convertBPSADOToVO(bpSA);
+				benefitPlanSAVo.add(convertBPSADOToVO);			
+			}			
+			BPSAReqDataBean bpSAReqDataBean = (BPSAReqDataBean) getDataBean(BenefitPlanConstants.BP_SA_REQ_DB_NAME);
+			bpSAReqDataBean.setBpSAList(benefitPlanSAVo);
+		}
+		
+		/** Added for GAP - BP25 - Deductible Tab - Start **/
+		if(!ObjectUtils.equals(benefitPlanMain.getBenefitPlanDeductable(), BenefitPlanConstants.NULL)) {
+			
+			Set<BenefitPlanDeductable> benifitDeductibleSet = benefitPlanMain.getBenefitPlanDeductable();
+			List<BenefitPlanDeductibleVO> benefitPlanDeductibleVo = new ArrayList<BenefitPlanDeductibleVO>(); 
+			
+			for(BenefitPlanDeductable deductible : benifitDeductibleSet) {				
+				BenefitPlanDeductibleVO convertBPDeductibleDOToVO = benefitPlanHelper.convertBPDeductibleDOToVO(deductible);
+				benefitPlanDeductibleVo.add(convertBPDeductibleDOToVO);			
+			}
+			BPDedDataBean bpDedDataBean = (BPDedDataBean)getDataBean(BenefitPlanConstants.BP_DED_DB_NAME);
+			bpDedDataBean.setDeductible(benefitPlanDeductibleVo);
+		}
+		
+		/** Added for GAP - BP25 - Coverage Tab - End **/
+		
+		/** Added for GAP - BP25 - Out of Pocket Tab - Start **/
+		if(!ObjectUtils.equals(benefitPlanMain.getBenefitPlanOOP(), BenefitPlanConstants.NULL)) {
+			
+			Set<BenefitPlanOOP> benifitOOPSet = benefitPlanMain.getBenefitPlanOOP();
+			List<BenefitPlanOOPVO> benefitPlanOopVo = new ArrayList<BenefitPlanOOPVO>(); 
+			
+			for(BenefitPlanOOP oop : benifitOOPSet) {				
+				BenefitPlanOOPVO convertBPOopDOToVO = benefitPlanHelper.convertBPOOPDOToVO(oop);
+				benefitPlanOopVo.add(convertBPOopDOToVO);			
+			}			
+			BPOOPDataBean bpOopDataBean = (BPOOPDataBean) getDataBean(BenefitPlanConstants.BP_OOP_DB_NAME);
+			bpOopDataBean.setOopList(benefitPlanOopVo);
+		}
+	}
+	/**
+	 * This method navigate the user to the AddPage.
+	 * 
+	 * @return String
+	 */
+	public String navAddBP() {
+		try{
+		BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+		BPMainDataBean bpMainDataBean = (BPMainDataBean) getDataBean(BenefitPlanConstants.BP_MAIN_DB_NAME);
+		//added this to clear bpDedDataBean data bean start(temporary)
+		BPDedDataBean bpDedDataBean = (BPDedDataBean) getDataBean(BenefitPlanConstants.BP_DED_DB_NAME);
+		bpDedDataBean.getDeductible().clear();
+		//added this to clear bpDedDataBean data bean end
+				
+		CommonEntityDataBean commonEntityDataBean = ContactHelper
+        .getCommonEntityDataBean();	
+		BenefitPlanMainVO tempBPMainVO = bpCommonDataBean
+				.getBenefitPlanMainVO();
+		bpCommonDataBean.setFocusThisId(BenefitPlanConstants.EMPTY);
+		commonEntityDataBean.setMainNotesRender(false);
+		BenefitPlanMainVO benefitPlanMainVO = new BenefitPlanMainVO();
+		if (tempBPMainVO != null) {
+			benefitPlanMainVO.setLobId(tempBPMainVO.getLobId());
+			benefitPlanMainVO.setLobDesc(tempBPMainVO.getLobDesc());
+		}
+		bpCommonDataBean.setBenefitPlanMainVO(benefitPlanMainVO);
+		bpMainDataBean.setBenefitPlanCohortVO(new BenefitPlanCohortVO());
+		bpMainDataBean
+				.setBenefitPlanCaseManagementVO(new BenefitPlanCaseMgmtVO());
+		bpMainDataBean.setBenefitPlanNwAssocVO(new BenefitPlanNwAssocVO());
+		bpMainDataBean.getNwAsscList().clear();
+		bpMainDataBean.getCapitationList().clear();
+		bpMainDataBean.setShowBenefitPlan(true);
+		bpMainDataBean.setShowNwAssc(false);
+		bpMainDataBean.setShowCaseMgt(false);
+		bpCommonDataBean.setNoData(true);
+		bpCommonDataBean.setNoOtherData(true);
+		bpMainDataBean.setShowCase(false);
+		bpMainDataBean.setProtectBP(false);
+		//Added for UIS-PGM-BP-012_BP53 
+		bpMainDataBean.setMaxEnrollFlag(false);
+		bpMainDataBean.setShowCryOvrAcc(false);
+		bpCommonDataBean.setDeleteDetailSuccess(false);
+		bpCommonDataBean.setNwDeleteDetailSuccess(false);
+		
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(true);
+		BenefitPlanTree benefitPlanTree = (BenefitPlanTree) session
+				.getAttribute(BenefitPlanConstants.BENEFIT_PLAN_TREE);
+		session.setAttribute(BenefitPlanConstants.BENEFIT_PLAN_TREE_STATE,
+				benefitPlanTree.getTreeModel().getTreeState());
+		cleanAllBeansForNewBP();
+		}
+		catch(Exception e)
+		{
+			logger
+			.error("Exception in AddBenefitPlanControllerBean - navAddBP Method"
+					+ e.getMessage());
+		}
+		return BenefitPlanConstants.NAV_ADD_BENEFIT_PLAN;
+
+	}
+
+	/**
+	 * This method will fetch the lob description for the selected lob.
+	 * 
+	 * @param e
+	 *            holds the event.
+	 */
+	/**
+	 * Commented for GapId - ARCH56(UIS-PGM-BP-012 Add-Update Benefit Plan)
+	 */
+	/*public void onChange(ValueChangeEvent e) {
+		BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+		bpCommonDataBean.setFocusThisId("HEADER_FOCUS"); 
+		String lobCode = (String) e.getNewValue();
+		// Changed for Performance
+		//LineOfBusiness lob = new LineOfBusiness();
+		String lobName = "";
+		if (lobCode != null && !lobCode.trim().equals(BenefitPlanConstants.EMPTY)) {
+			//lob = getLineOfBussiness(lobCode);
+			lobName = getLineOfBussinessName(lobCode);
+		}
+		//if (lob != null) {
+		if (lobName != null && !lobName.trim().equals("")) {
+			//getMapID(lob.getLobCode());
+			getMapID(lobCode);
+			bpCommonDataBean.getBenefitPlanMainVO()
+					//.setLobDesc(lob.getLobName());
+			.setLobDesc(lobName);
+		} else {
+			flag = false;
+			setErrorMessage(BenefitPlanConstants.BENEFIT_PLAN_LOB_INVALID,
+					new Object[] {},
+					BenefitPlanConstants.BENEFIT_PLAN_PROPERTIES, "lobid");
+			setErrorMessage(BenefitPlanConstants.MAP_ID_NOT_FOUND);
+		}
+	}*/
+	/**
+	 * End of ARCH56
+	 */
+	/**
+	 * This method will set the lob and lob description based on the lob
+	 * selected from the tree.
+	 */
+	public void setLOB() {
+		BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+		//FacesContext context = FacesContext.getCurrentInstance();
+		//Map map = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+		String idn = (String) (FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("idn"));
+		String[] str = idn.split(BenefitPlanConstants.DELIMITER);
+		String lobCode = str[0];
+		// Changed for Performance
+		//LineOfBusiness lob = getLineOfBussiness(lobCode);
+		String lobName = getLineOfBussinessName(lobCode);
+		if (bpCommonDataBean.getBenefitPlanMainVO() != null) {
+			bpCommonDataBean.getBenefitPlanMainVO()
+					//.setLobDesc(lob.getLobName());
+			.setLobDesc(lobName);
+			bpCommonDataBean.getBenefitPlanMainVO().setLobId(lobCode);
+		}
+	}
+
+	/**
+	 * This Mthod sorts the NWAssociation List . calls
+	 * benefitPlanNWAsscComparator method.
+	 * 
+	 * @param event
+	 *            holds the vent.
+	 */
+	public void sortingNWAssociation(ActionEvent event) {
+		String sortColumn = (String) event.getComponent().getAttributes().get(
+				"columnName");
+		String sortOrder = (String) event.getComponent().getAttributes().get(
+				"sortOrder");
+		BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+		BPMainDataBean bpMainDataBean = (BPMainDataBean) getDataBean(BenefitPlanConstants.BP_MAIN_DB_NAME);
+
+		
+		if(-1!=bpMainDataBean.getTableFirstRow() && bpMainDataBean.getTableFirstRow()>0 ){
+        	
+			bpMainDataBean.setTableFirstRow(0);
+        }
+		
+		bpCommonDataBean.setImageRender(event.getComponent().getId());
+		benefitPlanNWAsscComparator(sortColumn, sortOrder, bpMainDataBean
+				.getNwAsscList());
+	}
+
+	/**
+	 * will compare the records in the list.
+	 * 
+	 * @param sortColumn
+	 *            holds the column to be sorted.
+	 * @param sortOrder
+	 *            holds the sort order.
+	 * @param dataList
+	 *            holds the records.
+	 */
+	private void benefitPlanNWAsscComparator(final String sortColumn,
+			final String sortOrder, List dataList) {
+		Comparator comparator = new Comparator() {
+			public int compare(Object obj1, Object obj2) {
+				BenefitPlanNwAssocVO data1 = (BenefitPlanNwAssocVO) obj1;
+				BenefitPlanNwAssocVO data2 = (BenefitPlanNwAssocVO) obj2;
+				boolean ascending = false;
+				if (BenefitPlanConstants.ASC.equals(sortOrder)) {
+					ascending = true;
+				} else {
+					ascending = false;
+				}
+
+				if (sortColumn == null) {
+					return 0;
+				}
+
+				if ("begDT".equals(sortColumn)) {
+					
+					
+					
+					/*if (null == data1.getBeginDate()) {
+						data1.setBeginDate(null);
+					}
+					if (null == data2.getBeginDate()) {
+						data2.setBeginDate(null);
+					}
+
+					return ascending ? data1.getBeginDate().compareTo(
+							data2.getBeginDate()) : data2.getBeginDate()
+							.compareTo(data1.getBeginDate());*/
+					
+					if (null == data1.getBeginDate())
+		             	{
+							data1.setBeginDate(BenefitPlanConstants.DEFAULT_DATE);
+		             	}
+		             if (null == data2.getBeginDate())
+		              	{
+		                    data2.setBeginDate(BenefitPlanConstants.DEFAULT_DATE);
+		              	}
+		                   	                    
+		             return ascending ? (dateConverter(data1.getBeginDate())
+						.compareTo(dateConverter(data2.getBeginDate()))) : 
+						(dateConverter(data2.getBeginDate()).
+						compareTo(dateConverter(data1.getBeginDate())));
+				}
+
+				if ("endDT".equals(sortColumn)) {
+					
+					
+					/*if (null == data1.getNwEndDate()) {
+						data1.setNwEndDate(null);
+					}
+
+					if (null == data2.getNwEndDate()) {
+						data2.setNwEndDate(null);
+					}
+
+					return ascending ? data1.getNwEndDate().compareTo(
+							data2.getNwEndDate()) : data2.getNwEndDate()
+							.compareTo(data1.getNwEndDate());
+							*/
+							
+					if (null == data1.getNwEndDate())
+		            	{
+							data1.setNwEndDate(BenefitPlanConstants.DEFAULT_DATE);
+		                }
+					
+					if (null == data2.getNwEndDate())
+		               {
+		                	data2.setNwEndDate(BenefitPlanConstants.DEFAULT_DATE);
+		               }
+		                   	                    
+					return ascending ? (dateConverter(data1.getNwEndDate())
+							.compareTo(dateConverter(data2.getNwEndDate()))) : 
+							(dateConverter(data2.getNwEndDate()).
+							 compareTo(dateConverter(data1.getNwEndDate())));
+							
+				}
+
+				if ("networkID".equals(sortColumn)) {
+					
+					
+					if (null == data1.getNwID()) {
+						data1.setNwID(BenefitPlanConstants.EMPTY);
+					}
+					if (null == data2.getNwID()) {
+						data2.setNwID(BenefitPlanConstants.EMPTY);
+					}
+					return ascending ? data1.getNwID().compareTo(
+							data2.getNwID()) : data2.getNwID().compareTo(
+							data1.getNwID());
+
+				}
+
+				if ("networkStatus".equals(sortColumn)) {
+					
+					
+					if (null == data1.getNwStatCode()) {
+						data1.setNwStatCode(BenefitPlanConstants.EMPTY);
+					}
+					if (null == data2.getNwStatCode()) {
+						data2.setNwStatCode(BenefitPlanConstants.EMPTY);
+					}
+					return ascending ? data1.getNwStatCode().compareTo(
+							data2.getNwStatCode()) : data2.getNwStatCode()
+							.compareTo(data1.getNwStatCode());
+
+				}
+
+				if ("networkRank".equals(sortColumn)) {
+					
+					
+					/*if (null == data1.getSeqNum()) {
+						data1.setSeqNum(null);
+					}
+					if (null == data2.getSeqNum()) {
+						data2.setSeqNum(null);
+					}*/
+					
+					return ascending ? new Integer(data1.getSeqNum())
+							.compareTo(new Integer(data2.getSeqNum()))
+							: new Integer(data2.getSeqNum())
+									.compareTo(new Integer(data1.getSeqNum()));
+
+				}
+
+				return 0;
+
+			}
+
+		};
+		Collections.sort(dataList, comparator);
+	}
+
+	/**
+	 * This Mthod sorts the Capitation List . calls
+	 * benefitPlanCapitationComparator method.
+	 * 
+	 * @param event
+	 *            holds the event.
+	 */
+	public void sortingCapitation(ActionEvent event) {
+		String sortColumn = (String) event.getComponent().getAttributes().get(
+				"columnName");
+		String sortOrder = (String) event.getComponent().getAttributes().get(
+				"sortOrder");
+		BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+		BPMainDataBean bpMainDataBean = (BPMainDataBean) getDataBean(BenefitPlanConstants.BP_MAIN_DB_NAME);
+
+		bpCommonDataBean.setImageRender(event.getComponent().getId());
+		benefitPlanCapitationComparator(sortColumn, sortOrder, bpMainDataBean
+				.getCapitationList());
+	}
+
+	/**
+	 * this method will compare the records in the list.
+	 * 
+	 * @param sortColumn
+	 *            holds the column to be sorted.
+	 * @param sortOrder
+	 *            holds the sort order.
+	 * @param dataList
+	 *            holds the records.
+	 */
+	private void benefitPlanCapitationComparator(final String sortColumn,
+			final String sortOrder, List dataList) {
+		Comparator comparator = new Comparator() {
+			public int compare(Object obj1, Object obj2) {
+				BenefitPlanCohortVO data1 = (BenefitPlanCohortVO) obj1;
+				BenefitPlanCohortVO data2 = (BenefitPlanCohortVO) obj2;
+				boolean ascending = false;
+				if (BenefitPlanConstants.ASC.equals(sortOrder)) {
+					ascending = true;
+				} else {
+					ascending = false;
+				}
+
+				if (sortColumn == null) {
+					return 0;
+				}
+
+				if ("networkStatus".equals(sortColumn)) {
+					if (null == data1.getNwStatCode()) {
+						data1.setNwStatCode(null);
+					}
+					if (null == data2.getNwStatCode()) {
+						data2.setNwStatCode(null);
+					}
+
+					return ascending ? data1.getNwStatCode().compareTo(
+							data2.getNwStatCode()) : data2.getNwStatCode()
+							.compareTo(data1.getNwStatCode());
+				}
+
+				if ("mapid".equals(sortColumn)) {
+					if (null == data1.getMapID()) {
+						data1.setMapID(null);
+					}
+
+					if (null == data2.getMapID()) {
+						data2.setMapID(null);
+					}
+
+					return ascending ? data1.getMapID().compareTo(
+							data2.getMapID()) : data2.getMapID().compareTo(
+							data1.getMapID());
+				}
+
+				if ("begDt".equals(sortColumn)) {
+					if (null == data1.getBegDate()) {
+						data1.setBegDate(null);
+					}
+					if (null == data2.getBegDate()) {
+						data2.setBegDate(null);
+					}
+					return ascending ? data1.getBegDate().compareTo(
+							data2.getBegDate()) : data2.getBegDate().compareTo(
+							data1.getBegDate());
+
+				}
+
+				if ("endDt".equals(sortColumn)) {
+					if (null == data1.getEndDate()) {
+						data1.setEndDate(null);
+					}
+					if (null == data2.getEndDate()) {
+						data2.setEndDate(null);
+					}
+					return ascending ? data1.getEndDate().compareTo(
+							data2.getEndDate()) : data2.getEndDate().compareTo(
+							data1.getEndDate());
+
+				}
+
+				if ("rate".equals(sortColumn)) {
+					if (null == data1.getRate()) {
+						data1.setRate(null);
+					}
+					if (null == data2.getRate()) {
+						data2.setRate(null);
+					}
+					return ascending ? new Double(data1.getRate())
+							.compareTo(new Double(data2.getRate()))
+							: new Double(data2.getRate()).compareTo(new Double(
+									data1.getRate()));
+
+				}
+
+				if ("rank".equals(sortColumn)) {
+					if (null == data1.getSeqNum()) {
+						data1.setSeqNum(null);
+					}
+					if (null == data2.getSeqNum()) {
+						data2.setSeqNum(null);
+					}
+					return ascending ? new Integer(data1.getSeqNum())
+							.compareTo(new Integer(data2.getSeqNum()))
+							: new Integer(data2.getSeqNum())
+									.compareTo(new Integer(data1.getSeqNum()));
+				}
+				return 0;
+			}
+		};
+		Collections.sort(dataList, comparator);
+	}
+
+	/**
+	 * This method will render the Capitation/CaseManagement.
+	 * 
+	 * @param e
+	 *            holds the event.
+	 */
+	public void showCapitationCaseMgntForType(ValueChangeEvent e) {
+		BPMainDataBean bpMainDataBean = (BPMainDataBean) getDataBean(BenefitPlanConstants.BP_MAIN_DB_NAME);
+		BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+		bpCommonDataBean.setFocusThisId("ONCHANGE_FOCUS");
+		String planType = (String) e.getNewValue();
+		
+		//Added for UIS-PGM-BP-012_BP53 
+		if(BenefitPlanConstants.WEBSITE.equals(planType)){
+			bpMainDataBean.setMaxEnrollFlag(true);
+		}else{
+			bpMainDataBean.setMaxEnrollFlag(false);
+		}
+		
+		if (BenefitPlanConstants.ManagedCare.equals(planType)) {
+			bpMainDataBean.setShowCase(true);
+			bpCommonDataBean.setCapedit(false);
+			bpMainDataBean.setShowCaseMgt(false);			
+			UIComponent tabsPaneComponent = findComponentInRoot(BenefitPlanConstants.AddDiag_UIComponent);         
+	        if (tabsPaneComponent instanceof HtmlPanelTabbedPane) 
+	        {
+	        //	int newTabindex=  ((HtmlPanelTabbedPane) tabsPaneComponent).getSelectedIndex(); 
+	        	((HtmlPanelTabbedPane) tabsPaneComponent).setSelectedIndex(0);
+	        	bpMainDataBean.setTabIndex(0);
+	        }
+		
+		}
+		//Modified for Defect id ESPRD00885821
+		else if ((BenefitPlanConstants.PCPRequired).equals(bpCommonDataBean
+				.getBenefitPlanMainVO().getOptionsCode())) {
+			bpMainDataBean.setShowCase(true);
+			UIComponent tabsPaneComponent = findComponentInRoot(BenefitPlanConstants.AddDiag_UIComponent);         
+	        if (tabsPaneComponent instanceof HtmlPanelTabbedPane) 
+	        {
+	        //	int newTabindex=  ((HtmlPanelTabbedPane) tabsPaneComponent).getSelectedIndex(); 
+	        	((HtmlPanelTabbedPane) tabsPaneComponent).setSelectedIndex(0);
+	        	bpMainDataBean.setTabIndex(0);
+	        }
+		}
+		else {
+UIComponent tabsPaneComponent = findComponentInRoot(BenefitPlanConstants.AddDiag_UIComponent);         
+	        
+			if (tabsPaneComponent instanceof HtmlPanelTabbedPane) 
+	        {
+	        //	int newTabindex=  ((HtmlPanelTabbedPane) tabsPaneComponent).getSelectedIndex();
+				//PMD Fix
+				if(bpMainDataBean.getTabIndex() == BenefitPlanConstants.INT_ZERO){
+	        	((HtmlPanelTabbedPane) tabsPaneComponent).setSelectedIndex(1);
+	        	bpMainDataBean.setTabIndex(1);
+	        }
+				bpMainDataBean.setChangeTypeCode(false);
+			    bpMainDataBean.setShowCase(false);
+						
+	        }
+		}
+	}
+
+	/**
+	 * This method will render the Capitation/CaseManagement.
+	 * 
+	 * @param e
+	 *            holds the event.
+	 */
+	public void showCapitationCaseMgntForOption(ValueChangeEvent e) {
+		//Modified for Defect id ESPRD00885821
+		BPMainDataBean bpMainDataBean = (BPMainDataBean) getDataBean(BenefitPlanConstants.BP_MAIN_DB_NAME);
+		BPCommonDataBean bpCommonDataBean = (BPCommonDataBean) getDataBean(BenefitPlanConstants.BP_COMMON_DB_NAME);
+		String planOption = (String) e.getNewValue();
+		//For Defect ESPRD00733832
+		if (BenefitPlanConstants.PCPRequired.equals(planOption))/*||
+				BenefitPlanConstants.PCP_CCO.equals(planOption))*/ {
+			bpMainDataBean.setShowCase(true);
+			UIComponent tabsPaneComponent = findComponentInRoot(BenefitPlanConstants.AddDiag_UIComponent);         
+	        if (tabsPaneComponent instanceof HtmlPanelTabbedPane) 
+	        {
+	        //	int newTabindex=  ((HtmlPanelTabbedPane) tabsPaneComponent).getSelectedIndex(); 
+	        	((HtmlPanelTabbedPane) tabsPaneComponent).setSelectedIndex(0);
+	        	bpMainDataBean.setTabIndex(0);
+	        }	
+		}
+		else if ((BenefitPlanConstants.ManagedCare).equals(bpCommonDataBean
+				.getBenefitPlanMainVO().getCode())) {
+			bpMainDataBean.setShowCase(true);
+			UIComponent tabsPaneComponent = findComponentInRoot(BenefitPlanConstants.AddDiag_UIComponent);         
+	        if (tabsPaneComponent instanceof HtmlPanelTabbedPane) 
+	        {
+	        //	int newTabindex=  ((HtmlPanelTabbedPane) tabsPaneComponent).getSelectedIndex(); 
+	        	((HtmlPanelTabbedPane) tabsPaneComponent).setSelectedIndex(0);
+	        	bpMainDataBean.setTabIndex(0);
+	        }
+		
+		}
+	
+		else {
+			 UIComponent tabsPaneComponent = findComponentInRoot(BenefitPlanConstants.AddDiag_UIComponent);         
+		        
+				if (tabsPaneComponent instanceof HtmlPanelTabbedPane) 
+		        {
+		        //	int newTabindex=  ((HtmlPanelTabbedPane) tabsPaneComponent).getSelectedIndex(); 
+					//PMD Fix
+					if(bpMainDataBean.getTabIndex() == BenefitPlanConstants.INT_ZERO){
+		        	((HtmlPanelTabbedPane) tabsPaneComponent).setSelectedIndex(1);
+		        	bpMainDataBean.setTabIndex(1);
+		        }
+
+			bpMainDataBean.setChangeTypeCode(false);
+			bpMainDataBean.setShowCase(false);          
+				}
+		}
+	}
+
+	/**
+	 * benefitID for IPC with Network.
+	 */
+	private String benefitID;
+
+	/**
+	 * returns the BenefitPlanID for IPC with Network.
+	 * 
+	 * @return String
+	 */
+	public String getBenefitID() {
+		String benefitID = BenefitPlanConstants.EMPTY;
+		
+		FacesContext fc = FacesContext.getCurrentInstance();
+		ExternalContext context = fc.getExternalContext();
+		
+		
+		String invalidBPID = (String)fc.getExternalContext().getRequestMap().get(
+	      "claimBenifitID");
+
+
+	    if ((invalidBPID != null) && (invalidBPID.equalsIgnoreCase("invalidBPID")))
+	    {
+	      fc.addMessage(null, new FacesMessage("No records found for the selected Benefit plan Id."));
+	    }
+
+		BPMainDataBean bpMainDataBean = (BPMainDataBean) getDataBean(BenefitPlanConstants.BP_MAIN_DB_NAME);
+		Object request = context.getRequest();
+		if (request instanceof RenderRequest) {
+			RenderRequest portletRequest = (RenderRequest) request;
+			benefitID = portletRequest.getParameter("BenefitID");
+			if (benefitID != null) {
+				String[] str = benefitID.split(BenefitPlanConstants.DELMTR);
+				String ipcbenfitID = str[0];
+				String ipclobCode = str[1];
+				bpMainDataBean.setIpcbpId(ipcbenfitID);
+				bpMainDataBean.setIpclobCode(ipclobCode);
+			}
+		}
+		return benefitID;
+	}
+
+	/**
+	 * @param benefitID
+	 *            for IPC with Network The benefitID to set.
+	 */
+	public void setBenefitID(String benefitID) {
+		this.benefitID = benefitID;
+	}
+
+	/**
+	 * Holds String rateBenifitId
+	 */
+	private String rateBenifitId;
+
+	/**
+	 * @return Returns the rateBenifitId.
+	 */
+	public String getRateBenifitId() {
+		ExternalContext context = FacesContext.getCurrentInstance()
+				.getExternalContext();
+		BPMainDataBean bpMainDataBean = (BPMainDataBean) getDataBean(BenefitPlanConstants.BP_MAIN_DB_NAME);
+		Object request = context.getRequest();
+		if (request instanceof RenderRequest) {
+			RenderRequest portletRequest = (RenderRequest) request;
+			String rateBenifitplan = portletRequest
+					.getParameter("rateBenifitplan");
+			if (rateBenifitplan != null) {
+				bpMainDataBean.setIpcbpId(rateBenifitplan);
+				bpMainDataBean.setIpclobCode("MED");
+			}
+
+		}
+		return rateBenifitId;
+	}
+
+	/**
+	 * @param rateBenifitId
+	 *            The rateBenifitId to set.
+	 */
+	public void setRateBenifitId(String rateBenifitId) {
+		this.rateBenifitId = rateBenifitId;
+	}
+
+	/**
+	 * This method is used to avoid the validation when user already did the
+	 * small save and tried to do big save as in the big save we are internally
+	 * calling the small save method and again, validation should call if user
+	 * added some values in the blank fields that is remain open after small
+	 * save and did the big save . This method return true only if the user did
+	 * some modification in the data , other wise it return false
+	 * 
+	 * @param benefitPlanDataBean
+	 * @return
+	 */
+	//PMD Fix
+	/*private boolean isCapCaseMgmtValueChange(
+			BPMainDataBean bpMainDataBean,int selectedRecord) {
+
+		try {
+			int addedCaptionListSize = bpMainDataBean.getCapitationList()
+					.size();
+			*//**
+			 * Checking the size of added capitation and case management list.
+			 * if the size of added list is less greater then 0 then comparison
+			 * between the Added list and tobe added list will happen
+			 *//*
+			if (addedCaptionListSize <= 0) {
+				return true;
+			} else if (addedCaptionListSize > 0) {
+
+				*//**
+				 * Getting the added values
+				 *//*
+				BenefitPlanCohortVO benefitPlanCohortVOFromAddedList = (BenefitPlanCohortVO) bpMainDataBean
+						//.getCapitationList().get(addedCaptionListSize - 1);
+						.getCapitationList().get(selectedRecord);
+
+				String nwkSCodeFromAddedList = benefitPlanCohortVOFromAddedList
+						.getNwStatCode();
+				String mapIDFromAddedList = benefitPlanCohortVOFromAddedList
+						.getMapID();
+				String beginDateFromAddedList = benefitPlanCohortVOFromAddedList
+						.getBegDate();
+				String endDateFromAddedList = benefitPlanCohortVOFromAddedList
+						.getEndDate();
+				String rateFromAddedList = benefitPlanCohortVOFromAddedList
+						.getRate();
+				String rankFromAddedList = benefitPlanCohortVOFromAddedList
+						.getSeqNum();
+
+				*//**
+				 * Getting the modified or new values
+				 *//*
+				BenefitPlanCohortVO benefitPlanCohortVOTobeAdded = bpMainDataBean
+						.getBenefitPlanCohortVO();
+
+				String nwkssCodeTobeAdded = benefitPlanCohortVOTobeAdded
+						.getNwStatCode();
+				String mapIDTobeAdded = benefitPlanCohortVOTobeAdded
+						.getMapID();
+				String beginDateTobeAdded = benefitPlanCohortVOTobeAdded
+						.getBegDate();
+				String endDateTobeAdded = benefitPlanCohortVOTobeAdded
+						.getEndDate();
+				String rateTobeAdded = benefitPlanCohortVOTobeAdded
+						.getRate();
+				String rankTobeAdded = benefitPlanCohortVOTobeAdded
+						.getSeqNum();
+				*//**
+				 * Comparing between allready added values and newly or modifed
+				 * values and also checking for at least one values changed
+				 *//*
+				if ((!((nwkSCodeFromAddedList == null && nwkssCodeTobeAdded == null)
+						||(nwkSCodeFromAddedList == null && nwkssCodeTobeAdded!= null && nwkssCodeTobeAdded.equals(BenefitPlanConstants.EMPTY))
+						||(nwkssCodeTobeAdded == null && nwkSCodeFromAddedList.equals(BenefitPlanConstants.EMPTY))
+						||(nwkssCodeTobeAdded.equals(nwkSCodeFromAddedList))
+						))
+						|| (!((mapIDFromAddedList == null && mapIDTobeAdded == null)
+								||(mapIDFromAddedList == null && mapIDTobeAdded!= null && mapIDTobeAdded.equals(BenefitPlanConstants.EMPTY))
+								||(mapIDTobeAdded == null && mapIDFromAddedList.equals(BenefitPlanConstants.EMPTY))
+								||(mapIDTobeAdded.equals(mapIDFromAddedList))
+								))	
+						|| (!((beginDateFromAddedList == null && beginDateTobeAdded == null)
+								||(beginDateFromAddedList == null && beginDateTobeAdded!= null && beginDateTobeAdded.equals(BenefitPlanConstants.EMPTY))
+								||(beginDateTobeAdded == null && beginDateFromAddedList.equals(BenefitPlanConstants.EMPTY))
+								||(beginDateTobeAdded.equals(beginDateFromAddedList))
+								))	
+						|| (!((endDateFromAddedList == null && endDateTobeAdded == null)
+								||(endDateFromAddedList == null && endDateTobeAdded!= null && endDateTobeAdded.equals(BenefitPlanConstants.EMPTY))
+								||(endDateTobeAdded == null && endDateFromAddedList.equals(BenefitPlanConstants.EMPTY))
+								||(endDateTobeAdded.equals(endDateFromAddedList))
+								))
+						|| (!((rateFromAddedList == null && rateTobeAdded == null)
+								||(rateFromAddedList == null && rateTobeAdded!= null && rateTobeAdded.equals(BenefitPlanConstants.EMPTY))
+								||(rateTobeAdded == null && rateFromAddedList.equals(BenefitPlanConstants.EMPTY))
+								||(rateTobeAdded.equals(rateFromAddedList))
+								))
+						|| (!((rankFromAddedList == null && rankTobeAdded == null)
+								||(rankFromAddedList == null && rankTobeAdded!= null && rankTobeAdded.equals(BenefitPlanConstants.EMPTY))
+								||(rankTobeAdded == null && rankFromAddedList.equals(BenefitPlanConstants.EMPTY))
+								||(rankTobeAdded.equals(rankFromAddedList))
+								))
+						) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+		} catch (Exception ex) {
+			logger
+					.error("Exception  while comparing the caseMgmtList and ChangedList"
+							+ ex.getMessage());
+		}
+		return false;
+	}*/
+
+	/**
+	 * This method is used to avoid the validation when user already did the
+	 * small save and tried to do big save as in the big save we are internally
+	 * calling the small save method and again validation should call if user
+	 * added some values in the blank fields that is remain open after small
+	 * save and did the big save . This method return true only if the user did
+	 * some modification in the data , other wise it return false
+	 * 
+	 * @param benefitPlanDataBean
+	 * @return
+	 */
+	//PMD Fix
+	/*private boolean isNtkAssociationValueChange(
+			BPMainDataBean bpMainDataBean,int selectedRecord) {
+		try {
+			int nwAssoListSize = bpMainDataBean.getNwAsscList().size();
+			*//**
+			 * Checking the size of added capitation and case management list.
+			 * if the size of added list is less greater then 0 then comparison
+			 * between the Added list and tobe added list will happen
+			 *//*
+			if (nwAssoListSize <= 0) {
+				return true;
+			} else if (nwAssoListSize > 0) {
+				*//**
+				 * Getting allready added values
+				 *//*
+				BenefitPlanNwAssocVO benefitPlanNwAssocVOFromAddedList = (BenefitPlanNwAssocVO) bpMainDataBean
+						//.getNwAsscList().get(addedCaptionListSize - 1);
+				.getNwAsscList().get(selectedRecord);
+				String beginDateFromAddedList = benefitPlanNwAssocVOFromAddedList
+						.getBeginDate();
+				String endDateFromAddedList = benefitPlanNwAssocVOFromAddedList
+						.getNwEndDate();
+				String networkIdFromAddedList = benefitPlanNwAssocVOFromAddedList
+						.getNwID();
+				String neworkStatusFromAddedList = benefitPlanNwAssocVOFromAddedList
+						.getNwStatCode();
+				String rankFromAddedList = benefitPlanNwAssocVOFromAddedList
+						.getSeqNum();
+				*//**
+				 * Getting newly or modified values
+				 *//*
+
+				BenefitPlanNwAssocVO BenefitPlanNwAssocVOTobeAdded = bpMainDataBean
+						.getBenefitPlanNwAssocVO();
+				String beginDateTobeAdded = BenefitPlanNwAssocVOTobeAdded
+						.getBeginDate();
+				String endDateTobeAdded = BenefitPlanNwAssocVOTobeAdded
+						.getNwEndDate();
+				String networkIdTobeAdded = BenefitPlanNwAssocVOTobeAdded
+						.getNwID();
+				String neworkStatusTobeAdded = BenefitPlanNwAssocVOTobeAdded
+						.getNwStatCode();
+				String rankTobeAdded = BenefitPlanNwAssocVOTobeAdded
+						.getSeqNum();
+
+				*//**
+				 * Comparing between allready added values and newly or modified
+				 * values and also checking at least one value got modified
+				 *//*
+				if ((!((neworkStatusFromAddedList == null && neworkStatusTobeAdded == null)
+						||(neworkStatusFromAddedList == null && neworkStatusTobeAdded!= null && neworkStatusTobeAdded.equals(BenefitPlanConstants.EMPTY))
+						||(neworkStatusTobeAdded == null && neworkStatusFromAddedList.equals(BenefitPlanConstants.EMPTY))
+						||(neworkStatusTobeAdded.equals(neworkStatusFromAddedList))
+						))			
+						
+				|| (!((beginDateFromAddedList == null && beginDateTobeAdded == null)
+						||(beginDateFromAddedList == null && beginDateTobeAdded!= null && beginDateTobeAdded.equals(BenefitPlanConstants.EMPTY))
+						||(beginDateTobeAdded == null && beginDateFromAddedList.equals(BenefitPlanConstants.EMPTY))
+						||(beginDateTobeAdded.equals(beginDateFromAddedList))
+						))		
+				|| (!((endDateFromAddedList == null && endDateTobeAdded == null)
+						||(endDateFromAddedList == null && endDateTobeAdded!= null && endDateTobeAdded.equals(BenefitPlanConstants.EMPTY))
+						||(endDateTobeAdded == null && endDateFromAddedList.equals(BenefitPlanConstants.EMPTY))
+						||(endDateTobeAdded.equals(endDateFromAddedList))
+						))
+				|| (!((networkIdFromAddedList == null && networkIdTobeAdded == null)
+						||(networkIdFromAddedList == null && networkIdTobeAdded!= null && networkIdTobeAdded.equals(BenefitPlanConstants.EMPTY))
+						||(networkIdTobeAdded == null && networkIdFromAddedList.equals(BenefitPlanConstants.EMPTY))
+						||(networkIdTobeAdded.equals(networkIdFromAddedList))
+						))
+				|| (!((rankFromAddedList == null && rankTobeAdded == null)
+						||(rankFromAddedList == null && rankTobeAdded!= null && rankTobeAdded.equals(BenefitPlanConstants.EMPTY))
+						||(rankTobeAdded == null && rankFromAddedList.equals(BenefitPlanConstants.EMPTY))
+						||(rankTobeAdded.equals(rankFromAddedList))
+						))) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+		} catch (Exception ex) {
+			logger
+					.error("Exception  while comparing  the caseMgmtList with ChangedList"
+							+ ex.getMessage());
+		}
+		return false;
+	}*/
+
+	/**
+	 * This method is used to check not null and empty string
+	 * 
+	 * @param data
+	 * @return
+	 */
+	/*private boolean isNullOrEmpty(String data) {
+		if (data != null && data.trim().length() > 0) {
+			return false;
+		}
+		return true;
+	}*/
+
+	/**
+	 * This method is used to filter invalid lob
+	 */
+	public boolean validateLob(String lobCode) {
+		//LineOfBusiness lob = new LineOfBusiness();
+		boolean isLOBExists = false;
+		if (lobCode.equals("OTH")) {
+			lobCode = "ew";
+		}
+		if (lobCode != null && !lobCode.trim().equals(BenefitPlanConstants.EMPTY)) {
+			//Commented for performance
+			//lob = getLineOfBussiness(lobCode);
+			isLOBExists = isLobExists(lobCode);
+		}
+		//if (lob == null) {
+		//	return false;
+		//} else
+		//	return true;
+		return isLOBExists;
+	}
+	
+	//Added this method for IPC call from SearchBenefitPlanPortlet to BenefitPlan Portlet
+
+	public String getIpcAddBP() {
+        
+        final PortletSession portletSession = (PortletSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+        final String addBenefitPlanIPC = (String)portletSession.getAttribute("addNewBenefitPlan"); 
+
+        if("true".equals(addBenefitPlanIPC))
+
+        {
+	        portletSession.removeAttribute("addNewBenefitPlan");
+	        navAddBP();
+        } 
+        	return ipcAddBP;
+      	}
+
+	public void setIpcAddBP(final String ipcAddBP) {
+		this.ipcAddBP = ipcAddBP;
+	}
+
+	
+	public BenefitPlanDeductibleControllerBean getBpDeductibleControllerBean() {
+		return bpDeductibleControllerBean;
+	}
+
+	public void setBpDeductibleControllerBean(
+			final BenefitPlanDeductibleControllerBean bpDeductibleControllerBean) {
+		this.bpDeductibleControllerBean = bpDeductibleControllerBean;
+	}
+
+	public BenefitPlanCoInsuranceControllerBean getBpCoInsuranceControllerBean() {
+		return bpCoInsuranceControllerBean;
+	}
+
+	public void setBpCoInsuranceControllerBean(
+			final BenefitPlanCoInsuranceControllerBean bpCoInsuranceControllerBean) {
+		this.bpCoInsuranceControllerBean = bpCoInsuranceControllerBean;
+	}
+	public BenefitPlanCoPayControllerBean getBpCoPayControllerBean() {
+		return bpCoPayControllerBean;
+	}
+
+	public void setBpCoPayControllerBean(
+			final BenefitPlanCoPayControllerBean bpCoPayControllerBean) {
+		this.bpCoPayControllerBean = bpCoPayControllerBean;
+	}
+
+	public BenefitPlanCoverageControllerBean getBpCoverageControllerBean() {
+		return bpCoverageControllerBean;
+	}
+
+	public void setBpCoverageControllerBean(final BenefitPlanCoverageControllerBean bpCoverageControllerBean) {
+		this.bpCoverageControllerBean = bpCoverageControllerBean;
+	}
+	public BenefitPlanOOPControllerBean getBpOopControllerBean() {
+		return bpOopControllerBean;
+	}
+
+	public void setBpOopControllerBean(final
+			BenefitPlanOOPControllerBean bpOopControllerBean) {
+		this.bpOopControllerBean = bpOopControllerBean;
+	}
+	public BenefitPlanLimitControllerBean getBplimitControllerBean() {
+		return bplimitControllerBean;
+	}
+
+	public void setBplimitControllerBean(
+			final BenefitPlanLimitControllerBean bplimitControllerBean) {
+		this.bplimitControllerBean = bplimitControllerBean;
+	}
+	public BenefitPlanSAControllerBean getBpSAControllerBean() {
+		return bpSAControllerBean;
+	}
+
+	public void setBpSAControllerBean(final BenefitPlanSAControllerBean bpSAControllerBean) {
+		this.bpSAControllerBean = bpSAControllerBean;
+	}
+
+
+	
+
+	//end of the class
+}

@@ -1,0 +1,159 @@
+package com.xerox.enterprise.ghs.mmis.rif.rules.operations;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import com.acs.enterprise.mmis.operations.claimadjudication.common.helper.ClaimAdjudicationConstants;
+import com.acs.enterprise.mmis.operations.claimadjudication.common.helper.SystemListCheckUtil;
+import com.acs.enterprise.mmis.operations.common.domain.ClaimAttachment;
+import com.acs.enterprise.mmis.operations.common.domain.EnterpriseClaim;
+import com.xerox.enterprise.ghs.mmis.rif.common.exception.RIFPOJORulesException;
+import com.xerox.enterprise.ghs.mmis.rif.common.util.RIFConstants;
+import com.xerox.enterprise.ghs.mmis.rif.core.Rule;
+import com.xerox.enterprise.ghs.mmis.rif.core.RulesContext;
+import com.xerox.enterprise.ghs.mmis.rif.core.RulesResult;
+/**
+ * POJO for the rule "CLM4001.0049.01"
+ * @author $419990
+ * @source ClaimTPLEditsManager
+ */
+public class CLM4001_0049_01 extends Rule{
+	/*Static LOG to log a message */
+	private static final Logger LOG = Logger.getLogger(CLM4001_0049_01.class);
+	private transient final static SystemListCheckUtil checkUtil = new SystemListCheckUtil();
+	private transient static Map systemListMap;
+	private static final int HUNDRED = 100;
+	private transient static Set claimAttachments;
+	/**
+	 * Execute method of the rule. This holds the rule conditions and actions.
+	 * The required objects are initialized through init() method.
+	 * return - execution result of rule either SUCCESS or FAILURE
+	 */
+	public static RulesResult execute(final RulesContext ctx, final String ruleId) throws RIFPOJORulesException {
+		
+		//Construct rules result object
+		RulesResult rulesResult;
+		rulesResult = new RulesResult(ruleId);
+		boolean carrierFlag = false;
+		EnterpriseClaim claim=null;
+		 Integer lineNum=null; 
+		if (ctx != RIFConstants.NULL) {			
+			List<Object> inputObjs = ctx.getContextObject();
+			carrierFlag = (Boolean) inputObjs.get(0);
+			claim = (EnterpriseClaim) inputObjs.get(1);
+			lineNum=(Integer) inputObjs.get(2);
+						
+		} else {
+			LOG.log(Level.ERROR,"Input Context Object is null during intialization for the rule "+ruleId);
+			
+			throw new RIFPOJORulesException("Unable to initialize the required rules objects for rule "+ruleId);
+		}
+		LOG.log(Level.INFO,"Executing the actions for the rule:" + ruleId);
+		
+		if (carrierFlag && checkAttachments(claim, lineNum))
+		   {
+			   rulesResult.setReturnBooleanValue(true);
+		   }	
+				rulesResult.setRuleStatus(true);
+		return rulesResult;	
+	}
+	 private static boolean checkAttachments(final EnterpriseClaim claim,final Integer lineNum)
+	    {
+	        LOG.info("ClaimTPLEditsManager.checkAttachments() start ");
+	        Set attachments = getAttachmentCodes(lineNum);
+	        if (attachments != null && !attachments.isEmpty())
+	        {
+	            Iterator attachmentIter = attachments.iterator();
+	            while (attachmentIter.hasNext())
+	            {
+	                String attachment = (String) attachmentIter.next();
+	                if(LOG.isDebugEnabled()) {
+		                LOG.debug("Attachment: " + attachment);
+
+	                }
+	                boolean attachmentFlag = checkUtil
+	                        .isPresentInSystemList(
+	                                systemListMap,
+	                                ClaimAdjudicationConstants.FUNCTIONAL_AREA_C3,
+	                                new Long(
+	                                        ClaimAdjudicationConstants.TPL_ATTACHMENTS_CODES_LIST),
+	                                attachment, claim.getFDOS());
+	                if (attachmentFlag)
+	                {
+	                	if(LOG.isDebugEnabled()){
+	                    LOG.debug("Attachment is in system list");
+	                	}
+	                    return true;
+	                }
+	            }
+	        }
+	        LOG.info("ClaimTPLEditsManager.checkAttachments() Ends  ");
+	        return false;
+	    }
+	 
+	 /**
+	     * This Method Finds all the Attachment Codes for given LineNum
+	     * 
+	     * @param lineNum
+	     *                     Claim Line Number
+	     * @return attachmentCodes Set of AttachmentCodes for given LineNumber
+	     */
+	    private static Set getAttachmentCodes(Integer lineNum)
+	    {
+	        LOG.info(" CLAIMTPLEDITS MANAGER : getAttachmentCodes : BEGIN ");
+	        //read the header and the line attachments.
+	        Set attachmentCodes = new HashSet(HUNDRED);
+	        ClaimAttachment attachment = null;
+	        if (claimAttachments != null && lineNum != null)
+	        {
+	            Iterator i = claimAttachments.iterator();
+	            while (i.hasNext())
+	            {
+	                attachment = (ClaimAttachment) i.next();
+	                if (attachment != null
+	                        && attachment.getAttachmentCode() != null)
+	                {
+	                    if(LOG.isDebugEnabled()) {
+		                    LOG.debug("AttachmentCode:"
+		                            + attachment.getAttachmentCode());
+
+	                    }
+
+	                    if (Integer.valueOf(0).equals(lineNum))
+	                    {
+	                        attachmentCodes.add(attachment.getAttachmentCode());
+	                    }
+	                    else if ((lineNum.equals(attachment.getLineNumber()))
+	                            || (Integer.valueOf(0).equals(attachment
+	                                    .getLineNumber())))
+	                    {
+	                        attachmentCodes.add(attachment.getAttachmentCode());
+	                    }
+	                }
+	            }
+	        }
+	        LOG.info(" CLAIMTPLEDITS MANAGER : getAttachmentCodes : END ");
+	        return attachmentCodes;
+	    }
+	/*
+	* Method to initialize rule
+	*/
+	public static void initialize() throws RIFPOJORulesException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/*
+	* Method to shutdown rule
+	*/
+	public static void shutdown() throws RIFPOJORulesException {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	}
+
+	

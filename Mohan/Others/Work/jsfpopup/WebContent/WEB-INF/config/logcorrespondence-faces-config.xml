@@ -1,0 +1,155 @@
+<?xml version="1.0"?>
+<faces-config
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
+   version="2.0">
+	
+	
+	
+	<managed-bean>
+		<managed-bean-name>CorrespondenceControllerBean</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.bean.CorrespondenceControllerBean
+		</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	
+		
+	 <managed-bean>
+		<managed-bean-name>CorrespondenceDataBean</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.bean.CorrespondenceDataBean
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+			
+		<managed-property>
+    		<property-name>correspondenceRecordVO</property-name>
+    		<value>#{CorrespondenceRecordVO}</value>
+    	</managed-property>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>CorrespondenceRecordVO</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.vo.CorrespondenceRecordVO
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+		<managed-property>
+			<property-name>correspondenceDetailsVO</property-name>
+			<value>#{correspondenceDetailsVO}</value>
+		</managed-property>
+		<managed-property>
+			<property-name>correspondenceForVO</property-name>
+			<value>#{correspondenceForVO}</value>
+		</managed-property>
+		<managed-property>
+			<property-name>correspondenceForProviderVO</property-name>
+			<value>#{correspondenceForProviderVO}</value>
+		</managed-property>
+		<managed-property>
+			<property-name>correspondenceForMemberVO</property-name>
+			<value>#{correspondenceForMemberVO}</value>
+		</managed-property>
+		
+		<managed-property>
+    		<property-name>listOfLettersAndResponses</property-name>
+    		<value>#{listOfLettersAndResponses}</value>
+    	</managed-property>
+		
+		
+		
+		<!--
+		<managed-property>
+			<property-name>associatedCorrespondenceVO</property-name>
+			<value>#{associatedCorrespondenceVO}</value>
+		</managed-property>
+		
+	--></managed-bean>
+	
+	
+	
+	
+	<managed-bean>
+		<managed-bean-name>correspondenceDetailsVO</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.vo.CorrespondenceDetailsVO
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>correspondenceForVO</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.vo.CorrespondenceForVO
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>correspondenceForProviderVO</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.vo.CorrespondenceForProviderVO
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	
+	<managed-bean>
+		<managed-bean-name>correspondenceForMemberVO</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.vo.CorrespondenceForMemberVO
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	
+	<managed-bean>
+		<managed-bean-name>listOfLettersAndResponses</managed-bean-name>
+		<managed-bean-class>
+			java.util.ArrayList
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>		  	
+	</managed-bean>		
+	
+	<managed-bean>
+		<managed-bean-name>associatedCorrespondenceVO</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.vo.AssociatedCorrespondenceVO
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<!-- Creatting managedBean for  correspondenceForTradingPartnerVO VO -->
+	<managed-bean>
+		<managed-bean-name>correspondenceForTradingPartnerVO</managed-bean-name>
+		<managed-bean-class>com.acs.enterprise.common.program.contactmanagement.view.vo.CorrespondenceForTradingPartnerVO</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<lifecycle>
+		<phase-listener>com.ibm.faces.webapp.ValueResourcePhaseListener</phase-listener>
+	</lifecycle>
+	<!--Note:Added for Search Correspondance Navigation Rule -->
+	<navigation-rule>
+		<from-view-id>/jsp/logcorrespondence/logCorrespondence.jsp</from-view-id>		
+		<navigation-case>
+			<from-outcome>success</from-outcome>
+			<to-view-id>/jsp/logcorrespondence/logCorrespondence.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<!-- variable/property resolver registration -->
+	<application>
+		
+		<locale-config>
+
+			<default-locale>en</default-locale>
+
+			<supported-locale>es</supported-locale>
+
+		</locale-config>
+		<message-bundle>com.acs.enterprise.common.program.contactmanagement.view.nl.PGM_IN_ContactCorrespondenceLog</message-bundle>		
+	</application>	
+	
+</faces-config>

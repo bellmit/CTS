@@ -1,0 +1,10 @@
+package com.xerox.enterprise.ghs.mmis.sax;
+
+public class SAXParserUtility {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

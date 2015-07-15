@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<portlet-app xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
+	version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
+	id="testPortlet.TestPortlet.1234">
+	<portlet>
+		<portlet-name>TestPortlet</portlet-name>
+		<display-name>Test Portlet</display-name>
+		<portlet-class>com.test.portlet.TestPortlet</portlet-class>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.view</name>
+			<value>/jsp/test.jsp</value>
+		</init-param>
+		<init-param>
+			<name>wps.markup</name>
+			<value>html</value>
+		</init-param>
+		<init-param>
+			<name>wps.enforce.redirect</name>
+			<value>true</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>			
+		</supports>
+		<supported-locale>en</supported-locale>
+		<portlet-info>
+			<title>Test Portlet</title>
+		</portlet-info>
+		<portlet-preferences>
+			<preference>
+				<name>com.ibm.portal.pagecontext.enable</name>
+				<value>true</value>
+				<read-only>true</read-only>
+			</preference>
+		</portlet-preferences>
+		<supported-publishing-event>
+			<name>searchNumberPub</name>
+		</supported-publishing-event>		
+	</portlet>
+		<portlet>
+		<portlet-name>SearchResultPortlet</portlet-name>
+		<display-name>Search Result Portlet</display-name>
+		<portlet-class>com.test.portlet.SearchResultPortlet</portlet-class>
+		<init-param>
+			<name>com.ibm.faces.portlet.page.view</name>
+			<value>/jsp/blank.jsp</value>
+		</init-param>
+		<init-param>
+			<name>wps.markup</name>
+			<value>html</value>
+		</init-param>
+		<init-param>
+			<name>wps.enforce.redirect</name>
+			<value>true</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+			<portlet-mode>view</portlet-mode>			
+		</supports>
+		<supported-locale>en</supported-locale>
+		<portlet-info>
+			<title>Search Result Portlet</title>
+		</portlet-info>
+		<portlet-preferences>
+			<preference>
+				<name>com.ibm.portal.pagecontext.enable</name>
+				<value>true</value>
+				<read-only>true</read-only>
+			</preference>
+		</portlet-preferences>
+		<supported-processing-event>
+			<name>searchNumberPro</name>
+		</supported-processing-event>
+	</portlet>
+	<event-definition>
+		<name>searchNumberPub</name>
+		<value-type>com.test.portlet.MyNumber</value-type>		
+	</event-definition>	
+	<event-definition>
+		<name>searchNumberPro</name>
+		<value-type>com.test.portlet.MyNumber</value-type>		
+	</event-definition>	
+</portlet-app>

@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="LogCorrespondence_Service"
+	targetNamespace="http://enterprise.ipc"
+	xmlns="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:portlet="http://www.ibm.com/wps/c2a"
+	xmlns:tns="http://enterprise.ipc"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<types>
+		<xsd:schema targetNamespace="http://enterprise.ipc">
+			<xsd:simpleType name="CorrespondenceEntity">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="InquiryEntityData">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="CorrespondenceSk">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="MyTaskCorrespondenceSk">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="MyTaskClaimCorrespondenceSk">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+			<xsd:complexType name="EDMSSearchCriteriaDataType">
+			</xsd:complexType>
+			<xsd:complexType name="logCREDMSSearchResultsDataType">
+			</xsd:complexType>
+
+			<xsd:simpleType name="LetterGenerationData">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+
+			<xsd:simpleType name="CorrespondencePage">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+
+			<xsd:simpleType name="AssociateCaseDataType">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="MyAlertSk">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+
+			<xsd:complexType name="CorrespondenceResultsDataType">
+			</xsd:complexType>
+
+			<xsd:complexType name="CommonLetterInputVO_SRC">
+			</xsd:complexType>
+			<xsd:complexType name="LogCrsEntityDataType">
+			</xsd:complexType>
+			<xsd:complexType name="SrcEntLogCrsDataType">
+			</xsd:complexType>
+			
+		</xsd:schema>
+	</types>
+	<message name="CorrespondenceEntity_Request">
+		<part name="CorrespondenceEntity_Input"
+			type="tns:CorrespondenceEntity" />
+	</message>
+	<message name="InquiryEntityData_Request">
+		<part name="InquiryEntityData_Input"
+			type="tns:InquiryEntityData" />
+	</message>
+	<message name="CorrespondenceSk_Request">
+		<part name="CorrespondenceSk_Input" type="tns:CorrespondenceSk" />
+	</message>
+	<message name="MyTaskCorrespondenceSk_Request">
+		<part name="MyTaskCorrespondenceSk_Input"
+			type="tns:MyTaskCorrespondenceSk" />
+	</message>
+	<message name="MyTaskClaimCorrespondenceSk_Request">
+		<part name="MyTaskClaimCorrespondenceSk_Input"
+			type="tns:MyTaskClaimCorrespondenceSk" />
+	</message>
+
+	<message name="EDMSSearchCriteriaDataType_Response">
+		<part name="EDMSSearchCriteriaDataType_Output"
+			type="tns:EDMSSearchCriteriaDataType" />
+		<part name="CorrespondenceResultsDataType_Output"
+			type="tns:CorrespondenceResultsDataType" />
+	</message>
+
+	<message name="logCREDMSSearchResultsDataType_Request">
+		<part name="logCREDMSSearchResultsDataType_Input"
+			type="tns:logCREDMSSearchResultsDataType" />
+	</message>
+
+	<message name="SendLetterRequestSK_Response">
+		<part name="LetterRequestSK_Output" type="tns:MyAlertSk" />
+	</message>
+	<message name="LogCrsSrchEntity_Response">
+		<part name="LogCrsEntityDataType_Output"
+			type="tns:LogCrsEntityDataType" />
+	</message>
+	<message name="LetterGenerationData_Response">
+		<part name="LetterGenerationData_Output"
+			type="tns:LetterGenerationData" />
+	</message>
+
+	<message name="CorrespondencePage_Request">
+		<part name="CorrespondencePage_Input"
+			type="tns:CorrespondencePage" />
+	</message>
+
+	<message name="AssociateCaseDataType_Request">
+		<part name="AssociateCaseDataType_Input"
+			type="tns:AssociateCaseDataType" />
+	</message>
+
+	<message name="CommonLetterInputDataType_Response">
+		<part name="CommonLetterInputVO_SRC_Output"
+			type="tns:CommonLetterInputVO_SRC" />
+	</message>
+	<message name="SrcEntLogCrsDataType_Request">
+		<part name="SrcEntLogCrsDataType_Input"
+			type="tns:SrcEntLogCrsDataType" />
+	</message>
+
+	<portType name="LogCorrespondence_Service">
+		<operation name="LogCorrespondence">
+			<input message="tns:CorrespondenceEntity_Request" />
+		</operation>
+		<operation name="ReceiveInquiryEntityData">
+			<input message="tns:InquiryEntityData_Request" />
+		</operation>
+		<operation name="ReceiveCorrespondenceSk">
+			<input message="tns:CorrespondenceSk_Request" />
+		</operation>
+		<operation name="ReceiveMyTaskCorrespondenceSk">
+			<input message="tns:MyTaskCorrespondenceSk_Request" />
+		</operation>
+		<operation name="ReceiveMyTaskClaimCorrespondenceSk">
+			<input message="tns:MyTaskClaimCorrespondenceSk_Request" />
+		</operation>
+		<operation name="SendCREDMSSearchCriteriaDataType">
+			<output message="tns:EDMSSearchCriteriaDataType_Response" />
+		</operation>
+
+		<operation name="ReceiveCREDMSSearchResultsDataType">
+			<input message="tns:logCREDMSSearchResultsDataType_Request" />
+		</operation>
+
+		<operation name="SendLetterGenerationData">
+			<output message="tns:LetterGenerationData_Response" />
+		</operation>
+
+		<operation name="ReceiveLetterGenerationSk">
+			<input message="tns:CorrespondencePage_Request" />
+		</operation>
+		<operation name="SendLetterRequestSK">
+			<output message="tns:SendLetterRequestSK_Response" />
+		</operation>
+		<operation name="LogCrsSrEntity">
+			<output message="tns:LogCrsSrchEntity_Response" />
+		</operation>
+		<operation name="ReceiveCaseData">
+			<input message="tns:AssociateCaseDataType_Request" />
+		</operation>
+
+		<operation name="SendCommonLetterInputDataType">
+			<output message="tns:CommonLetterInputDataType_Response" />
+		</operation>
+
+		<operation name="LogCorrespondence0">
+			<input message="tns:SrcEntLogCrsDataType_Request" />
+		</operation>
+	</portType>
+	<binding name="LogCorrespondence_Binding"
+		type="tns:LogCorrespondence_Service">
+		<portlet:binding />
+		<operation name="LogCorrespondence">
+			<portlet:action name="receiveCorrespondenceEntity"
+				actionNameParameter="receive.Correspondence.Entity"
+				caption="receive.Correspondence.Entity" type="standard" />
+			<input>
+				<portlet:param name="correspondenceEntity"
+					partname="CorrespondenceEntity_Input" boundTo="request-attribute"
+					caption="correspondence.Entity" />
+			</input>
+		</operation>
+		<operation name="SendLetterRequestSK">
+			<portlet:action name="SendMyAlertSk"
+				actionNameParameter="Send.MyAlerts.AlertSk" type="standard" />
+			<output>
+				<portlet:param name="myAlertSk"
+					partname="LetterRequestSK_Output" boundTo="request-attribute"
+					caption="send.ltr.request.sk" />
+			</output>
+		</operation>
+		<operation name="LogCrsSrEntity">
+			<portlet:action name="LogCrsEnt_SOURCE_ACTION"
+				actionNameParameter="LogCrsSrchEntity_ACTION_NAME" type="standard" />
+			<output>
+				<portlet:param name="CrsSearchCrtVO"
+					partname="LogCrsEntityDataType_Output" boundTo="request-attribute"
+					caption="LogCrsToSrchEntity"
+					class="com.acs.enterprise.common.program.contactmanagement.common.vo.CorrespondenceSearchCriteriaVO" />
+			</output>
+		</operation>
+		<operation name="ReceiveInquiryEntityData">
+			<portlet:action name="receiveinquiryaboutEntityData"
+				actionNameParameter="receive.inquiryabout.EntityData"
+				caption="receive.inquiryabout.EntityData" type="standard" />
+			<input>
+				<portlet:param name="inquiryaboutEntityData"
+					partname="InquiryEntityData_Input" boundTo="request-attribute"
+					caption="receive.EntityData" />
+			</input>
+		</operation>
+		<operation name="ReceiveCorrespondenceSk">
+			<portlet:action name="receiveCorrespondenceSk"
+				actionNameParameter="receive.Correspondence.Sk"
+				caption="receive.correspondence.sk" type="standard" />
+			<input>
+				<portlet:param name="correspondenceSk"
+					partname="CorrespondenceSk_Input" boundTo="request-attribute"
+					caption="receive.correspondencesk" />
+			</input>
+		</operation>
+		<operation name="ReceiveMyTaskCorrespondenceSk">
+			<portlet:action name="receiveMyTaskCorrespondenceSk"
+				actionNameParameter="receive.mytask.correspondence.sk"
+				caption="receive.mytask.correspondence.sk" type="standard" />
+			<input>
+				<portlet:param name="mytaskcorrespondenceSk"
+					partname="MyTaskCorrespondenceSk_Input" boundTo="request-attribute"
+					caption="receive.nytask.correspondencesk" />
+			</input>
+		</operation>
+		<operation name="ReceiveMyTaskClaimCorrespondenceSk">
+			<portlet:action name="receiveMyTaskClaimCorrespondenceSk"
+				actionNameParameter="receiveMyTask.ClaimCorrespondence.Sk"
+				caption="receive.claim.correspondence.sk" type="standard" />
+			<input>
+				<portlet:param name="myTaskClaimCorrespondenceSk"
+					partname="MyTaskClaimCorrespondenceSk_Input"
+					boundTo="request-attribute"
+					caption="receive.claim.correspondencesk" />
+			</input>
+		</operation>
+		<operation name="SendCREDMSSearchCriteriaDataType">
+			<portlet:action name="SendEDMSSearchCriteriaDataType"
+				actionNameParameter="com.ibm.portal.propertybroker.action"
+				type="standard" />
+			<output>
+				<portlet:param name="EDMSSearchCriteria"
+					class="com.acs.enterprise.common.cots.edms.application.common.vo.EnterpriseEDMSSearchCriteriaVO"
+					partname="EDMSSearchCriteriaDataType_Output"
+					boundTo="request-attribute" caption="send.EDMSSearchCriteria" />
+				<portlet:param name="CorrespondenceResultsList"
+					class="com.acs.enterprise.common.program.contactmanagement.view.vo.CorrespondenceRecordVO"
+					partname="CorrespondenceResultsDataType_Output"
+					boundTo="request-attribute"
+					caption="send.CorrespondenceResults.Caption" />
+
+			</output>
+		</operation>
+		<operation name="ReceiveCREDMSSearchResultsDataType">
+			<portlet:action name="receiveEDMSSearchResultsAction"
+				type="standard"
+				actionNameParameter="receive.EDMSSearchResults.Action"
+				description="EDMS Search Results" />
+			<input>
+				<portlet:param name="logCREDMSSearchResultsList"
+					partname="logCREDMSSearchResultsDataType_Input"
+					class="com.acs.enterprise.common.cots.edms.application.common.vo.EnterpriseEDMSSearchResultsVO"
+					boundTo="request-attribute" caption="logCREDMSSearchResultsList" />
+			</input>
+		</operation>
+
+		<operation name="SendLetterGenerationData">
+			<portlet:action name="SendletterGenerationData"
+				actionNameParameter="send.letter.generation.data" type="standard" />
+			<output>
+				<portlet:param name="LetterGeneration"
+					partname="LetterGenerationData_Output" boundTo="request-attribute"
+					caption="send.Letter.generation" />
+			</output>
+		</operation>
+
+		<operation name="ReceiveLetterGenerationSk">
+			<portlet:action name="receiveLetterGenerationSk"
+				actionNameParameter="receive.letterGeneration.Sk"
+				caption="receive.letter.generation.sk" type="standard" />
+			<input>
+				<portlet:param name="LetterGenerationSKCreated"
+					partname="CorrespondencePage_Input" boundTo="request-attribute"
+					caption="receive.Letter.Generation.sk" />
+			</input>
+		</operation>
+
+		<operation name="ReceiveCaseData">
+			<portlet:action name="receiveCaseDataAction"
+				actionNameParameter="receive.CaseData.Action" type="standard"
+				description="Recieve CaseData" />
+			<input>
+				<portlet:param name="AssociateCaseData"
+					partname="AssociateCaseDataType_Input" boundTo="request-attribute"
+					caption="receive.caseData.Caption" />
+			</input>
+		</operation>
+
+		<operation name="SendCommonLetterInputDataType">
+			<portlet:action name="SendCommonLetterInputAction"
+				actionNameParameter="send.CommonLetterInputData.Action"
+				type="standard" />
+			<output>
+				<portlet:param name="CommonLetterInput"
+					class="com.acs.enterprise.common.cots.lettergeneration.vo.CommonLetterInputVO"
+					partname="CommonLetterInputVO_SRC_Output"
+					boundTo="request-attribute"
+					caption="send.CommonLetterInput.Caption" />
+			</output>
+		</operation>
+
+		<operation name="LogCorrespondence0">
+			<portlet:action name="LogCrsSrchEntity_TARGET_ACTION" actionNameParameter="SrcEntLogCrs_ACTION"
+				type="standard" />
+			<input>
+				<portlet:param name="srcEntLogMap"
+					partname="SrcEntLogCrsDataType_Input" boundTo="request-attribute"
+					caption="SrcEntToLogCrs" class="java.util.Map" />
+			</input>
+		</operation>
+	</binding>
+</definitions>

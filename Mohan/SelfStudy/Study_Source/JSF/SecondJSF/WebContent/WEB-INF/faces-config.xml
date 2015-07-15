@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<faces-config
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
+    version="1.2">
+	<managed-bean>
+		<managed-bean-name>propBean</managed-bean-name>
+		<managed-bean-class>com.test.prop.PropBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>myActionListener</managed-bean-name>
+		<managed-bean-class>com.actionlist.MyActionListener</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>departments</managed-bean-name>
+		<managed-bean-class>com.dept.Departments</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>actionlistNavigationBean</managed-bean-name>
+		<managed-bean-class>com.actionlist.NavigationBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>login</managed-bean-name>
+		<managed-bean-class>com.actionlist.Login</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>	
+
+	<navigation-rule>
+		<from-view-id>/pages/actionlist/Page1.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>success</from-outcome>
+			<to-view-id>/pages/actionlist/Page2.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<from-view-id>/pages/actionlist/login.jsp</from-view-id>
+		<navigation-case>
+			<from-action>#{login.processLogin}</from-action>
+			<to-view-id>/pages/actionlist/welcome.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{login.cancelLogin}</from-action>
+			<to-view-id>/pages/actionlist/bye.jsp</to-view-id>
+		</navigation-case>		
+	</navigation-rule>
+
+</faces-config>

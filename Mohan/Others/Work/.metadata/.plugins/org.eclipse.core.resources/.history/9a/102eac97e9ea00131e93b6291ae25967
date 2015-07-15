@@ -1,0 +1,13 @@
+package com.spring.util;
+
+public class MySpringInitializer {
+
+	
+	
+	public Log loadLogger()
+	{
+		
+	}
+	
+	
+}

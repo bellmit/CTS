@@ -1,0 +1,207 @@
+package com.cognizant.designproject.main;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.VelocityEngine;
+
+import com.cognizant.designproject.dto.RuleDescriptor;
+import com.cognizant.designproject.listeners.RuleExtractionListener;
+import com.cognizant.designproject.utilities.RuleTemplateUtility;
+import com.cognizant.javagrammar.JavaLexer;
+import com.cognizant.javagrammar.JavaParser;
+
+public class TestPOJORuleExtraction {
+
+	private static final String RULE_PROPERTYFILE = "src\\rule.properties";
+	private static final String RULE_PACKAGE_NAME = "packageName";
+	private static final String RULE_ID = "rule.ID";
+	private static final String RULE_NAME = "rule.Name";
+	private static final String RULE_DESCRIPTION = "rule.Description";
+	private static final String RULE_CLASS_NAME = "className";
+	private static final String FILE_SOURCE_BASE_URL="D:\\RIF\\src\\main\\java\\";
+
+
+	public static void main(String[] args) {
+
+
+		try {
+
+			Map<String,List<Map<String,Object>>> classRuleExtractionMap=new HashMap<String, List<Map<String,Object>>>();
+			//testRuleExtraction("D:\\CA2\\RevEngg\\Test\\MemberTest\\MemberManager.java");
+		/*	testRuleExtraction("D:\\ClearCase_Source\\396662_CTS_MNT_FIX_Dev_2\\provider\\ProviderSupport\\ProviderSupportComponents\\src\\com\\acs\\enterprise\\mmis\\provider\\support\\application\\domainmanager\\ProviderLetterManager.java"
+					,classRuleExtractionMap);*/
+			testRuleExtraction("D:\\ClearCase_Source\\396662_CTS_MNT_FIX_Dev_2\\operations_comn\\ServiceAuth_Comn\\ServiceAuthorizationPortlet\\src\\com\\acs\\enterprise\\mmis\\operations\\serviceauthorization\\view\\bean\\ServiceAuthCommonControllerBean.java"
+					,classRuleExtractionMap);
+
+			
+			//testFacesConfigParse("D:\\CA2\\RevEngg\\Antlr Samples\\lexmagic\\XML-inputs\\cat.xml");
+		} catch (Exception ie) {
+			System.out.println(" Exception ....");
+			ie.printStackTrace();
+		}
+	}
+
+	private static void testRuleExtraction(String filenameWithPath,Map<String,List<Map<String,Object>>> classRuleExtractionMap) throws IOException {
+
+		File fileName = new File(filenameWithPath);
+
+		ANTLRInputStream input = new ANTLRInputStream(new FileInputStream(
+				fileName));
+		JavaLexer lexer = new JavaLexer(input);
+		CommonTokenStream tokens = new CommonTokenStream(lexer);
+		JavaParser parser = new JavaParser(tokens);
+		ParseTree tree = parser.compilationUnit();
+		ParseTreeWalker walker = new ParseTreeWalker();
+		StringBuffer extractedText = new StringBuffer();
+		RuleExtractionListener extractor1 = new RuleExtractionListener(
+				tokens,classRuleExtractionMap);
+		walker.walk(extractor1, tree);
+
+		System.out.println("Extraction Data Details");
+
+		System.out.println("Size===>"+classRuleExtractionMap.size());
+
+		for(List<Map<String,Object>> list:classRuleExtractionMap.values())
+		{
+			for(Map<String,Object> ruleextractmap : list)
+			{
+				System.out.println(ruleextractmap.get("extractText"));
+				System.out.println(ruleextractmap.get("import"));
+				System.out.println(ruleextractmap.get("param"));
+				String extractText=(String) ruleextractmap.get("extractText");
+				List<String> importsList=(List<String>) ruleextractmap.get("import");
+				Map<String, String> ruleContextParams=(Map<String, String>) ruleextractmap.get("param");
+				externalizeRule(extractText, importsList, ruleContextParams);
+			}
+		}
+
+
+	}
+
+	public static void externalizeRule(String extractText,List<String> importsList,Map<String, String> ruleContextParams)
+	{
+		/*
+		 *   first, get and initialize an engine
+		 */
+
+		VelocityEngine ve = new VelocityEngine();
+
+		ve.init();
+
+		/*
+		 *   organize our data 
+		 */
+
+		RuleDescriptor ruleDescriptor  = new RuleDescriptor();
+
+		//List<String> importsList = new ArrayList<String>();
+		/* importsList.add("com.import1");
+        importsList.add("com.import2");
+        importsList.add("com.xxx.import3");*/
+
+		//Map<String, String> ruleContextParams = new HashMap<String, String>();
+		/* ruleContextParams.put("saLineItemInfo", "SALineItemInfo");
+        ruleContextParams.put("previousDOD", "PreviousDateOfDeath");
+        ruleContextParams.put("memberSysID", "Long");
+        ruleContextParams.put("memberDAO", "MemberDAO");
+        ruleContextParams.put("dateOfDeathChanged", "boolean");*/
+
+		try
+		{
+			//Getting rule details from Property file
+			Properties prop = new Properties();
+			InputStream is=null;
+			is=new FileInputStream(RULE_PROPERTYFILE);
+			prop.load(is);
+
+			ruleDescriptor.setImportsList(importsList);
+			ruleDescriptor.setRuleContextParams(ruleContextParams);
+			ruleDescriptor.setRuleText(extractText);
+
+			ruleDescriptor.setRuleId(prop.getProperty(RULE_ID));
+			ruleDescriptor.setRuleName(prop.getProperty(RULE_NAME));
+			ruleDescriptor.setRuleDescription(prop.getProperty(RULE_DESCRIPTION));
+			ruleDescriptor.setRulePackageName(prop.getProperty(RULE_PACKAGE_NAME));
+			ruleDescriptor.setRuleClassName(prop.getProperty(RULE_CLASS_NAME));
+
+			RuleTemplateUtility ruleTempUtility = new RuleTemplateUtility();
+
+			/*
+			 *  add that list to a VelocityContext
+			 */
+
+			VelocityContext context = new VelocityContext();
+			List<RuleDescriptor>  ruleDescriptorList  = new ArrayList<RuleDescriptor>();
+			ruleDescriptorList.add(ruleDescriptor);
+			context.put("ruleDescriptorList", ruleDescriptorList);
+			context.put("ruleDescriptor", ruleDescriptor);
+			context.put("ruleTempUtility", ruleTempUtility);
+			context.put("isBatchRule", true);
+
+			
+			String filepath=FILE_SOURCE_BASE_URL+getClassPath(ruleDescriptor.getRulePackageName(),ruleDescriptor.getRuleClassName());
+			
+			System.out.println("filepath==> "+filepath);
+
+			File file = new File(filepath);
+			BufferedWriter ruleExtractionWriter = new BufferedWriter(new FileWriter(file));;
+
+			/*
+			 *   get the Template  
+			 */
+			Template t = ve.getTemplate( "\\src\\rule_pojo.vm" );
+			StringWriter writer = new StringWriter();
+			t.merge( context, writer );
+			ruleExtractionWriter.write(writer.toString());
+			System.out.println( writer.toString() );
+
+			t = ve.getTemplate( "\\src\\invoke_rule.vm" );
+			writer = new StringWriter();
+			t.merge( context, writer );
+
+			ruleExtractionWriter.close();
+
+
+			System.out.println( writer.toString() );
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	private static String getClassPath(String packageName,String className) {
+		
+		
+		String path=null;
+		path=packageName.replace(".", "\\");
+		
+		//System.out.println(new File(FILE_SOURCE_BASE_URL+path).exists());
+		new File(FILE_SOURCE_BASE_URL+path).mkdirs();
+		
+		path=path+"\\"+className+".java";
+		
+		System.out.println("Class Path ==> "+path);
+		
+		return path;
+	}
+
+}

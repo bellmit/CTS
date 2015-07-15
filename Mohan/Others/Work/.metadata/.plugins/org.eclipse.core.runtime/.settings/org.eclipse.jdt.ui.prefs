@@ -1,0 +1,24 @@
+content_assist_disabled_computers=org.eclipse.jdt.ui.javaAllProposalCategory\u0000org.eclipse.jdt.ui.javaNoTypeProposalCategory\u0000org.eclipse.jdt.ui.textProposalCategory\u0000org.eclipse.jdt.ui.javaTypeProposalCategory\u0000
+content_assist_lru_history=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?><history maxLHS\="100" maxRHS\="10"><lhs name\="com.ibm.gsk.ikeyman.io.Logger"><rhs name\="com.ibm.gsk.ikeyman.io.Logger"/></lhs><lhs name\="com.xerox.ghs.mmis.rif.examples.RIFClientProvider"><rhs name\="com.xerox.ghs.mmis.rif.examples.RIFClientProvider"/></lhs><lhs name\="com.xerox.ghs.mmis.rif.core.RuleInvocationContext"><rhs name\="com.xerox.ghs.mmis.rif.core.RuleInvocationContext"/></lhs><lhs name\="com.acs.enterprise.common.base.common.vo.EnterpriseBaseVO"><rhs name\="com.acs.enterprise.mmis.provider.common.vo.ProviderNCPDPInterfaceVO"/></lhs><lhs name\="com.acs.enterprise.mmis.provider.common.vo.ProviderNCPDPInterfaceVO"><rhs name\="com.acs.enterprise.mmis.provider.common.vo.ProviderNCPDPInterfaceVO"/></lhs><lhs name\="com.xerox.ghs.mmis.rif.rules.provider.PreviousProviderMedicaidNotFoundRuleVO"><rhs name\="com.xerox.ghs.mmis.rif.rules.provider.PreviousProviderMedicaidNotFoundRuleVO"/></lhs><lhs name\="com.acs.enterprise.mmis.provider.common.domain.ProviderBaseDomain"><rhs name\="com.acs.enterprise.mmis.provider.common.domain.Provider"/></lhs><lhs name\="com.acs.enterprise.common.base.common.domain.EnterpriseBaseDomain"><rhs name\="com.acs.enterprise.mmis.provider.common.domain.Provider"/></lhs><lhs name\="com.acs.enterprise.common.base.common.domain.Auditable"><rhs name\="com.acs.enterprise.mmis.provider.common.domain.Provider"/></lhs><lhs name\="java.lang.Cloneable"><rhs name\="com.acs.enterprise.mmis.provider.common.domain.Provider"/><rhs name\="java.util.LinkedList"/></lhs><lhs name\="com.acs.enterprise.mmis.provider.common.domain.Provider"><rhs name\="com.acs.enterprise.mmis.provider.common.domain.Provider"/></lhs><lhs name\="java.util.Collection"><rhs name\="java.util.ArrayList"/><rhs name\="java.util.LinkedList"/></lhs><lhs name\="java.lang.Iterable"><rhs name\="java.util.ArrayList"/><rhs name\="java.util.LinkedList"/></lhs><lhs name\="java.util.List"><rhs name\="java.util.ArrayList"/><rhs name\="java.util.LinkedList"/></lhs><lhs name\="java.util.Deque"><rhs name\="java.util.LinkedList"/></lhs><lhs name\="java.util.Queue"><rhs name\="java.util.LinkedList"/></lhs><lhs name\="java.util.AbstractSequentialList"><rhs name\="java.util.LinkedList"/></lhs><lhs name\="java.util.AbstractList"><rhs name\="java.util.LinkedList"/></lhs><lhs name\="java.util.AbstractCollection"><rhs name\="java.util.LinkedList"/></lhs><lhs name\="java.util.LinkedList"><rhs name\="java.util.LinkedList"/></lhs><lhs name\="com.ccup.DS.LinkedList$Node"><rhs name\="com.ccup.DS.LinkedList$Node"/></lhs></history>
+content_assist_number_of_computers=21
+content_assist_proposals_background=255,255,255
+content_assist_proposals_foreground=0,0,0
+eclipse.preferences.version=1
+fontPropagated=true
+org.eclipse.jdt.internal.ui.navigator.layout=2
+org.eclipse.jdt.ui.editor.tab.width=
+org.eclipse.jdt.ui.exception.name=e
+org.eclipse.jdt.ui.formatterprofiles.version=12
+org.eclipse.jdt.ui.gettersetter.use.is=true
+org.eclipse.jdt.ui.javadoclocations.migrated=true
+org.eclipse.jdt.ui.overrideannotation=true
+org.eclipse.jdt.ui.text.code_templates_migrated=true
+org.eclipse.jdt.ui.text.custom_code_templates=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?><templates/>
+org.eclipse.jdt.ui.text.custom_templates=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?><templates/>
+org.eclipse.jdt.ui.text.templates_migrated=true
+org.eclipse.jface.textfont=1|Consolas|10.0|0|WINDOWS|1|0|0|0|0|0|0|0|0|1|0|0|0|0|Consolas;
+proposalOrderMigrated=true
+spelling_locale_initialized=true
+tabWidthPropagated=true
+useAnnotationsPrefPage=true
+useQuickDiffPrefPage=true

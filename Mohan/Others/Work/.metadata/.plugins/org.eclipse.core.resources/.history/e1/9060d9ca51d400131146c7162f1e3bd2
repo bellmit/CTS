@@ -1,0 +1,133 @@
+package com.xerox.ghs.mmis.rif.rules.operations;
+
+import java.util.Date;
+import org.junit.*;
+import static org.junit.Assert.*;
+
+/**
+ * The class <code>SALineItemInfoTest</code> contains tests for the class <code>{@link SALineItemInfo}</code>.
+ *
+ * @generatedBy CodePro at 5/5/14 6:05 PM
+ * @author 396662
+ * @version $Revision: 1.0 $
+ */
+public class SALineItemInfoTest {
+	/**
+	 * Run the Object getApprovalDate() method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 6:05 PM
+	 */
+	@Test
+	public void testGetApprovalDate_1()
+		throws Exception {
+		SALineItemInfo fixture = new SALineItemInfo();
+		fixture.setApprovalDate(new Date());
+		fixture.setLineItemStatusCode("");
+
+		Object result = fixture.getApprovalDate();
+
+		// add additional test code here
+		assertNotNull(result);
+	}
+
+	/**
+	 * Run the String getLineItemStatusCode() method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 6:05 PM
+	 */
+	@Test
+	public void testGetLineItemStatusCode_1()
+		throws Exception {
+		SALineItemInfo fixture = new SALineItemInfo();
+		fixture.setApprovalDate(new Date());
+		fixture.setLineItemStatusCode("");
+
+		String result = fixture.getLineItemStatusCode();
+
+		// add additional test code here
+		assertEquals("", result);
+	}
+
+	/**
+	 * Run the void setApprovalDate(Date) method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 6:05 PM
+	 */
+	@Test
+	public void testSetApprovalDate_1()
+		throws Exception {
+		SALineItemInfo fixture = new SALineItemInfo();
+		fixture.setApprovalDate(new Date());
+		fixture.setLineItemStatusCode("");
+		Date date = new Date();
+
+		fixture.setApprovalDate(date);
+
+		// add additional test code here
+	}
+
+	/**
+	 * Run the void setLineItemStatusCode(String) method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 6:05 PM
+	 */
+	@Test
+	public void testSetLineItemStatusCode_1()
+		throws Exception {
+		SALineItemInfo fixture = new SALineItemInfo();
+		fixture.setApprovalDate(new Date());
+		fixture.setLineItemStatusCode("");
+		String lineStatusCode = "";
+
+		fixture.setLineItemStatusCode(lineStatusCode);
+
+		// add additional test code here
+	}
+
+	/**
+	 * Perform pre-test initialization.
+	 *
+	 * @throws Exception
+	 *         if the initialization fails for some reason
+	 *
+	 * @generatedBy CodePro at 5/5/14 6:05 PM
+	 */
+	@Before
+	public void setUp()
+		throws Exception {
+		// add additional set up code here
+	}
+
+	/**
+	 * Perform post-test clean-up.
+	 *
+	 * @throws Exception
+	 *         if the clean-up fails for some reason
+	 *
+	 * @generatedBy CodePro at 5/5/14 6:05 PM
+	 */
+	@After
+	public void tearDown()
+		throws Exception {
+		// Add additional tear down code here
+	}
+
+	/**
+	 * Launch the test.
+	 *
+	 * @param args the command line arguments
+	 *
+	 * @generatedBy CodePro at 5/5/14 6:05 PM
+	 */
+	public static void main(String[] args) {
+		new org.junit.runner.JUnitCore().run(SALineItemInfoTest.class);
+	}
+}

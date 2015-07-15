@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="ConfigureProjectWizard">
+		<item value="com.ibm.rational.clearcase.ide.plugin.shareproject.ConfigurationWizard" key="selectedWizardId"/>
+	</section>
+</section>

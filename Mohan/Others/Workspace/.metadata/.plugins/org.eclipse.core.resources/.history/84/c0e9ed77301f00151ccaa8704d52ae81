@@ -1,0 +1,5 @@
+eclipse.preferences.version=1
+extraProperties=sonar.java.coveragePlugin\=cobertura\r\nsonar.dynamicAnalysis\=true\r\nsonar.host.url\=http\://10.222.4.22\:9000/
+projectKey=com.xerox.enterprise.ghs.mmis.rules\:RIFRules
+serverUrl=http\://localhost\:9000
+version=2

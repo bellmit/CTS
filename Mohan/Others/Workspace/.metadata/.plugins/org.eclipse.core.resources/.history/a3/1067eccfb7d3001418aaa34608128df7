@@ -1,0 +1,134 @@
+package com.xerox.enterprise.ghs.mmis.rif.rules.operations;
+
+import junit.framework.Test;
+import junit.framework.TestSuite;
+import junit.framework.TestCase;
+
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
+import com.acs.enterprise.common.rif.rules.delegate.RulesDelegate;
+import com.acs.enterprise.common.util.rif.rules.exception.RulesDelegateException;
+import com.acs.enterprise.common.util.rif.rules.vo.RulesResultVO;
+import com.xerox.enterprise.ghs.mmis.rif.common.exception.RIFException;
+import com.xerox.enterprise.ghs.mmis.rif.common.exception.RIFPOJORulesException;
+import com.xerox.enterprise.ghs.mmis.rif.core.api.RulesManager;
+
+/**
+ * The class TestOPR0561_0001_01 contains tests for the class OPR0561_0001_01.
+ * 
+ * @author 300051
+ * @generatedBy RIF
+ * @since <pre>
+ * Thu Mar 19 09:56:24 IST 2015
+ * </pre>
+ * @version 1.0
+ */
+public class TestOPR0561_0001_01 extends TestCase {
+	private static final Logger LOG = Logger
+			.getLogger(TestOPR0561_0001_01.class);
+
+	public TestOPR0561_0001_01(final String name) {
+		super(name);
+	}
+
+	/**
+	 * Method Name: execute Param: RulesContext ctx, String ruleId
+	 * 
+	 */
+	private static final String RULEID = "OPR0561.0001.01";
+
+	public void testEXECUTE() throws Exception {
+		// TODO: Test goes here...
+		// TODO: Assignment
+		int procedure_limit = 24;
+		int limitSize = 24;
+		LOG.log(Level.INFO, "Started Rule Execution::::");
+		// Rule Invocation Context object holds object arrays used in rule
+		// execution.
+		RulesDelegate ruleDelegate = new RulesDelegate(RULEID);
+		// Adding object into rule invocation context.
+		ruleDelegate.addObject(procedure_limit);
+		ruleDelegate.addObject(limitSize);
+		// Invoke RIF with ruleid and rule invocation objects.
+		RulesResultVO rulesResult = null;
+		try {
+			rulesResult = ruleDelegate.invokeRule();
+		} catch (RulesDelegateException re) {
+			if ("300".equals(re.getErrorCode())) {
+				LOG.log(Level.INFO, "Rule Expired...");
+			}
+			LOG.log(Level.ERROR, "RulesDelegateException::::" + re);
+		}
+		LOG.log(Level.INFO, "Rule Execution Ended::::" + RULEID + "\n");
+
+		assertEquals(true, rulesResult.isReturnBooleanValue());
+	}
+
+	public void testEXECUTE1() throws Exception {
+		// TODO: Test goes here...
+		// TODO: Assignment
+		int procedure_limit = 24;
+		int limitSize = 20;
+		LOG.log(Level.INFO, "Started Rule Execution::::");
+		// Rule Invocation Context object holds object arrays used in rule
+		// execution.
+		RulesDelegate ruleDelegate = new RulesDelegate(RULEID);
+		// Adding object into rule invocation context.
+		ruleDelegate.addObject(procedure_limit);
+		ruleDelegate.addObject(limitSize);
+		// Invoke RIF with ruleid and rule invocation objects.
+		RulesResultVO rulesResult = null;
+		try {
+			rulesResult = ruleDelegate.invokeRule();
+		} catch (RulesDelegateException re) {
+			if ("300".equals(re.getErrorCode())) {
+				LOG.log(Level.INFO, "Rule Expired...");
+			}
+			LOG.log(Level.ERROR, "RulesDelegateException::::" + re);
+		}
+		LOG.log(Level.INFO, "Rule Execution Ended::::" + RULEID + "\n");
+
+		assertEquals(false, rulesResult.isReturnBooleanValue());
+	}
+
+	@org.junit.Test(expected = RIFException.class)
+	public void testEXECUTE3() throws Exception {
+		// Rule Invocation Context object holds object arrays used in rule
+		// execution.
+		RulesManager rulesManager = RulesManager.getRIFInstance();
+		// Adding object into rule invocation context.
+
+		// Invoke RIF with ruleid and rule invocation objects.
+		try {
+			rulesManager.execute(RULEID, null);
+		} catch (RIFException re) {
+			re.getErrorCode();
+		}
+		assertEquals(true, true);
+	}
+
+	public void testINITIALIZE() {
+		try {
+			OPR0561_0001_01.initialize();
+		} catch (RIFPOJORulesException e) {
+			// TODO Auto-generated catch block
+			e.getErrorCode();
+		}
+		assertEquals(true, true);
+	}
+
+	public void testSHUTDOWN() {
+		try {
+			OPR0561_0001_01.shutdown();
+		} catch (RIFPOJORulesException e) {
+			// TODO Auto-generated catch block
+			e.getErrorCode();
+		}
+		assertEquals(true, true);
+	}
+
+	public static Test suite() {
+		return new TestSuite(TestOPR0561_0001_01.class);
+	}
+}

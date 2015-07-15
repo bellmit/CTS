@@ -1,0 +1,57 @@
+package com.xerox.enterprise.ghs.mmis.rif.common.util;
+
+import java.io.IOException;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+public class DomXMLWriter {
+	
+	public static void main(String args[])
+	{
+		writeXML();
+	}
+
+	public static void writeXML() {
+		// TODO Auto-generated constructor stub
+		String filepath = "c:\\file.xml";
+		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder docBuilder;
+		try {
+			docBuilder = docFactory.newDocumentBuilder();
+			Document doc = docBuilder.parse(Thread.currentThread().getContextClassLoader().
+        			getResource("Rules-Metadata.xml").getFile());
+			System.out.println(doc.getFirstChild());
+			Node node=doc.getElementsByTagName("RulesConfig").item(0);
+			NodeList nodes=node.getChildNodes();
+			System.out.println(nodes.getLength());
+			
+			for(int i=0;i<nodes.getLength();i++)
+			{
+				//System.out.println("Node::"+nodes.item(i).getNodeName());
+				if(nodes.item(i).getNodeName().equalsIgnoreCase("Rule"))
+				{
+				Node ruleNode=nodes.item(i);
+				System.out.println(ruleNode.getAttributes().getNamedItem("id"));
+				System.out.println(ruleNode.getChildNodes().item(2).getNodeName());
+				}
+			}
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+}

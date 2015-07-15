@@ -1,0 +1,50 @@
+			  
+#set ($rulereturnBoolean = $ruleDescriptor.getRuleReturnField())
+ 		#if($isBatchRule)
+		RulesDelegate ruleDelegate = new RulesDelegate();
+		List objects;
+		#end
+		#foreach($ruleDescriptor in $ruleDescriptorList)
+
+              LOG.log(Level.INFO,"Started Rule Execution::::");
+              
+              //Rule Invocation Context object holds object arrays used in rule execution.
+			  #if($isBatchRule)
+				String ruleId$foreach.count = "$ruleDescriptor.getRuleId()";
+				objects = new ArrayList(); 
+				//Adding object into rule invocation context.
+			  	$ruleTempUtility.getAddObjectsToContext($ruleDescriptor.getRuleContextParams(), "ruleDelegate","objects","$ruleDescriptor.getRuleId()")	
+			  #else			    
+			    String ruleId = "$ruleDescriptor.getRuleId()";
+			    RulesDelegate ruleDelegate = new RulesDelegate(ruleId);
+			    //Adding object into rule invocation context.
+			 	$ruleTempUtility.getAddObjectsToContext($ruleDescriptor.getRuleContextParams(), "ruleDelegate")	    
+			  #end
+        #end                                
+		    #if($isBatchRule)
+			  List<RulesResultVO> rulesResult = null;         
+            #end
+              //Invoke RIF with ruleid and rule invocation objects.
+			  #if($isBatchRule)
+				RulesResultVO[] rulesResult = null;
+			  #else
+			    RulesResultVO rulesResult = null;
+			  #end
+              
+              try {
+              		  #if($isBatchRule)
+						rulesResult = ruleDelegate.invokeRules();
+					  #else
+						rulesResult = ruleDelegate.invokeRule();	
+					  #end
+					  #if($rulereturnBoolean)
+						$rulereturnBoolean=rulesResult.isReturnBooleanValue(); 
+					  #end
+              } catch (RulesDelegateException re){
+		            if("300".equals(re.getErrorCode()))
+					{
+						LOG.log(Level.INFO,"Rule Expired...");
+					}
+                    LOG.log(Level.ERROR,"RulesDelegateException::::"+re);
+              }
+              LOG.log(Level.INFO,"Rule Execution Ended::::"+ruleId+"\n");

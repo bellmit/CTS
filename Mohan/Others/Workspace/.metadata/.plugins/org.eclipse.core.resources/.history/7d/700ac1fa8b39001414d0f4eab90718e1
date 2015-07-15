@@ -1,0 +1,235 @@
+package com.cognizant.designproject.main;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.cognizant.designproject.rules.identification.BatchRuleFinder;
+import com.cognizant.designproject.rules.identification.GenerateDesignProject;
+import com.cognizant.designproject.rules.identification.MessageConstantExtractor;
+
+
+/**
+ * The class <code>GenerateDesignProjectTest</code> contains tests for the class <code>{@link GenerateDesignProject}</code>.
+ *
+ * @generatedBy CodePro at 8/18/14 12:30 PM
+ * @author 396662
+ * @version $Revision: 1.0 $
+ */
+public class GenerateDesignProjectTest {
+	
+	private GenerateDesignProject fixture;
+	private String sourcePath;
+	private String destinationPath = "D:\\Logs\\Output";
+	private String projectId;
+	private String projectVersion;
+	private List<String> searchPattern;
+	private Map<String,String> messagePropertyId;
+	private String jspPg;
+	private String BASE_DIR="D:\\ClearCase_Source\\396662_CTS_MNT_FIX_Dev_2\\";
+//	private String BASE_DIR="C:\\Users\\305852\\305852_ATL_MNT_FIX_Dev_1\\member";
+
+
+	/**
+	 * Run the void generateSmartML(String,String,String,String,List<String>,String) method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 8/18/14 12:30 PM
+	 */
+//	@Test
+//	public void testKeywordsearchIdentification()
+//	{
+//		//Ruld ID : MEM0340.0000.01
+//		sourcePath = BASE_DIR+"member";
+//		searchPattern = new String[]{"TPL Policy","sourceSysid","targetSysid","source Sysid","target Sysid","Delete source","TPL Coverage","AuditUserID","MERGE","source member", "target member","sourcemember", "targetmember","copysource","copy source","Coverage"};
+//		messagePropertyId = null;		
+//		jspPg = BASE_DIR+"operations_comn\\ServiceAuth_Comn\\ServiceAuthorizationPortlet\\WebContent\\jsp\\serviceauthmaintenance\\inc_internalEventProvider.jsp";
+//		//jspPg = BASE_DIR+"operations_comn\\ServiceAuth_Comn\\ServiceAuthorizationPortlet\\WebContent\\jsp\\";		
+//		fixture.generateSmartML(sourcePath, destinationPath, projectId, projectVersion, jspPg, searchPattern, messagePropertyId);
+//	
+//	}
+	
+	
+	/**
+	 * Run the void generateSmartML(String,String,String,String,String[],String) method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 8/18/14 12:30 PM
+	 */
+	@Test
+	public void testRuleKeywordsearchIdentification()
+	{	//Category H
+		sourcePath = BASE_DIR+"operations\\ServiceAuthorization\\";
+		String ruleid="OPR0043.0001.01";
+		searchPattern=new ArrayList<String>();
+		searchPattern.addAll(getRuleIDArrays(ruleid));
+		messagePropertyId = null;		
+		jspPg = BASE_DIR+"operations\\ServiceAuthorization\\ServiceAuthorizationPortlet\\WebContent\\jsp\\serviceauthmaintenance\\serviceAuthMaintenance.jsp";	
+		fixture.generateSmartML(sourcePath, destinationPath, projectId, projectVersion, jspPg, searchPattern, messagePropertyId);
+	
+	}
+	
+	@Test
+    public void testEJBBatchProcessIdentification() throws Exception
+    {
+        //To test Batch
+        GenerateDesignProject gdp=new GenerateDesignProject();
+        //MEM4007.2130.NH01
+        String[] keywordSearch={"COE Code","B1","SystemList","98","Benifit Plan"};
+		searchPattern=new ArrayList<String>();
+        searchPattern.addAll(Arrays.asList(keywordSearch));
+       
+        List<File> filesToParse=BatchRuleFinder.getBatchFiles(BASE_DIR,"UC-OPR-ADJ-031.1.cmj");
+        gdp.generateBatchSmartML(filesToParse,"D:\\Logs\\Output","189","1.18.4",
+        		searchPattern ,null);
+                    
+    }
+
+    @Test
+    public void testPropertyIDIdentification() throws Exception
+    {	
+    	//TPL0565.0001.01
+        List<String> constantFiles=new ArrayList<String>();
+        Map<String,String> constantsInputMap=new HashMap<String,String>();
+        List<String> propertyFiles=new ArrayList<String>();
+        Map<String,String> messageMap=new HashMap<String,String>();
+        //String[] inputMessages=new String[]{"LOB is required for search."};
+        String[] inputMessages=new String[]{"Member ID must be entered when Carrier ID and Policy are not entered"};
+        GenerateDesignProject gdp=new GenerateDesignProject();
+        gdp.getPropertyFileNames(new File(BASE_DIR),propertyFiles);
+        gdp.getConstantFileNames(new File(BASE_DIR),constantFiles);        
+        MessageConstantExtractor.extractPropertyKeys(propertyFiles,inputMessages,messageMap);            
+        MessageConstantExtractor.extractConstants(constantsInputMap,constantFiles,messageMap,"D:\\Logs\\Output");                                               
+		List<String> keywordSearch = (List<String>) constantsInputMap.keySet(); 				
+		fixture.generateSmartML(BASE_DIR+"operations\\tpladministration\\TPLAdministrationPortlet","D:\\Logs\\Output","189","1.18.4",		
+		BASE_DIR+"operations\\tpladministration\\TPLAdministrationPortlet\\WebContent\\jsp\\policydetails\\addPolicy.jsp",keywordSearch,constantsInputMap);		                               
+    }
+    
+
+	@Test 
+    public void testRuleIDsearchIdentification(){ 
+			//Category I -
+            sourcePath = BASE_DIR+"operations_comn\\ServiceAuth_Comn";             
+            String ruleid="SRA2001.2129.01";             
+            searchPattern=fixture.getRuleIDArrays(ruleid); 
+            messagePropertyId = null;             
+            jspPg = BASE_DIR+"operations_comn\\ServiceAuth_Comn\\ServiceAuthorizationPortlet\\WebContent\\jsp\\serviceauthmaintenance\\lineitems\\inc_lineItemServicingProviderSummary_common.jsp";
+            fixture.generateSmartML(sourcePath, destinationPath, projectId, projectVersion, jspPg, searchPattern, messagePropertyId);
+            
+    }
+
+	@Test 
+    public void testRuleIDsearchIdentification2(){ 
+            sourcePath = BASE_DIR+"operations_comn\\ServiceAuth_Comn";             
+            String ruleid="SRA2001.2148.01";             
+            searchPattern=fixture.getRuleIDArrays(ruleid); 
+            messagePropertyId = null;             
+            jspPg = BASE_DIR+"operations_comn\\ServiceAuth_Comn\\ServiceAuthorizationPortlet\\WebContent\\jsp\\serviceauthmaintenance\\";
+            fixture.generateSmartML(sourcePath, destinationPath, projectId, projectVersion, jspPg, searchPattern, messagePropertyId);
+	}
+	
+	/**
+	 * Perform pre-test initialization.
+	 *
+	 * @throws Exception
+	 *         if the initialization fails for some reason
+	 *
+	 * @generatedBy CodePro at 8/18/14 12:30 PM
+	 */
+	@Before
+	public void setUp()
+		throws Exception {
+		fixture = new GenerateDesignProject();
+		sourcePath = BASE_DIR+"operations_comn\\ServiceAuth_Comn";		
+		projectId = "189";
+		projectVersion = "1.18.4";
+		//searchPattern = new String[] {"test"};
+		messagePropertyId =null;
+		//jspPg = "D:\\ClearCase_Source\\396662_CTS_MNT_FIX_Dev_2\\operations_comn\\ServiceAuth_Comn\\ServiceAuthorizationPortlet\\WebContent\\jsp\\serviceauthmaintenance\\inc_internalEventProvider.jsp";
+	
+		
+	}
+	
+	 @Test 
+	    public void testRuleIDsearchIdentification1(){ 
+	  
+	         sourcePath = BASE_DIR+"member\\";              
+	         String ruleid="MEM6007.0000.01";  
+	         
+	         searchPattern=fixture.getRuleIDArrays(ruleid); 
+	         
+	         messagePropertyId = null;   
+	         jspPg=BASE_DIR+"member\\"; 
+	          
+	         fixture.generateSmartML(sourcePath, destinationPath, projectId, projectVersion, jspPg, searchPattern, messagePropertyId);
+
+	  
+	        }
+
+	 @Test 
+     public void testRuleIDsearchIdentification_BR6526(){ 
+         sourcePath = BASE_DIR+"member\\";             
+          String ruleid="MEM6007.0000.01";             
+          searchPattern=fixture.getRuleIDArrays(ruleid); 
+          messagePropertyId = null;             
+          jspPg = BASE_DIR+"member\\";
+          fixture.generateSmartML(sourcePath, destinationPath, projectId, projectVersion, jspPg, searchPattern, messagePropertyId);       
+     }
+
+	 
+	 
+	/**
+	 * Perform post-test clean-up.
+	 *
+	 * @throws Exception
+	 *         if the clean-up fails for some reason
+	 *
+	 * @generatedBy CodePro at 8/18/14 12:30 PM
+	 */
+	@After
+	public void tearDown()
+		throws Exception {
+		// Add additional tear down code here
+	}
+
+	/**
+	 * Launch the test.
+	 *
+	 * @param args the command line arguments
+	 *
+	 * @generatedBy CodePro at 8/18/14 12:30 PM
+	 */
+	//Pattern for rule id
+		public List<String> getRuleIDArrays(String ruleid)
+		{
+			String regex="\\.";
+			Pattern pat=Pattern.compile(regex);
+			Matcher m1=pat.matcher(ruleid);
+			List<String> ruleidList=new ArrayList<String>();
+			ruleidList.add(ruleid);
+			while(m1.find())
+			{
+				System.out.println("1"+m1.group());
+				ruleidList.add(m1.replaceAll("_"));
+				ruleidList.add(m1.replaceAll(" "));
+				ruleidList.add(m1.replaceAll(""));
+
+			}
+			return ruleidList;
+		}
+	
+	public static void main(String[] args) {
+		new org.junit.runner.JUnitCore().run(GenerateDesignProjectTest.class);
+	}
+}

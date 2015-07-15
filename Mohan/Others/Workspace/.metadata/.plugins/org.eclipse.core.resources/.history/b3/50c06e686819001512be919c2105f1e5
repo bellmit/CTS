@@ -1,0 +1,19 @@
+package com.xerox.enterprise.ghs.mmis.rif.common.util;
+
+import com.xerox.enterprise.ghs.mmis.rif.core.cache.RulesXMLConfigReader;
+
+public class RuleTurnOnOffUtility {
+
+	private RulesXMLConfigReader configReader;
+	
+	public RuleTurnOnOffUtility() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		System.out.println("RuleId:"+args[0]);
+		configReader = new RulesXMLConfigReader(rifCache);	
+	}
+
+}

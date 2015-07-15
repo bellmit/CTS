@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	   					   http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<!-- Setter Injection -->
+    <bean id="message"
+          class="com.study.spring.app.Message" scope="session">
+        <property name="message" value="Mohan" />
+    </bean>
+    <!-- Constructor Injection -->
+    <bean id="constructor" class="com.study.spring.app.ConstructorMSG">
+    	<constructor-arg value="Welcome Mohan"></constructor-arg>
+    </bean>
+    <bean id="constructor1" class="com.study.spring.app.ConstructorMSG">
+    	<constructor-arg  name="message" value="More Arguments"></constructor-arg>
+    	<constructor-arg name="messageCode" value="100"></constructor-arg>
+    </bean>
+    
+    <!-- Static Factory Method Injection -->
+    <bean id="staticFactory" class="com.study.spring.app.SpringStaticFactory" factory-method="getInstance" lazy-init="true">
+    	<property name="message" value="Mohan"></property>
+    </bean>
+    <!-- Instance Factory Method Injection -->
+    <bean id="instanceFactory" class="com.study.spring.app.SpringInstanceFactory"></bean>
+	<bean id="instancemsg" factory-bean="instanceFactory" factory-method="getMessageInstance">
+		<property name="message" value="Message from Factory method" />
+	</bean>
+</beans>
+         

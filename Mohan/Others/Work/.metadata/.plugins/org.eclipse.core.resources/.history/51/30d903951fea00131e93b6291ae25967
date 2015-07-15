@@ -1,0 +1,5 @@
+username=cts\mohan
+password=griffin_05
+wsdl=https://ch1workspaces.cognizant.com/sites/SW01/JPMC-GRD/ER-Releases/_vti_bin/Lists.asmx?wsdl
+endpoint=https://ch1workspaces.cognizant.com/sites/SW01/JPMC-GRD/ER-Releases/_vti_bin/Lists.asmx?wsdl
+folder=Prod Support Folder

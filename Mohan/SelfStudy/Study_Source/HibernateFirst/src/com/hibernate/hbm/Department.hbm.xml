@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated Sep 5, 2013 11:30:16 AM by Hibernate Tools 4.0.0 -->
+<hibernate-mapping>
+    <class name="com.hibernate.entity.Department" table="department" catalog="firsthibernate">
+        <id name="deptNo" type="java.lang.Integer">
+            <column name="DEPT_NO" />
+            <generator class="identity" />
+        </id>
+        <property name="deptName" type="string">
+            <column name="DEPT_NAME" length="45" not-null="true" />
+        </property>
+        <property name="location" type="string">
+            <column name="LOCATION" length="45" not-null="true" />
+        </property>                
+        <set name="employees" table="employee" inverse="true" lazy="true" fetch="select" cascade="save-update">
+            <key>
+                <column name="DEPT_NO" not-null="true" />
+            </key>
+            <one-to-many class="com.hibernate.entity.Employee" />            
+        </set>        
+    </class>
+    
+</hibernate-mapping>

@@ -1,0 +1,386 @@
+<?xml version="1.0"?>
+<faces-config
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
+   version="2.0">
+
+	<!--Commented for Attachment-->
+		
+	<!-- Managed bean declarations used in Log Case screen in Contact Management-->
+	<managed-bean>
+		<managed-bean-name>
+			logCaseControllerBean
+		</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.bean.CMLogCaseControllerBean
+		</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>
+			logCaseDataBean
+		</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.bean.CMLogCaseDataBean
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+		
+		<!-- Managed Bean property for CaseDetails VO  -->
+		<managed-property>
+				<property-name>caseDetailsVO</property-name>
+				<value>#{caseDetailsVO}</value>
+		</managed-property>
+		<!-- Managed Bean property for CaseRegarding VO  -->
+		<managed-property>
+				<property-name>caseRegardingVO</property-name>
+				<value>#{caseRegardingVO}</value>
+		</managed-property>
+		
+		<!-- Managed Bean property for Routing VO  -->
+		<managed-property>
+				<property-name>routingVO</property-name>
+				<value>#{routingVO}</value>
+		</managed-property>
+		<!-- Managed Bean property for Attachment VO  -->
+		<managed-property>
+				<property-name>attachmentVO</property-name>
+				<value>#{attachmentVO}</value>
+		</managed-property>
+		<!-- Managed Bean property for Case Events VO  -->
+		<managed-property>
+				<property-name>caseEventsVO</property-name>
+				<value>#{caseEventsVO}</value>
+		</managed-property>
+		<!-- Managed Bean property for Case Steps VO  -->
+		<managed-property>
+				<property-name>caseStepsVO</property-name>
+				<value>#{caseStepsVO}</value>
+		</managed-property>
+		<!-- Managed Bean property for Case Alerts VO  -->
+		<managed-property>
+				<property-name>alertVO</property-name>
+				<value>#{alertVO}</value>
+		</managed-property>
+		
+		<!-- Managed Bean property for AlternateIdentifiers VO  -->
+		<managed-property>
+				<property-name>alternateIdentifiersVO</property-name>
+				<value>#{alternateIdentifiersVO}</value>
+		</managed-property>
+		
+		<!-- Managed Bean property for Associate CR VO  -->
+		<managed-property>
+				<property-name>associatedCorrespondenceVO</property-name>
+				<value>#{associatedCorrespondenceVO}</value>
+		</managed-property>
+		
+		<!-- Managed Bean property for Associate Case VO  -->
+		<managed-property>
+				<property-name>associatedCaseVO</property-name>
+				<value>#{associatedCaseVO}</value>
+		</managed-property>
+		
+		<!-- Managed Bean property for Custom FieldValue  VO  -->
+		<managed-property>
+				<property-name>customFieldValueVO</property-name>
+				<value>#{customFieldValueVO}</value>
+		</managed-property>
+		
+		<!-- Managed Bean property for Correspondence Record search VO  -->
+		<managed-property>
+				<property-name>correspondenceSearchCriteriaVO</property-name>
+				<value>#{CorrespondenseSearchCriteriaVO}</value>
+		</managed-property>
+						
+	</managed-bean>
+	 <!-- End of DataBean -->
+	
+	<managed-bean>
+		<managed-bean-name>
+			caseDetailsVO
+		</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.vo.CaseDetailsVO
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+		
+		<!-- Managed Bean property for CaseTypeBCCP VO  -->
+		<managed-property>
+				<property-name>caseTypeBCCPVO</property-name>
+				<value>#{caseTypeBCCPVO}</value>
+		</managed-property>
+		
+		<!-- Managed Bean property for CaseTypeARS VO  -->
+		<managed-property>
+				<property-name>caseTypeARSVO</property-name>
+				<value>#{caseTypeARSVO}</value>
+		</managed-property>
+		
+		<!-- Managed Bean property for CaseTypeDDU VO  -->
+		<managed-property>
+				<property-name>caseTypeDDUVO</property-name>
+				<value>#{caseTypeDDUVO}</value>
+		</managed-property>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>
+			associatedCorrespondenceVO
+		</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.vo.AssociatedCorrespondenceVO
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>
+			associatedCaseVO
+		</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.vo.AssociatedCaseVO
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>
+			caseTypeBCCPVO
+		</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.vo.CaseTypeBCCPVO
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>
+			caseTypeARSVO
+		</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.vo.CaseTypeARSVO
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>
+			caseTypeDDUVO
+		</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.vo.CaseTypeDDUVO
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>
+			caseEventsVO
+		</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.vo.CaseEventsVO
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>
+			caseStepsVO
+		</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.vo.CaseStepsVO
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>
+			alertVO
+		</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.vo.AlertVO
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>
+			caseRegardingVO
+		</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.vo.CaseRegardingVO
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+		<!-- Managed Bean property for CaseRegardingMember VO  -->
+		<managed-property>
+				<property-name>caseRegardingMemberVO</property-name>
+				<value>#{caseRegardingMemberVO}</value>
+		</managed-property>
+		<!-- Managed Bean property for CaseRegardingProvider VO  -->
+		<managed-property>
+				<property-name>caseRegardingProviderVO</property-name>
+				<value>#{caseRegardingProviderVO}</value>
+		</managed-property>
+		<!-- Managed Bean property for CaseRegardingTPL VO  -->
+		<managed-property>
+				<property-name>caseRegardingTPLVO</property-name>
+				<value>#{caseRegardingTPLVO}</value>
+		</managed-property>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>
+			caseRegardingProviderVO
+		</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.vo.CaseRegardingProviderVO
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>
+			caseRegardingMemberVO
+		</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.vo.CaseRegardingMemberVO
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>
+			alternateIdentifiersVO
+		</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.vo.AlternateIdentifiersVO
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>
+			caseRegardingTPLVO
+		</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.vo.CaseRegardingTPL
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>
+			routingVO
+		</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.vo.CMRoutingVO
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>
+			customFieldValueVO
+		</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.vo.CustomFieldValueVO
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<!-- Creatting managedBean for  caseCorrespondenceRecordSearch VO -->
+	<managed-bean>
+		<managed-bean-name>
+			CorrespondenseSearchCriteriaVO
+		</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.common.vo.CorrespondenceSearchCriteriaVO
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+		<managed-property>
+			<property-name>advSearchCriteria</property-name>
+			<value>#{CRAdvanceSearchCriteriaVO}</value>
+		</managed-property>
+	</managed-bean>
+	
+	<!-- Creatting managedBean for  caseRegardingTradingPartner VO -->
+	<managed-bean>
+		<managed-bean-name>
+			caseRegardingTradingPartnerVO
+		</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.vo.CaseRegardingTradingPartnerVO
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<navigation-rule>
+		<from-view-id>
+			/jsp/LogCase/LogCase.jsp
+		</from-view-id>
+		<navigation-case>
+			<from-action>#{logCaseControllerBean.renderAddAttachmentPage}</from-action>
+			<from-outcome>success</from-outcome>
+			<to-view-id>
+				/jsp/LogCase/inc_logCaseAddAttachments.jsp
+			</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<from-view-id>
+			/jsp/LogCase/inc_logCaseAddAttachments.jsp
+		</from-view-id>
+		<navigation-case>
+			<from-action>#{logCaseControllerBean.cancelAttachments}</from-action>
+			<from-outcome>success</from-outcome>
+			<to-view-id>
+				/jsp/LogCase/LogCase.jsp
+			</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<!--<navigation-rule>
+		<from-view-id>
+			/jsp/LogCase/inc_logCaseAddAttachments.jsp
+		</from-view-id>
+		<navigation-case>
+			<from-action>#{logCaseControllerBean.uploadFile}</from-action>
+			<from-outcome>success</from-outcome>
+			<to-view-id>
+				/jsp/LogCase/LogCase.jsp
+			</to-view-id>
+		</navigation-case>
+	</navigation-rule>-->
+	
+	<!-- Added for Attachment Functionality
+	 <lifecycle>
+		<phase-listener>com.ibm.faces.webapp.ValueResourcePhaseListener</phase-listener>
+	</lifecycle>-->
+	<!-- variable/property resolver registration -->
+	<!-- <lifecycle>
+		<phase-listener>
+			com.ibm.faces.webapp.ValueResourcePhaseListener
+		</phase-listener>
+	</lifecycle> -->
+	<application>
+		<!--<variable-resolver>
+			com.ibm.faces.databind.SelectItemsVarResolver
+		</variable-resolver>
+		<variable-resolver>
+			com.ibm.faces.portlet.PortletVariableResolver
+		</variable-resolver>
+		<property-resolver>
+			com.ibm.faces.databind.SelectItemsPropResolver
+		</property-resolver>
+		-->
+		<!--
+		<locale-config>
+			<default-locale>en</default-locale>
+			<supported-locale>es</supported-locale> 
+		</locale-config>
+		-->
+		<message-bundle>com.acs.enterprise.common.program.contactmanagement.view.nl.PGM_IN_CMContactManagementCase</message-bundle>
+	</application>
+	
+	
+</faces-config>

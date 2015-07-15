@@ -1,0 +1,25 @@
+package com.study.spring.app;
+
+public class ConstructorMSG {
+	
+	String message;
+
+	public ConstructorMSG(String message) {
+		this.message=message;
+		
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+	
+	public String printMessage()
+	{
+		return "Constructor Injected Message:"+message;
+	}
+
+}

@@ -1,0 +1,5 @@
+username=cts\mohan
+password=griffin_05
+wsdl=https://ch1hub.cognizant.com/sites/SC63/XeroxMMIS-ASG/_vti_bin/Lists.asmx?wsdl
+endpoint=https://ch1hub.cognizant.com/sites/SC63/XeroxMMIS-ASG/_vti_bin/Lists.asmx
+folder=Prod Support Folder

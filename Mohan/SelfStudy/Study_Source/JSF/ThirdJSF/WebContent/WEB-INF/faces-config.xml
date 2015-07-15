@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<faces-config
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
+    version="1.2">
+	<managed-bean>
+		<managed-bean-name>hTMLLibBean</managed-bean-name>
+		<managed-bean-class>com.hlib.HTMLLibBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>manualBean</managed-bean-name>
+		<managed-bean-class>com.myvalid.ManualBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>implicitBean</managed-bean-name>
+		<managed-bean-class>com.myvalid.ImplicitBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>	
+	
+	<managed-bean>
+		<managed-bean-name>explicitBean</managed-bean-name>
+		<managed-bean-class>com.myvalid.ExplicitBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>	
+	
+	<managed-bean>
+		<managed-bean-name>customBean</managed-bean-name>
+		<managed-bean-class>com.myvalid.CustomBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>		
+	
+	<navigation-rule>
+		<from-view-id>/pages/validations/manual.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>success</from-outcome>
+			<to-view-id>/pages/validations/welcome.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>/pages/validations/implicit.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>success</from-outcome>
+			<to-view-id>/pages/validations/welcome.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>/pages/validations/explicit.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>success</from-outcome>
+			<to-view-id>/pages/validations/welcome.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<from-view-id>/pages/validations/custom.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>success</from-outcome>
+			<to-view-id>/pages/validations/welcome.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>	
+	
+	<application>		
+		<message-bundle>com.custommsg.myerr</message-bundle>
+	</application>
+	
+	<validator>
+		<validator-id>myvalid</validator-id>
+		<validator-class>com.myvalid.CustomValidator</validator-class>
+	</validator>
+		
+</faces-config>

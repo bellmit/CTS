@@ -1,0 +1,13 @@
+1416290513486	Rename type 'RIFCommonContants'
+1416290519527	Rename type 'RIFInputContants'
+1416290613295	Copy compilation unit
+1416290621253	Rename package 'com.cognizant.servlet.main'
+1416290627913	Rename package 'com.cognizant.servlet.init'
+1416290640376	Rename package 'com.cognizant.constants'
+1416290648491	Delete element
+1416291973316	Rename package 'com.cognizant.utilities'
+1416312486288	Delete element
+1416313240223	Move 1 resources to 'WebContent'
+1416313243153	Copy files
+1416395956086	Encapsulate field 'patternPath'
+1416395961930	Encapsulate field 'junitPath'

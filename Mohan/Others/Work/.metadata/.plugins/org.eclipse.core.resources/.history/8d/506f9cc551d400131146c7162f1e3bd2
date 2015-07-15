@@ -1,0 +1,133 @@
+package com.xerox.ghs.mmis.rif.core;
+
+import org.junit.*;
+import static org.junit.Assert.*;
+
+/**
+ * The class <code>RuleInvocationContextTest</code> contains tests for the class <code>{@link RuleInvocationContext}</code>.
+ *
+ * @generatedBy CodePro at 5/5/14 5:55 PM
+ * @author 396662
+ * @version $Revision: 1.0 $
+ */
+public class RuleInvocationContextTest {
+	/**
+	 * Run the RuleInvocationContext(int) constructor test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testRuleInvocationContext_1()
+		throws Exception {
+		int objSize = 1;
+
+		RuleInvocationContext result = new RuleInvocationContext(objSize);
+
+		// add additional test code here
+		assertNotNull(result);
+		assertEquals(1, result.getObjectsSize());
+	}
+
+	/**
+	 * Run the void addObject(Object) method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testAddObject_1()
+		throws Exception {
+		RuleInvocationContext fixture = new RuleInvocationContext(1);
+		fixture.addObject(new Object());
+		Object obj = new Object();
+
+		fixture.addObject(obj);
+
+		// add additional test code here
+		// An unexpected exception was thrown in user code while executing this test:
+		//    java.lang.ArrayIndexOutOfBoundsException: 1
+		//       at com.xerox.ghs.mmis.rif.core.RuleInvocationContext.addObject(RuleInvocationContext.java:43)
+	}
+
+	/**
+	 * Run the Object[] getContextObject() method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testGetContextObject_1()
+		throws Exception {
+		RuleInvocationContext fixture = new RuleInvocationContext(1);
+		fixture.addObject(new Object());
+
+		Object[] result = fixture.getContextObject();
+
+		// add additional test code here
+		assertNotNull(result);
+		assertEquals(1, result.length);
+		assertNotNull(result[0]);
+	}
+
+	/**
+	 * Run the int getObjectsSize() method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testGetObjectsSize_1()
+		throws Exception {
+		RuleInvocationContext fixture = new RuleInvocationContext(1);
+		fixture.addObject(new Object());
+
+		int result = fixture.getObjectsSize();
+
+		// add additional test code here
+		assertEquals(1, result);
+	}
+
+	/**
+	 * Perform pre-test initialization.
+	 *
+	 * @throws Exception
+	 *         if the initialization fails for some reason
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Before
+	public void setUp()
+		throws Exception {
+		// add additional set up code here
+	}
+
+	/**
+	 * Perform post-test clean-up.
+	 *
+	 * @throws Exception
+	 *         if the clean-up fails for some reason
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@After
+	public void tearDown()
+		throws Exception {
+		// Add additional tear down code here
+	}
+
+	/**
+	 * Launch the test.
+	 *
+	 * @param args the command line arguments
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	public static void main(String[] args) {
+		new org.junit.runner.JUnitCore().run(RuleInvocationContextTest.class);
+	}
+}

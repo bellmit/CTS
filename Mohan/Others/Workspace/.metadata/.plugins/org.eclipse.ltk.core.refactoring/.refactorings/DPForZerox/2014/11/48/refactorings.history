@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring accessors="true" comment="Delete 5 elements from project &apos;DPForZerox&apos;&#x0D;&#x0A;- Original project: &apos;DPForZerox&apos;&#x0D;&#x0A;- Original elements:&#x0D;&#x0A;     LineRejectReasonCode.java&#x0D;&#x0A;     ManageReceiptControllerBean.java&#x0D;&#x0A;     MemberSupportRules.java&#x0D;&#x0A;     ServiceAuthCommonControllerBean.java&#x0D;&#x0A;     ServiceAuthDomainManager.java" description="Delete elements" element1="LineRejectReasonCode.java" element2="MemberSupportRules.java" element3="ServiceAuthCommonControllerBean.java" element4="ManageReceiptControllerBean.java" element5="ServiceAuthDomainManager.java" elements="0" flags="589830" id="org.eclipse.jdt.ui.delete" resources="5" stamp="1417159997905" subPackages="false" version="1.0"/>
+</session>

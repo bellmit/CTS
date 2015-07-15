@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="EntitySearch_Service"
+	targetNamespace="http://enterprise.ipc"
+	xmlns="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:portlet="http://www.ibm.com/wps/c2a"
+	xmlns:tns="http://enterprise.ipc"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<types>
+		<xsd:schema targetNamespace="http://enterprise.ipc">
+		
+			<xsd:simpleType name="CorrespondenceEntity">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+			
+			<xsd:simpleType name="AddEntity">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+			
+			<xsd:simpleType name="SearchCREntity">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+			
+		</xsd:schema>
+	</types>
+	<message name="CorrespondenceEntity_Response">
+		<part name="CorrespondenceEntity_Output"
+			type="tns:CorrespondenceEntity" />
+		<part name="AddEntity_Output"
+			type="tns:AddEntity" />
+		
+			
+	</message>
+	
+	<message name="SearchCREntity_Request">
+		<part name="SearchCREntity_Input" type="tns:SearchCREntity" />
+	</message>
+	
+	
+	
+	<portType name="EntitySearch_Service">
+		<operation name="EntitySearch">
+			<output message="tns:CorrespondenceEntity_Response" />
+		</operation>
+		
+		<operation name="CrSearchEntityPortlet">
+			<input message="tns:SearchCREntity_Request" />
+		</operation>
+		
+</portType>
+
+	<binding name="EntitySearch_Binding"
+		type="tns:EntitySearch_Service">
+		<portlet:binding />
+		
+		<operation name="EntitySearch">
+			<portlet:action name="sendCorrespondenceEntity"
+				actionNameParameter="send.Correspondence.Entity"
+				caption="send.Correspondence.Entity" type="standard" />
+				
+			<output>
+				<portlet:param name="correspondenceEntity"
+					partname="CorrespondenceEntity_Output" boundTo="request-attribute" />
+			
+				<portlet:param name="MaintainEntity"
+					partname="AddEntity_Output" boundTo="request-attribute" />
+					
+			   
+			</output>
+		</operation>
+		
+		<operation name="CrSearchEntityPortlet">
+			<portlet:action name="goToCrEntitySearchPage"
+			                actionNameParameter="GO.TO.CR.ENTITY.SEARCH.PAGE"
+				             type="standard" 
+				             caption="to.cr.enity.search.page"
+				            description="go.to.cr.entitySearch.page" />
+			<input>
+				<portlet:param name="SearchCorrespondenceEntity"
+					partname="SearchCREntity_Input" boundTo="request-attribute"
+					caption="go.to.cr.EntSrch" />
+			</input>
+		</operation>
+		
+		
+	
+	</binding>
+</definitions>

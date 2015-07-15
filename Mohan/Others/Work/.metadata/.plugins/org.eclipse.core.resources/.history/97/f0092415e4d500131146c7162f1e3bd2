@@ -1,0 +1,7 @@
+package com.xerox.ghs.mmis.rif.rules.provider;
+
+import com.xerox.ghs.mmis.rif.core.HERule;
+
+public class PreviousProviderMedicaidNotFound implements HERule {
+
+}

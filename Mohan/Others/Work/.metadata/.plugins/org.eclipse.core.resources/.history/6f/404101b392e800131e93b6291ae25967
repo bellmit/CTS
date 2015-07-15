@@ -1,0 +1,27 @@
+.header
+{
+	background-color:gray;
+	text-align: center;
+	font-size:large;
+	font-family:monospace;
+	font-weight:bolder;
+	margin:5px;
+	margin-top:-5px;
+}
+
+.menu
+{
+	width: 30%;
+	text-align: left;
+	font-style: italic;
+}
+.content
+{
+	
+}
+
+table
+{
+	width: 100%;
+	border-top: thin;
+}

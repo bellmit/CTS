@@ -1,0 +1,5 @@
+package com.xerox.ghs.mmis.rif.rules.provider;
+
+public class NCPDPClosureDateUpdate {
+
+}

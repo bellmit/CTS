@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Rules META DATA Details -->
+<RulesConfig> 
+<Rule id="PGM9001.0016.01"> 
+		<name>ProgramAdministration</name>
+		<type>2</type>
+		<implement>com.xerox.enterprise.ghs.mmis.rif.rules.program.PGM9001_0016_01</implement>
+		<effectivestartdate>05-01-2014</effectivestartdate>
+		<effectiveenddate>05-10-2016</effectiveenddate>
+		<MITAMapping>provider</MITAMapping>
+		<sla>
+			<RedThresholdInMilliSeconds>50</RedThresholdInMilliSeconds>
+			<AmberThresholdInMilliSeconds>25</AmberThresholdInMilliSeconds>
+		</sla>
+	</Rule>
+	<Rule id="PGM9001.0017.01"> 
+		<name>ProgramAdministration</name>
+		<type>2</type>
+		<implement>com.xerox.enterprise.ghs.mmis.rif.rules.program.PGM9001_0017_01</implement>
+		<effectivestartdate>05-01-2014</effectivestartdate>
+		<effectiveenddate>05-10-2016</effectiveenddate>
+		<MITAMapping>provider</MITAMapping>
+		<sla>
+			<RedThresholdInMilliSeconds>50</RedThresholdInMilliSeconds>
+			<AmberThresholdInMilliSeconds>25</AmberThresholdInMilliSeconds>
+		</sla>
+	</Rule>
+	<Rule id="PGM9004.0021.01"> 
+		<name>ProgramAdministration</name>
+		<type>2</type>
+		<implement>com.xerox.enterprise.ghs.mmis.rif.rules.program.PGM9004_0021_01</implement>
+		<effectivestartdate>05-01-2014</effectivestartdate>
+		<effectiveenddate>05-10-2016</effectiveenddate>
+		<MITAMapping>provider</MITAMapping>
+		<sla>
+			<RedThresholdInMilliSeconds>50</RedThresholdInMilliSeconds>
+			<AmberThresholdInMilliSeconds>25</AmberThresholdInMilliSeconds>
+		</sla>
+	</Rule>
+	<Rule id="PGM9001.0018.01"> 
+		<name>ProgramAdministration</name>
+		<type>2</type>
+		<implement>com.xerox.enterprise.ghs.mmis.rif.rules.program.PGM9001_0018_01</implement>
+		<effectivestartdate>05-01-2014</effectivestartdate>
+		<effectiveenddate>05-10-2016</effectiveenddate>
+		<MITAMapping>provider</MITAMapping>
+		<sla>
+			<RedThresholdInMilliSeconds>50</RedThresholdInMilliSeconds>
+			<AmberThresholdInMilliSeconds>25</AmberThresholdInMilliSeconds>
+		</sla>
+	</Rule> 
+	<Rule id="PGM4005.9001.NH01"> 
+	<name>benefitadministration</name>
+		<type>2</type>
+		<implement>com.xerox.enterprise.ghs.mmis.rif.rules.program.PGM4005_9001_NH01</implement>
+		<effectivestartdate>05-01-2014</effectivestartdate>
+		<effectiveenddate>05-10-2016</effectiveenddate>
+		<MITAMapping>Program</MITAMapping>
+		<sla>
+			<RedThresholdInMilliSeconds>50</RedThresholdInMilliSeconds>
+			<AmberThresholdInMilliSeconds>25</AmberThresholdInMilliSeconds>
+		</sla>
+	</Rule>
+	<Rule id="PGM4005.9002.NH01"> 
+	<name>benefitadministration</name>
+		<type>2</type>
+		<implement>com.xerox.enterprise.ghs.mmis.rif.rules.program.PGM4005_9002_NH01</implement>
+		<effectivestartdate>05-01-2014</effectivestartdate>
+		<effectiveenddate>05-10-2016</effectiveenddate>
+		<MITAMapping>Program</MITAMapping>
+		<sla>
+			<RedThresholdInMilliSeconds>50</RedThresholdInMilliSeconds>
+			<AmberThresholdInMilliSeconds>25</AmberThresholdInMilliSeconds>
+		</sla>
+	</Rule>
+	<Rule id="PGM4004.9005.NH01"> 
+	<name>benefitadministration</name>
+		<type>2</type>
+		<implement>com.xerox.enterprise.ghs.mmis.rif.rules.program.PGM4004_9005_NH01</implement>
+		<effectivestartdate>05-01-2014</effectivestartdate>
+		<effectiveenddate>05-10-2016</effectiveenddate>
+		<MITAMapping>Program</MITAMapping>
+		<sla>
+			<RedThresholdInMilliSeconds>50</RedThresholdInMilliSeconds>
+			<AmberThresholdInMilliSeconds>25</AmberThresholdInMilliSeconds>
+		</sla>
+	</Rule>
+	
+	<Rule id="PRV0147.0001.01"> 
+	<name>Provider</name>
+		<type>2</type>
+		<implement>com.xerox.enterprise.ghs.mmis.rif.rules.provider.PRV0147_0001_01</implement>
+		<effectivestartdate>05-01-2014</effectivestartdate>
+		<effectiveenddate>05-10-2016</effectiveenddate>
+		<MITAMapping>Provider</MITAMapping>
+		<sla>
+			<RedThresholdInMilliSeconds>50</RedThresholdInMilliSeconds>
+			<AmberThresholdInMilliSeconds>25</AmberThresholdInMilliSeconds>
+		</sla>
+	</Rule>
+	<Rule id="PRV0148.0001.01"> 
+	<name>Provider</name>
+		<type>2</type>
+		<implement>com.xerox.enterprise.ghs.mmis.rif.rules.provider.PRV0148_0001_01</implement>
+		<effectivestartdate>05-01-2014</effectivestartdate>
+		<effectiveenddate>05-10-2016</effectiveenddate>
+		<MITAMapping>Provider</MITAMapping>
+		<sla>
+			<RedThresholdInMilliSeconds>50</RedThresholdInMilliSeconds>
+			<AmberThresholdInMilliSeconds>25</AmberThresholdInMilliSeconds>
+		</sla>
+	</Rule>
+	<Rule id="PRV0149.0001.01"> 
+	<name>Provider</name>
+		<type>2</type>
+		<implement>com.xerox.enterprise.ghs.mmis.rif.rules.provider.PRV0149_0001_01</implement>
+		<effectivestartdate>05-01-2014</effectivestartdate>
+		<effectiveenddate>05-10-2016</effectiveenddate>
+		<MITAMapping>Provider</MITAMapping>
+		<sla>
+			<RedThresholdInMilliSeconds>50</RedThresholdInMilliSeconds>
+			<AmberThresholdInMilliSeconds>25</AmberThresholdInMilliSeconds>
+		</sla>
+	</Rule>
+	<Rule id="PRV0150.0001.01"> 
+	<name>Provider</name>
+		<type>2</type>
+		<implement>com.xerox.enterprise.ghs.mmis.rif.rules.provider.PRV0150_0001_01</implement>
+		<effectivestartdate>05-01-2014</effectivestartdate>
+		<effectiveenddate>05-10-2016</effectiveenddate>
+		<MITAMapping>Provider</MITAMapping>
+		<sla>
+			<RedThresholdInMilliSeconds>50</RedThresholdInMilliSeconds>
+			<AmberThresholdInMilliSeconds>25</AmberThresholdInMilliSeconds>
+		</sla>
+	</Rule>
+	<Rule id="PRV0173.0001.01"> 
+	<name>Provider</name>
+		<type>2</type>
+		<implement>com.xerox.enterprise.ghs.mmis.rif.rules.provider.PRV0173_0001_01</implement>
+		<effectivestartdate>05-01-2014</effectivestartdate>
+		<effectiveenddate>05-10-2016</effectiveenddate>
+		<MITAMapping>Provider</MITAMapping>
+		<sla>
+			<RedThresholdInMilliSeconds>50</RedThresholdInMilliSeconds>
+			<AmberThresholdInMilliSeconds>25</AmberThresholdInMilliSeconds>
+		</sla>
+	</Rule>
+	<Rule id="PRV0174.0001.01"> 
+	<name>Provider</name>
+		<type>2</type>
+		<implement>com.xerox.enterprise.ghs.mmis.rif.rules.provider.PRV0174_0001_01</implement>
+		<effectivestartdate>05-01-2014</effectivestartdate>
+		<effectiveenddate>05-10-2016</effectiveenddate>
+		<MITAMapping>Provider</MITAMapping>
+		<sla>
+			<RedThresholdInMilliSeconds>50</RedThresholdInMilliSeconds>
+			<AmberThresholdInMilliSeconds>25</AmberThresholdInMilliSeconds>
+		</sla>
+	</Rule>
+	<Rule id="PRV0330.0001.01"> 
+	<name>Provider</name>
+		<type>2</type>
+		<implement>com.xerox.enterprise.ghs.mmis.rif.rules.provider.PRV0330_0001_01</implement>
+		<effectivestartdate>05-01-2014</effectivestartdate>
+		<effectiveenddate>05-10-2016</effectiveenddate>
+		<MITAMapping>Provider</MITAMapping>
+		<sla>
+			<RedThresholdInMilliSeconds>50</RedThresholdInMilliSeconds>
+			<AmberThresholdInMilliSeconds>25</AmberThresholdInMilliSeconds>
+		</sla>
+	</Rule>
+	<Rule id="PRV0552.0002.01"> 
+	<name>Provider</name>
+		<type>2</type>
+		<implement>com.xerox.enterprise.ghs.mmis.rif.rules.provider.PRV0552_0002_01</implement>
+		<effectivestartdate>05-01-2014</effectivestartdate>
+		<effectiveenddate>05-10-2016</effectiveenddate>
+		<MITAMapping>Provider</MITAMapping>
+		<sla>
+			<RedThresholdInMilliSeconds>50</RedThresholdInMilliSeconds>
+			<AmberThresholdInMilliSeconds>25</AmberThresholdInMilliSeconds>
+		</sla>
+	</Rule>
+	
+	<Rule id="PRV0552.0001.01"> 
+	<name>Provider</name>
+		<type>2</type>
+		<implement>com.xerox.enterprise.ghs.mmis.rif.rules.provider.PRV0552_0001_01</implement>
+		<effectivestartdate>05-01-2014</effectivestartdate>
+		<effectiveenddate>05-10-2016</effectiveenddate>
+		<MITAMapping>Provider</MITAMapping>
+		<sla>
+			<RedThresholdInMilliSeconds>50</RedThresholdInMilliSeconds>
+			<AmberThresholdInMilliSeconds>25</AmberThresholdInMilliSeconds>
+		</sla>
+	</Rule>
+	
+	<Rule id="PRV0845.0001.01"> 
+	<name>Provider</name>
+		<type>2</type>
+		<implement>com.xerox.enterprise.ghs.mmis.rif.rules.provider.PRV0845_0001_01</implement>
+		<effectivestartdate>05-01-2014</effectivestartdate>
+		<effectiveenddate>05-10-2016</effectiveenddate>
+		<MITAMapping>Provider</MITAMapping>
+		<sla>
+			<RedThresholdInMilliSeconds>50</RedThresholdInMilliSeconds>
+			<AmberThresholdInMilliSeconds>25</AmberThresholdInMilliSeconds>
+		</sla>
+	</Rule>
+	<Rule id="PRV0003.0001.01"> 
+	<name>Provider</name>
+		<type>2</type>
+		<implement>com.xerox.enterprise.ghs.mmis.rif.rules.provider.PRV0003_0001_01</implement>
+		<effectivestartdate>05-01-2014</effectivestartdate>
+		<effectiveenddate>05-10-2016</effectiveenddate>
+		<MITAMapping>Provider</MITAMapping>
+		<sla>
+			<RedThresholdInMilliSeconds>50</RedThresholdInMilliSeconds>
+			<AmberThresholdInMilliSeconds>25</AmberThresholdInMilliSeconds>
+		</sla>
+	</Rule>
+	<Rule id="PRV0004.0001.01"> 
+	<name>Provider</name>
+		<type>2</type>
+		<implement>com.xerox.enterprise.ghs.mmis.rif.rules.provider.PRV0004_0001_01</implement>
+		<effectivestartdate>05-01-2014</effectivestartdate>
+		<effectiveenddate>05-10-2016</effectiveenddate>
+		<MITAMapping>Provider</MITAMapping>
+		<sla>
+			<RedThresholdInMilliSeconds>50</RedThresholdInMilliSeconds>
+			<AmberThresholdInMilliSeconds>25</AmberThresholdInMilliSeconds>
+		</sla>
+	</Rule>
+	<Rule id="PRV0001.0001.01"> 
+	<name>Provider</name>
+		<type>2</type>
+		<implement>com.xerox.enterprise.ghs.mmis.rif.rules.provider.PRV0001_0001_01</implement>
+		<effectivestartdate>05-01-2014</effectivestartdate>
+		<effectiveenddate>05-10-2016</effectiveenddate>
+		<MITAMapping>Provider</MITAMapping>
+		<sla>
+			<RedThresholdInMilliSeconds>50</RedThresholdInMilliSeconds>
+			<AmberThresholdInMilliSeconds>25</AmberThresholdInMilliSeconds>
+		</sla>
+	</Rule>
+	<Rule id="PGM9004_0021_01"> 
+	<name>Provider</name>
+		<type>2</type>
+		<implement>com.xerox.enterprise.ghs.mmis.rif.rules.provider.PRV0001_0001_01</implement>
+		<effectivestartdate>05-01-2014</effectivestartdate>
+		<effectiveenddate>05-10-2016</effectiveenddate>
+		<MITAMapping>Provider</MITAMapping>
+		<sla>
+			<RedThresholdInMilliSeconds>50</RedThresholdInMilliSeconds>
+			<AmberThresholdInMilliSeconds>25</AmberThresholdInMilliSeconds>
+		</sla>
+	</Rule>
+	
+</RulesConfig>

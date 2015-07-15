@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy element &apos;RIFPOJORulesException.java&apos; to &apos;RIF/src/main/java/com.xerox.enterprise.ghs.mmis.rif.common.exception&apos;&#x0D;&#x0A;- Original project: &apos;RIF&apos;&#x0D;&#x0A;- Destination element: &apos;RIF/src/main/java/com.xerox.enterprise.ghs.mmis.rif.common.exception&apos;&#x0D;&#x0A;- Original element: &apos;com.xerox.enterprise.ghs.mmis.rif.common.exception.RIFPOJORulesException.java&apos;" description="Copy compilation unit" destination="/src\/main\/java&lt;com.xerox.enterprise.ghs.mmis.rif.common.exception" element1="/src\/main\/java&lt;com.xerox.enterprise.ghs.mmis.rif.common.exception{RIFPOJORulesException.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1425368304164" units="1" version="1.0"/>
+</session>

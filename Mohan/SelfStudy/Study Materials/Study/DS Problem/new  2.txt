@@ -1,0 +1,31 @@
+Given a linked list: 5 -> 4 -> 3 -> 2 -> 1, produce the following output: 4 -> 2 -> 0 -> 2 -> 1 by substracting the 1st node with nth node, the 2nd with nth -1 node, etc... Only apply the stated action on the first half of the list
+
+	Find the largest sequence in a array which sums to zero
+
+	
+	Provided a number dictionary and a number, x , which is formed from the number dictionary. Find the rank of the number x? Rank is defined as the position of the number x when all the number formed from the dictionary are sorted. 
+	Example 
+	Input :{4,1,5} 
+	X : 451 
+	Output : 4 
+	(145,154,415,451,514,541). 451 comes at 4th position
+	
+	Write a program to count the number of numbers between two numbers a, b that have the sum of their bits equal to a fibonacci number. 
+
+	For example between 15 and 17 there are two numbers that have sum of bits equal to a fibonacci number. 
+
+	15: 1111 sum=4 
+	16: 10000 sum=1 (fibonacci) 
+	17:10001 sum=2 (fibonacci) 
+
+	So the output will be 2 in this case. 
+
+	Test case - 
+	Input 15 & 17 
+	Input 173 & 10000003210005 
+
+	The interviewer asked this to code in 5 hours in any programming language & mail him the full working program.a
+	
+	Design an algorithm for a thermometer that shows the Maximum and minimum temperature in the last 24 hours. The current temperature can be read in 5 second intervals. 
+
+The interviewer was looking for an algorithm that is space efficient as there will be limited memory on the device. .

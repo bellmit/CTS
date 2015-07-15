@@ -1,0 +1,52 @@
+@startuml
+	title <size:20>Sequence Diagram for <u>$SequenceDO.sequenceName</u> transaction</size>
+
+	#set($allLines = $SequenceDO.messageLinesDOList)
+	#if($allLines && $allLines.size() > 0)
+		
+		' User Request Depiction
+		#set($userRequest = $allLines.get(0))
+		box "<i>	Actors	</i>" #DarkGray
+			actor User
+		end box
+		
+		box "<i>$SequenceDO.firstLayer</i>" $SequenceDO.firstColor
+			#if($SequenceDO.firstLayer != "UI Layer")
+    		note over $userRequest.lineFrom: $userRequest.lineCommentFrom
+			#end
+    		User -> $userRequest.lineFrom
+			#if($userRequest.direction != "Single")
+    		activate $userRequest.lineFrom #LightGrey
+			#end
+    	end box
+
+		' Calls between Seperations of Concern Depiction
+    	#foreach($methodCall in $allLines)
+    		#if($methodCall.forward)
+        		box "<i>$methodCall.layer</i>" $methodCall.color
+					#if($methodCall.typeOfTo.contains("DataService"))
+						database $methodCall.lineTo
+					#end
+					#if($methodCall.typeOfTo != "Screen")
+					note over $methodCall.lineTo: $methodCall.lineCommentTo
+					#end
+        			$methodCall.lineFrom -> $methodCall.lineTo : <b>$methodCall.dataObject</b>
+					#if($methodCall.direction != "Single")
+            		activate $methodCall.lineTo #LightGrey
+					#end
+            	end box
+    		#else
+    			$methodCall.lineFrom -> $methodCall.lineTo : <b>$methodCall.dataObject</b>
+            	deactivate $methodCall.lineFrom
+    		#end
+    	#end
+	
+		' User Response Depiction
+		#set($lastIndex = $allLines.size())
+		#set($lastIndex = $lastIndex - 1)
+		#set($userResponse = $allLines.get($lastIndex))
+		$userResponse.lineTo -> User : <b>$userResponse.dataObject</b>
+		deactivate $userResponse.lineTo
+		
+	#end
+@enduml

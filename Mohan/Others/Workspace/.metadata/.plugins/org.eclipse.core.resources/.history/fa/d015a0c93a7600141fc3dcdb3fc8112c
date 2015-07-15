@@ -1,0 +1,3151 @@
+/*
+ * Created on Sep 2, 2008
+ *
+ * TODO To change the template for this generated file go to
+ * Window - Preferences - Java - Code Style - Code Templates
+ */
+package com.acs.enterprise.mmis.operations.tpladministration.view.validator;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+
+import org.apache.commons.lang.StringUtils;
+
+import javax.faces.application.FacesMessage;
+
+import java.util.ResourceBundle;
+
+import com.acs.enterprise.common.util.logger.EnterpriseLogFactory;
+import com.acs.enterprise.common.util.logger.EnterpriseLogger;
+import com.acs.enterprise.common.util.validator.EnterpriseCommonValidator;
+import com.acs.enterprise.mmis.operations.common.helper.TPLAdministrationConstants;
+import com.acs.enterprise.mmis.operations.tpladministration.view.bean.TPLRecoveryDataBean;
+import com.acs.enterprise.mmis.operations.tpladministration.view.helper.TPLAdministrationHelper;
+import com.acs.enterprise.mmis.operations.tpladministration.view.helper.TPLRecoveryCaseConstants;
+import com.acs.enterprise.mmis.operations.tpladministration.view.vo.TPLRecoveryCaseDetailVO;
+import com.acs.enterprise.mmis.operations.tpladministration.view.vo.TPLRecoveryCaseResponseVO;
+import com.xerox.enterprise.ghs.mmis.rif.common.exception.RIFException;
+//import com.ibm.faces.util.StringUtil;
+import com.xerox.enterprise.ghs.mmis.rif.core.RulesContext;
+import com.xerox.enterprise.ghs.mmis.rif.core.RulesResult;
+import com.xerox.enterprise.ghs.mmis.rif.core.api.RulesManager;
+
+/**
+ * @author kurapatip
+ * 
+ * TODO To change the template for this generated type comment go to Window -
+ * Preferences - Java - Code Style - Code Templates
+ */
+
+
+public class TPLRecoveryCommonValidator
+{
+
+    /** constant declaration for BatchControlAddControllerBean. */
+    private String className = this.getClass().getName();
+
+    /** Logger Declaration. */
+    private static EnterpriseLogger logger = EnterpriseLogFactory.getLogger(this.getClass().getName());
+
+    public TPLRecoveryCommonValidator() 
+    {
+    	if(logger.isDebugEnabled()){
+        logger.debug("defalut constructor");
+    	}
+
+    }
+
+    /**
+     * This method is used to validate Recovery method TPL0264.0001.01
+     * 
+     * @param method
+     *            String
+     * @param tplRecoveryCaseResponseVO
+     *            TPLRecoveryCaseResponseVO
+     */
+    public static final boolean validateTPLRCVYUPDTRCVY0025(String method,
+            TPLRecoveryCaseResponseVO tplRecoveryCaseResponseVO)
+    {
+        boolean checkMethod = false;
+        //if (method == "Manual")
+        if(method.equalsIgnoreCase("M"))
+        {
+            if (tplRecoveryCaseResponseVO.getFcn() == null)
+            {
+                TPLAdministrationHelper
+                        .setRecoveryMethodMessage(TPLRecoveryCaseConstants.TPL_RECOVERY_RCVYMETHOD_MANUAL);
+                checkMethod = true;
+                return checkMethod; //Find Bug Fix
+            }
+            if (tplRecoveryCaseResponseVO.getRecoveryDate() == null) 
+            {
+                TPLAdministrationHelper
+                        .setRecoveryMethodMessage(TPLRecoveryCaseConstants.TPL_RECOVERY_RCVYMETHOD_MANUAL);
+                 checkMethod = true;
+                return checkMethod; //Find Bug Fix
+            }
+            if (tplRecoveryCaseResponseVO.getRecoveryReason() == null)
+            {
+                TPLAdministrationHelper
+                        .setRecoveryMethodMessage(TPLRecoveryCaseConstants.TPL_RECOVERY_RCVYMETHOD_MANUAL);
+                 checkMethod = true;
+                return checkMethod; //Find Bug Fix
+            }
+            if (tplRecoveryCaseResponseVO.getTcn() == null) 
+            {
+                TPLAdministrationHelper
+                        .setRecoveryMethodMessage(TPLRecoveryCaseConstants.TPL_RECOVERY_RCVYMETHOD_MANUAL);
+                 checkMethod = true;
+                return checkMethod; //Find Bug Fix
+            }
+        }
+        return checkMethod;
+
+    }
+
+    /**
+     * This method is used to validate billing info 
+     * TPL0532.0003.01
+     * 
+     * @param value
+     *            String
+     * @param tplRecoveryCaseBillingInformationVO
+     *            TPLRecoveryCaseBillingInformationVO
+     */
+    public static boolean validateTPLRCVYMNTRCVY0030(String entityID, String payeeid)
+    {
+    	boolean result = false;
+        if (StringUtils.isNotEmpty(entityID) && StringUtils.isEmpty(payeeid)) 
+        {
+        	TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_BILLING_PAYERID);
+        	result = true;
+        } 
+        else 
+        {
+        	TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_BILLING_ENTITYID);
+        	result = true;
+        }
+        return result;
+    }
+
+    /**
+     * This method is used to validate billing frequency 
+     * TPL0484.0002.01 and TPL0484.0003.01
+     * 
+     * @param tplRecoveryCaseBillingInformationVO
+     *            TPLRecoveryCaseBillingInformationVO
+     */
+    public static boolean validateTPLRCVYMNTRCVY0031(String frequencyCode, String billStartDate) 
+    {
+    	boolean result = false;
+        try
+		{
+        	if (StringUtils.isNotEmpty(frequencyCode) && StringUtils.isEmpty(billStartDate))
+    		{
+        		TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_BILLING_START_DT);
+    			result = true;
+    		}
+        	if (StringUtils.isNotEmpty(billStartDate) && StringUtils.isEmpty(frequencyCode))
+    		{
+        		TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_BILLING_FREQUENCY);
+    			result = true;
+    		}
+		}
+        catch (Exception e) 
+		{
+        	e.printStackTrace();
+		}
+        return result;
+    }
+
+    /**
+     * This method is used to validate billing details 
+     * TPL0485.0001.01
+     * 
+     * @param tplRecoveryCaseBillingInformationVO
+     *            TPLRecoveryCaseBillingInformationVO
+     */
+    public static boolean validateTPLRCVYMNTRCVY0033(String entityType, String entityID, String frequencyCode, String billStartDate)
+    {
+    	boolean result = false;
+    	try
+		{
+    		if (StringUtils.isNotEmpty(frequencyCode) && StringUtils.isNotEmpty(billStartDate))
+            {
+                if (StringUtils.isEmpty(entityType) || StringUtils.isEmpty(entityID)) 
+                {
+                	TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_BILLING_DETAILS);
+                	result = true;
+                }
+            }
+    		if(StringUtils.isNotEmpty(entityID) && StringUtils.isNotEmpty(entityType))
+    		{
+    			if(StringUtils.isEmpty(frequencyCode) && StringUtils.isEmpty(billStartDate))
+    			{
+    				//TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_BILLING_FREQ_START);
+    				TPLAdministrationHelper.setAddRecoveryInformation(TPLRecoveryCaseConstants.TPL_RECOVERY_BILLING_FREQ_START, "billingFrequencyList");
+    				result = true;
+    			}
+    		}
+    	}
+        catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+        return result;
+    }
+
+    /**
+     * This method is used to validate letter type 
+     * TPL0664.0001.01
+     * @param tplRecoveryCaseBillingInformationVO
+     *            TPLRecoveryCaseBillingInformationVO
+     */
+    public static boolean validateTPLRCVYMNTRCVY0034(String letterType, String billStartDate) 
+    {
+    	boolean result = false;
+        try
+		{
+        	
+        	if (StringUtils.isNotEmpty(billStartDate) && StringUtils.isEmpty(letterType))
+            {
+        		result = true;
+            	//TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_BILLING_LETTER_TYPE);
+            	//Added for ESPRD00578418
+            	TPLAdministrationHelper.setAddHIPPInfoMessageToId(TPLRecoveryCaseConstants.TPL_RECOVERY_BILLING_LETTER_TYPE,"letterType",false,TPLRecoveryCaseConstants.ADDRECOVERYCASEPPortletResource);
+            	
+            }
+        }
+        catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+        return result;
+    }
+
+    /**
+     * This method is used to validate letter type
+     * 
+     * TPL0664.0001.01
+     * 
+     * @param tplRecoveryCaseBillingInformationVO
+     *            TPLRecoveryCaseMemberClaimFilterVO
+     
+    public static final void validateCaseClaimDates(String caseClaimStartDate, String caseClaimStopDate) 
+    {
+
+        SimpleDateFormat sd = new SimpleDateFormat("MM/dd/yyyy");
+        boolean result = false;
+        try
+		{
+        	Date startDate = sd.parse(caseClaimStartDate);
+        	Date stopDate = sd.parse(caseClaimStopDate);
+        	if (startDate == null || stopDate == null)
+        	{
+        		result = true;
+            	TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_MEMBER_CASECLAIMS_INFO);
+        	}
+		}
+        catch (ParseException e) 
+		{
+			
+		}
+
+    }*/
+
+    /**
+     * This rule If Recovery Case Status is 'Open', Case Claim Start Date cannot
+     * be equal to spaces TPL0586.0001.01 TPL.RCVY.ADDRCVY.0003
+     * 
+     * @param recoveryCaseStatus
+     *            String
+     * @param caseClaimStartDt
+     *            Date
+     */
+    public static boolean validateTPLRCVYADDRCVY0003(String recoveryCaseStatus, String caseClaimStartDate) 
+    {
+    	boolean result = false;
+        try
+		{
+        	if (recoveryCaseStatus.equalsIgnoreCase(TPLRecoveryCaseConstants.OPEN) && StringUtils.isEmpty(caseClaimStartDate))
+			{
+        		TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_CASE_STATUS);
+        		result = true;
+        	}
+		}
+        catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+        return result;
+    }
+    
+   
+    public static boolean validateTPLRCVYADDRCVY00003(String recoveryCaseStatus, String recoveryType, String serviceAuthID) 
+    {
+    	boolean result = false;
+        try
+		{
+        	if (recoveryCaseStatus.equalsIgnoreCase(TPLRecoveryCaseConstants.OPEN) && 
+        			recoveryType.equalsIgnoreCase(TPLRecoveryCaseConstants.SIX)&& StringUtils.isEmpty(serviceAuthID))
+			{
+        		TPLAdministrationHelper.setAddRecoveryInformation(TPLRecoveryCaseConstants.TPL_RECOVERY_AUTH_ID,
+        				TPLRecoveryCaseConstants.TPL_RCVRY_SERVICE_AUTH_ID); 
+        		result = true;
+        	}
+		}
+        catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+        return result;
+    }
+   
+
+    /**
+     * This rule If Case Status is equal to Open and (LOB, Member ID, Recovery
+     * Type) combination has been entered, the Case Claim Start Date and Case
+     * Claim Stop Date must be entered TPL0223.0001.01 TPL.RCVY.MNTRCVY.0008
+     * 
+     * @param recoveryCaseStatus
+     *            String
+     * @param lob
+     *            String
+     * @param memberID
+     *            String
+     * @param recoveryType
+     *            String
+     * @param caseClaimStartDt
+     *            Date
+     * @param caseClaimEndDt
+     *            Date
+     */
+    public static boolean validateTPLRCVYMNTRCVY0008(String recoveryCaseStatus,
+			String lob, String memberID, String recoveryType,
+			String caseClaimStartDate, String caseClaimEndDate) {
+		//SimpleDateFormat sd = new SimpleDateFormat("MM/dd/yyyy");
+		boolean result = false;
+		//Date startDate = null;
+		//Date stopDate  = null;
+		try {
+			//Find Bug Fix
+			/*if (StringUtils.isNotEmpty(caseClaimStartDate)) {
+				startDate = sd.parse(caseClaimStartDate);
+			}*/
+			/*if (StringUtils.isNotEmpty(caseClaimEndDate)) {
+				stopDate = sd.parse(caseClaimEndDate);
+			}*/
+
+			if (recoveryCaseStatus.equalsIgnoreCase(TPLRecoveryCaseConstants.OPEN)
+				 && StringUtils.isNotEmpty(lob) && StringUtils.isNotEmpty(memberID)
+				 && StringUtils.isNotEmpty(recoveryType)) {
+				if (StringUtils.isEmpty(caseClaimStartDate)	) {
+					result = true;
+					TPLAdministrationHelper.setAddRecoveryInformation(
+							TPLRecoveryCaseConstants.TPL_RECOVERY_CASE_STATUS_DT,
+							TPLRecoveryCaseConstants.JSP_TPL_START_RECOVERY_INVALID_DATE);
+				}else if(StringUtils.isEmpty(caseClaimEndDate))
+				{
+					result = true;
+					TPLAdministrationHelper.setAddRecoveryInformation(
+							TPLRecoveryCaseConstants.TPL_RECOVERY_CASE_STATUS_DT,
+							TPLRecoveryCaseConstants.JSP_TPL_STOP_RECOVERY_INVALID_DATE);
+				}
+				
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+    /**
+	 * This Rule If the Accident/Trauma Recovery Type is equal to 'Open', the
+	 * Case/Incident Type and Incident Date must be entered TPL0267.0001.01
+	 * TPL.RCVY.MNTRCVY.0014
+	 * 
+	 * @param recoveryType
+	 *            String
+	 * @param incidentType
+	 *            String
+	 * @param incidentDt
+	 *            Date
+	 */
+    public static boolean validateTPLRCVYMNTRCVY0014(String recoveryType, String caseStatus,
+            String incidentType,String incidentDate) 
+    {
+    	boolean result = false;
+        try
+		{
+        	if (recoveryType.equals(TPLRecoveryCaseConstants.ACCIDTRAUM.toString())) 
+            {
+        		if (StringUtils.isEmpty(incidentType)|| StringUtils.isEmpty(incidentDate)) 
+                {
+        			if (StringUtils.isNotEmpty(caseStatus) && caseStatus.equals(TPLRecoveryCaseConstants.OPEN))
+        			{
+                    	TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_CASE_RECOVERY_TYPE);
+                    	result = true;
+        			}
+        			
+                }
+            }
+        }
+        catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+        return result;
+    }
+    /**
+     * 
+     * This Rule If Special Needs Trust checkbox is checked then the Special
+     * Needs Trust Established Date must be populated Vice Versa TPL0495.0002.01 &&
+     * TPL0495.0003.01
+     * 
+     * @param specailNeedsTrust
+     *            boolean
+     * @param specailNeedstrustEstDt
+     *            Date
+     */
+    public static boolean validateTPLRCVYMNTRCVY0016(boolean specailNeedsTrust, String specailNeedstrustEstDate) 
+    {
+    	boolean result = false;
+        try
+		{
+        	if (specailNeedsTrust && StringUtils.isEmpty(specailNeedstrustEstDate)) 
+	        {
+        		TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_CASE_RECOVERY_SNT);
+        		result = true;
+            }
+	        if (StringUtils.isNotEmpty(specailNeedstrustEstDate) && !specailNeedsTrust) 
+	        {
+	        	TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_CASE_RECOVERY_SNT);
+	        	result = true;
+	        }
+		}
+        catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+	    return result;    	
+    }
+
+    /**
+     * This Rule Working Status must be selected if Recovery Type is Estate
+     * TPL0577.0001.01
+     * 
+     * @param workStatus
+     *            String
+     * @param recoveryType
+     *            String
+     */
+    public static boolean validateTPLRCVYADDRCVY0005(String workStatus, String recoveryType) 
+    {
+    	
+        boolean result = false;
+       
+        if (recoveryType.equalsIgnoreCase(TPLRecoveryCaseConstants.ESTATE.toString()) && StringUtils.isEmpty(workStatus))
+        {
+        	//Added for Defect@ESPRD00580816
+        	//TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_CASE_WORK_STATUS);
+        	TPLAdministrationHelper.setAddHIPPInfoMessageToId(TPLRecoveryCaseConstants.TPL_RECOVERY_CASE_WORK_STATUS,"workingStatus",false,TPLRecoveryCaseConstants.ADDRECOVERYCASEPPortletResource);
+        	result = true;
+        }
+        return result;
+    }
+
+    /**
+     * This Rule Case/Incident Type must be selected for Accident/Trauma Case
+     * TPL0591.0001.01
+     * 
+     * @param recoveryType
+     *            String
+     * @param caseRIncidentType
+     *            String
+     * @param caseStatus
+     *            String
+     */
+    public static boolean validateTPLRCVYMNTRCVY0019(String recoveryType, 
+            String caseRIncidentType, String caseStatus)
+    {
+    	boolean result = false;
+    	if (!caseStatus.equalsIgnoreCase("P") 
+    			&& recoveryType.equalsIgnoreCase(TPLRecoveryCaseConstants.ACCIDTRAUM.toString()) 
+    			&& StringUtils.isEmpty(caseRIncidentType)) 
+        {
+        	result = true;
+        	TPLAdministrationHelper.setAddRecoveryInformation(
+        			TPLRecoveryCaseConstants.TPL_RECOVERY_CASE_TYPE_ACCIDENT,
+        			TPLRecoveryCaseConstants.TPL_RCVRY_INCIDENT_TYPE);
+        }
+        return result;
+    }
+
+    /**
+     * This Rule Case/Incident Type must be selected for Accident/Trauma Case
+     * TPL0592.0001.01
+     * 
+     * @param recoveryType
+     *            String
+     * @param incidentDt
+     *            Date
+     * @param caseStatus
+     *            String
+     */
+    public static boolean validateTPLRCVYMNTRCVY0020(String incidentDt,
+            String recoveryType, String caseStatus) 
+    {
+    	boolean result = false;
+    	if (!caseStatus.equalsIgnoreCase(TPLRecoveryCaseConstants.PEND) && recoveryType.equalsIgnoreCase(TPLRecoveryCaseConstants.ACCIDTRAUM.toString()) && StringUtils.isEmpty(incidentDt)) 
+        {
+        	result = true;
+        	TPLAdministrationHelper.setAddRecoveryInformation(
+        			TPLRecoveryCaseConstants.TPL_RECOVERY_CASE_TYPE_ACCIDENT_INCIDENT,
+        			TPLRecoveryCaseConstants.JSP_TPL_RECOVERY_INVALID_DATE);
+        }
+        return result;
+    }
+
+    /**
+     * This Rule If Case Status is equal to 'Closed' Case Close Date and Closure
+     * Reason must be present TPL0254.0001.01
+     * 
+     * @param caseStatus
+     *            String
+     * @param caseCloseDate
+     *            Date
+     * @param closureReason
+     *            String
+     */
+    public static boolean validateTPLRCVYUPDTRCVY0004(String caseStatus,
+            String caseCloseDate, String closureReason) 
+    {
+        boolean result = false;
+        try {
+
+			if (caseStatus.equalsIgnoreCase(TPLRecoveryCaseConstants.CLOSE)) {
+				if (StringUtils.isEmpty(caseCloseDate)){
+					result = true;
+					TPLAdministrationHelper.setAddRecoveryInformation(
+							TPLRecoveryCaseConstants.TPL_RECOVERY_CASE_STAT_CLOSED,
+							TPLRecoveryCaseConstants.TPL_RCVRY_CLOSED_DATE);
+				}
+			}
+		}
+        catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+        return result;
+    }
+
+    /**
+     * This Rule LOB cannot be changed when the Case Status is equal to one of
+     * the following (Open, Close) TPL0583.0001.01
+     * 
+     * @param caseStatus
+     *            String
+     * @param preLOB
+     *            String
+     * @param changedLOB
+     *            String
+     */
+    public static boolean validateTPLRCVYUPDTRCVY0005(String caseStatus) 
+    {
+    	boolean result = false;
+    	if ((caseStatus.equalsIgnoreCase(TPLRecoveryCaseConstants.OPEN))
+                || (caseStatus.equalsIgnoreCase(TPLRecoveryCaseConstants.CLOSE))) 
+        {
+        	result = true;
+        	TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_CASE_LOB);
+        }
+    	return result;
+    }
+
+    /**
+     * This Rule Asset Code cannot be equal to spaces when Asset Type entered
+     * TPL0663.0001.01
+     * 
+     * @param assetCode
+     *            String
+     * @param assetType
+     *            String
+     */
+    public static boolean validateTPLRCVYMNTRCVY0088(String assetCode,
+            String assetType) 
+    {
+    	boolean result = false;
+    	if (StringUtils.isNotEmpty(assetType) && StringUtils.isEmpty(assetCode))
+        {
+        	TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_ESTATE_ASSET_CODE);
+        	result = true;
+        }
+        return result;
+    }
+
+    /**
+     * This Rule If Lien Type is selected then Lien County must be populated
+     * TPL0493.0001.01
+     * 
+     * @param lienCounty
+     *            String
+     * @param lienType
+     *            String
+     */
+    public static boolean validateTPLRCVYMNTRCVY0089(String lienType,
+            String lienCounty)
+    {	
+    	boolean result = false;
+    	if (StringUtils.isNotEmpty(lienType) && StringUtils.isEmpty(lienCounty)) 
+        {
+        	TPLAdministrationHelper.setAddRecoveryInformation(
+        			TPLRecoveryCaseConstants.TPL_RECOVERY_ESTATE_LIEN_TYPE,
+        			TPLRecoveryCaseConstants.TPL_RCVRY_LIENCOUNTY);
+        	result = true;
+        }
+        return result;
+    }
+
+    /**
+     * This Rule If Case Close Date is present, Closure Reason must be present
+     * TPL0255.0001.01
+     * 
+     * @param caseCloseDate
+     *            Date
+     * @param caseClosureReason
+     *            String
+     */
+    public static boolean validateTPLRCVYUPDTRCVY0008(String caseCloseDate, String caseClosureReason) 
+    {
+    	SimpleDateFormat sd = new SimpleDateFormat("MM/dd/yyyy");
+    	boolean result = false;
+    	try 
+		{
+    		Date closeDate = null;
+    		if(StringUtils.isNotEmpty(caseCloseDate)){
+    		closeDate = sd.parse(caseCloseDate);
+    		if (closeDate != null)
+    		{
+                if (StringUtils.isEmpty(caseClosureReason)) 
+                {
+                	result = true;
+                	TPLAdministrationHelper.setAddRecoveryInformation(
+                			TPLRecoveryCaseConstants.TPL_RECOVERY_CASE_CLOSURE_REASON,
+                			TPLRecoveryCaseConstants.TPL_RCVRY_CLOSER_REASON);
+                }
+    		}
+
+            }
+		}
+        catch (ParseException e) 
+		{
+			e.printStackTrace();
+		}
+        return result;
+    }
+    
+    public static boolean validateTPLRCVYUPDTRCVY0118(String caseCloseDate,String caseClosureReason) 
+    {   
+    	boolean result = false;
+    	if(StringUtils.isNotEmpty(caseClosureReason))
+    	{
+    		if(StringUtils.isEmpty(caseCloseDate))
+    		{
+    		   result=true;
+    		   TPLAdministrationHelper.setAddRecoveryInformation(
+    				   TPLRecoveryCaseConstants.TPL_RECOVERY_CASE_CLOSURE_DATE,
+    				   TPLRecoveryCaseConstants.TPL_RCVRY_CLOSED_DATE);
+    	  	}
+    	}
+		return result;
+    }
+    /**
+     * ESPRD00660975 CR Related Changes
+     * This Rule If Employer Name is present, Address Line 1, City, State and
+     * Zip are required TPL0631.0001.01
+     * 
+     * @param empName
+     *            String
+     * @param city
+     *            String
+     * @param state
+     *            String
+     * @param addressLine1
+     *            String
+     * @param zip
+     *            String
+     */
+    public static boolean validateTPLRCVYMNTRCVY0075(String empName,String addressType,
+            String city, String state, String addressLine1,String addressLine2, String zip) 
+    {
+    	boolean result = false;
+        if (StringUtils.isNotEmpty(empName)) 
+        {
+           /* if (StringUtils.isEmpty(addressLine1) || StringUtils.isEmpty(city) || StringUtils.isEmpty(state)
+                    || StringUtils.isEmpty(zip)) 
+            {
+            	result = true;
+            	//Infinite Defect Resolution :ESPRD00480198
+            	TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_CARRIER_EMPLOYEE_INFO);
+            	
+            }*/
+        	        	
+        	//Code Changed for defect  : ESPRD00659424
+        	if(StringUtils.isEmpty(addressType))
+        	{
+        		result = true;
+             	TPLAdministrationHelper.setAddRecoveryInformation(TPLRecoveryCaseConstants.TPL_RECOVERY_CARRIER_EMPLOYEE_INFO,"empAddressType");
+        	}
+        	if(StringUtils.isEmpty(addressLine1) ){    
+        		result = true;
+             	TPLAdministrationHelper.setAddRecoveryInformation(TPLRecoveryCaseConstants.TPL_RECOVERY_CARRIER_EMPLOYEE_INFO,"empAddress1");
+        	 
+        	 }
+        	 if (StringUtils.isEmpty(city)) 
+             {
+             	result = true;
+            	TPLAdministrationHelper.setAddRecoveryInformation(TPLRecoveryCaseConstants.TPL_RECOVERY_CARRIER_EMPLOYEE_INFO,"empCity");
+           	             	
+             }
+        	 if(StringUtils.isEmpty(state)){
+            	 result = true;
+            	 TPLAdministrationHelper.setAddRecoveryInformation(TPLRecoveryCaseConstants.TPL_RECOVERY_CARRIER_EMPLOYEE_INFO,"empState");
+               	 
+             }
+        	 if(StringUtils.isEmpty(zip)){
+            	 result = true;
+            	TPLAdministrationHelper.setAddRecoveryInformation(TPLRecoveryCaseConstants.TPL_RECOVERY_CARRIER_EMPLOYEE_INFO,"empZip1");
+               	 
+             }
+        	 
+        }
+        //Code commented because, same logic implemented in validateTPLRCVYMNTRCVY0074
+        
+       /* if((addressLine2!=null && addressLine2.trim().length()>0) && (addressLine1==null && addressLine1.trim().length()==0)){
+        	//Infinite Defect Resolution :ESPRD00480198
+        	TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_CARRIER_ADDRESS);
+        	
+        }*/
+        return result;
+    }
+
+    /**
+     * This Rule If the Exclude indicator has been selected, the Exclude reason
+     * must be entered TPL0260.0001.01
+     * 
+     * @param excludeIndicator
+     *            String
+     * @param excludeReason
+     *            String
+     */
+   /* public static boolean validateTPLRCVYMNTRCVY0053(
+            String excludeIndicator, String excludeReason) 
+    {
+    	boolean result = false;
+        if (excludeIndicator.equalsIgnoreCase("true"))
+
+        {
+            if (StringUtils.isEmpty(excludeReason)) 
+            {
+            	result = true;
+            	TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_INCLUDECLAIMS_EXCLUDE_IND);
+            }
+
+        }
+        return result;
+    }*/
+    public static boolean validateTPLRCVYMNTRCVY0053(
+            boolean excludeIndicator, String excludeReason) 
+    {
+    	boolean result = false;
+        if (excludeIndicator)
+        {
+            if (StringUtils.isEmpty(excludeReason)) 
+            {
+            	result = true;
+            	TPLAdministrationHelper.setAddHIPPInfoMessageToId(TPLRecoveryCaseConstants.TPL_RECOVERY_INCLUDECLAIMS_EXCLUDE_IND,"excludeReason",false,TPLRecoveryCaseConstants.ADDRECOVERYCASEPPortletResource);
+            }
+        }
+        	//Defect Fix:ESPRD00091906
+           if(StringUtils.isNotEmpty(excludeReason)&& !excludeIndicator)
+           {
+        		result = true;
+        		//changed for defect : ESPRD00812149        		 
+        		TPLAdministrationHelper.setAddRecoveryInformation(TPLRecoveryCaseConstants.TPL_RECOVERY_INCLUDECLAIMS_EXCLUDE_REASON,"excludeInd");
+           }
+        return result;
+    }
+
+    /**
+     * This Rule Interested Party Represents must be entered if Interested Part
+     * entity is entered 
+     * TPL0598.0001.01
+     * 
+     * @param entityType
+     *            String
+     * @param interestedPartyRepresents
+     *            String
+     */
+    public static boolean validateTPLRCVYMNTRCVY1156(
+    		String entityType, String interestedPartyRepresents, String interestedPartyName)
+    {
+    	boolean result=false;
+    	try
+		{
+    		//UC-FIN-TPL-023.1_ESPRD00436029_03252010
+         if (StringUtils.isNotEmpty(entityType) && StringUtils.isEmpty(interestedPartyRepresents)) 
+         {
+         	    result = true;
+         	   //TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_INTERESTEDPARTY_REPRESENTS);
+         	  // Added for ESPRD00579459
+         	   TPLAdministrationHelper.setAddHIPPInfoMessageToId(TPLRecoveryCaseConstants.TPL_RECOVERY_INTERESTEDPARTY_REPRESENTS,"interestedPartyRepresentsValue",false,TPLRecoveryCaseConstants.ADDRECOVERYCASEPPortletResource);
+         }
+         /*else if(StringUtils.isNotEmpty(entityType) && !(EnterpriseCommonValidator.validateAlphaNumeric(interestedPartyName)))   	
+         {
+         		result = true;
+             	TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_INTERESTEDPARTYNAME_REPRESENTS);
+         }*/
+		} 
+       	 catch (Exception e) 
+	 	 {
+	 		e.printStackTrace();
+		 } 
+       	 return result;
+    }
+    
+    public static boolean validateTPLRCVYMNTRCVY0056(
+            String entityType, String interestedPartyRepresents, String interestedPartyName) 
+    {
+    	boolean result = false;
+    	try
+		{
+         if (StringUtils.isNotEmpty(entityType) && StringUtils.isEmpty(interestedPartyRepresents))
+         {
+         	    result = true;
+         	   TPLAdministrationHelper.setAddRecoveryInformation(
+         			   TPLRecoveryCaseConstants.TPL_RECOVERY_INTERESTEDPARTY_REPRESENTS1,
+         			   TPLRecoveryCaseConstants.TPL_RCVRY_INTR_PARTY_REPR);
+         }
+		}
+       	 catch (Exception e) 
+	 	 {
+	 		e.printStackTrace();
+		 } 
+        return result;
+        
+    }
+
+    /**
+     * This Rule When Legal Status is populated Reference Number must be
+     * populated and Hearing Requested date must be populated and When Legal
+     * Status is populated Reference Number must be populated and Hearing Held
+     * date must be populated TPL0528.0002.01 and TPL0528.0003.01
+     * 
+     * @param legalStatus
+     *            String
+     * @param referenceNumber
+     *            String
+     * @param hearingReqDate
+     *            Date
+     * @param hearingHeldDate
+     *            Date
+     */
+    public static boolean validateTPLRCVYMNTRCVY0063(String legalStatus,
+            String referenceNumber, String hearingReqDate, String hearingHeldDate)
+    {
+    	boolean result = false;
+    	try
+		{
+    		if (StringUtils.isNotEmpty(legalStatus)) 
+            {
+    			if (StringUtils.isEmpty(referenceNumber) || (StringUtils.isEmpty(hearingReqDate) && StringUtils.isEmpty(hearingHeldDate)) ) 
+                {
+    				result = true;
+    				//TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_LEGAL_LEGALSTATUS_INFO);
+    				TPLAdministrationHelper.setAddHIPPInfoMessageToId(TPLRecoveryCaseConstants.TPL_RECOVERY_LEGAL_LEGALSTATUS_INFO,"referenceNumber",false,TPLRecoveryCaseConstants.ADDRECOVERYCASEPPortletResource);
+                }
+            }
+    		
+    		/*if(!EnterpriseCommonValidator.validateAlphaNumeric(referenceNumber)){
+    			System.out.println("Reference number is not valid");
+    			result = true;
+            	TPLAdministrationHelper.setAddHIPPInfoMessageToId(TPLRecoveryCaseConstants.TPL_RECOVERY_LEGAL_LEGALSTATUS_INFO_REF_NOT_VALID,"referenceNumber",false,TPLRecoveryCaseConstants.ADDRECOVERYCASEPPortletResource);
+    			
+    		}*/
+    				
+		}
+        catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+        return result;
+    }
+
+    /**
+     * This Rule Legal Status cannot be spaces when Reference Number entered,
+     * Legal Status cannot be spaces when Hearing Request entered and Legal
+     * Status cannot be spaces when Hearing Held Date entered TPL0527.0002.01,
+     * TPL0527.0003.01 and TPL0527.0004.01
+     * 
+     * @param legalStatus
+     *            String
+     * @param referenceNumber
+     *            String
+     * @param hearingReqDate
+     *            Date
+     * @param hearingHeldDate
+     *            Date
+     */
+    public static boolean validateTPLRCVYMNTRCVY0061(String legalStatus,
+            String referenceNumber, String hearingReqDate, String hearingHeldDate) 
+    {
+    	boolean result = false;
+        try
+		{
+        	if (StringUtils.isNotEmpty(hearingReqDate) && StringUtils.isEmpty(legalStatus))
+            {
+        		result = true;
+        		//TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_LEGAL_LEGALSTATUS);
+        		TPLAdministrationHelper.setAddHIPPInfoMessageToId(TPLRecoveryCaseConstants.TPL_RECOVERY_LEGAL_LEGALSTATUS,"legalStatus",false,TPLRecoveryCaseConstants.ADDRECOVERYCASEPPortletResource);
+            }
+        	else
+            if (StringUtils.isNotEmpty(hearingHeldDate) && StringUtils.isEmpty(legalStatus)) 
+            {
+            	result = true;
+            	//TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_LEGAL_LEGALSTATUS);
+            	TPLAdministrationHelper.setAddHIPPInfoMessageToId(TPLRecoveryCaseConstants.TPL_RECOVERY_LEGAL_LEGALSTATUS,"legalStatus",false,TPLRecoveryCaseConstants.ADDRECOVERYCASEPPortletResource);
+            }
+
+            else if (StringUtils.isNotEmpty(referenceNumber) && StringUtils.isEmpty(legalStatus)) 
+            {
+            	result = true;
+            	TPLAdministrationHelper.setAddHIPPInfoMessageToId(TPLRecoveryCaseConstants.TPL_RECOVERY_LEGAL_LEGALSTATUS,"legalStatus",false,TPLRecoveryCaseConstants.ADDRECOVERYCASEPPortletResource);
+            	//TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_LEGAL_LEGALSTATUS);
+            }
+		}
+        catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+        return result;
+    }
+
+    /**
+     * This Rule If Lien Date Placed is populated then the Lien Type needs to be
+     * selected and Lien County, Book and Page must be populated 
+     * TPL0494.0002.01 
+     * 
+     * @param lienType
+     *            String
+     * @param lienCounty
+     *            String
+     * @param lienDtPlaced
+     *            Date
+     * @param book
+     *            String
+     * @param page
+     *            String
+     */
+    public static boolean validateTPLRCVYMNTRCVY0090(String lienType,
+            String lienCounty, String lienDatePlaced, String book, String page) 
+    {
+    	boolean result = false;
+        try
+		{
+        	if (StringUtils.isNotEmpty(lienDatePlaced))
+            {
+        		if (StringUtils.isEmpty(lienType) || StringUtils.isEmpty(lienCounty)
+        				|| StringUtils.isEmpty(book)|| StringUtils.isEmpty(page)) 
+                {
+                	TPLAdministrationHelper.setAddRecoveryInformation(
+                			TPLRecoveryCaseConstants.TPL_RECOVERY_ESTATE_LIEN_DT_PLACED
+                			,TPLRecoveryCaseConstants.TPL_RCVRY_LIENTYPE);
+                	result = true;
+                }
+            }
+        }
+        catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+        return result;
+    }
+    /**
+     * This Rule If Lien Date Released is populated then the Lien Type needs to be selected and
+     * Lien County, Book and Page must be populated 
+     * 
+     * TPL0494.0003.01
+     * 
+     * @param lienType
+     *            String
+     * @param lienCounty
+     *            String
+     * @param lienDateReleased
+     *            Date
+     * @param book
+     *            String
+     * @param page
+     *            String
+     */
+    public static boolean validateTPLRCVYMNTRCVY0091(String lienType,
+            String lienCounty, String lienDateReleased,
+            String book, String page) 
+    {
+    	boolean result = false;
+        try
+		{
+        	if (StringUtils.isNotEmpty(lienDateReleased)) 
+            {
+        		
+                if (StringUtils.isEmpty(lienType) || StringUtils.isEmpty(lienCounty) 
+                		|| StringUtils.isEmpty(book) || StringUtils.isEmpty(page)) 
+                {
+                	result = true;
+                	TPLAdministrationHelper.setAddRecoveryInformation(
+                			TPLRecoveryCaseConstants.TPL_RECOVERY_ESTATE_LIEN_DT_RELEASED,
+                			TPLRecoveryCaseConstants.TPL_RCVRY_LIENTYPE);
+                }
+            }
+		}
+        catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+        return result;
+    }
+
+
+    /**
+     * This Rule If Denial Recovery Reason Code is entered the Recovery Date is
+     * required. The Recovery Amount and FCN are not applicable in this case
+     * TPL0433.0001.01
+     * 
+     * @param recoveryReason
+     *            String
+     * @param recoveryDate
+     *            Date
+     */
+    public static boolean validateTPLRCVYUPDTRCVY0019(String recoveryReason,String recoveryDate) 
+    {
+        boolean result = false;
+        if (StringUtils.isNotEmpty(recoveryReason) && recoveryReason.charAt(0) == 'D') {
+			if (StringUtils.isEmpty(recoveryDate)) {
+				result = true;
+				TPLAdministrationHelper
+					.setAddRecoveryInformation(TPLRecoveryCaseConstants.TPL_RECOVERY_CASE_RECOVERYREASON_CODE,
+							TPLRecoveryCaseConstants.TPL_RCVRY_RESP_RCVRY_DATE);
+			}
+				
+        }
+	    return result;
+    }
+    
+    /**TPL0428.0001.01
+     * When Recovery Reason entered starts with 'R**', 
+     * the Recovery Method, Recovery Date, Recovery Amount, Recovery Reason and FCN are required.
+     * @param recoveryReason
+     * @param recoveryMethod
+     * @param recoveryAmount
+     * @param fcn
+     * @return
+     */
+    public static boolean validateTPLRCVYMNTRCVY0028(String recoveryAmount,String recoveryReason, 
+            String fcn,String method) 
+    {  
+    	boolean result = false;
+    	if (recoveryReason != null && recoveryReason.equals(TPLRecoveryCaseConstants.R99))
+    	{
+    		int ramt=0;
+    		if(recoveryAmount!=null&& StringUtils.isNotEmpty(recoveryAmount)){
+    			ramt=Integer.valueOf(recoveryAmount).intValue();
+    		}
+    		if (ramt>0)	{
+    			if(method.equalsIgnoreCase(TPLRecoveryCaseConstants.TPL_RCVRY_METHOD))
+    			{
+    				TPLAdministrationHelper.setAddRecoveryInformation(
+    					TPLRecoveryCaseConstants.TPL_RECOVERY_REASON_CODE_R99,
+    					TPLRecoveryCaseConstants.TPL_RCVRY_AMT);
+    			} else if(method.equalsIgnoreCase(TPLRecoveryCaseConstants.TPL_RCVRY_RESP)){
+    				TPLAdministrationHelper.setAddRecoveryInformation(
+        					TPLRecoveryCaseConstants.TPL_RECOVERY_REASON_CODE_R99,
+        					TPLRecoveryCaseConstants.TPL_RCVRY_RESP_RCVRY_AMT);
+    			}
+    			return true;
+    		}else if(StringUtils.isNotEmpty(fcn)) {
+    			if(method.equalsIgnoreCase(TPLRecoveryCaseConstants.TPL_RCVRY_METHOD))
+    			{
+    				TPLAdministrationHelper.setAddRecoveryInformation(
+    					TPLRecoveryCaseConstants.TPL_RECOVERY_REASON_CODE_R99,
+    					TPLRecoveryCaseConstants.TPL_RCVRY_FCN);
+    			}else if(method.equalsIgnoreCase(TPLRecoveryCaseConstants.TPL_RCVRY_RESP)){
+    				TPLAdministrationHelper.setAddRecoveryInformation(
+        					TPLRecoveryCaseConstants.TPL_RECOVERY_REASON_CODE_R99,
+        					TPLRecoveryCaseConstants.TPL_RCVRY_RESP_FCN);
+    			}
+    			return true;
+    		}
+    	}
+    	//CR ESPRD00909402 Modified to get D**, S01
+    	if (recoveryAmount!=null && StringUtils.isNotEmpty(recoveryAmount) 
+				&& new Double(recoveryAmount).doubleValue()!=0)
+		{
+    		if (recoveryReason != null && recoveryReason.trim().length()>0 
+    			 && ( recoveryReason.equals(TPLRecoveryCaseConstants.R99) 
+    			 	  || TPLRecoveryCaseConstants.D == recoveryReason.charAt(0)
+    				  || recoveryReason.equals("S01")))
+    		{
+    			if(method.equalsIgnoreCase(TPLRecoveryCaseConstants.TPL_RCVRY_METHOD))
+    			{
+    				//Added the condition for CR ESPRD00362166
+    				TPLAdministrationHelper.setAddRecoveryInformation(
+    						TPLRecoveryCaseConstants.TPL_RECOVERY_AMT_MUST_ZERO_FOR_RECVRY_RSN_CODE_D,
+    						TPLRecoveryCaseConstants.TPL_RCVRY_AMT);
+    			}else if(method.equalsIgnoreCase(TPLRecoveryCaseConstants.TPL_RCVRY_RESP)){
+    				TPLAdministrationHelper.setAddRecoveryInformation(
+    						TPLRecoveryCaseConstants.TPL_RECOVERY_AMT_MUST_ZERO_FOR_RECVRY_RSN_CODE_D,
+    						TPLRecoveryCaseConstants.TPL_RCVRY_RESP_RCVRY_AMT);
+    			}
+    			return true;
+    		}
+		}
+    	if (recoveryReason != null && recoveryReason.trim().length()>0 
+    		  && TPLRecoveryCaseConstants.R == recoveryReason.charAt(0) 
+    		  && (!recoveryReason.equals(TPLRecoveryCaseConstants.R99))){
+    			boolean flag = false;
+    			if((StringUtils.isEmpty(recoveryAmount) ||
+					new Double(recoveryAmount).doubleValue()<=0))
+				{
+					result = true;
+					if(method.equalsIgnoreCase(TPLRecoveryCaseConstants.TPL_RCVRY_METHOD))
+	    			{
+						TPLAdministrationHelper.setAddRecoveryInformation(
+								TPLRecoveryCaseConstants.TPL_RECOVERY_REASON_STARTWITH_R_NOTR99,
+								TPLRecoveryCaseConstants.TPL_RCVRY_AMT);
+	    			}else if(method.equalsIgnoreCase(TPLRecoveryCaseConstants.TPL_RCVRY_RESP)){
+	    				flag = true;
+	    				TPLAdministrationHelper.setAddRecoveryInformation(
+								TPLRecoveryCaseConstants.TPL_RECOVERY_REASON_STARTWITH_R_NOTR99,
+								TPLRecoveryCaseConstants.TPL_RCVRY_RESP_RCVRY_AMT);
+	    			}
+				}
+    			if(method.equalsIgnoreCase(TPLRecoveryCaseConstants.TPL_RCVRY_RESP)){
+    			  if(StringUtils.isEmpty(recoveryAmount))
+    		      {
+    				result = true;
+    				if(flag){
+    					TPLAdministrationHelper.setAddRecoveryInformation(
+        		  				TPLRecoveryCaseConstants.TPL_RECOVERY_REASON_R,
+        		  				TPLRecoveryCaseConstants.TPL_RCVRY_RESP_FCN);
+    				}else{
+    					TPLAdministrationHelper.setAddRecoveryInformation(
+    						TPLRecoveryCaseConstants.TPL_RECOVERY_REASON_R,
+    						TPLRecoveryCaseConstants.TPL_RCVRY_RESP_RCVRY_AMT);
+    				}
+    		      }else if(StringUtils.isEmpty(fcn)){
+    		    	result = true;
+    		  		TPLAdministrationHelper.setAddRecoveryInformation(
+    		  				TPLRecoveryCaseConstants.TPL_RECOVERY_REASON_R,
+    		  				TPLRecoveryCaseConstants.TPL_RCVRY_RESP_FCN);
+    		      }
+    			}	
+    	}
+        return result;
+    }
+    
+    public static boolean validateTPLRCVYMNTRCVY0042(
+    		String recoveryMethod, String recoveryDate,String recoveryAmount,String recoveryReason, 
+            String fcn) 
+    {    
+    	boolean result = false;
+    	if(recoveryReason!=null && recoveryReason.trim().length()>0 && (!recoveryReason.equals(TPLRecoveryCaseConstants.R99))
+    			&& recoveryReason.charAt(0) == TPLRecoveryCaseConstants.R 
+				&& !recoveryReason.equals(TPLRecoveryCaseConstants.R99)){
+    		if(	StringUtils.isEmpty(recoveryMethod) || StringUtils.isEmpty(recoveryDate)	|| 
+				StringUtils.isEmpty(recoveryAmount) || StringUtils.isEmpty(fcn)) {
+    		result = true;
+    		TPLAdministrationHelper.setAddRecoveryInformation(TPLRecoveryCaseConstants.TPL_RECOVERY_REASON_STARTWITH_R,
+    				TPLRecoveryCaseConstants.TPL_RCVRY_RCVRY_REASON);
+        }
+    	}
+        return result;
+    }
+    
+    public static boolean validateTPLRCVYMNTRCVY0043(
+    		String recoveryReason, String recoveryAmount,String fcn) 
+    { 
+    	boolean result = false;
+    	if (recoveryReason != null && recoveryReason.trim().length()>0 && 
+    				TPLRecoveryCaseConstants.R == recoveryReason.charAt(0) && 
+    				(!recoveryReason.equals(TPLRecoveryCaseConstants.R99))){
+    		
+    	  if(StringUtils.isEmpty(recoveryAmount))
+          {
+    		result = true;
+    		TPLAdministrationHelper.setAddRecoveryInformation(
+    				TPLRecoveryCaseConstants.TPL_RECOVERY_REASON_R,
+    				TPLRecoveryCaseConstants.TPL_RCVRY_RESP_RCVRY_AMT);
+          }else if(StringUtils.isEmpty(fcn)){
+        	result = true;
+      		TPLAdministrationHelper.setAddRecoveryInformation(
+      				TPLRecoveryCaseConstants.TPL_RECOVERY_REASON_R,
+      				TPLRecoveryCaseConstants.TPL_RCVRY_RESP_FCN);
+          }
+    	}
+        return result;
+    }
+    
+    public static boolean validateTPLRCVYUPDTRCVY0022(String recAmt,String recReason)
+    {
+    	boolean result=false;
+    	if (recReason!=null && recReason.trim().length()>0 && recReason.charAt(0)=='R' && (!recReason.equals(TPLRecoveryCaseConstants.R99)))
+    	{
+    		if( StringUtils.isNotEmpty(recAmt) && new Double(recAmt).doubleValue() <= 0)
+    		{
+    		  result = true;
+	          TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_REASON_STARTWITH_R_NOTR99);
+            }
+    		
+    	}
+    	return result;
+    }
+    
+
+    /**
+     * This Rule If Relationship Name is entered, Relationship must be present
+     * and Vice Versa TPL0246.0001.01 and TPL0247.0001.01
+     * 
+     * @param relationshipName
+     *            String
+     * @param relatioship
+     *            String
+     */
+    public static boolean validateTPLRCVYMNTRCVY0079(
+            String relationshipFirstName,String relationshipLastName, String relationship,boolean renderEditRelationship) 
+    {
+    	String relationshipName =relationshipFirstName+relationshipLastName;
+    	boolean result = false;
+    	try
+		{
+    		if (StringUtils.isNotEmpty(relationshipName) && StringUtils.isEmpty(relationship)) 
+            {
+    			if (renderEditRelationship) {
+					// TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_ESTATE_RELATIONSHIP_INFO);
+					TPLAdministrationHelper.setAddRecoveryInformation(TPLRecoveryCaseConstants.TPL_RECOVERY_ESTATE_RELATIONSHIP_INFO,"relationship_editvalue");
+					result = true;
+				} else {
+					TPLAdministrationHelper.setAddRecoveryInformation(TPLRecoveryCaseConstants.TPL_RECOVERY_ESTATE_RELATIONSHIP_INFO,"relationship_addvalue");
+					result = true;
+				}
+    			
+            }
+        	if (StringUtils.isNotEmpty(relationship) && (StringUtils.isEmpty(relationshipFirstName) || StringUtils.isEmpty(relationshipLastName)))
+            {
+        		if(!(!StringUtils.isEmpty(relationshipLastName)&& StringUtils.isEmpty(relationshipFirstName)))
+        		{
+        		if(renderEditRelationship)
+        		{
+	            	//TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_ESTATE_RELATIONSHIP);
+	        		TPLAdministrationHelper.setAddRecoveryInformation(TPLRecoveryCaseConstants.TPL_RECOVERY_ESTATE_RELATIONSHIP,"lastName_editrelationship");
+	        		result = true;
+        		}else
+        		{
+	        		TPLAdministrationHelper.setAddRecoveryInformation(TPLRecoveryCaseConstants.TPL_RECOVERY_ESTATE_RELATIONSHIP,"lastName_addrelationship");
+	        		result = true;
+        		
+        		}
+            }
+            }
+    	}
+    	catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+    	
+        return result;
+    }
+
+    /**
+     * This Rule If Settlement Date is entered then Settlement Reason must be
+     * entered and Vice Versa TPL0269.0002.01 and TPL0269.0003.01
+     * 
+     * @param settlementDt
+     *            Date
+     * @param settlementReason
+     *            String
+     */
+    public static boolean validateTPLRCVYMNTRCVY0066(String settlementDate,
+            String settlementReason) 
+    {
+    	boolean result = false;
+    	try
+		{
+    		if (StringUtils.isNotEmpty(settlementDate) && StringUtils.isEmpty(settlementReason))
+    		{
+    			result = true;
+    			//TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_LEGAL_SETTLEMENTREASON);
+    			TPLAdministrationHelper.setAddHIPPInfoMessageToId(TPLRecoveryCaseConstants.TPL_RECOVERY_LEGAL_SETTLEMENTREASON,"settlementReasonValue",false,TPLRecoveryCaseConstants.ADDRECOVERYCASEPPortletResource);
+    		}
+    		if (StringUtils.isNotEmpty(settlementReason) && StringUtils.isEmpty(settlementDate))
+    		{
+    			result = true;
+    			//TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_LEGAL_SETTLEMENT_DT);
+    			TPLAdministrationHelper.setAddHIPPInfoMessageToId(TPLRecoveryCaseConstants.TPL_RECOVERY_LEGAL_SETTLEMENT_DT,"settlementDateComp",false,TPLRecoveryCaseConstants.ADDRECOVERYCASEPPortletResource);
+    			
+    		}
+		}
+    	catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+    	return result;
+    }
+
+    /**
+     * This Rule Total Settlement Amount must be entered if Settlement Reason
+     * selected TPL0599.0001.01
+     * 
+     * @param settlementReason
+     *            String
+     * @param totalSettlementAmount
+     *            Double
+     */
+    public static boolean validateTPLRCVYMNTRCVY0068(
+            String settlementReason, String totalSettlementAmount) 
+    {
+    	boolean result = false;
+    	double totalSettlementAmt = 0;
+    	if (!StringUtils.isBlank(totalSettlementAmount)
+    			
+    			&& !TPLAdministrationHelper.validateHippValue(totalSettlementAmount))
+        {
+    		result = true;        	
+        	TPLAdministrationHelper.addErrorMessage(TPLRecoveryCaseConstants.TPL_RECOVERY_INVALID_DATE,
+					TPLRecoveryCaseConstants.ADDRECOVERYCASEPPortletResource,"totalSettlementAmountValue");
+        }else if(!totalSettlementAmount.contains(".") &&
+        		totalSettlementAmount.length()>9){
+        	result = false; 
+			TPLAdministrationHelper.addErrorMessage(TPLRecoveryCaseConstants.TPL_RECOVERY_INVALID_DATE,
+					TPLRecoveryCaseConstants.ADDRECOVERYCASEPPortletResource,"totalSettlementAmountValue");
+        }
+    	else
+    	{
+    		if(StringUtils.isNotEmpty(totalSettlementAmount))
+    		{
+    	    	totalSettlementAmt = Double.parseDouble(totalSettlementAmount);
+    	    }
+    		if (StringUtils.isNotEmpty(settlementReason) && StringUtils.isEmpty(totalSettlementAmount))
+            {
+                result = true;
+                TPLAdministrationHelper.setAddHIPPInfoMessageToId(TPLRecoveryCaseConstants.TPL_RECOVERY_LEGAL_TOTALSETTLEMENT_AMT,
+                		"totalSettlementAmountValue",false,TPLRecoveryCaseConstants.ADDRECOVERYCASEPPortletResource);
+                
+            }
+    		else if (StringUtils.isNotEmpty(settlementReason) && totalSettlementAmt <= 0)
+    		{
+            	result = true;
+            	TPLAdministrationHelper.setAddHIPPInfoMessageToId(TPLRecoveryCaseConstants.TPL_RECOVERY_LEGAL_TOTALSETTLEMENT_AMT,
+            			"totalSettlementAmountValue",false,TPLRecoveryCaseConstants.ADDRECOVERYCASEPPortletResource);           
+            }
+    	}
+    	/*if(StringUtils.isNotEmpty(totalSettlementAmount)){
+    	totalSettlementAmt = Double.parseDouble(totalSettlementAmount);
+    	}*/
+        /*if (StringUtils.isNotEmpty(settlementReason) && StringUtils.isEmpty(totalSettlementAmount) && !result)
+        {
+            result = true;
+            TPLAdministrationHelper.setAddHIPPInfoMessageToId(TPLRecoveryCaseConstants.TPL_RECOVERY_LEGAL_TOTALSETTLEMENT_AMT,"totalSettlementAmountValue",false,TPLRecoveryCaseConstants.ADDRECOVERYCASEPPortletResource);
+            
+        }else if (StringUtils.isNotEmpty(settlementReason) && totalSettlementAmt <= 0){
+        	result = true;
+        	TPLAdministrationHelper.setAddHIPPInfoMessageToId(TPLRecoveryCaseConstants.TPL_RECOVERY_LEGAL_TOTALSETTLEMENT_AMT,"totalSettlementAmountValue",false,TPLRecoveryCaseConstants.ADDRECOVERYCASEPPortletResource);
+       
+        }*/
+        return result;
+    }
+
+    /**
+     * This Rule If Prior Claims Amount is greater than zero on Estate tab then
+     * populate the Prior Estate Claims Amount on the POD. If Prior Estate
+     * Claims Amount is greater than zero add amount to the Included Claims
+     * Total TPL0497.0001.01
+     * 
+     * @param priorClaimsAmt
+     *            Double
+     */
+    public static boolean validateTPLRCVYMNTRCVY0077(
+            Double priorClaimsAmt)
+    {
+    	if (priorClaimsAmt.doubleValue() > 0) 
+        {
+            return true;
+        }
+        else 
+        {
+            return false;
+        }
+    }
+
+    /**
+     * This Rule If Previous Recovered Amount is greater than zero on the Estate
+     * Tab then add the amount to the Total Recovered and Previous Recovered on
+     * the POD TPL0498.0001.01
+     * 
+     * @param preRecoveredAmt
+     *            Double
+     */
+    public static boolean validateTPLRCVYMNTRCVY0078(
+            Double preRecoveredAmt) 
+    {
+    	if (preRecoveredAmt.doubleValue() > 0) 
+        {
+            return true;
+        } 
+        else 
+        {
+            return false;
+        }
+    }
+
+    /**
+     * This Rule When Type is Asset (+), Code must be entered and Amount must be greater than zero
+     * TPL0248.0001.01
+     * 
+     * @param type
+     *            String
+     * @param code
+     *            String
+     * @param amount
+     *            Double
+     */
+    public static boolean validateTPLRCVYMNTRCVY0083(String type, String code,
+            String amount) 
+    {
+    	boolean result = false;
+    	
+    	if (TPLRecoveryCaseConstants.ASSET.equalsIgnoreCase(type)) 
+        {
+            if (StringUtils.isEmpty(amount) || StringUtils.isEmpty(code)) 
+            {
+            	TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_ESTATE_TYPE_ASSET);
+            	result = true;
+            }
+        }
+        return result;
+    }
+    
+    /**
+     * Added this methos for deffect Fix:ESPRD00088806
+     */
+    
+    /**
+     * @param type String
+     * @param code String
+     * @param amount String
+     * @return boolean
+     */
+    public static boolean validateTPLRCVYMNTRCVY008(String type, String code,
+            String amount) 
+    {
+    	boolean result = false;
+    	Double dAmount = null;
+    	if(StringUtils.isNotEmpty(amount)){
+    	dAmount = new Double(amount);
+    	}
+    	
+    	if (StringUtils.isNotEmpty(code))
+        {
+            if (StringUtils.isEmpty(amount) || StringUtils.isEmpty(type)) 
+            {
+            	TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_ESTATE_CODE_ASSET);
+            	result = true;
+            }else if(dAmount != null && dAmount.intValue() <= 0){
+            	TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_ESTATE_CODE_ASSET);
+            	result = true;
+            }
+        }
+        return result;
+    }
+    
+    /**
+     * This Rule When Asset Type equals Liability "-", the Asset Code must be entered
+     * TPL0475.0001.01
+     * 
+     * @param type
+     *            String
+     * @param code
+     *            String
+     * @param amount
+     *            Double
+     */
+    public static boolean validateTPLRCVYMNTRCVY0085(String type, String code)
+    {
+    	boolean result = false;
+    	if (TPLRecoveryCaseConstants.LIABILITY.equalsIgnoreCase(type)) 
+        {
+    		if (StringUtils.isEmpty(code)) 
+            {
+            	TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_ESTATE_TYPE_LIABILITY);
+            	result = true;
+            }
+        }
+        return result;
+    }
+
+
+    /**
+     * This Rule If Case Close Date and Closure Reason are entered, Case Status
+     * will be updated by the System to 'Closed' TPL0256.0001.01
+     * 
+     * @param caseCloseDate
+     *            Date
+     * @param caseClosureReason
+     *            String
+     
+    public static boolean checkRecoveyCaseInfo_TPL0248(Date caseCloseDate,
+            String caseClosureReason) 
+    {
+    	
+        if ((caseCloseDate != null) && (caseCloseDate != null)) 
+        {
+            return true;
+        } 
+        else 
+        {
+            return false;
+        }
+
+    }*/
+
+    /**
+     * This Rule If Case Status is equal to 'Closed', Payments can be posted but
+     * no other action can be taken on the Recovery Case TPL0253.0001.01
+     * 
+     * @param caseStatus
+     *            String
+     */
+    public static boolean validateTPLRCVYUPDTRCVY0007(String caseStatus) 
+    {
+    	if (caseStatus.equalsIgnoreCase("Closed")) 
+        {
+            return true;
+        } 
+        else 
+        {
+            return false;
+        }
+    }
+
+    /**
+     * This Rule Bill Start Date cannot be changed when Billing Frequency is not
+     * equal to 'one time' when Recovery Case Billing Letter is already
+     * generated TPL0414.0001.01
+     * 
+     * @param billingFrequency
+     *            String
+     * @param preStartDate
+     *            Date
+     * @param changedStartDate
+     *            Date
+     */
+    public static boolean validateTPLRCVYUPDTRCVY0014(String billingFreq, String billStartDate,String originalBillStartDt) 
+    {
+    	boolean result = false;
+    	if ((billingFreq.equalsIgnoreCase("O")))
+        {	if(StringUtils.isNotEmpty(originalBillStartDt)){
+    		if(!billStartDate.equalsIgnoreCase(originalBillStartDt)){
+    			TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_BILL_FREQ_MSG);
+    			  result = true;
+    		}
+        }
+          
+        }
+        return result;
+    }
+
+    /**
+     * This Rule If the Exclude Indicator is checked, Requested Amount cannot be
+     * updated for that claim, Recovery Amount cannot be updated for that claim
+     * TPL0265.0001.01
+     * 
+     * @param excludeIndicator
+     *            String
+     */
+    public static boolean validateTPLRCVYUPDTRCVY0018(
+            String excludeIndicator) 
+    {
+    	if (excludeIndicator.equalsIgnoreCase("true")) 
+        {
+            return true;
+        } 
+        else 
+        {
+            return false;
+        }
+    }
+
+    /**
+     * This Rule If the Recovery Case Status is from the following list {'Open',
+     * 'Closed'}, Case Status cannot be changed to 'Pend' TPL0709.0001.01
+     * 
+     * @param caseStatus
+     *            String
+     * @param changedStatus
+     *            String
+     */
+    public static boolean validateTPLRCVYUPDTRCVY0012(String caseStatus) 
+    {
+    	boolean result = false;
+        if (caseStatus.equalsIgnoreCase(TPLRecoveryCaseConstants.OPEN) || caseStatus.equalsIgnoreCase(TPLRecoveryCaseConstants.CLOSE)) 
+        {
+        	result = true;
+			TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_CASE_STAT_OPEN);
+        }
+        return result;
+    }
+
+    /**
+     * This Rule Case Established Date cannot be change when Case Status is set
+     * to 'Open' TPL0710.0001.01
+     * 
+     * @param caseStatus
+     *            String
+     * @param caseEstablishDate
+     *            Date
+     * @param changedEstablishDate
+     *            Date
+     */
+    public static boolean validateTPLRCVYUPDTRCVY0013(String caseStatus,
+            String caseEstablishDate) 
+    {
+    	//SimpleDateFormat sd = new SimpleDateFormat("MM/dd/yyyy");
+    	boolean result = false;
+    	try
+		{
+    		//Date establishDt = sd.parse(caseEstablishDate); Find Bug Fix
+    		if (caseStatus.equalsIgnoreCase(TPLRecoveryCaseConstants.OPEN)) 
+            {
+    			result = true;
+    			TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_CASE_ESTABLISH_DT);
+            }
+		}
+    	catch (Exception e) 
+		{
+    		e.printStackTrace();
+		}
+        return result;
+    }
+
+    /**
+     * This Rule If Case Status is equal to 'Open', LOB, Member ID and Recovery
+     * Type are protected fields. TPL0252.0001.01
+     * 
+     * @param caseStatus
+     *            String
+     */
+    public static boolean validateTPLRCVYMNTRCVY0004(String caseStatus) 
+    {
+    	if (caseStatus.equalsIgnoreCase(TPLRecoveryCaseConstants.OPEN)) 
+        {
+            return true;
+        } 
+        else 
+        {
+            return false;
+        }
+    }
+
+    /**
+     * This Rule If Case Claim Stop Date is blank, default it to 12/31/9999. If
+     * Case Calim Stop Date is populated, Case Claim Stop Date must be greater
+     * than or equal Case Claim Start Date TPL0587.0001.01
+     * 
+     * @param tplRecoveryCaseDetailVO
+     *            TPLRecoveryCaseDetailVO
+     */
+    public static boolean validateTPLRCVYMNTRCVY0006(
+            String claimStartDate, String claimStopDate, TPLRecoveryCaseDetailVO tplRecoveryCaseDetailVO) 
+    {
+    	boolean result = false;
+        SimpleDateFormat sd = new SimpleDateFormat("MM/dd/yyyy");
+        try 
+        {
+         if (StringUtils.isEmpty(claimStopDate)) 
+          {
+        	tplRecoveryCaseDetailVO.setCaseClaimStopDate("12/31/9999");
+            Date claimStartDt = sd.parse(claimStartDate);
+        	Date claimStopDt = sd.parse(tplRecoveryCaseDetailVO.getCaseClaimStopDate());
+        	
+           }
+        } 
+        catch (ParseException e)
+        {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    /**
+     * This Rule If Recovery Case Status is equal to 'Open' Case Start Date and
+     * Case Stop Date must be present and at least one MMIS or Pharmacy claim
+     * should be included on Included Claims Tab TPL0251.0001.01
+     * 
+     * @param caseStatus
+     *            String
+     * @param claimStartDate
+     *            Date
+     * @param claimStopDate
+     *            Date
+     * @param claimList
+     *            ArrayList
+     */
+    public static boolean validateTPLRCVYMNTRCVY0013(String caseStatus,
+            String caseStartDate, String caseStopDate, ArrayList claimList)
+    {
+    	//SimpleDateFormat sd = new SimpleDateFormat("MM/dd/yyyy");
+    	boolean result = false;
+    	try
+		{
+    		//Date startDt = sd.parse(caseStartDate);Find Bug Fix
+    		//Date stopDt = sd.parse(caseStopDate); Find Bug Fix
+    		if (caseStatus.equalsIgnoreCase(TPLRecoveryCaseConstants.OPEN) && (caseStartDate == null) || (caseStopDate == null)
+                    || (claimList.size() == 0)) 
+            {
+    			result = true;
+    			TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_CASE_STOP_DT);
+            }
+        }
+    	catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+    	return result;
+    }
+
+    /**
+     * This Rule Case Claim Start Date and Case Claim Stop Date are not required
+     * if the Case Status is set to Pend TPL0459.0001.01
+     * 
+     * @param caseStatus
+     *            String
+     */
+    public static boolean validateTPLRCVYADDRCVY0004(String caseStatus) 
+    {
+    	if (caseStatus.equalsIgnoreCase(TPLRecoveryCaseConstants.PEND))
+        {
+            return true;
+        } 
+        else 
+        {
+            return true;
+        }
+    }
+
+    /**
+     * This Rule When Recovery Case Status changes to "Open" populate the Case
+     * Open Date with system date TPL0492.0001.01
+     * 
+     * @param caseStatus
+     *            String
+     * @return boolean
+     */
+    public static boolean validateTPLRCVYMNTRCVY0015(String caseStatus)
+    {
+    	if (caseStatus.equalsIgnoreCase(TPLRecoveryCaseConstants.OPEN))
+        {
+            return true;
+        }
+        else 
+        {
+            return false;
+        }
+    }
+
+    /**
+     * This Rule At least one claim must be selected if Case Status is Open
+     * TPL0670.0001.01
+     * 
+     * @param caseStatus
+     *            String
+     * @param claimList
+     *            ArrayList
+     */
+    public static boolean validateTPLRCVYMNTRCVY0021(String caseStatus, String claimStartDate, 
+    		String claimEndDate, boolean checkEmptyIncludedList,TPLRecoveryDataBean tplRecoveryDataBean) 
+    {
+        boolean result = false;
+        if (caseStatus.equalsIgnoreCase(TPLRecoveryCaseConstants.OPEN)) 
+        {
+        	if(checkEmptyIncludedList)
+        	{
+        		if (StringUtils.isEmpty(claimStartDate) && StringUtils.isEmpty(claimEndDate))
+        		{
+            		TPLAdministrationHelper.setAddRecoveryInfo(
+            				TPLRecoveryCaseConstants.TPL_RECOVERY_CLAIM_CASE_STAT_DATE_NULL);
+            		result = true;
+        		}
+        		else
+        		{
+        			TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_CLAIM_CASE_STAT);
+            		result = true;
+        		}
+        		tplRecoveryDataBean.setFocusThisId("");
+	        }
+        	/*if(memClaimsList != null && !memClaimsList.isEmpty() && memClaimsList.size() > 0)
+        	{
+        		System.err.println("--------memClaimsList is not empty-----");
+	        	if(includedClaimList == null)
+	            {
+	        		System.err.println("-----included claims list is empty------");
+	            	result = true;
+	    			TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_CLAIM_CASE_STAT);
+	                
+	            }
+	        	else if(includedClaimList != null && includedClaimList.size() == 0)
+	        	{
+	            	System.err.println("-----included claims list is empty------");
+	            	result = true;
+	    			TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_CLAIM_CASE_STAT);
+	            }
+	        }*/
+        }
+        return result;
+    }
+    
+    /*TPL0596.0001.01 and TPL0597.0001.01
+	 *TPL.RCVY.MNTRCVY.0039 and TPL.RCVY.MNTRCVY.0040
+	 This rule is  Filter Begin Value must be less than or equal to Filter End Value and Vice Versa*/
+    public static boolean validateTPLRCVYMNTRCVY0039(String filterbeginvalue, String filterendvalue)
+    {
+    	SimpleDateFormat sd = new SimpleDateFormat("MM/dd/yyyy");
+    	boolean result = false;
+    	try
+		{	
+    		Date beginValue = sd.parse(filterbeginvalue);
+    		Date endValue = sd.parse(filterendvalue);
+    		
+    		if(beginValue.compareTo(endValue)==0)
+    		{
+    			result = false;
+    		}
+    		else if((beginValue.compareTo(endValue) > 0))
+    		{
+    			result = true;
+    			TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_CASE_MEMBERCLAIMS_FILTER_BEGIN);
+    			TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_CASE_MEMBERCLAIMS_FILTER_END);
+    		}
+    		/*if((endValue.compareTo(beginValue) < 0)){
+    			System.out.println("<<<<<endValue.after(beginValue)>>>>>");
+    			result = true;
+    			TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_CASE_MEMBERCLAIMS_FILTER_END);
+    			
+    		}*/
+    		
+    		/*if (!beginValue.before(endValue))
+        	{
+    			System.out.println("<<<<<beginValue.before(endValue)>>>>>");
+    			result = true;
+    			TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_CASE_MEMBERCLAIMS_FILTER_BEGIN);
+    		}
+        		
+    		if (!endValue.after(beginValue))
+    		{
+    			System.out.println("<<<<<endValue.after(beginValue)>>>>>");
+    			result = true;
+    			TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_CASE_MEMBERCLAIMS_FILTER_END);
+    		}*/
+          
+		}
+    	catch (ParseException e) 
+		{
+			e.printStackTrace();
+		}
+    	return result;
+    }
+    //Filter Begin date has to be less than Filter End date
+    public static boolean validateTPLRCVYMNTRCVY0040(TPLRecoveryDataBean tplRecoveryDataBean,String filterType
+    		  ,String filterbeginvalue, String filterendvalue)
+
+    {
+       boolean result = false;
+       try
+       {
+          if("9".equalsIgnoreCase(filterType))
+          {
+         	  int bValue= Integer.parseInt(filterbeginvalue);
+         	  int eValue= Integer.parseInt(filterendvalue);
+         	  if(bValue>eValue)
+         	  {
+         		 result = true;
+         		if(tplRecoveryDataBean.isRenderAddClaimFilter()
+         		   && !tplRecoveryDataBean.isRenderEditClaimFilter())
+         	    {
+                   TPLAdministrationHelper.setAddRecoveryInformation(TPLRecoveryCaseConstants.TPL_RECOVERY_CASE_MEMBERCLAIMS_FILTER_BEGIN
+                		 ,TPLRecoveryCaseConstants.TPL_RCVRY_ADD_FILTER_BEGIN);
+         	    }
+         		else if(!tplRecoveryDataBean.isRenderAddClaimFilter()
+       				 && tplRecoveryDataBean.isRenderEditClaimFilter())
+         		{
+         		   TPLAdministrationHelper.setAddRecoveryInformation(TPLRecoveryCaseConstants.TPL_RECOVERY_CASE_MEMBERCLAIMS_FILTER_BEGIN
+         			    ,TPLRecoveryCaseConstants.TPL_RCVRY_EDIT_FILTER_BEGIN);
+         		}
+         	  }
+          }
+          else
+          {
+        	 List NumValueList = new ArrayList();
+             NumValueList.add(filterbeginvalue);
+             NumValueList.add(filterendvalue);
+             Collections.sort(NumValueList);
+             if(!(NumValueList.get(0).equals(filterbeginvalue)))
+             {
+               result = true;
+               TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_CASE_MEMBERCLAIMS_FILTER_BEGIN);
+             }
+          }
+       }
+       catch (Exception e) 
+       {
+    	   result = true;
+          e.printStackTrace();
+       }
+       return result;
+     }
+
+
+    
+    /*TPL0243.0002.01
+	TPL.RCVY.MNTRCVY.0057
+	This Rule Hearing Request Date cannot be less than Case Claim Start Date, otherwise display error message.*/
+
+    public static boolean validateTPLRCVYMNTRCVY0057(String hearingReqDate, String caseClaimStartDate)
+    {
+    	SimpleDateFormat sd = new SimpleDateFormat("MM/dd/yyyy");
+    	boolean result = false;
+    	System.out.println("unused one");
+		logger.debug("Started Rule Execution:::: TPL0243.0002.01");
+		  
+		  //Rule Invocation Context object holds object arrays used in rule execution.
+						//Name of the rule to be executed.
+			String ruleId = "TPL0243.0002.01";
+			RulesContext ric = new RulesContext();
+			//Adding object into rule invocation context.
+			ric.addObject(caseClaimStartDate);
+			ric.addObject(result);
+			ric.addObject(hearingReqDate);
+			ric.addObject(sd);
+
+			RulesManager rulesManager;
+			RulesResult rulesResult = null;
+		try {
+			
+			rulesManager = RulesManager.getRIFInstance();
+		
+		  
+		  //Invoke RIF with rulename and rule invocation objects.
+			
+			
+			rulesResult = rulesManager.execute(ruleId, ric);	
+			result=rulesResult.isReturnBooleanValue(); 
+			} catch (RIFException re){
+				logger.error("Exception"+re.getMessage());
+		  }
+							if (!rulesResult.isReturnBooleanValue()) {
+				  
+				}
+		if(result)
+		{
+			TPLAdministrationHelper.setAddHIPPInfoMessageToId(TPLRecoveryCaseConstants.TPL_RECOVERY_LEGAL_LEGALINFO,"hearingRequest",false,TPLRecoveryCaseConstants.ADDRECOVERYCASEPPortletResource);
+		}
+		  logger.info("Rule Execution Ended::::");
+    	
+    	return result;
+    }
+    
+    /*TPL0243.0003.01
+	TPL.RCVY.MNTRCVY.0058
+	This Rule Hearing Request Date cannot be greater than Case Claim End Date*/
+    public static boolean validateTPLRCVYMNTRCVY0058(String hearingReqDate, String caseClaimStopDate)
+    {
+    	SimpleDateFormat sd = new SimpleDateFormat("MM/dd/yyyy");
+    	boolean result = false;
+    	try
+		{
+    		Date hearingReqDt = sd.parse(hearingReqDate);
+    		Date caseClaimStopDt = sd.parse(caseClaimStopDate);
+    		if (hearingReqDt.after(caseClaimStopDt))
+        	{
+    			//code changed for defect : ESPRD00679372
+    			//TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_LEGAL_LEGALINFO);
+    			TPLAdministrationHelper.setAddRecoveryInformation(
+    					TPLRecoveryCaseConstants.TPL_RECOVERY_LEGAL_LEGALINFO,"hearingRequest");
+    			result = true;
+    		}
+        }
+    	catch (ParseException e) 
+		{
+			e.printStackTrace();
+		}
+    	return result;
+    }
+    
+    /*TPL0661.0001.01
+	TPL.RCVY.MNTRCVY.0074
+	This Rule Employer Address line 2 cannot be entered if Employer Address line 1 not entered*/
+    public static boolean validateTPLRCVYMNTRCVY0074(String addressLine1, String addressLine2)
+    {
+    	boolean result = false;
+    	if (StringUtils.isEmpty(addressLine1) && StringUtils.isNotEmpty(addressLine2))
+		{
+			result = true;
+			
+			//Commented for defect :ESPRD00659424
+			/*//Infinite Defect Resolution :ESPRD00480198
+			TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_CARRIER_ADDRESS);*/
+			
+			//Added for defect :ESPRD00659424
+			TPLAdministrationHelper.setAddRecoveryInformation(TPLRecoveryCaseConstants.TPL_RECOVERY_CARRIER_ADDRESS, "empAddress2");
+
+		}
+    	return result;
+    }
+    
+    /*TPL0526.0001.01
+	TPL.RCVY.MNTRCVY.0059
+	This Rule Hearing Held Date must fall in between Case Claim Start Date and Case Claim End Date*/
+    public static boolean validateTPLRCVYMNTRCVY0059(String hearingHeldDate, String caseClaimStartDate, String caseClaimStopDate)
+    {
+    	SimpleDateFormat sd = new SimpleDateFormat("MM/dd/yyyy");
+    	boolean result = false;
+    	try
+		{
+    		Date hearingheldDt = sd.parse(hearingHeldDate);
+			Date caseClaimStartDt = sd.parse(caseClaimStartDate);
+			Date caseClaimStopDt = sd.parse(caseClaimStopDate);
+			if (hearingheldDt.before(caseClaimStartDt) || hearingheldDt.after(caseClaimStopDt))
+			{
+				result = true;
+				//TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_LEGAL_LEGALINFO_HEARINGHELD_DT);
+				TPLAdministrationHelper.setAddHIPPInfoMessageToId(TPLRecoveryCaseConstants.TPL_RECOVERY_LEGAL_LEGALINFO_HEARINGHELD_DT,"hearingHeld",false,TPLRecoveryCaseConstants.ADDRECOVERYCASEPPortletResource);
+			}
+		}
+    	catch (ParseException e) 
+		{
+    		e.printStackTrace();
+		}
+    	return result;
+    }
+    
+    /*TPL0268.0001.01
+	TPL.RCVY.MNTRCVY.0065
+	This Rule Settlement Date cannot be less than Case Claim Start Date*/
+    public static boolean validateTPLRCVYMNTRCVY0065(String settlementDate, String caseClaimStartDate)
+    {
+    	SimpleDateFormat sd = new SimpleDateFormat("MM/dd/yyyy");
+    	boolean result = false;
+    	try
+		{
+    		Date caseClaimStartDt = sd.parse(caseClaimStartDate);
+			Date settlementDt = sd.parse(settlementDate);
+			if (settlementDt.before(caseClaimStartDt))
+			{
+				result = true;
+				//TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_LEGAL_SETTLEMENT_DATE);
+				TPLAdministrationHelper.setAddHIPPInfoMessageToId(TPLRecoveryCaseConstants.TPL_RECOVERY_LEGAL_SETTLEMENT_DATE,"settlementDateComp",false,TPLRecoveryCaseConstants.ADDRECOVERYCASEPPortletResource);
+
+			}
+		}
+    	catch (ParseException e) 
+		{
+    		e.printStackTrace();
+		}
+    	return result;
+    }
+    
+    /*TPL0237.0001.01
+	TPL.RCVY.MNTRCVY.0052
+	This Rule Requested Amount cannot be greater than the Reimbursement Amount*/
+    public static boolean validateTPLRCVYMNTRCVY0052(Double requestedAmount, Double reimbursementAmount)
+    {
+    	boolean result = false;
+    	if (requestedAmount.compareTo(reimbursementAmount) > 0)
+    	{
+    		result = true;
+			TPLAdministrationHelper.setAddHIPPInfoMessageToId(TPLRecoveryCaseConstants.TPL_RECOVERY_INCLUDE_CLAIMS_REQ_AMOUNT,"requestedAmount",false,TPLRecoveryCaseConstants.ADDRECOVERYCASEPPortletResource);
+    	}
+    	return result;
+    }
+    
+    /*TPL0581.0001.01
+	TPL.RCVY.MNTRCVY.0081
+	This Rule Relationship SSN must be in valid format :  Example 123-45-6789 or 123456789*/
+   // public static boolean validateTPLRCVYMNTRCVY0081(String relationshipSSN)
+    public static boolean validateTPLRCVYMNTRCVY0081(String relationshipSSN,String jspid)
+    {
+    	boolean result = false;
+    	String SSN_PATTERN1 = "[0-9]{3}[-][0-9]{2}[-][0-9]{4}", SSN_PATTERN2 = "[0-9]{9}";
+		Pattern p = Pattern.compile(SSN_PATTERN1);
+		Matcher m = p.matcher(relationshipSSN);
+		if (m.matches())
+    	{
+			result = false;
+		}
+		else
+		{
+			p = Pattern.compile(SSN_PATTERN2);
+			m = p.matcher(relationshipSSN);
+			if (m.matches())
+			{
+				result = false;
+			}
+			else
+			{
+				//TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_ESTATE_RELATIONSHIP_SSN);
+				TPLAdministrationHelper.setAddRecoveryInformation(TPLRecoveryCaseConstants.TPL_RECOVERY_ESTATE_RELATIONSHIP_SSN,jspid);
+				result = true;
+			}
+		}
+		return result;
+    }
+    
+    /*TPL0662.0001.01
+	TPL.RCVY.MNTRCVY.0082
+	This Rule Relationship First Name must be entered if Relationship Last Name is entered*/
+    public static boolean validateTPLRCVYMNTRCVY0082(String relationshipLastName, String relationshipFirstName,boolean renderEditRelationship)
+    {
+    	boolean result = false;
+    	if (StringUtils.isNotEmpty(relationshipLastName) && StringUtils.isEmpty(relationshipFirstName))
+		{
+    		if(renderEditRelationship){
+			//TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_ESTATE_RELATIONSHIP_NAME);
+			TPLAdministrationHelper.setAddRecoveryInformation(TPLRecoveryCaseConstants.TPL_RECOVERY_ESTATE_RELATIONSHIP_NAME,"firstName_editrelationship");
+			result = true;
+    		}else
+    		{
+    			TPLAdministrationHelper.setAddRecoveryInformation(TPLRecoveryCaseConstants.TPL_RECOVERY_ESTATE_RELATIONSHIP_NAME,"firstName_addrelationship");
+    			result = true;	
+    		}
+		}
+    	return result;
+    }
+    
+    /*
+	 * Rule Set
+	 * TPL0238.0002.01 TPL.RCVY.MNTRCVY.0011
+	 * TPL0238.0003.01 TPL.RCVY.MNTRCVY.0012
+	 * This Rule is f Incident Date is entered
+	 * 1.  Cannot be less than Case Claim Start Date
+	 * 2. Cannot be greater than Case Claim Stop Date
+	 */
+    public static boolean validateTPLRCVYMNTRCVY0011(String caseClaimStartDate, String caseClaimStopDate, String caseIncidentDate)
+    {
+		SimpleDateFormat sd = new SimpleDateFormat("MM/dd/yyyy");
+		boolean result = false;
+		try {
+			if (StringUtils.isNotEmpty(caseIncidentDate)
+					&& StringUtils.isNotEmpty(caseClaimStartDate)
+					&& StringUtils.isNotEmpty(caseClaimStopDate)) {
+
+				Date caseIncidentDt = sd.parse(caseIncidentDate);
+				Date caseCliamBeginDate = sd.parse(caseClaimStartDate);
+				Date caseCliamEndDate = sd.parse(caseClaimStopDate);
+
+				if (caseIncidentDt.before(caseCliamBeginDate) || caseIncidentDt.after(caseCliamEndDate)) {
+					result = true;
+					TPLAdministrationHelper.setAddRecoveryInformation(
+							TPLRecoveryCaseConstants.TPL_RECOVERY_CASE_INCIDENT_DT,
+							TPLRecoveryCaseConstants.JSP_TPL_RECOVERY_INVALID_DATE);
+				}
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return result;
+    }
+    
+    /*
+	 * TPL0600.0001.01 TPL.RCVY.MNTRCVY.0069 This Rule FCN required if State
+	 * Settlement Amount entered
+	 */
+    public static boolean validateTPLRCVYMNTRCVY0069(String stateSettlementAmt, String fcn)
+    {
+    	boolean result = false;
+    	if (StringUtils.isNotEmpty(stateSettlementAmt) && StringUtils.isEmpty(fcn))
+		{
+    		//TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_LEGAL_FCN);
+    		TPLAdministrationHelper.setAddHIPPInfoMessageToId(TPLRecoveryCaseConstants.TPL_RECOVERY_LEGAL_FCN,"FCNValues",false,TPLRecoveryCaseConstants.ADDRECOVERYCASEPPortletResource);
+			result = true;
+		}
+    	return result;
+    }
+    
+    /*TPL0672.0001.01
+	TPL.RCVY.MNTRCVY.0096 
+	This Rule Recovery Date must be less than or equal to System Date*/
+    public static boolean validateTPLRCVYMNTRCVY0096(String recoveryDate, String componentID)
+    {
+    	SimpleDateFormat sd = new SimpleDateFormat("MM/dd/yyyy");
+    	Date systemDt = new Date();
+    	boolean result = false;
+    	try
+		{
+    		Date recoveryDt = sd.parse(recoveryDate);
+    		if (!recoveryDt.before(systemDt))
+    		{
+    			result = true;
+    			if(componentID != null)
+    			{
+    				TPLAdministrationHelper.setAddRecoveryInformation(TPLRecoveryCaseConstants.TPL_RECOVERY_CASE_RECOVERY_DT, componentID);
+    			}
+    			/*else //ESPRD00874573
+    			{
+    				TPLAdministrationHelper.setAddRecoveryInformation(
+    						TPLRecoveryCaseConstants.TPL_RECOVERY_CASE_RECOVERY_DT,
+    						TPLRecoveryCaseConstants.TPL_RCVRY_RESP_RCVRY_DATE);
+    			}*/
+				
+    		}
+		}
+    	catch (ParseException e) 
+		{
+    		e.printStackTrace();
+		}
+    	return result;
+    }
+    
+    /*
+     *TPL0225.0001.01 TPL.RCVY.MNTRCVY.0010
+     *
+     *this rule is Case Claim Start Date cannot be greater than System Date
+     *
+     */
+    public static boolean validateTPLRCVYMNTRCVY0010(String caseClaimStartDate)
+    {
+    	SimpleDateFormat sd = new SimpleDateFormat("MM/dd/yyyy");
+    	Date systemDt = new Date();
+    	boolean result = false;
+    	try
+		{
+    		Date startDt = sd.parse(caseClaimStartDate);
+    		if (startDt.after(systemDt))
+    		{
+    			result = true;
+				TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_CASE_START_DT);
+    		}
+		}
+    	catch (ParseException e) 
+		{ 
+			e.printStackTrace();
+		}
+    	return result;
+    }
+    
+    /*TPL0589.0001.01
+	TPL.RCVY.MNTRCVY.0007 
+	This Rule Case Close Date must be greater than or equal to Case Established Date*/
+    public static boolean validateTPLRCVYMNTRCVY0007(String caseClaimEstablishDate, String caseCloseDate)
+    {
+    	SimpleDateFormat sd = new SimpleDateFormat("MM/dd/yyyy");
+    	
+    	//Date systemDt = new Date(); Find Bug Fix
+    	boolean result = false;
+    	try
+		{
+    		Date closeDt = sd.parse(caseCloseDate);
+    		Date establishDt = sd.parse(caseClaimEstablishDate);
+    		if (closeDt.before(establishDt))
+    		{
+    			result = true;
+				TPLAdministrationHelper.setAddRecoveryInformation(
+						TPLRecoveryCaseConstants.TPL_RECOVERY_CASE_CLOSE_DATE,
+						TPLRecoveryCaseConstants.TPL_RCVRY_CLOSED_DATE);
+    		}
+		}
+    	catch (ParseException e) 
+		{
+			e.printStackTrace();
+		}
+    	return result;
+    }
+    
+    /*TPL0665.0001.01
+	TPL.RCVY.MNTRCVY.0035
+	This Rule Address must be selected if Bill Start Date is entered*/
+    public static boolean validateTPLRCVYMNTRCVY0035(String billStartDate, List address)
+    {
+    	SimpleDateFormat sd = new SimpleDateFormat("MM/dd/yyyy");
+    	boolean result = false;
+    	try
+		{
+    		if(StringUtils.isNotEmpty(billStartDate))
+    		{
+	    		Date billStartDt = sd.parse(billStartDate);
+	    		if (billStartDt != null && address != null && address.size() == 0)
+	    		{
+	    			result = true;
+					TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_CASE_BILLING_START_DATE);  			
+	    		}
+    		}
+		}
+    	catch (ParseException e) 
+		{
+			e.printStackTrace();
+		}
+    	return result;
+    }
+    
+    /*TPL0230.0001.01
+	TPL.RCVY.MNTRCVY.0023
+	This Rule Billing Start Date cannot be less than System Date*/
+    public static boolean validateTPLRCVYMNTRCVY0023(String billStartDate)
+    {
+    	SimpleDateFormat sd = new SimpleDateFormat("MM/dd/yyyy");
+    	boolean result = false;
+    	try
+		{
+    		Date billStartDt = sd.parse(billStartDate);
+    		Date currentDate = sd.parse(sd.format(new Date()));    		
+    		
+    		if (billStartDt.compareTo(currentDate) == 0) 
+			{
+    			result = false;
+        	}
+    		else if (billStartDt.compareTo(currentDate) < 0)
+    		{
+    		    result = true;// Added for ESPRD00578425
+				//TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_CASE_BILLING_START_DT); 
+				TPLAdministrationHelper.setAddHIPPInfoMessageToId(TPLRecoveryCaseConstants.TPL_RECOVERY_CASE_BILLING_START_DT,"billingStartDate1",false,TPLRecoveryCaseConstants.ADDRECOVERYCASEPPortletResource);
+				
+    		}
+		}
+    	catch (ParseException e) 
+		{
+    		e.printStackTrace();
+		}
+    	return result;
+    	
+    }
+    
+    /*TPL0245.0001.01
+	TPL.RCVY.MNTRCVY.0076
+	This Rule Appointment Date cannot be less than Case Claim Start Date*/
+    public static boolean validateTPLRCVYMNTRCVY0076(String appointmentDate, String caseClaimStartDate)
+    {
+    	SimpleDateFormat sd = new SimpleDateFormat("MM/dd/yyyy");
+    	boolean result = false;
+    	try
+		{
+    		Date appointmentDt = sd.parse(appointmentDate);
+    		Date caseClaimStartDt = sd.parse(caseClaimStartDate);
+    		if (appointmentDt.before(caseClaimStartDt))
+    		{
+    			//ESPRD00661948
+    			//TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_ESTATE_APPOINTMENT_DT);
+    			TPLAdministrationHelper.setAddHIPPInfoMessageToId(TPLRecoveryCaseConstants.TPL_RECOVERY_ESTATE_APPOINTMENT_DT,"appointmentDate",
+    					false,TPLRecoveryCaseConstants.ADDRECOVERYCASEPPortletResource);
+    			//ESPRD00661948
+    			result = true;
+    		}
+		}
+    	catch (ParseException e) 
+		{
+			e.printStackTrace();
+		}
+    	return result;
+    	
+    }
+    
+   /* TPL0578.0001.01 
+	TPL.RCVY.ADDRCVY.0008
+	This Rule Case Claims Start Date and Case Claims Stop Date must be entered before Filter may be selected
+	*/
+    public static boolean validateTPLRCVYADDRCVY0007(String caseClaimStartDate, String caseClaimStopDate)
+    {
+    	boolean result = false;
+    	
+			if (StringUtils.isEmpty(caseClaimStartDate))
+			{
+				TPLAdministrationHelper.setAddRecoveryInformation(
+						TPLRecoveryCaseConstants.TPL_RECOVERY_FILTER_DATE,
+						TPLRecoveryCaseConstants.JSP_TPL_START_RECOVERY_INVALID_DATE);
+				result = true;
+			}else if(StringUtils.isEmpty(caseClaimStopDate)){
+				TPLAdministrationHelper.setAddRecoveryInformation(
+						TPLRecoveryCaseConstants.TPL_RECOVERY_FILTER_DATE,
+						TPLRecoveryCaseConstants.JSP_TPL_STOP_RECOVERY_INVALID_DATE);
+				result = true;
+			}
+    	return result;
+    }
+    public static boolean validateTPLRCVYADDRCVY0008(String caseClaimStartDate, String caseClaimStopDate)
+    {
+    	boolean result = false;
+    	
+			if (StringUtils.isEmpty(caseClaimStartDate) || StringUtils.isEmpty(caseClaimStopDate))
+			{
+				TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_ESTATE_APPOINTMENT_DT);
+				result = true;
+			}
+		 
+    	return result;
+    	
+    }
+    
+    /*TPL0585.0001.01 TPL.RCVY.MNTRCVY.0005
+	 This rule is  Case Claim Start Date must be less than or equal to Case Claim Stop Date*/
+    public static boolean validateTPLRCVYMNTRCVY0005(String caseClaimStartDate, String caseCalimEndDate)
+    {
+    	SimpleDateFormat sd = new SimpleDateFormat("MM/dd/yyyy");
+    	boolean result = false;
+    	try
+		{
+    		Date caseClaimEndDt = sd.parse(caseCalimEndDate);
+    		Date caseClaimStartDt = sd.parse(caseClaimStartDate);
+    		if (caseClaimStartDt.after(caseClaimEndDt))
+    		{
+    			result = true;
+				TPLAdministrationHelper.setAddRecoveryInformation(
+						TPLRecoveryCaseConstants.TPL_RECOVERY_CASE_BEGIN_DATE,
+						TPLRecoveryCaseConstants.JSP_TPL_START_RECOVERY_INVALID_DATE);  			
+    		}
+		}
+    	catch (ParseException e) 
+		{
+    		e.printStackTrace();
+		}
+    	return result;
+    	
+    }
+    /*TPL0585.0001.01 TPL.RCVY.MNTRCVY.00051
+	 This rule is  Case Claim Start Date and Case Claim Stop Date cannot be reduced.*/
+    public static boolean validateTPLRCVYMNTRCVY00051(String caseClaimStartDate, String caseClaimEndDate,String tempClaimStartDate,String tempclaimStopDate)
+    {
+    	SimpleDateFormat sd = new SimpleDateFormat("MM/dd/yyyy");
+    	boolean result = false;
+    	Date caseClaimEndDt = null;
+		Date caseClaimStartDt = null;
+		Date tempcaseClaimEndDt=null;
+		Date tempcaseClaimStartDt=null;
+    	try
+		{
+    		caseClaimEndDt = sd.parse(caseClaimEndDate);
+    		caseClaimStartDt = sd.parse(caseClaimStartDate);
+    		tempcaseClaimEndDt=sd.parse(tempclaimStopDate);
+    		tempcaseClaimStartDt=sd.parse(tempClaimStartDate);
+		}
+    	catch(ParseException e)
+		{
+    		e.printStackTrace();
+		}
+    	if(tempcaseClaimStartDt!=null && tempcaseClaimEndDt!=null)
+    	{
+    		//condition changed for defect : ESPRD00704316
+    	 /*if(caseClaimStartDt.before(tempcaseClaimStartDt) && caseClaimEndDt.before(tempcaseClaimEndDt))
+    	 {
+    		result=true;
+    		TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_CASE_BEGIN_END_REDUCED);
+    	 }*/
+    	//defect id:ESPRD00811213 changed from before to after as per the defect
+    	 if(caseClaimStartDt.after(tempcaseClaimStartDt))
+    	 {
+    		result=true;
+    		TPLAdministrationHelper.setAddRecoveryInformation(
+    				TPLRecoveryCaseConstants.TPL_RECOVERY_CASE_BEGIN_END_REDUCED,
+    				TPLRecoveryCaseConstants.JSP_TPL_START_RECOVERY_INVALID_DATE);  
+    	 }
+    	 if(caseClaimEndDt.before(tempcaseClaimEndDt))
+    	 {
+    		result=true;
+    		TPLAdministrationHelper.setAddRecoveryInformation(
+    				TPLRecoveryCaseConstants.TPL_RECOVERY_CASE_BEGIN_END_REDUCED,
+    				TPLRecoveryCaseConstants.JSP_TPL_STOP_RECOVERY_INVALID_DATE); 
+    	 }
+    	}
+      	return result;
+    }
+       
+    public static  boolean dateValidator( String date) 
+	{
+    
+		boolean isValid = false;
+		final String DATE_DEFAULT = "(0[1-9]|1[012]|[1-9])([/])(0[1-9]|[12][0-9]|3[01]|[1-9])([/])([0-9]{4})";
+		boolean invalidDateFormat = false;
+		String d1 = date.trim();
+		Pattern mask = null;
+		mask = Pattern.compile(DATE_DEFAULT);
+		Matcher matcher = mask.matcher(d1);
+		if (!d1.trim().equals("")) 
+		{
+			if (matcher.matches())
+			{
+				int year = 0;
+				int month = 0;
+				int day = 0;
+				if (matcher.matches()) 
+				{
+					year = Integer.parseInt(d1
+							.substring(d1.lastIndexOf('/') + 1));
+					month = Integer.parseInt(d1.substring(0, d1.indexOf('/')));
+					day = Integer.parseInt(d1.substring(d1.indexOf('/') + 1, d1
+							.lastIndexOf('/')));
+				}
+				int[] daysInMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31,
+						30, 31 };
+				int[] daysInMonth1 = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31,
+						30, 31 };
+				if (year == 0 || month == 0 || day == 0)
+				{
+					invalidDateFormat = true;
+				}
+				if (year % 400 == 0 || (year % 100 != 0 && year % 4 == 0)) 
+				{
+					if (day > daysInMonth1[month - 1])
+					{
+						invalidDateFormat = true;
+					}
+				} 
+				else 
+				{
+					if (day > daysInMonth[month - 1]) 
+					{
+						invalidDateFormat = true;
+					}
+				}
+			} 
+			else
+			{
+				invalidDateFormat = true;
+			}
+		}
+		if (invalidDateFormat)
+		{
+			TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_INVALID_DATE);
+			return true;
+		}
+		return isValid;
+	}
+    
+    //Infinite defect Resolution ESPRD00480153
+    public static  boolean dateValidator( String date,String fieldName) 
+	{
+    
+		boolean isValid = false;
+		final String DATE_DEFAULT = "(0[1-9]|1[012]|[1-9])([/])(0[1-9]|[12][0-9]|3[01]|[1-9])([/])([0-9]{4})";
+		boolean invalidDateFormat = false;
+		String d1 = date.trim();
+		Pattern mask = null;
+		mask = Pattern.compile(DATE_DEFAULT);
+		Matcher matcher = mask.matcher(d1);
+		if (!d1.trim().equals("")) 
+		{
+			if (matcher.matches())
+			{
+				int year = 0;
+				int month = 0;
+				int day = 0;
+				if (matcher.matches()) 
+				{
+					year = Integer.parseInt(d1
+							.substring(d1.lastIndexOf('/') + 1));
+					month = Integer.parseInt(d1.substring(0, d1.indexOf('/')));
+					day = Integer.parseInt(d1.substring(d1.indexOf('/') + 1, d1
+							.lastIndexOf('/')));
+				}
+				int[] daysInMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31,
+						30, 31 };
+				int[] daysInMonth1 = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31,
+						30, 31 };
+				if (year == 0 || month == 0 || day == 0)
+				{
+					invalidDateFormat = true;
+				}
+				if (year % 400 == 0 || (year % 100 != 0 && year % 4 == 0)) 
+				{
+					if (day > daysInMonth1[month - 1])
+					{
+						invalidDateFormat = true;
+					}
+				} 
+				else 
+				{
+					if (day > daysInMonth[month - 1]) 
+					{
+						invalidDateFormat = true;
+					}
+				}
+			} 
+			else
+			{
+				invalidDateFormat = true;
+			}
+		}
+		if (invalidDateFormat)
+		{
+			TPLAdministrationHelper.setAddHIPPInfoMessageToId(TPLRecoveryCaseConstants.TPL_RECOVERY_INVALID_DATE,fieldName,false,TPLRecoveryCaseConstants.ADDRECOVERYCASEPPortletResource);
+			
+			return true;
+		}
+		return isValid;
+	}
+    
+    
+    /*TPL0231.0001.01 TPL.RCVY.MNTRCVY.0002
+     This rule is  Service Auth ID must be required for Orthodontia Claims*/
+    public static boolean validateTPLRCVYMNTRCVY0002(TPLRecoveryDataBean recoveryDataBean,String recoveryType, String caseStatus, String serviceAuthID)
+    {
+    	boolean result = false;
+    	//changed for defect ESPRD00782194
+    	if(!(recoveryDataBean.isMajorSaveClicked())){
+			if(StringUtils.isEmpty(serviceAuthID.trim())){
+				recoveryDataBean.setFocusThisId("serviceauthfocus");
+				TPLAdministrationHelper.setAddRecoveryInformation(TPLRecoveryCaseConstants.SERVICE_AUTH_REQUIRED,"serviceAuthID");
+  				result = true;
+			}					
+		}
+    	
+  		/*if ("6".equals(recoveryType) && "O".equalsIgnoreCase(caseStatus))
+  		{
+  			if (StringUtils.isEmpty(serviceAuthID))
+  			{
+  				Defect id ESPRD00677465 field level error message
+  				TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.SERVICE_AUTH_REQUIRED);
+  				TPLAdministrationHelper.setAddRecoveryInformation(TPLRecoveryCaseConstants.SERVICE_AUTH_REQUIRED,"serviceAuthID");
+  				result = true;
+  			}
+  		}*/
+    	
+  		//Deffect Fix:ESPRD00090023
+  		/*else if (!"6".equals(recoveryType))
+  		{
+  			if (StringUtils.isNotEmpty(serviceAuthID))
+  			{
+  				TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.SERVICE_AUTH_ORTHO_REQUIRED);
+  				result = true;
+  			}
+  		}*/
+  		return result;
+  	}
+    
+    /**
+     * this method used to checking RecoveryMethodIsFixed 
+     * TPL0132.0001.01
+     * @param recoveryMethod String
+     * @param fixedAmount Double
+     * @param recoveryReason
+     */
+    public static boolean validateTPLRCVYMNTRCVY0029(String recoveryMethod,Double fixedAmount) 
+    {   
+    	boolean result = false;
+        if (StringUtils.isNotEmpty(recoveryMethod) && recoveryMethod.equalsIgnoreCase(TPLRecoveryCaseConstants.RCVY_METHOD_FIXED)) 
+        {
+        	if(fixedAmount == null)
+        	{
+        	 result = true;
+        	//Defect -- Defect Fix ESPRD00652474
+        	 TPLAdministrationHelper.setAddRecoveryInformation(
+        			 	TPLRecoveryCaseConstants.TPL_RECOVERY_CASE_FXDAMOUNT, 
+        			 	TPLRecoveryCaseConstants.TPL_RCVRY_FIXEDAMT);
+        	}
+        	else if(StringUtils.isNotEmpty(fixedAmount.toString()) &&  fixedAmount.doubleValue() <= 0)
+        	{
+        	 result = true;
+        	//Defect -- Defect Fix ESPRD00652474
+        	 TPLAdministrationHelper.setAddRecoveryInformation(
+        			 TPLRecoveryCaseConstants.TPL_RECOVERY_CASE_FXDAMOUNT, 
+        			 TPLRecoveryCaseConstants.TPL_RCVRY_FIXEDAMT);
+        	}
+        }
+        
+        return result;
+    }
+    
+    /**
+     * this method used to checking Fixed GreterThan RecovryAmt 
+     * TPL0134.0001.01
+     * 
+     * @param recoveryAmount Double
+     * @param fixedAmount Double
+     */
+    public static boolean validateTPLRCVYMNTRCVY0032(String recoveryMethod, Double recoveryAmount, Double fixedAmount) 
+    {
+    	boolean result = false;
+    	if(fixedAmount !=null && recoveryAmount != null && recoveryMethod != null){
+        if (recoveryMethod.equalsIgnoreCase(TPLRecoveryCaseConstants.RCVY_METHOD_FIXED) && fixedAmount.doubleValue() > recoveryAmount.doubleValue()) 
+        {
+        	result = true;
+        	TPLAdministrationHelper.setAddRecoveryInformation(
+        			TPLRecoveryCaseConstants.TPL_RECOVERY_AMT_GTR_FXDAMOUNT,
+        			TPLRecoveryCaseConstants.TPL_RCVRY_FIXEDAMT);
+        }
+    	}
+        return result;
+    }
+    
+    /**
+     * this method used to checking RecoveryMethodIsFixed 
+     * TPL0717.0001.01
+     * @param recoveryMethod String
+     * @param fixedAmount Double
+     * @param recoveryReason
+     */
+    //Not Using Duplicate code
+   /* public static boolean validateTPLRCVYMNTRCVY0717(String recoveryAmount, String recoveryReason) 
+    {   //System.out.println("...1..... 29  "+recoveryMethod);
+    	boolean result = false;
+    	double recoveryAmt = new Double(recoveryAmount).doubleValue();
+    	//changed the condition for CR ESPRD00362166
+    	if (recoveryReason!=null && recoveryReason.trim().length()>0 && (recoveryReason.charAt(0) == TPLRecoveryCaseConstants.D||recoveryReason.charAt(0) == TPLRecoveryCaseConstants.S))
+        {
+        	if (recoveryAmt != 0)
+        	{
+         		  TPLAdministrationHelper.addErrorMessage(TPLRecoveryCaseConstants.TPL_RECOVERY_AMT_MUST_ZERO_FOR_RECVRY_RSN_CODE_D,
+						TPLRecoveryCaseConstants.ADDRECOVERYCASEPPortletResource,TPLRecoveryCaseConstants.TPL_RCVRY_RESP_RCVRY_AMT);	
+        		result = true;
+        	}
+        }
+        
+        return result;
+    }*/
+
+    public static boolean validateTPLRCVYMNTRCVY0226(String entityType, String entityId) 
+    {
+    	boolean result = false;
+    	try
+		{
+    		if (StringUtils.isEmpty(entityType) || StringUtils.isEmpty(entityId))
+    		{
+    			result = true;
+    			//TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_INTERESTEDPARTY_INVALID);
+    			TPLAdministrationHelper.setAddHIPPInfoMessageToId(TPLRecoveryCaseConstants.TPL_RECOVERY_INTERESTEDPARTY_INVALID,"entityType_interestedParty",false,TPLRecoveryCaseConstants.ADDRECOVERYCASEPPortletResource);
+    		}
+    		else if (StringUtils.isNotEmpty(entityId) && !StringUtils.isNumeric(entityId))
+    		{
+    			result = true;
+    			//TPLAdministrationHelper.setAddRecoveryInfo(TPLRecoveryCaseConstants.TPL_RECOVERY_INTERESTEDPARTY_INVALID);
+    			TPLAdministrationHelper.setAddHIPPInfoMessageToId(TPLRecoveryCaseConstants.TPL_RECOVERY_INTERESTEDPARTY_INVALID,"entityType_interestedParty",false,TPLRecoveryCaseConstants.ADDRECOVERYCASEPPortletResource);
+    		}
+		}
+    	catch (Exception e) 
+		{
+    		e.printStackTrace();
+	 	} 
+        return result;
+        
+    }
+    
+    public static boolean validateTPLRCVYMNTRCVY0433(String recoveryReason, String responseDate) 
+    {
+    	boolean result = false;
+    	try
+		{
+    		if (StringUtils.isNotEmpty(recoveryReason) && recoveryReason.startsWith("D") 
+    				&& StringUtils.isEmpty(responseDate))
+    		{
+    			result = true;
+            	TPLAdministrationHelper.setAddRecoveryInformation(
+            			TPLRecoveryCaseConstants.DENIAL_RSNCD_PRESENT_RESPONSE_DATE_REQUIRED
+            			,TPLRecoveryCaseConstants.TPL_RCVRY_METHOD_DATE);
+    		}
+		}
+    	catch (Exception e) 
+		{
+    		e.printStackTrace();
+	 	} 
+        return result;
+        
+    }
+    // Defect ESPRD00684376
+    public static boolean validateTPLRCVYMNTRCVY4320(String recoveryAmount, String recoveryReason, String fcn) 
+    {
+    	boolean result = false;
+    	double recoveryAmt = new Double(recoveryAmount).doubleValue();
+    	try{
+    		if (recoveryReason!=null && recoveryReason.trim().length()>0 && 
+    		(recoveryReason.charAt(0) == TPLRecoveryCaseConstants.D||recoveryReason.charAt(0) == TPLRecoveryCaseConstants.S || recoveryReason.equals(TPLRecoveryCaseConstants.R99)))
+    		{
+    			if(recoveryAmt != 0 || StringUtils.isNotBlank(fcn))
+    			{
+    				TPLAdministrationHelper.setAddHIPPInfoMessageToId(TPLRecoveryCaseConstants.TPL_RCVRY_RES_AMT_FCN_MUST_BLANK_RECVRY_RSN_CODE_DF, 
+    						"FCN_value", false, TPLRecoveryCaseConstants.ADDRECOVERYCASEPPortletResource);
+    				result = true;     			
+    			}
+    		}
+    	}
+    	catch(Exception e){
+    		e.printStackTrace();
+    	}
+    	return result;
+    }
+    
+    public static boolean validateTPLRCVNumeric(String amount, String field){
+    	boolean result = false;
+    	try{
+    	   if(amount.startsWith(".")){
+       		 amount="0"+amount;   		 
+       	 }
+    	   //DEFECT_ESPRD00813608 changed the pattern for validating amount
+    	 String pattern="[0-9]{0,9}[.]?[0-9]{0,2}";
+		 Pattern p = Pattern.compile(pattern);
+	     Matcher m = p.matcher(amount);
+	     result = m.matches();	    
+	     if(!result){	    	
+	    	 TPLAdministrationHelper.setAddRecoveryInformation(TPLRecoveryCaseConstants.TPL_RCVRY_RES_AMT_FORMAT, field);
+	     }
+	     else if(!amount.contains(".") &&
+	    		 amount.length()>9){
+				result = false; 
+				 TPLAdministrationHelper.setAddRecoveryInformation(TPLRecoveryCaseConstants.TPL_RCVRY_RES_AMT_FORMAT, field);
+			}
+    	     
+    	}
+    	catch(Exception e)
+    	{
+    		e.printStackTrace();
+    	}
+    	return result;
+    }
+    //END
+    //  ESPRD00450126_CR
+    public static boolean validateRecAmtandFCN(String recReasonCode, String recAmount, String fcn)
+    {
+    	boolean result = false;
+    	double recoveryAmt = new Double(recAmount).doubleValue();
+    	if ((recReasonCode != null && recReasonCode.trim().length()>0 && 
+				(recReasonCode.equals(TPLRecoveryCaseConstants.R99)))
+				|| (recReasonCode != null && recReasonCode.trim().length()>0 &&
+						TPLRecoveryCaseConstants.D == recReasonCode.charAt(0))
+				|| (recReasonCode != null && recReasonCode.trim().length()>0 &&
+						TPLRecoveryCaseConstants.S == recReasonCode.charAt(0)))
+    	{
+    		if (recoveryAmt != 0)
+    		{
+    			result = true;
+    			TPLAdministrationHelper.setAddRecoveryInformation(
+    					TPLRecoveryCaseConstants.TPL_RCVRY_REC_AMT_FCN_NOT_ENTERED,
+    					TPLRecoveryCaseConstants.TPL_RCVRY_AMT);
+    		}else if (StringUtils.isNotEmpty(fcn))
+    		{
+    			result = true;
+    			TPLAdministrationHelper.setAddRecoveryInformation(
+    					TPLRecoveryCaseConstants.TPL_RCVRY_REC_AMT_FCN_NOT_ENTERED,
+    					TPLRecoveryCaseConstants.TPL_RCVRY_FCN);
+    		}
+    	}
+    	return result;
+    }
+    
+    
+    public static boolean dateValidator(FacesContext fc, String date, String componentId) 
+    {
+    	if (date == null || "".equals(date.trim()))
+    	{
+    		return true;
+    	}
+    	boolean isValid = false;
+    	final String DATE_DEFAULT = "(0[1-9]|1[012]|[1-9])([/])(0[1-9]|[12][0-9]|3[01]|[1-9])([/])([0-9]{4})";
+    	final String DATE_HYPEN = "(0[1-9]|1[012]|[1-9])([-])(0[1-9]|[12][0-9]|3[01]|[1-9])([-])([0-9]{4})";
+    	final String DATE_PLAIN = "(0[1-9]|1[012]|[1-9])(0[1-9]|[12][0-9]|3[01]|[1-9])([0-9]{4})";
+    	boolean invalidDateFormat = false;
+    	String d1 = date.trim();
+    	String formatDate = null;
+    	Pattern mask = null, mask1 = null, mask2 = null;
+    	mask = Pattern.compile(DATE_DEFAULT);
+    	mask1 = Pattern.compile(DATE_HYPEN);
+    	mask2 = Pattern.compile(DATE_PLAIN);
+    	if ( mask2.matcher(d1).matches())
+    	{
+    		StringBuffer dt = new StringBuffer(d1);
+    		dt.insert(TPLRecoveryCaseConstants.TWO, '/');
+    		dt.insert(TPLRecoveryCaseConstants.FIVE, '/');
+    		d1 = dt.toString();
+    	}
+    	else 
+    	if (mask1.matcher(d1).matches())
+    	{
+    		d1 = d1.replaceAll(TPLRecoveryCaseConstants.TPL_RCVRY_HYPHEN, "/");
+    	}
+    	Matcher matcher = mask.matcher(d1);
+    	if (!d1.trim().equals("")) 
+    	{
+    		if (matcher.matches()) 
+    		{
+    			formatDate = d1;
+    			int year = TPLRecoveryCaseConstants.ZERO;
+    			int month = TPLRecoveryCaseConstants.ZERO;
+    			int day = TPLRecoveryCaseConstants.ZERO;
+    			year = Integer.parseInt(d1
+    					.substring(d1.lastIndexOf('/') + TPLRecoveryCaseConstants.ONE));
+    			month = Integer.parseInt(d1.substring(TPLRecoveryCaseConstants.ZERO, d1.indexOf('/')));
+    			day = Integer.parseInt(d1.substring(d1.indexOf('/') + TPLRecoveryCaseConstants.ONE, d1
+    					.lastIndexOf('/')));
+        
+		       int[] daysInMonth = {TPLRecoveryCaseConstants.THIRTYONE, TPLRecoveryCaseConstants.TWENTYEIGHT,
+		       			TPLRecoveryCaseConstants.THIRTYONE, TPLRecoveryCaseConstants.THIRTY,
+						TPLRecoveryCaseConstants.THIRTYONE, TPLRecoveryCaseConstants.THIRTY, 
+						TPLRecoveryCaseConstants.THIRTYONE, TPLRecoveryCaseConstants.THIRTYONE, 
+						TPLRecoveryCaseConstants.THIRTY, TPLRecoveryCaseConstants.THIRTYONE,
+						TPLRecoveryCaseConstants.THIRTY, TPLRecoveryCaseConstants.THIRTYONE};
+		       	int[] daysInMonth1 = {TPLRecoveryCaseConstants.THIRTYONE, TPLRecoveryCaseConstants.TWENTYNINE, 
+		       			TPLRecoveryCaseConstants.THIRTYONE, TPLRecoveryCaseConstants.THIRTY, 
+						TPLRecoveryCaseConstants.THIRTYONE, TPLRecoveryCaseConstants.THIRTY, 
+						TPLRecoveryCaseConstants.THIRTYONE, TPLRecoveryCaseConstants.THIRTYONE, 
+						TPLRecoveryCaseConstants.THIRTY, TPLRecoveryCaseConstants.THIRTYONE, 
+						TPLRecoveryCaseConstants.THIRTY, TPLRecoveryCaseConstants.THIRTYONE};
+		       	if (year == TPLRecoveryCaseConstants.ZERO || month == TPLRecoveryCaseConstants.ZERO || day == TPLRecoveryCaseConstants.ZERO) 
+		       	{
+		       		invalidDateFormat = true;
+		       	}
+		       	if (year % TPLRecoveryCaseConstants.FOURHUNDRED == TPLRecoveryCaseConstants.ZERO 
+		       			||  (year % TPLRecoveryCaseConstants.HUNDRED != TPLRecoveryCaseConstants.ZERO 
+		       					&& year % TPLRecoveryCaseConstants.FOUR == TPLRecoveryCaseConstants.ZERO))
+		       	{
+		       		if (day > daysInMonth1[month - TPLRecoveryCaseConstants.ONE]) 
+		       		{
+		       			invalidDateFormat = true;
+		       		}
+		       	} 
+		       	else 
+		       	if (day > daysInMonth[month - TPLRecoveryCaseConstants.ONE])
+		       	{
+		       		invalidDateFormat = true;
+		       	}
+    		} 
+    		else
+    		{
+    			invalidDateFormat = true;
+    		}
+    	}
+    	if (invalidDateFormat) 
+    	{
+    		if ( fc != null)
+    		{
+    			UIComponent fieldName = (UIComponent) findComponentInRoot(componentId);
+    			String key = TPLRecoveryCaseConstants.TPL_RECOVERY_INVALID_DATE;
+    			fc.addMessage(fieldName.getClientId(fc), new FacesMessage(
+    					ResourceBundle.getBundle(TPLRecoveryCaseConstants.ADDRECOVERYCASEPPortletResource)
+							.getString(key)));
+    		}
+    		isValid = true;
+    	}
+    	return isValid;
+    }
+    
+    /**
+     * Method used find the component in root by passing id.
+     * 
+     * @param id -
+     *            String object.
+     * @return UIComponent object.
+     */
+    public static UIComponent findComponentInRoot(String id)
+    {
+        UIComponent ret = null;
+        FacesContext context = FacesContext.getCurrentInstance();
+        if (context != null)
+        {
+            UIComponent root = context.getViewRoot();
+            ret = findComponent(root, id);
+        }
+        return ret;
+    }
+    
+    /**
+     * @param base -
+     *            View root component of the jsp.
+     * @param id -
+     *            Id of the component from jsp.
+     * @return UIComponent object.
+     */
+    public static UIComponent findComponent(UIComponent base, String id)
+    {
+        UIComponent kid = null;
+        UIComponent result = null;
+        if (id.equals(base.getId()))
+        {
+            result = base;
+        }
+        else
+        {
+            Iterator kids = base.getFacetsAndChildren();
+            while (kids.hasNext() && (result == null))
+            {
+                kid = (UIComponent) kids.next();
+                if (id.equals(kid.getId()))
+                {
+                    result = kid;
+                    break;
+                }
+                result = findComponent(kid, id);
+                if (result != null)
+                {
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+  public static String getValidDateFormat(String inputDate)
+    {
+        String outputDate = inputDate;
+
+        if (!(outputDate.indexOf('/') > 0))
+        {
+            if (outputDate.indexOf('-') > 0)
+            {
+                inputDate = inputDate.replace('-', '/');
+            }
+            else
+            {
+                inputDate = inputDate.substring(0,
+                        TPLAdministrationConstants.TWO)
+                        + "/"
+                        + inputDate.substring(TPLAdministrationConstants.TWO,
+                                TPLAdministrationConstants.FOUR)
+                        + "/"
+                        + inputDate.substring(TPLAdministrationConstants.FOUR,
+                                TPLAdministrationConstants.EIGHT);
+            }
+        }
+        return inputDate;
+    }
+  public static Date dateConverter(String strdate)
+    {
+        Date date = null;
+
+        SimpleDateFormat sdf1 = new SimpleDateFormat(
+                TPLAdministrationConstants.DATE_FORMAT, Locale.getDefault());
+        if (strdate != null && EnterpriseCommonValidator.validateDate(strdate))
+        {
+            String valDt = getValidDateFormat(strdate);
+
+            try
+            {
+                date = new Date(sdf1.parse(valDt).getTime());
+
+            }
+            catch (ParseException e)
+            {
+            	e.printStackTrace();
+            }                       
+        }
+
+        return date;
+    } 
+  /**
+   * ESPRD00660975 CR Related Changes
+   * This Rule If Address Line 1 is present, Employer Name, City, State and
+   * Zip are required TPL0168.0001.01
+   * 
+   * @param empName
+   *            String
+   * @param city
+   *            String
+   * @param state
+   *            String
+   * @param addressLine1
+   *            String
+   * @param zip
+   *            String
+   */
+  public static boolean validateTPLRCVYMNTRCVY00168(String empName,String addressType,
+          String city, String state, String addressLine1, String zip) 
+  {
+  	boolean result = false;
+      	 
+  	if(StringUtils.isEmpty(empName))
+	{
+		result = true;
+     	TPLAdministrationHelper.setAddRecoveryInformation(TPLRecoveryCaseConstants.TPL_RECOVERY_CARRIER_EMPLOYEE_ADDR,"empName");
+	}
+  	if(StringUtils.isEmpty(addressType))
+	{
+		result = true;
+     	TPLAdministrationHelper.setAddRecoveryInformation(TPLRecoveryCaseConstants.TPL_RECOVERY_CARRIER_EMPLOYEE_ADDR,"empAddressType");
+	}
+	if (StringUtils.isEmpty(city)) 
+     {
+     	result = true;
+    	TPLAdministrationHelper.setAddRecoveryInformation(TPLRecoveryCaseConstants.TPL_RECOVERY_CARRIER_EMPLOYEE_ADDR,"empCity");
+   	 }
+	if(StringUtils.isEmpty(state)){
+        result = true;
+    	TPLAdministrationHelper.setAddRecoveryInformation(TPLRecoveryCaseConstants.TPL_RECOVERY_CARRIER_EMPLOYEE_ADDR,"empState");
+     }
+	if(StringUtils.isEmpty(zip)){
+        result = true;
+    	TPLAdministrationHelper.setAddRecoveryInformation(TPLRecoveryCaseConstants.TPL_RECOVERY_CARRIER_EMPLOYEE_ADDR,"empZip1");
+     }
+    
+	return result;
+  }
+  
+  //CR ESPRD00915907 START
+  public boolean validateTPLRCVRYMNTRCVRYNEW0044(
+	  		String recoveryMethod, String recoveryAmount,String recoveryReason, 
+	          String fcn, String method, String recoveryDate, String fixedAmount) 
+  {   
+	  boolean result = false;  	
+	  if(method.equalsIgnoreCase(TPLRecoveryCaseConstants.TPL_RCVRY_METHOD))
+	  {
+		  if(StringUtils.isNotEmpty(recoveryMethod)){
+			  if(StringUtils.isEmpty(recoveryReason)|| StringUtils.isEmpty(recoveryAmount) 
+					  ||StringUtils.isEmpty(fcn)|| StringUtils.isEmpty(recoveryDate) ){
+				  result = true;  
+			  }
+		  }else if(StringUtils.isNotEmpty(recoveryAmount) && (StringUtils.isEmpty(recoveryReason) 
+				  || StringUtils.isEmpty(recoveryMethod) || StringUtils.isEmpty(fcn)
+				  || StringUtils.isEmpty(recoveryDate))){
+			  result = true;
+		  }else if(StringUtils.isNotEmpty(fcn) && (StringUtils.isEmpty(recoveryReason) 
+				  || StringUtils.isEmpty(recoveryMethod)|| StringUtils.isEmpty(recoveryAmount) 
+				  || StringUtils.isEmpty(recoveryDate))){
+			  result = true;
+		  }else if(StringUtils.isNotEmpty(recoveryDate)&& (StringUtils.isEmpty(recoveryReason) 
+				  || StringUtils.isEmpty(recoveryMethod)|| StringUtils.isEmpty(recoveryAmount) 
+				  || StringUtils.isEmpty(fcn))){
+			  result = true; 
+		  }else if(StringUtils.isNotEmpty(fixedAmount)&& (StringUtils.isEmpty(recoveryReason) 
+				  || StringUtils.isEmpty(recoveryMethod)|| StringUtils.isEmpty(recoveryAmount) 
+				  || StringUtils.isEmpty(fcn)||StringUtils.isEmpty(recoveryDate))){
+			  result = true;   
+		  }
+		  if(result){
+			  TPLAdministrationHelper.setAddRecoveryInformation(
+					  TPLRecoveryCaseConstants.ERROR_RREASON_FCN_RAMOUNT_RMETHOD_REQUIRED,
+					  TPLRecoveryCaseConstants.TPL_RCVRY_RCVRY_REASON); 
+		  }
+	  } else if(method.equalsIgnoreCase(TPLRecoveryCaseConstants.TPL_RCVRY_RESP)){
+		  if(StringUtils.isNotEmpty(recoveryReason) && (StringUtils.isEmpty(recoveryAmount) 
+				  || StringUtils.isEmpty(fcn)|| StringUtils.isEmpty(recoveryDate))){
+			  result = true;
+		  }else if(StringUtils.isNotEmpty(recoveryAmount) && (StringUtils.isEmpty(recoveryReason) 
+				  || StringUtils.isEmpty(fcn)|| StringUtils.isEmpty(recoveryDate))){
+			  result = true;
+		  }else if(StringUtils.isNotEmpty(fcn) && (StringUtils.isEmpty(recoveryReason) 
+				  || StringUtils.isEmpty(recoveryAmount) || StringUtils.isEmpty(recoveryDate))){
+			  result = true;
+		  }else if(StringUtils.isNotEmpty(recoveryDate)&& (StringUtils.isEmpty(recoveryReason) 
+				   || StringUtils.isEmpty(recoveryAmount) || StringUtils.isEmpty(fcn))){
+			  result = true; 
+		  } 
+		  if(result){
+			  TPLAdministrationHelper.setAddRecoveryInformation(
+					  TPLRecoveryCaseConstants.ERROR_RREASON_FCN_RAMOUNT_RMETHOD_REQUIRED,
+					  TPLRecoveryCaseConstants.TPL_RCVRY_RESP_RESON); 
+		  }
+	  }
+	  return result;
+  }
+
+//CR ESPRD00915907 END
+}

@@ -1,0 +1,19 @@
+1409645834954	Rename package 'com.cognizant.designproject.rules.identifiaction'
+1409645951801	Move compilation units
+1409810742077	Delete element
+1409810784276	Rename type 'ExtractKeywordConditionsListener'
+1409812443827	Rename type 'ExtractBatchKeywordConditionsListener'
+1409830038560	Rename resource 'Rules-Metadata.xml'
+1409834322421	Move compilation unit
+1409896436249	Delete element
+1409899027263	Rename package 'src.com.cognizant.designproject.core.helper'
+1409904642104	Delete element
+1409908988541	Delete element
+1409909427953	Delete element
+1409909536605	Delete element
+1409910686961	Delete element
+1409915811200	Rename resource 'RulesExternalizeDescription.xml'
+1409917376063	Delete element
+1409917400506	Rename type 'ExtractMethodNamesListenerUpdate'
+1409920246463	Rename resource 'RulesExternalizerInfo.xml'
+1409920301597	Rename resource 'RulesExternalizer.xml'

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="/DesignProjectUI/css/bootstrap.min.css"/>
+<link rel="stylesheet" href="/DesignProjectUI/css/bootstrap-table.css"/>
+<link rel="stylesheet" href="/DesignProjectUI/css/layout-default-latest.css"/>
+<meta charset="ISO-8859-1">
+<title>CA2 Design Project
+</title>
+<style type="text/css">
+	
+	#dp {		
+		border-radius : 8px 8px 0 8px;
+		background-color : #fff;
+	}
+	
+	.leftDiv{		
+		width : 400px;
+		height :2000px;
+		float: left;
+		overflow:scroll;
+	}
+	.centerDiv{
+		left:400px;'
+		width : 13000px;
+		height :2000px;
+		overflow:scroll;
+	}
+	 <style type="text/css">
+circle.node {
+  cursor: pointer;
+  stroke: #000;
+  stroke-width: .5px;
+}
+
+circle.node.directory {
+  stroke: #9ecae1;
+  stroke-width: 2px;
+}
+
+circle.node.collapsed {
+  stroke: #555;
+}
+
+.nodetext {
+  fill: #252929;
+  font-weight: bold;
+  text-shadow: 0 0 0.2em white;
+}
+
+line.link {
+  fill: none;
+  stroke: #9ecae1;
+  stroke-width: 1.5px;
+}
+</style>
+</head>
+<body>
+	
+		<div class="ui-layout-north" style="background: #191007">		
+				<div class="container-fluid">    
+			        <div class="navbar-header" >
+			        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+			            <span class="sr-only">Toggle navigation</span>
+			            <span class="icon-bar"></span>
+			            <span class="icon-bar"></span>
+			            <span class="icon-bar"></span>
+			          </button>		          
+			          <a class="navbar-brand" href="#"><img src="/DesignProjectUI/image/CA2_logo.png" style="height:30px"/> Design Project</a>
+			         </div>
+			         <div style="float:right">	          
+			            <input type="text"  placeholder="Enter Source Path..." id="srcPath">
+			            <button type="button" class="btn btn-primary" id="getClsInfo" >Generate Design Doc</button>
+			        </div>
+		        </div> 
+		 </div>  
+		  
+        	<div class="ui-layout-west" >        		
+	        	<div id="designProjectTree" class="aciTree aciTreeNoBranches" >
+	        	
+	        	</div>
+        	</div>       
+		   	<div class="ui-layout-center">
+		   	 <h1  id="pageHeader"></h1>
+		   	 <div style="display:none" id="loaderDiv"><image src="/DesignProjectUI/image/loadingPreload.gif" id="imgLoader"/></div>
+		   	 	<div >
+		     		<div id="content1" class="col-sm-4" >
+		     		</div>
+		     		<div id="content2" class="col-sm-4">
+		     		</div>
+		     		<div id="content3" class="col-sm-4">
+		     		</div>
+		     	</div>		     	
+		   </div>
+		   
+
+<script src="/DesignProjectUI/js/vendor/raphael.js"></script>
+<script src="/DesignProjectUI/js/vendor/joint.js"></script>
+<script src="/DesignProjectUI/js/vendor/joint.shapes.uml.js"></script>
+<script src="/DesignProjectUI/js/vendor/joint.layout.DirectedGraph.js"></script>
+<script src="/DesignProjectUI/js/ClassDiagram.js"></script>
+<script src="/DesignProjectUI/js/vendor/sequence-diagram-min.js"></script>
+<script src="/DesignProjectUI/js/SeqDiagram.js"></script>
+<script src="/DesignProjectUI/js/vendor/bootstrap.min.js"></script>
+<script src="/DesignProjectUI/js/vendor/jquery.aciPlugin.min.js"></script>
+<script src="/DesignProjectUI/js/vendor/jquery.aciTree.min.js"></script>
+<script src="/DesignProjectUI/js/ClassInfoTree.js"></script>
+<script src="/DesignProjectUI/js/UseCaseDiagram.js"></script>
+<script src="/DesignProjectUI/js/vendor/bootstrap-table.js"></script>
+<script src="/DesignProjectUI/js/vendor/jasny-bootstrap.js"></script>
+<script src="/DesignProjectUI/js/vendor/jquery.layout-latest.js"></script>
+	<script type="text/javascript">
+	$(document).ready(function () {
+		$('body').layout();
+	});
+
+	$("#getClsInfo").click(function(){
+		var div1=$("#content1");
+		div1.append("<Span>No Of Lines</Span><br><strong>100</strong><small>&nbsp;Lines</small>");
+		var div2=$("#content2");
+		div2.append("<strong>Content 2</strong><br><small>150 Lines</small>");
+		var div3=$("#content3");
+		div3.append("<strong>Content 3</strong><br><small>125 Lines</small>");
+		var jsonData=[{id:1,name:"kumar"},{id:2,name:"teja"},{id:3,name:"jayanth"},{id:4,name:"Raji"}];
+		$("#datatable").bootstrapTable({
+			data:jsonData,
+			striped:true,
+			columns:[{field:'id',title:"Id"},{field:"name",title:"Name"}]
+		});
+		
+		//var currentFlower = new CodeFlower("#visualization",300,200);
+		//var jsonData={"name":"root","children":[{"name":"app","children":[{"name":"dashboard","children":[{"name":"public","children":[{"name":"stylesheets","children":[{"name":"bootstrap.css","size":4945,"language":"CSS"},{"name":"style.css","size":254,"language":"CSS"},{"name":"jquery.tagsinput.css","size":7,"language":"CSS"}],"size":5206},{"name":"javascripts","children":[{"name":"dateNavigation.js","size":155,"language":"Javascript"},{"name":"dateInterval.js","size":83,"language":"Javascript"},{"name":"bootstrap-affix.js","size":56,"language":"Javascript"},{"name":"bootstrap-button.js","size":52,"language":"Javascript"},{"name":"uptimeBar.js","size":47,"language":"Javascript"},{"name":"checkState.js","size":31,"language":"Javascript"},{"name":"flashcanvas","children":[{"name":"canvas2png.js","size":27,"language":"Javascript"},{"name":"flashcanvas.js","size":21,"language":"Javascript"}],"size":48},{"name":"statNavigation.js","size":26,"language":"Javascript"},{"name":"flotr2.min.js","size":3,"language":"Javascript"},{"name":"jquery.min.js","size":3,"language":"Javascript"},{"name":"jquery.tablesorter.min.js","size":1,"language":"Javascript"},{"name":"moment.min.js","size":1,"language":"Javascript"},{"name":"ejs.min.js","size":1,"language":"Javascript"},{"name":"jquery.tagsinput.min.js","size":1,"language":"Javascript"}],"size":508}],"size":5714},{"name":"app.js","size":126,"language":"Javascript"}],"size":5840},{"name":"api","children":[{"name":"routes","children":[{"name":"check.js","size":95,"language":"Javascript"},{"name":"ping.js","size":68,"language":"Javascript"},{"name":"tag.js","size":64,"language":"Javascript"}],"size":227},{"name":"app.js","size":59,"language":"Javascript"}],"size":286}],"size":6126},{"name":"lib","children":[{"name":"qosAggregator.js","size":476,"language":"Javascript"},{"name":"intervalBuilder.js","size":144,"language":"Javascript"},{"name":"monitor.js","size":109,"language":"Javascript"},{"name":"pollers","children":[{"name":"https.js","size":81,"language":"Javascript"},{"name":"http.js","size":80,"language":"Javascript"},{"name":"icmp.js","size":53,"language":"Javascript"},{"name":"udp.js","size":47,"language":"Javascript"},{"name":"base.js","size":33,"language":"Javascript"}],"size":294},{"name":"proxy.js","size":61,"language":"Javascript"},{"name":"analyzer.js","size":40,"language":"Javascript"},{"name":"timer.js","size":15,"language":"Javascript"}],"size":1139},{"name":"models","children":[{"name":"check.js","size":313,"language":"Javascript"},{"name":"tag.js","size":176,"language":"Javascript"},{"name":"migrations","children":[{"name":"upgrade2to3.js","size":137,"language":"Javascript"}],"size":137},{"name":"checkEvent.js","size":56,"language":"Javascript"},{"name":"ping.js","size":51,"language":"Javascript"},{"name":"checkYearlyStat.js","size":16,"language":"Javascript"},{"name":"tagYearlyStat.js","size":16,"language":"Javascript"},{"name":"checkMonthlyStat.js","size":16,"language":"Javascript"},{"name":"tagMonthlyStat.js","size":16,"language":"Javascript"},{"name":"tagDailyStat.js","size":15,"language":"Javascript"},{"name":"checkHourlyStat.js","size":15,"language":"Javascript"},{"name":"tagHourlyStat.js","size":15,"language":"Javascript"},{"name":"checkDailyStat.js","size":15,"language":"Javascript"}],"size":857},{"name":"test","children":[{"name":"lib","children":[{"name":"test_intervalBuilder.js","size":133,"language":"Javascript"}],"size":133}],"size":133},{"name":"fixtures","children":[{"name":"computeStats.js","size":117,"language":"Javascript"},{"name":"populate.js","size":70,"language":"Javascript"},{"name":"fixEvents.js","size":28,"language":"Javascript"},{"name":"dummyTargetUdp.js","size":19,"language":"Javascript"},{"name":"dummyTarget.js","size":13,"language":"Javascript"}],"size":247},{"name":"plugins","children":[{"name":"console","children":[{"name":"index.js","size":86,"language":"Javascript"}],"size":86},{"name":"email","children":[{"name":"index.js","size":36,"language":"Javascript"}],"size":36}],"size":122},{"name":"app.js","size":75,"language":"Javascript"},{"name":"config","children":[{"name":"default.yaml","size":36,"language":"YAML"},{"name":"test.yaml","size":4,"language":"YAML"}],"size":40},{"name":"bootstrap.js","size":32,"language":"Javascript"},{"name":"monitor.js","size":4,"language":"Javascript"},{"name":"makefile","size":3,"language":"make"}],"nbFiles":81,"size":8778};
+		//currentFlower.update(jsonData);
+		/*var chart = d3.chart.dependencyWheel().width(700).margin(100).padding(0.02);
+		var composerjson=JSON.parse('{"name":"sylius/sylius","require":{"php":">=5.3.3","athari/yalinqo":"*@dev","doctrine/doctrine-bundle":"1.2.*@dev","doctrine/doctrine-fixtures-bundle":"2.2.*","doctrine/orm":"~2.3","friendsofsymfony/rest-bundle":"0.13.*","friendsofsymfony/user-bundle":"2.0.*@dev","fzaninotto/faker":"1.2.*","incenteev/composer-parameter-handler":"~2.0","jms/serializer-bundle":"0.12.*","jms/translation-bundle":"1.1.*","knplabs/knp-menu-bundle":"*@dev","knplabs/knp-gaufrette-bundle":"*@dev","knplabs/knp-snappy-bundle":"*@dev","liip/doctrine-cache-bundle":"*","liip/imagine-bundle":"0.9.*","mathiasverraes/money":"*@dev","omnipay/omnipay":"*@dev","sensio/distribution-bundle":"2.3.*","stof/doctrine-extensions-bundle":"1.1.*","symfony/assetic-bundle":"2.3.*","symfony/intl":"~2.3","symfony/monolog-bundle":"2.3.*","symfony/swiftmailer-bundle":"2.3.*","symfony/symfony":"~2.3","twig/extensions":"1.0.*","white-october/pagerfanta-bundle":"1.0.*@dev"}}');
+		var composerlock=JSON.parse('{"packages":[{"name":"athari/yalinqo","require":{"php":">=5.3"}},{"name":"doctrine/annotations","require":{"doctrine/lexer":"1.*","php":">=5.3.2"}},{"name":"doctrine/cache","require":{"php":">=5.3.2"}},{"name":"doctrine/collections","require":{"php":">=5.3.2"}},{"name":"doctrine/common","require":{"doctrine/annotations":"1.*","doctrine/cache":"1.*","doctrine/collections":"1.*","doctrine/inflector":"1.*","doctrine/lexer":"1.*","php":">=5.3.2"}},{"name":"doctrine/data-fixtures","require":{"doctrine/common":">=2.2,<2.5-dev","php":">=5.3.2"}},{"name":"doctrine/dbal","require":{"doctrine/common":"~2.4","php":">=5.3.2"}},{"name":"doctrine/doctrine-bundle","require":{"doctrine/dbal":">=2.2,<2.6-dev","jdorn/sql-formatter":"~1.1","php":">=5.3.2","symfony/doctrine-bridge":"~2.2","symfony/framework-bundle":"~2.2"}},{"name":"doctrine/doctrine-fixtures-bundle","require":{"doctrine/data-fixtures":"~1.0","doctrine/doctrine-bundle":"~1.0","php":">=5.3.2","symfony/doctrine-bridge":"~2.1"}},{"name":"doctrine/inflector","require":{"php":">=5.3.2"}},{"name":"doctrine/lexer","require":{"php":">=5.3.2"}},{"name":"doctrine/orm","require":{"doctrine/collections":"~1.1","doctrine/dbal":"~2.4","ext-pdo":"*","php":">=5.3.2","symfony/console":"~2.0"}},{"name":"friendsofsymfony/rest","require":{"php":">=5.3.2","symfony/http-foundation":"~2.0"}},{"name":"friendsofsymfony/rest-bundle","require":{"doctrine/inflector":"1.0.*","friendsofsymfony/rest":">=0.7.0,<0.9.0-dev","php":">=5.3.2","symfony/framework-bundle":"~2.1","willdurand/negotiation":"1.0.*"}},{"name":"friendsofsymfony/user-bundle","require":{"php":">=5.3.2","symfony/form":"~2.1","symfony/framework-bundle":"~2.1","symfony/security-bundle":"~2.1"}},{"name":"fzaninotto/faker","require":{"php":">=5.3.3"}},{"name":"gedmo/doctrine-extensions","require":{"doctrine/common":">=2.2,<2.5-dev","php":">=5.3.2"}},{"name":"guzzle/common","require":{"php":">=5.3.2","symfony/event-dispatcher":">=2.1"}},{"name":"guzzle/http","require":{"guzzle/common":"self.version","guzzle/parser":"self.version","guzzle/stream":"self.version","php":">=5.3.2"}},{"name":"guzzle/parser","require":{"php":">=5.3.2"}},{"name":"guzzle/stream","require":{"guzzle/common":"self.version","php":">=5.3.2"}},{"name":"imagine/imagine","require":{"php":">=5.3.2"}},{"name":"incenteev/composer-parameter-handler","require":{"php":">=5.3.3","symfony/yaml":"~2.0"}},{"name":"jdorn/sql-formatter","require":{"php":">=5.2.4"}},{"name":"jms/metadata","require":{"php":">=5.3.0"}},{"name":"jms/parser-lib","require":{"phpoption/phpoption":">=0.9,<2.0-dev"}},{"name":"jms/serializer","require":{"doctrine/annotations":"1.*","jms/metadata":"~1.1","jms/parser-lib":"1.*","php":">=5.3.2","phpcollection/phpcollection":">=0.1,<0.3-dev"}},{"name":"jms/serializer-bundle","require":{"jms/serializer":"~0.11","php":">=5.3.2","symfony/framework-bundle":"~2.1"}},{"name":"jms/translation-bundle","require":{"nikic/php-parser":"0.9.1","symfony/console":"*","symfony/framework-bundle":"~2.1"}},{"name":"knplabs/gaufrette","require":{"php":">=5.3.2"}},{"name":"knplabs/knp-gaufrette-bundle","require":{"knplabs/gaufrette":"0.1.4","symfony/framework-bundle":"2.*"}},{"name":"knplabs/knp-menu","require":{"php":">=5.3.0"}},{"name":"knplabs/knp-menu-bundle","require":{"knplabs/knp-menu":"~1.1","symfony/framework-bundle":"~2.0"}},{"name":"knplabs/knp-snappy","require":{"php":">=5.3.0"}},{"name":"knplabs/knp-snappy-bundle","require":{"knplabs/knp-snappy":"*","php":">=5.3.2","symfony/framework-bundle":">=2.0.0"}},{"name":"kriswallsmith/assetic","require":{"php":">=5.3.1","symfony/process":"~2.1"}},{"name":"liip/doctrine-cache-bundle","require":{"doctrine/common":">=2.2","php":">=5.3.0","symfony/symfony":">=2.0"}},{"name":"liip/imagine-bundle","require":{"imagine/imagine":"0.4.*","php":">=5.3.2","symfony/filesystem":">=2.0.16,~2.0","symfony/finder":">=2.0.16,~2.0","symfony/framework-bundle":">=2.0.16,~2.0"}},{"name":"mathiasverraes/money","require":{"php":">=5.3.3"}},{"name":"monolog/monolog","require":{"php":">=5.3.0","psr/log":"~1.0"}},{"name":"nikic/php-parser","require":{"php":">=5.2"}},{"name":"omnipay/omnipay","require":{"guzzle/http":"~3.1","php":">=5.3.2","symfony/http-foundation":"~2.1"}},{"name":"pagerfanta/pagerfanta","require":{"php":">=5.3.0"}},{"name":"phpcollection/phpcollection","require":{"phpoption/phpoption":"1.*"}},{"name":"phpoption/phpoption","require":{"php":">=5.3.0"}},{"name":"psr/log"},{"name":"sensio/distribution-bundle","require":{"symfony/framework-bundle":"~2.2"}},{"name":"stof/doctrine-extensions-bundle","require":{"gedmo/doctrine-extensions":"2.3.*","php":">=5.3.2","symfony/framework-bundle":"~2.1"}},{"name":"swiftmailer/swiftmailer","require":{"php":">=5.2.4"}},{"name":"symfony/assetic-bundle","require":{"kriswallsmith/assetic":"~1.1","php":">=5.3.0","symfony/framework-bundle":"~2.1"}},{"name":"symfony/icu","require":{"lib-icu":">=4.4","php":">=5.3.3","symfony/intl":"~2.3"}},{"name":"symfony/monolog-bundle","require":{"monolog/monolog":"~1.3","php":">=5.3.2","symfony/config":"~2.2-beta2","symfony/dependency-injection":"~2.2-beta2","symfony/monolog-bridge":"~2.2-beta2"}},{"name":"symfony/swiftmailer-bundle","require":{"php":">=5.3.2","swiftmailer/swiftmailer":">=4.2.0,<5.1-dev","symfony/swiftmailer-bridge":"~2.1"}},{"name":"symfony/symfony","require":{"doctrine/common":"~2.2","php":">=5.3.3","psr/log":"~1.0","symfony/icu":"~1.0","twig/twig":"~1.11"}},{"name":"twig/extensions","require":{"twig/twig":"1.*"}},{"name":"twig/twig","require":{"php":">=5.2.4"}},{"name":"white-october/pagerfanta-bundle","require":{"pagerfanta/pagerfanta":"1.0.*","symfony/framework-bundle":"~2.1","symfony/property-access":"~2.2"}},{"name":"willdurand/negotiation","require":{"php":">=5.3.0"}}]}');
+		var data = buildMatrixFromComposerJsonAndLock(composerjson, composerlock);
+		console.log("data",data);
+	      d3.select('#visualization').datum(data).call(chart);*/
+	
+	})
+	</script>
+</body>
+</html>

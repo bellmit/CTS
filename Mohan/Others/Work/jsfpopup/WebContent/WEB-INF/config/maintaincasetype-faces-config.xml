@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+<faces-config
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
+   version="2.0">
+	
+	<managed-bean>
+		<managed-bean-name>CaseTypeControllerBean</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.bean.CaseTypeControllerBean
+		</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+		
+	<managed-bean>
+		<managed-bean-name>CaseTypeDataBean</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.bean.CaseTypeDataBean
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+		<managed-property>
+    		<property-name>caseTypeVO</property-name>
+    		<value>#{caseTypeVO}</value>
+    	</managed-property>	
+    	<managed-property>
+    		<property-name>caseTypeStepVO</property-name>
+    		<value>#{caseTypeStepVO}</value>
+    	</managed-property>	
+    	<managed-property>
+    		<property-name>customFieldVO</property-name>
+    		<value>#{customFieldVO}</value>
+    	</managed-property>	
+    	<managed-property>
+    		<property-name>caseTypeEventVO</property-name>
+    		<value>#{caseTypeEventVO}</value>
+    	</managed-property>	
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>caseTypeVO</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.vo.CaseTypeVO
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>caseTypeEventVO</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.vo.CaseTypeEventVO
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>caseTypeStepVO</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.vo.CaseTypeStepVO
+		</managed-bean-class>
+		
+		<managed-bean-scope>session</managed-bean-scope>
+		<!-- Begin - Commented unused property for the defect id ESPRD00723971_21NOV2011 -->
+		<!-- <managed-property>
+    		<property-name>workunitvo</property-name>
+    		<value>#{workunitvo}</value>
+    	</managed-property> -->	
+		<!-- End - Commented unused property for the defect id ESPRD00723971_21NOV2011 -->
+		
+	</managed-bean>
+	
+	<!-- Begin - Commented unused managed bean for the defect id ESPRD00723971_21NOV2011 -->
+	<!-- <managed-bean>
+		<managed-bean-name>workunitvo</managed-bean-name>
+		<managed-bean-class>
+                 com.acs.enterprise.common.program.contactmanagement.view.vo.CaseTypeStepWorkUnitVO
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean> -->
+	<!-- End - Commented unused managed bean for the defect id ESPRD00723971_21NOV2011 -->
+	
+	<!--For savestate-->
+	<!--<application>
+		
+		<locale-config>
+			<default-locale>en</default-locale>
+			<supported-locale>es</supported-locale> 
+		</locale-config>
+	</application>
+	
+	
+	-->
+	<!-- Begin - Commented unused navigation rule for the defect id ESPRD00723971_21NOV2011 -->
+	<!-- <navigation-rule>
+	
+		<from-view-id>/jsp/maintaincasetypes/inc_maintainCaseTypeCaseSteps.jsp</from-view-id>
+		<navigation-case>
+			<from-action>#{caseTypeControllerBean.addCaseStep}</from-action>
+			<from-outcome>addCaseType</from-outcome>
+			<to-view-id>/jsp/maintaincasetypes/inc_maintainCaseTypeCaseSteps.jsp</to-view-id>
+		</navigation-case>
+	
+		<navigation-case>
+			<from-action>#{caseTypeControllerBean.getCaseStepDetails}</from-action>
+			<from-outcome>EditCaseStep</from-outcome>
+			<to-view-id>/jsp/maintaincasetypes/inc_maintainCaseTypeCaseSteps.jsp</to-view-id>
+		</navigation-case>
+		</navigation-rule>
+		
+		<navigation-rule>
+	
+		<from-view-id>/jsp/maintaincasetypes/inc_maintainCaseTypeCaseEvents.jsp</from-view-id>
+		<navigation-case>
+			<from-action>#{caseTypeControllerBean.getCaseEventDetails}</from-action>
+			<from-outcome>EditCaseEvents</from-outcome>
+			<to-view-id>/jsp/maintaincasetypes/inc_maintainCaseTypeCaseEvents.jsp</to-view-id>
+		</navigation-case>
+		</navigation-rule> -->
+		<!-- End - Commented unused navigation rule for the defect id ESPRD00723971_21NOV2011 -->
+</faces-config>

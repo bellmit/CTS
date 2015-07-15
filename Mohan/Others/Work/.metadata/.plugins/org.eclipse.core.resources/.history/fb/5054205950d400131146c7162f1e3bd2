@@ -1,0 +1,3 @@
+package com.xerox.ghs.mmis.rif.core;
+
+import org.junit.runner.JUnitCore;

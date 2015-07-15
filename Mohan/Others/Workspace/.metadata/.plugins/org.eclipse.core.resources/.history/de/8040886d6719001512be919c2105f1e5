@@ -1,0 +1,14 @@
+package com.xerox.enterprise.ghs.mmis.rif.common.util;
+
+public class RuleTurnOnOffUtility {
+
+	public RuleTurnOnOffUtility() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

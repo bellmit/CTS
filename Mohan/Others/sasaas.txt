@@ -1,0 +1,3 @@
+Hibernate to learn:
+JTA-Java Transaction API
+HQL-Hibernate Query Language

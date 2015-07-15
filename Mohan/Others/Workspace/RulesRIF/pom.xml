@@ -1,0 +1,123 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.xerox.enterprise.ghs.mmis.rif.rules</groupId>
+  <artifactId>RuleRIF</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>RulesRIF</name>
+  <description>Rules POJO</description>
+  <properties>
+		<env.GROUPID>com.xerox.enterprise.ghs.mmis</env.GROUPID>
+     	<env.MMIS_JAR_GROUPID>com.xerox.enterprise.ghs.mmis</env.MMIS_JAR_GROUPID>
+     	<env.MMIS_JAR_VER>1.0.0</env.MMIS_JAR_VER>
+  </properties>
+  <dependencies>
+  	<dependency>
+		<groupId>log4j</groupId>
+		<artifactId>log4j</artifactId>
+		<version>1.2.17</version>
+	</dependency>
+  	<dependency>
+	<groupId>junit</groupId>
+	<artifactId>junit</artifactId>
+	<version>4.8.1</version>
+	</dependency>
+  	<dependency>
+		<groupId>net.sf.ehcache</groupId>
+		<artifactId>ehcache</artifactId>
+		<version>2.8.3</version>
+	</dependency>
+	<dependency>
+	<groupId>commons-lang</groupId>
+	<artifactId>commons-lang</artifactId>
+	<version>2.1</version>
+	</dependency>
+	
+	<!-- <dependency>
+		<groupId>com.rif</groupId>
+		<artifactId>RIF</artifactId>
+		<version>2.0-SNAPSHOT</version>
+	</dependency> -->
+	<dependency>
+		<groupId>${env.MMIS_JAR_GROUPID}</groupId>
+		<artifactId>RIF</artifactId>
+		<version>${env.MMIS_JAR_VER} </version>
+		<scope>provided</scope>
+	</dependency> 
+	<dependency>
+   		<groupId>${env.MMIS_JAR_GROUPID}</groupId>
+		<artifactId>EnterpriseDomainObjects</artifactId>
+   		<version>${env.MMIS_JAR_VER} </version>
+   		<scope>provided</scope>
+	</dependency>
+	<dependency>
+   		<groupId>${env.MMIS_JAR_GROUPID}</groupId>
+		<artifactId>ProviderEnrollmentDelegates</artifactId>
+   		<version>${env.MMIS_JAR_VER} </version>
+   		<scope>provided</scope>
+	</dependency>
+	<dependency>
+   		<groupId>${env.MMIS_JAR_GROUPID}</groupId>
+		<artifactId>EnterpriseCommonUtilities</artifactId>
+   		<version>${env.MMIS_JAR_VER} </version>
+   		<scope>provided</scope>
+	</dependency>
+	<dependency>
+   		<groupId>${env.MMIS_JAR_GROUPID}</groupId>
+  		<artifactId>BenefitAdministrationComponents</artifactId>
+   		<version>${env.MMIS_JAR_VER} </version>
+   		<scope>provided</scope>
+	</dependency>
+	<dependency>
+   		<groupId>${env.MMIS_JAR_GROUPID}</groupId>
+  		<artifactId>ProviderApplicationComponents</artifactId>
+   		<version>${env.MMIS_JAR_VER} </version>
+   		<scope>provided</scope>
+	</dependency>
+	<dependency>
+   		<groupId>${env.MMIS_JAR_GROUPID}</groupId>
+  		<artifactId>EnterpriseApplicationComponents</artifactId>
+   		<version>${env.MMIS_JAR_VER} </version>
+   		<scope>provided</scope>
+	</dependency>
+	<dependency>
+   		<groupId>${env.MMIS_JAR_GROUPID}</groupId>
+  		<artifactId>ProgramApplicationComponents</artifactId>
+   		<version>${env.MMIS_JAR_VER} </version>
+   		<scope>provided</scope>
+	</dependency>
+	<dependency>
+   		<groupId>${env.MMIS_JAR_GROUPID}</groupId>
+  		<artifactId>ProgramAdministrationComponents</artifactId>
+   		<version>${env.MMIS_JAR_VER} </version>
+   		<scope>provided</scope>
+	</dependency>
+	<dependency>
+   		<groupId>${env.MMIS_JAR_GROUPID}</groupId>
+  		<artifactId>TPLAdministrationComponents</artifactId>
+   		<version>${env.MMIS_JAR_VER} </version>
+   		<scope>provided</scope>
+	</dependency>
+	<dependency>
+   		<groupId>${env.MMIS_JAR_GROUPID}</groupId>
+  		<artifactId>OperationsApplicationComponents</artifactId>
+   		<version>${env.MMIS_JAR_VER} </version>
+   		<scope>provided</scope>
+	</dependency>
+	<dependency>
+   		<groupId>${env.MMIS_JAR_GROUPID}</groupId>
+  		<artifactId>TPLAdministrationDelegates</artifactId>
+   		<version>${env.MMIS_JAR_VER} </version>
+   		<scope>provided</scope>
+	</dependency>
+  </dependencies>
+  
+ 
+  
+	<repositories>
+    <repository>
+      <id>java.net</id>
+      <url>https://maven.java.net/content/repositories/public/</url>
+    </repository>
+ 	</repositories>
+
+</project>

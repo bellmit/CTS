@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+<tiles-definitions>
+
+    <definition name="base" template="/WEB-INF/jsp/tiles/layout.jsp">
+        <put-attribute name="title" value="My Spring" />
+        <put-attribute name="styles" value="/WEB-INF/jsp/tiles/styles.jsp" />
+        <put-attribute name="scripts" value="/WEB-INF/jsp/tiles/scripts.jsp" />
+        <put-attribute name="header" value="/WEB-INF/jsp/tiles/header.jsp" />
+        <put-attribute name="menu" value="/WEB-INF/jsp/tiles/menu.jsp" />
+        <put-attribute name="content" value="" />
+        <put-attribute name="footer" value="/WEB-INF/jsp/tiles/footer.jsp" />
+    </definition>
+    
+    
+    <definition name="login" extends="base">
+        <put-attribute name="title" value="SpirngMVC" />      
+        <put-attribute name="content" value="/WEB-INF/jsp/login.jsp" />
+    </definition>      
+ 
+ 	<definition name="jqyvalidation" extends="base">
+ 		<put-attribute name="title" value="Jquery Manpulation"></put-attribute>
+ 		<put-attribute name="content" value="/WEB-INF/jsp/jqyvalidation.jsp"></put-attribute>
+ 	</definition>
+ 
+</tiles-definitions>

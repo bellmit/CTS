@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<libraryInfos>
+<libraryInfo home="D:\Soft\Java\8.0JRE\8.0JRE\java" version="1.6.0">
+<bootpath>
+<entry path="D:\Soft\Java\8.0JRE\8.0JRE\java\jre\bin\default\jclSC160\vm.jar"/>
+<entry path="D:\Soft\Java\8.0JRE\8.0JRE\java\jre\lib\annotation.jar"/>
+<entry path="D:\Soft\Java\8.0JRE\8.0JRE\java\jre\lib\beans.jar"/>
+<entry path="D:\Soft\Java\8.0JRE\8.0JRE\java\jre\lib\java.util.jar"/>
+<entry path="D:\Soft\Java\8.0JRE\8.0JRE\java\jre\lib\jndi.jar"/>
+<entry path="D:\Soft\Java\8.0JRE\8.0JRE\java\jre\lib\logging.jar"/>
+<entry path="D:\Soft\Java\8.0JRE\8.0JRE\java\jre\lib\security.jar"/>
+<entry path="D:\Soft\Java\8.0JRE\8.0JRE\java\jre\lib\sql.jar"/>
+<entry path="D:\Soft\Java\8.0JRE\8.0JRE\java\jre\lib\ibmorb.jar"/>
+<entry path="D:\Soft\Java\8.0JRE\8.0JRE\java\jre\lib\ibmorbapi.jar"/>
+<entry path="D:\Soft\Java\8.0JRE\8.0JRE\java\jre\lib\ibmcfw.jar"/>
+<entry path="D:\Soft\Java\8.0JRE\8.0JRE\java\jre\lib\rt.jar"/>
+<entry path="D:\Soft\Java\8.0JRE\8.0JRE\java\jre\lib\charsets.jar"/>
+<entry path="D:\Soft\Java\8.0JRE\8.0JRE\java\jre\lib\resources.jar"/>
+<entry path="D:\Soft\Java\8.0JRE\8.0JRE\java\jre\lib\ibmpkcs.jar"/>
+<entry path="D:\Soft\Java\8.0JRE\8.0JRE\java\jre\lib\ibmcertpathfw.jar"/>
+<entry path="D:\Soft\Java\8.0JRE\8.0JRE\java\jre\lib\ibmjgssfw.jar"/>
+<entry path="D:\Soft\Java\8.0JRE\8.0JRE\java\jre\lib\ibmjssefw.jar"/>
+<entry path="D:\Soft\Java\8.0JRE\8.0JRE\java\jre\lib\ibmsaslfw.jar"/>
+<entry path="D:\Soft\Java\8.0JRE\8.0JRE\java\jre\lib\ibmjcefw.jar"/>
+<entry path="D:\Soft\Java\8.0JRE\8.0JRE\java\jre\lib\ibmjgssprovider.jar"/>
+<entry path="D:\Soft\Java\8.0JRE\8.0JRE\java\jre\lib\ibmjsseprovider2.jar"/>
+<entry path="D:\Soft\Java\8.0JRE\8.0JRE\java\jre\lib\ibmcertpathprovider.jar"/>
+<entry path="D:\Soft\Java\8.0JRE\8.0JRE\java\jre\lib\management-agent.jar"/>
+<entry path="D:\Soft\Java\8.0JRE\8.0JRE\java\jre\lib\xml.jar"/>
+<entry path="D:\Soft\Java\8.0JRE\8.0JRE\java\jre\lib\jlm.jar"/>
+<entry path="D:\Soft\Java\8.0JRE\8.0JRE\java\jre\lib\javascript.jar"/>
+</bootpath>
+<extensionDirs>
+<entry path="D:\Soft\Java\8.0JRE\8.0JRE\java\jre\lib\ext"/>
+</extensionDirs>
+<endorsedDirs>
+<entry path="D:\Soft\Java\8.0JRE\8.0JRE\java\jre\lib\endorsed"/>
+</endorsedDirs>
+</libraryInfo>
+<libraryInfo home="D:\Soft\Environment\Kepler\java" version="1.6.0">
+<bootpath>
+<entry path="D:\Soft\Environment\Kepler\java\jre\bin\default\jclSC160\vm.jar"/>
+<entry path="D:\Soft\Environment\Kepler\java\jre\lib\annotation.jar"/>
+<entry path="D:\Soft\Environment\Kepler\java\jre\lib\beans.jar"/>
+<entry path="D:\Soft\Environment\Kepler\java\jre\lib\java.util.jar"/>
+<entry path="D:\Soft\Environment\Kepler\java\jre\lib\jndi.jar"/>
+<entry path="D:\Soft\Environment\Kepler\java\jre\lib\logging.jar"/>
+<entry path="D:\Soft\Environment\Kepler\java\jre\lib\security.jar"/>
+<entry path="D:\Soft\Environment\Kepler\java\jre\lib\sql.jar"/>
+<entry path="D:\Soft\Environment\Kepler\java\jre\lib\ibmorb.jar"/>
+<entry path="D:\Soft\Environment\Kepler\java\jre\lib\ibmorbapi.jar"/>
+<entry path="D:\Soft\Environment\Kepler\java\jre\lib\ibmcfw.jar"/>
+<entry path="D:\Soft\Environment\Kepler\java\jre\lib\rt.jar"/>
+<entry path="D:\Soft\Environment\Kepler\java\jre\lib\charsets.jar"/>
+<entry path="D:\Soft\Environment\Kepler\java\jre\lib\resources.jar"/>
+<entry path="D:\Soft\Environment\Kepler\java\jre\lib\ibmpkcs.jar"/>
+<entry path="D:\Soft\Environment\Kepler\java\jre\lib\ibmcertpathfw.jar"/>
+<entry path="D:\Soft\Environment\Kepler\java\jre\lib\ibmjgssfw.jar"/>
+<entry path="D:\Soft\Environment\Kepler\java\jre\lib\ibmjssefw.jar"/>
+<entry path="D:\Soft\Environment\Kepler\java\jre\lib\ibmsaslfw.jar"/>
+<entry path="D:\Soft\Environment\Kepler\java\jre\lib\ibmjcefw.jar"/>
+<entry path="D:\Soft\Environment\Kepler\java\jre\lib\ibmjgssprovider.jar"/>
+<entry path="D:\Soft\Environment\Kepler\java\jre\lib\ibmjsseprovider2.jar"/>
+<entry path="D:\Soft\Environment\Kepler\java\jre\lib\ibmcertpathprovider.jar"/>
+<entry path="D:\Soft\Environment\Kepler\java\jre\lib\ibmxmlcrypto.jar"/>
+<entry path="D:\Soft\Environment\Kepler\java\jre\lib\management-agent.jar"/>
+<entry path="D:\Soft\Environment\Kepler\java\jre\lib\xml.jar"/>
+<entry path="D:\Soft\Environment\Kepler\java\jre\lib\jlm.jar"/>
+<entry path="D:\Soft\Environment\Kepler\java\jre\lib\javascript.jar"/>
+</bootpath>
+<extensionDirs>
+<entry path="D:\Soft\Environment\Kepler\java\jre\lib\ext"/>
+</extensionDirs>
+<endorsedDirs>
+<entry path="D:\Soft\Environment\Kepler\java\jre\lib\endorsed"/>
+</endorsedDirs>
+</libraryInfo>
+<libraryInfo home="D:\Soft\java_1.7_32" version="1.7.0">
+<bootpath>
+<entry path="D:\Soft\java_1.7_32\jre\bin\default\jclSC170\vm.jar"/>
+<entry path="D:\Soft\java_1.7_32\jre\lib\se-service.jar"/>
+<entry path="D:\Soft\java_1.7_32\jre\lib\math.jar"/>
+<entry path="D:\Soft\java_1.7_32\jre\lib\jlm.jar"/>
+<entry path="D:\Soft\java_1.7_32\jre\lib\ibmorb.jar"/>
+<entry path="D:\Soft\java_1.7_32\jre\lib\ibmorbapi.jar"/>
+<entry path="D:\Soft\java_1.7_32\jre\lib\ibmcfw.jar"/>
+<entry path="D:\Soft\java_1.7_32\jre\lib\ibmpkcs.jar"/>
+<entry path="D:\Soft\java_1.7_32\jre\lib\ibmcertpathfw.jar"/>
+<entry path="D:\Soft\java_1.7_32\jre\lib\ibmjgssfw.jar"/>
+<entry path="D:\Soft\java_1.7_32\jre\lib\ibmjssefw.jar"/>
+<entry path="D:\Soft\java_1.7_32\jre\lib\ibmsaslfw.jar"/>
+<entry path="D:\Soft\java_1.7_32\jre\lib\ibmjcefw.jar"/>
+<entry path="D:\Soft\java_1.7_32\jre\lib\ibmjgssprovider.jar"/>
+<entry path="D:\Soft\java_1.7_32\jre\lib\ibmjsseprovider2.jar"/>
+<entry path="D:\Soft\java_1.7_32\jre\lib\ibmcertpathprovider.jar"/>
+<entry path="D:\Soft\java_1.7_32\jre\lib\xmldsigfw.jar"/>
+<entry path="D:\Soft\java_1.7_32\jre\lib\xml.jar"/>
+<entry path="D:\Soft\java_1.7_32\jre\lib\charsets.jar"/>
+<entry path="D:\Soft\java_1.7_32\jre\lib\resources.jar"/>
+<entry path="D:\Soft\java_1.7_32\jre\lib\rt.jar"/>
+<entry path="D:\Soft\java_1.7_32\jre\lib\ibmgpu.jar"/>
+</bootpath>
+<extensionDirs>
+<entry path="D:\Soft\java_1.7_32\jre\lib\ext"/>
+</extensionDirs>
+<endorsedDirs>
+<entry path="D:\Soft\java_1.7_32\jre\lib\endorsed"/>
+</endorsedDirs>
+</libraryInfo>
+<libraryInfo home="C:\Program Files\Java\jdk1.7.0_65" version="1.7.0_65">
+<bootpath>
+<entry path="C:\Program Files\Java\jdk1.7.0_65\jre\lib\resources.jar"/>
+<entry path="C:\Program Files\Java\jdk1.7.0_65\jre\lib\rt.jar"/>
+<entry path="C:\Program Files\Java\jdk1.7.0_65\jre\lib\sunrsasign.jar"/>
+<entry path="C:\Program Files\Java\jdk1.7.0_65\jre\lib\jsse.jar"/>
+<entry path="C:\Program Files\Java\jdk1.7.0_65\jre\lib\jce.jar"/>
+<entry path="C:\Program Files\Java\jdk1.7.0_65\jre\lib\charsets.jar"/>
+<entry path="C:\Program Files\Java\jdk1.7.0_65\jre\lib\jfr.jar"/>
+<entry path="C:\Program Files\Java\jdk1.7.0_65\jre\classes"/>
+</bootpath>
+<extensionDirs>
+<entry path="C:\Program Files\Java\jdk1.7.0_65\jre\lib\ext"/>
+<entry path="C:\Windows\Sun\Java\lib\ext"/>
+</extensionDirs>
+<endorsedDirs>
+<entry path="C:\Program Files\Java\jdk1.7.0_65\jre\lib\endorsed"/>
+</endorsedDirs>
+</libraryInfo>
+</libraryInfos>

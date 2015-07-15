@@ -1,0 +1,9 @@
+appliedTreeRules_0=com.ibm.rational.clearcase.ui.actions.ShowLoadedVobsAction|Public and Private VOBs|true|true|true|System;
+current_0=true
+displayName_0=base
+eclipse.preferences.version=1
+fileName_0=explorer_tree_default_1.xml
+nonappliedTreeRules_0=com.ibm.rational.clearcase.ui.actions.ShowUnloadedVobsAction|Unloaded VOBs|true|false|false|System;com.ibm.rational.clearcase.ui.actions.ShowUnloadedElementsAction|Unloaded Elements|true|false|false|System;com.ibm.rational.clearcase.ui.actions.ShowLoadedPublicVobsAction|Public VOBs only|true|true|false|System;com.ibm.rational.clearcase.ui.actions.ShowLoadedPrivateVobsAction|Private VOBs only|true|true|false|System;com.ibm.rational.clearcase.ui.actions.ShowUnmountedVobsAction|Unmounted VOBs|true|false|false|System;
+numWorkingSets=1
+plugin_0=com.ibm.rational.team.client.ui
+type_0=base

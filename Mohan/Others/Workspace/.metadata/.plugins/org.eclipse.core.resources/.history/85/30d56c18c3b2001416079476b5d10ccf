@@ -1,0 +1,105 @@
+package com.xerox.enterprise.ghs.mmis.rif.rules.program;
+
+
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import java.util.List;
+import com.xerox.enterprise.ghs.mmis.rif.common.exception.RIFPOJORulesException;
+import com.xerox.enterprise.ghs.mmis.rif.core.Rule;
+import com.xerox.enterprise.ghs.mmis.rif.core.RulesContext;
+import com.xerox.enterprise.ghs.mmis.rif.core.RulesResult;
+
+import com.acs.enterprise.common.program.administration.common.domain.ClaimException;
+import java.util.Set;
+import java.util.Iterator;
+import com.acs.enterprise.common.program.administration.common.domain.ClaimExceptionDefault;
+
+
+/**
+ * POJO for the rule "PGM9006.0001.01"
+ * @author $authorName
+ * @source ClaimExceptionCodeDAOImpl
+ */
+public class PGM9006_0001_01 extends Rule {
+	
+    /* Static logger to log a message */
+    private static final Logger LOG = Logger.getLogger(PGM9006_0001_01.class);
+	
+    /**
+     * Execute method of the rule. This holds the rule conditions and actions.
+     * The required objects are initialized through init() method.
+     * return - execution result of rule either SUCCESS or FAILURE
+     */
+    public static RulesResult execute(final RulesContext ctx,final String ruleId) throws RIFPOJORulesException {
+		
+        // Construct rules result object
+        RulesResult rulesResult;
+
+        rulesResult = new RulesResult(ruleId);
+        String checklob = null;
+        String lobcode = null;
+        ClaimException claimException = null;
+
+        if (ctx != null) {
+				
+            List<Object> inputObjs = ctx.getContextObject();
+            lobcode = (String) inputObjs.get(0);
+            
+            claimException = (ClaimException) inputObjs.get(1);
+           
+
+        } else {
+            LOG.log(Level.ERROR, "Input Context Object is null during intialization for the rule " + ruleId);
+			
+            throw new RIFPOJORulesException("Unable to initialize the required rules objects for rule " + ruleId);
+        }
+        LOG.log(Level.INFO, "Executing the actions for the rule:" + ruleId);
+		
+        // EXTRACT_START PGM9006.0001.01
+		    
+        if (claimException != null) {
+            Set claimEDefault = claimException.getClaimExceptionDefault();
+            Iterator CEDef = claimEDefault.iterator();
+
+            while (CEDef.hasNext()) {
+                ClaimExceptionDefault claimExceptionDefault = (ClaimExceptionDefault) CEDef.next();
+                String lob = claimExceptionDefault.getLobCode();
+				
+                if (lob.equals(lobcode)) {
+                    checklob = "alreadyExist";
+				
+                    break;
+                } else {
+                    checklob = "lobchange";
+				
+                }
+            }
+		
+        }
+        else
+		   {
+		   	checklob="newcode";
+		   	
+		   }
+			
+        // EXTRACT_END
+        rulesResult.setReturnValue(checklob);
+		
+        rulesResult.setRuleStatus(true);
+        return rulesResult;
+		
+    }
+	
+    /*
+     * Method to initialize rule
+     */
+    public static void initialize() throws RIFPOJORulesException {// TODO Auto-generated method stub
+    }
+
+    /*
+     * Method to shutdown rule
+     */
+    public static void shutdown() throws RIFPOJORulesException {// TODO Auto-generated method stub
+    }
+	
+}

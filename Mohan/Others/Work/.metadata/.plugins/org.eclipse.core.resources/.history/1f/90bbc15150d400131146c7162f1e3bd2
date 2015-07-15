@@ -1,0 +1,145 @@
+package com.xerox.ghs.mmis.rif.common.exception;
+
+import org.junit.*;
+import static org.junit.Assert.*;
+
+/**
+ * The class <code>RIFPOJORulesExceptionTest</code> contains tests for the class <code>{@link RIFPOJORulesException}</code>.
+ *
+ * @generatedBy CodePro at 5/5/14 5:55 PM
+ * @author 396662
+ * @version $Revision: 1.0 $
+ */
+public class RIFPOJORulesExceptionTest {
+	/**
+	 * Run the RIFPOJORulesException(String) constructor test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testRIFPOJORulesException_1()
+		throws Exception {
+		String errorMsg = "";
+
+		RIFPOJORulesException result = new RIFPOJORulesException(errorMsg);
+
+		// add additional test code here
+		assertNotNull(result);
+		assertEquals(null, result.getErrorCode());
+		assertEquals("com.xerox.ghs.mmis.rif.common.exception.RIFPOJORulesException: ", result.toString());
+		assertEquals(null, result.getCause());
+		assertEquals("", result.getMessage());
+		assertEquals("", result.getLocalizedMessage());
+	}
+
+	/**
+	 * Run the RIFPOJORulesException(Throwable) constructor test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testRIFPOJORulesException_2()
+		throws Exception {
+		Throwable t = new Throwable();
+
+		RIFPOJORulesException result = new RIFPOJORulesException(t);
+
+		// add additional test code here
+		assertNotNull(result);
+		assertEquals(null, result.getErrorCode());
+		assertEquals("com.xerox.ghs.mmis.rif.common.exception.RIFPOJORulesException: java.lang.Throwable", result.toString());
+		assertEquals("java.lang.Throwable", result.getMessage());
+		assertEquals("java.lang.Throwable", result.getLocalizedMessage());
+	}
+
+	/**
+	 * Run the RIFPOJORulesException(String,String) constructor test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testRIFPOJORulesException_3()
+		throws Exception {
+		String errorCode = "";
+		String errorMsg = "";
+
+		RIFPOJORulesException result = new RIFPOJORulesException(errorCode, errorMsg);
+
+		// add additional test code here
+		assertNotNull(result);
+		assertEquals("", result.getErrorCode());
+		assertEquals("com.xerox.ghs.mmis.rif.common.exception.RIFPOJORulesException: ", result.toString());
+		assertEquals(null, result.getCause());
+		assertEquals("", result.getMessage());
+		assertEquals("", result.getLocalizedMessage());
+	}
+
+	/**
+	 * Run the RIFPOJORulesException(Throwable,String,String) constructor test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testRIFPOJORulesException_4()
+		throws Exception {
+		Throwable t = new Throwable();
+		String errorCode = "";
+		String errorMsg = "";
+
+		RIFPOJORulesException result = new RIFPOJORulesException(t, errorCode, errorMsg);
+
+		// add additional test code here
+		assertNotNull(result);
+		assertEquals("", result.getErrorCode());
+		assertEquals("com.xerox.ghs.mmis.rif.common.exception.RIFPOJORulesException: ", result.toString());
+		assertEquals("", result.getMessage());
+		assertEquals("", result.getLocalizedMessage());
+	}
+
+	/**
+	 * Perform pre-test initialization.
+	 *
+	 * @throws Exception
+	 *         if the initialization fails for some reason
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Before
+	public void setUp()
+		throws Exception {
+		// add additional set up code here
+	}
+
+	/**
+	 * Perform post-test clean-up.
+	 *
+	 * @throws Exception
+	 *         if the clean-up fails for some reason
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@After
+	public void tearDown()
+		throws Exception {
+		// Add additional tear down code here
+	}
+
+	/**
+	 * Launch the test.
+	 *
+	 * @param args the command line arguments
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	public static void main(String[] args) {
+		new org.junit.runner.JUnitCore().run(RIFPOJORulesExceptionTest.class);
+	}
+}

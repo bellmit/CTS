@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<faces-config
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
+    version="1.2">
+	<managed-bean>
+		<managed-bean-name>navigation2Bean</managed-bean-name>
+		<managed-bean-class>com.nav2.NavigationBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>navigation4Bean</managed-bean-name>
+		<managed-bean-class>com.nav4.NavigationBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>loginBean</managed-bean-name>
+		<managed-bean-class>com.login.LoginBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>success</from-outcome>
+			<to-view-id>/pages/nav3/Page2.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<to-view-id>/pages/nav3/Pagexsds.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<from-view-id>/pages/nav1/Page1.jsp</from-view-id>
+		<navigation-case>	
+			<from-outcome>nextpage2</from-outcome>		
+			<to-view-id>/pages/nav1/Page3.jsp</to-view-id>
+		</navigation-case>
+		
+	</navigation-rule>
+
+	<navigation-rule>
+		<from-view-id>/pages/nav2/Page1.jsp</from-view-id>		
+		<navigation-case>
+			<from-outcome>success</from-outcome>
+			<to-view-id>/pages/nav2/Page2.jsp</to-view-id>
+		</navigation-case>	
+		<navigation-case>
+			<from-outcome>failure</from-outcome>
+			<to-view-id>/pages/nav2/Page3.jsp</to-view-id>		
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<from-view-id>/pages/nav4/Page1.jsp</from-view-id>
+		<navigation-case>
+			<from-action>#{navigation4Bean.goToPage2}</from-action>
+			<to-view-id>/pages/nav4/Page2.jsp</to-view-id>
+		</navigation-case>	
+		<navigation-case>
+			<from-action>#{navigation4Bean.goToPage3}</from-action>
+			<to-view-id>/pages/nav4/Page3.jsp</to-view-id>		
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<from-view-id>/pages/login/Page1.jsp</from-view-id>
+		<navigation-case>
+			<from-outcome>success</from-outcome>
+			<to-view-id>/pages/login/Page2.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>failure</from-outcome>
+			<to-view-id>/pages/login/Page1.jsp</to-view-id>
+		</navigation-case>		
+	</navigation-rule>
+
+</faces-config>

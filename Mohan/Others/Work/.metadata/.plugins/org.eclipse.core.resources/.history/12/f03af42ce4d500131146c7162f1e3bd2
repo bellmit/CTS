@@ -1,0 +1,61 @@
+package com.xerox.ghs.mmis.rif.rules.provider;
+
+import org.apache.log4j.Logger;
+
+import com.xerox.ghs.mmis.rif.common.exception.RIFPOJORulesException;
+import com.xerox.ghs.mmis.rif.core.HERule;
+import com.xerox.ghs.mmis.rif.core.RuleInvocationContext;
+
+public class PreviousProviderMedicaidNotFound implements HERule {
+
+	/*Static LOG to log a message */
+	private static final Logger LOG = Logger.getLogger(NCPDPClosureDateUpdate.class);
+	
+	/* Unique rule id as per MT catalog */
+	private static final String RULE_ID = "PRV0880.0001.01";
+	
+	/* Namespace of the rule */
+	private static final String RULE_NAME = "/provider/interfaces/NCPDPClosureDateUpdate";
+	
+	/*Field describes more about the rule*/ 
+	private static final String RULE_DESC = "NCPDP-Closure Date update";
+	
+	
+	
+	@Override
+	public String getRuleId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getRuleName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getRuleDescription() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int init(RuleInvocationContext ctx) throws RIFPOJORulesException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int exec() throws RIFPOJORulesException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int post() throws RIFPOJORulesException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+}

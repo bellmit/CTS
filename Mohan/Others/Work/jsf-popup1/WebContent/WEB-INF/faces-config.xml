@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE faces-config PUBLIC "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.0//EN"
+                              "http://java.sun.com/dtd/web-facesconfig_1_0.dtd">
+<faces-config>
+ <managed-bean>
+  <description>Place to go</description>
+  <managed-bean-name>GetPlaceBean</managed-bean-name>
+  <managed-bean-class>demo.GetPlaceBean</managed-bean-class>
+  <managed-bean-scope>session</managed-bean-scope>
+  <managed-property>
+   <property-name>country</property-name>
+   <property-class>java.lang.String</property-class>
+   <value>Usa</value>
+  </managed-property>
+  <managed-property>
+   <property-name>place</property-name>
+   <property-class>java.lang.String</property-class>
+   <value>Pick up from the List --&gt;</value>
+  </managed-property>
+ </managed-bean>
+ <managed-bean>
+  <description>Place to go</description>
+  <managed-bean-name>ListHolderBean</managed-bean-name>
+  <managed-bean-class>demo.ListHolderBean</managed-bean-class>
+  <managed-bean-scope>session</managed-bean-scope>
+ </managed-bean>
+ <navigation-rule>
+  <navigation-case>
+   <from-outcome>showPlace</from-outcome>
+   <to-view-id>/pages/place.jsp</to-view-id>
+  </navigation-case>
+ </navigation-rule>
+ <navigation-rule>
+  <from-view-id>/pages/inputdata.jsp</from-view-id>
+  <navigation-case>
+   <from-outcome>visit</from-outcome>
+   <to-view-id>/pages/destination.jsp</to-view-id>
+  </navigation-case>
+ </navigation-rule>
+ <navigation-rule>
+  <from-view-id>/pages/destination.jsp</from-view-id>
+  <navigation-case>
+   <from-outcome>back</from-outcome>
+   <to-view-id>/pages/inputdata.jsp</to-view-id>
+  </navigation-case>
+ </navigation-rule>
+ <lifecycle/>
+ <application>
+  <locale-config/>
+ </application>
+ <factory/>
+</faces-config>

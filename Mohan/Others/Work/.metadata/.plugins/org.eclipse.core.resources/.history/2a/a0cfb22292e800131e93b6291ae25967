@@ -1,0 +1,12 @@
+.header
+{
+	background-color:gray;
+		margin:5px;
+		margin-top:-5px;
+}
+#wrapper
+	{
+		font-family: serif;
+		font-style: italic;
+		width: 100%
+	}

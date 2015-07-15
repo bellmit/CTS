@@ -1,0 +1,19 @@
+@startuml
+	title <size:20><b><u>$SequenceDO.sequenceName</u></b></size>
+
+	#foreach($class in $SequenceDO.classes)
+    	class $class.className {
+			#foreach($field in $class.injections)
+				$field.accessSpecifier#if($field.isStatic){static}#end$field.paramName
+			#end
+			#foreach($method in $class.methods)
+				$method.accessSpecifier#if($field.isStatic){static}#end#if($field.isAbstract){abstract}#end${method.name}()
+			#end
+    	}
+	#end
+
+			
+	#foreach($methodCall in $SequenceDO.messageLinesDOList)
+		$methodCall.lineFrom $methodCall.direction $methodCall.lineTo $!methodCall.lineCommentFrom
+	#end
+@enduml

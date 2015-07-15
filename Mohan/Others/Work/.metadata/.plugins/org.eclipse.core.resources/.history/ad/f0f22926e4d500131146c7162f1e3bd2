@@ -1,0 +1,45 @@
+package com.xerox.ghs.mmis.rif.rules.provider;
+
+import com.xerox.ghs.mmis.rif.common.exception.RIFPOJORulesException;
+import com.xerox.ghs.mmis.rif.core.HERule;
+import com.xerox.ghs.mmis.rif.core.RuleInvocationContext;
+
+public class PreviousProviderMedicaidNotFound implements HERule {
+
+	@Override
+	public String getRuleId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getRuleName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getRuleDescription() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int init(RuleInvocationContext ctx) throws RIFPOJORulesException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int exec() throws RIFPOJORulesException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int post() throws RIFPOJORulesException {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+}

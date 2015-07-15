@@ -1,0 +1,26 @@
+.header
+{
+	background-color:gray;
+	text-align: center;
+	font-size:large;
+	font-family:monospace;
+	font-weight:bolder;
+	margin:5px;
+	margin-top:-5px;
+}
+
+.menu
+{
+	width: 30%;
+}
+#wrapper
+	{
+		font-family: serif;
+		font-style: italic;
+		width: 100%;
+	}
+table
+{
+	width: 100%;
+	
+}

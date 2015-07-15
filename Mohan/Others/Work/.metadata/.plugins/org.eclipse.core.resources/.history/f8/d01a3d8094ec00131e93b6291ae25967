@@ -1,0 +1,26 @@
+package com.spring.controller;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+@Controller
+public class JqueryController {
+
+	@RequestMapping(value="/getAjaxData")
+	@ResponseBody
+	public Map<String,List<String>> getAjaxCall()
+	{
+		System.out.println("JqueryCtlr");
+		Map<String, List<String>> mp=new HashMap<String, List<String>>();
+		List l=new ArrayList<String>();
+		l.add("Mohan");
+		mp.put("Name", l);
+		return mp;
+	}
+}

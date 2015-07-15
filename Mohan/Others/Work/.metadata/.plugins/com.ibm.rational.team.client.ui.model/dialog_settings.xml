@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<item value="150" key="com.ibm.rational.clearcase.ui.dialogs.wvcm.GIAddToSourceTreeTableComponent.addToSourceWithoutActivity.comment.WIDTH"/>
+	<item value="100" key="com.ibm.rational.clearcase.ui.dialogs.wvcm.GIAddToSourceTreeTableComponent.addToSourceWithoutActivity.checkout.WIDTH"/>
+	<item value="150" key="com.ibm.rational.clearcase.ui.dialogs.wvcm.GIAddToSourceTreeTableComponent.addToSourceWithoutActivity.name.WIDTH"/>
+	<item value="150" key="com.ibm.rational.team.client.ui.component.renderer.DialogRenderer.checkoutWithActivity.path.WIDTH"/>
+	<item value="150" key="com.ibm.rational.team.client.ui.component.renderer.DialogRenderer.checkoutWithActivity.name.WIDTH"/>
+	<item value="150" key="com.ibm.rational.clearcase.ui.dialogs.wvcm.GIAddToSourceTreeTableComponent.addToSourceWithoutActivity.path.WIDTH"/>
+	<item value="150" key="com.ibm.rational.team.client.ui.component.renderer.DialogRenderer.checkoutWithActivity.activity.WIDTH"/>
+	<item value="150" key="com.ibm.rational.team.client.ui.component.renderer.DialogRenderer.checkoutWithActivity.comment.WIDTH"/>
+	<section name="com.ibm.rational.team.client.ui.dialogs.GILoginDialogComponent">
+		<section name="com.ibm.rational.team.client.ui.dialogs.GILoginDialogComponent">
+		</section>
+	</section>
+</section>

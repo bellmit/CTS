@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="InquiringAboutEntitySearch1_Service"
+	targetNamespace="http://enterprise.ipc"
+	xmlns="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:portlet="http://www.ibm.com/wps/c2a"
+	xmlns:tns="http://enterprise.ipc"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<types>
+		<xsd:schema targetNamespace="http://enterprise.ipc">
+			<xsd:simpleType
+				name="inqAbtCaseEntityDetailsDataType">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="AddEntity">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+		</xsd:schema>
+	</types>
+	<message name="inqAbtCaseEntityDetailsDataType_Response">
+		<part name="inqAbtCaseEntityDetailsDataType_Output"
+			type="tns:inqAbtCaseEntityDetailsDataType" />
+	</message>
+	<message name="CorrespondenceEntity_Response">
+		<part name="AddEntity_Output"
+			type="tns:AddEntity" />			
+	</message>
+	<portType name="InquiringAboutEntitySearch1_Service">
+		<operation name="InquiringAboutEntitySearch1">
+			<output
+				message="tns:inqAbtCaseEntityDetailsDataType_Response" />
+		</operation>
+		<operation name="EntitySearch">
+			<output message="tns:CorrespondenceEntity_Response" />
+		</operation>
+	</portType>
+	<binding name="InquiringAboutEntitySearch1_Binding"
+		type="tns:InquiringAboutEntitySearch1_Service">
+		<portlet:binding />
+		<operation name="InquiringAboutEntitySearch1">
+			<portlet:action name="sendInqAbtCaseEntityDetailsAction"
+				actionNameParameter="send.InqAbt.CaseEntityDetails.Action"
+				type="standard" />
+			<output>
+				<portlet:param name="inqAbtCaseEntityDetails"
+					partname="inqAbtCaseEntityDetailsDataType_Output"
+					boundTo="request-attribute"
+					caption="sendInqAbtCaseEntityDetails.caption" />
+			</output>
+		</operation>
+		<operation name="EntitySearch">
+			<portlet:action name="sendCorrespondenceEntity"
+				actionNameParameter="send.Correspondence.Entity"
+				caption="send.Correspondence.Entity" type="standard" />
+				
+			<output>
+				<portlet:param name="MaintainEntity"
+					partname="AddEntity_Output" boundTo="request-attribute" />
+			</output>
+		</operation>
+	</binding>
+</definitions>

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename package &apos;com.study.spring.app.Message&apos; to &apos;com.study.spring.app&apos;&#x0D;&#x0A;- Original project: &apos;SpringBasic&apos;&#x0D;&#x0A;- Original element: &apos;SpringBasic/src/main/java/com.study.spring.app.Message&apos;&#x0D;&#x0A;- Renamed element: &apos;SpringBasic/src/main/java/com.study.spring.app&apos;&#x0D;&#x0A;- Update references to refactored element&#x0D;&#x0A;- Update textual occurrences in comments and strings" description="Rename package &apos;com.study.spring.app.Message&apos;" flags="589830" hierarchical="false" id="org.eclipse.jdt.ui.rename.package" input="/src\/main\/java&lt;com.study.spring.app.Message" name="com.study.spring.app" qualified="false" references="true" stamp="1434949900679" textual="false" version="1.0"/>
+</session>

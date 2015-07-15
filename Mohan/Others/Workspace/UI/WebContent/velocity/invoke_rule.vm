@@ -1,0 +1,62 @@
+			  
+#set ($rulereturnBoolean = $ruleDescriptor.getRuleReturnField())
+		
+		logger.info("Started Rule Execution::::");  
+		#foreach($ruleDescriptor in $ruleDescriptorList)
+			  
+  			  int objSize = $ruleTempUtility.getSizeOfObjectsInContext($ruleDescriptor.getRuleContextParams());	
+              
+              
+              
+              //Rule Invocation Context object holds object arrays used in rule execution.
+			  #if($isBatchRule)
+				String ruleId$foreach.count = "$ruleDescriptor.getRuleId()";
+				RulesContext ric$foreach.count = new RulesContext();
+				//Adding object into rule invocation context.
+			  	$ruleTempUtility.getAddObjectsToContext($ruleDescriptor.getRuleContextParams(), "ric$foreach.count")	
+			  #else			    
+			    String ruleId = "$ruleDescriptor.getRuleId()";
+			    RulesContext ric = new RulesContext(objSize);
+			    //Adding object into rule invocation context.
+			 	$ruleTempUtility.getAddObjectsToContext($ruleDescriptor.getRuleContextParams(), "ric")	    
+			  #end
+        #end                                
+		    #if($isBatchRule)
+			  ConcurrentHashMap<String,RulesContext> ricMap = new ConcurrentHashMap<String, RulesContext>();
+			  #foreach($ruleDescriptor in $ruleDescriptorList)
+				ricMap.put(ruleId$foreach.count, ric$foreach.count);
+	          #end          
+            #end
+              //Invoke RIF with ruleid and rule invocation objects.
+			  #if($isBatchRule)
+				RulesResult[] rulesResult = null;
+			  #else
+			    RulesResult rulesResult = null;
+			  #end
+              
+              try {
+              		RulesManager rulesManager = RulesManager.getRIFInstance();
+                     #if($isBatchRule)
+						rulesResult = rulesManager.execute(ricMap);
+					  #else
+						rulesResult = rulesManager.execute(ruleId, ric);	
+					  #end
+					  #if($rulereturnBoolean)
+						$rulereturnBoolean=rulesResult.isReturnBooleanValue(); 
+					  #end
+              } catch (RIFException re){
+                     logger.info("RIFException::::"+re);
+              }
+			  #if($isBatchRule)
+				  for (RulesResult ruleResult: rulesResult) {
+					if (!ruleResult.isReturnBooleanValue()) {
+					  flag = false;
+					}
+			   #else
+					if (!ruleResult.isReturnBooleanValue()) {
+					  flag = false;
+					}
+			   #end
+		
+              
+              logger.info("Rule Execution Ended::::"+ruleId+"\n");

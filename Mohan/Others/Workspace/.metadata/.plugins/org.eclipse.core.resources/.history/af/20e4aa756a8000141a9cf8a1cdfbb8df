@@ -1,0 +1,15 @@
+package com.general.example;
+
+public class BitOperation {
+
+	public static void main(String args[])
+	{
+		int A=1;
+		System.out.println("A::>"+(A |= 1 << 4));
+		byte b=(byte) A;
+		
+		System.out.println(b|1);
+		Integer.toBinaryString(A);
+	}
+	
+}

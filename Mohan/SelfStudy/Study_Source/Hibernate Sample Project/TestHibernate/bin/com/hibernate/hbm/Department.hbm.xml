@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<hibernate-mapping>
+	<class name="com.hibernate.entity.Department" table="department" dynamic-insert="true" dynamic-update="true" select-before-update="true">		
+		<id name="departmentID" column="departmentID">
+			<generator class="identity" />
+		</id>
+		<property name="name" column="name" />
+	</class>
+</hibernate-mapping>

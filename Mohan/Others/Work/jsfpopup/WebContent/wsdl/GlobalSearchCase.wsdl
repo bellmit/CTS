@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="GlobalSearchCase_Service"
+	targetNamespace="http://enterprise.ipc"
+	xmlns="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:portlet="http://www.ibm.com/wps/c2a"
+	xmlns:tns="http://enterprise.ipc"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<types>
+		<xsd:schema targetNamespace="http://enterprise.ipc">
+			<xsd:complexType name="GlobalCaseSearchResultsDataType">
+			</xsd:complexType>
+			<!--Modified for defect ESPRD00560706 Hipp-->
+			<xsd:complexType name="SearchResult"/>	
+			<!--defect ESPRD00560706 ends-->
+			<!--Modified for defect ESPRD00560706 Recovery-->			
+			<xsd:complexType name="TPLRecoverySearch_Result" />
+			<!--defect ESPRD00560706 ends-->			
+		</xsd:schema>
+	</types>
+	<message name="GlobalCaseSearchResultsDataType_Response">
+		<part name="GlobalCaseSearchResultsDataType_Output"
+			type="tns:GlobalCaseSearchResultsDataType" />
+	</message>
+	<!--Modified for defect ESPRD00560706 Hipp-->			
+	<message name="SearchResult_Response">
+		<part name="SearchResult_Output" type="tns:SearchResult" />
+	</message>
+	<!--Modified for defect ESPRD00560706 Recovery-->	
+	<message name="TPLRecoverySearch_Result_Response">
+		<part name="TPLRecoverySearch_Result_Output"
+			type="tns:TPLRecoverySearch_Result" />
+	</message>
+	<!--defect ESPRD00560706 ends-->
+	<portType name="GlobalSearchCase_Service">
+		<operation name="GlobalSearchCase">
+			<output
+				message="tns:GlobalCaseSearchResultsDataType_Response" />
+		</operation>
+		<!--Modified for defect ESPRD00560706 Hipp-->		
+		<operation name="HIPPInformationSearch">
+			<output message="tns:SearchResult_Response" />
+		</operation>
+		<!--defect ESPRD00560706 ends-->	
+		<!--Modified for defect ESPRD00560706 Recovery-->		
+		<operation name="TPLRecoverySearchportlet1">
+			<output message="tns:TPLRecoverySearch_Result_Response" />
+		</operation>
+		<!--defect ESPRD00560706 ends-->				
+	</portType>
+	<binding name="GlobalSearchCase_Binding"
+		type="tns:GlobalSearchCase_Service">
+		<portlet:binding />
+		<operation name="GlobalSearchCase">
+			<portlet:action name="sendGlobalCaseSearchResults"
+				actionNameParameter="send.Global.Case.Search.Results"
+				type="standard" />
+			<output>
+				<portlet:param name="GlobalCaseSearchResult"
+					partname="GlobalCaseSearchResultsDataType_Output"
+					boundTo="request-attribute"
+					class="com.acs.enterprise.common.view.vo.CommonCMCaseDetailsVO"
+					caption="GlobalCaseSearchResult.Caption" />
+			</output>
+		</operation>
+		<!--Modified for defect ESPRD00560706 Hipp-->				
+		<operation name="HIPPInformationSearch">
+			<portlet:action name="SourceAction" class="com.acs.enterprise.mmis.operations.tpladministration.common.vo.TPLHIPPSearchResultVO"
+				actionNameParameter="ACTION_NAME" type="standard" />
+			<output>
+				<portlet:param name="resultVO"
+					partname="SearchResult_Output" boundTo="request-attribute"
+					caption="sendVO" />
+			</output>
+		</operation>
+		<!--defect ESPRD00560706 ends-->	
+		<!--Modified for defect ESPRD00560706 Recovery-->	
+		<operation name="TPLRecoverySearchportlet1">
+			<portlet:action name="sourceAction1"
+				class="com.acs.enterprise.mmis.operations.tpladministration.common.vo.TPLRecoverySearchResultVO"
+				actionNameParameter="ACTION_NAME" type="standard" />
+			<output>
+				<portlet:param name="sendVO1"
+					partname="TPLRecoverySearch_Result_Output"
+					boundTo="request-attribute" caption="source1" />
+			</output>
+		</operation>
+		<!--defect ESPRD00560706 ends-->				
+	</binding>
+</definitions>

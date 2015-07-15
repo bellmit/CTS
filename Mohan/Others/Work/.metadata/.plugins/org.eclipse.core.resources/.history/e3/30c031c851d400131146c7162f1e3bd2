@@ -1,0 +1,452 @@
+package com.xerox.ghs.mmis.rif.rules.provider;
+
+import org.junit.*;
+import static org.junit.Assert.*;
+
+/**
+ * The class <code>ProviderNCPDPInterfaceRuleVOTest</code> contains tests for the class <code>{@link ProviderNCPDPInterfaceRuleVO}</code>.
+ *
+ * @generatedBy CodePro at 5/5/14 5:55 PM
+ * @author 396662
+ * @version $Revision: 1.0 $
+ */
+public class ProviderNCPDPInterfaceRuleVOTest {
+	/**
+	 * Run the String getAlternateID() method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testGetAlternateID_1()
+		throws Exception {
+		ProviderNCPDPInterfaceRuleVO fixture = new ProviderNCPDPInterfaceRuleVO();
+		fixture.setStoreClosureStrDate("");
+		fixture.setReInstatementStrDate("");
+		fixture.setValidStoreClosureDate(true);
+		fixture.setAlternateID("");
+		fixture.setDeactivationCode("");
+		fixture.setAlternateIDExistsForStoreClosureDate(true);
+		fixture.setReInstatementCode("");
+
+		String result = fixture.getAlternateID();
+
+		// add additional test code here
+		assertEquals("", result);
+	}
+
+	/**
+	 * Run the String getDeactivationCode() method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testGetDeactivationCode_1()
+		throws Exception {
+		ProviderNCPDPInterfaceRuleVO fixture = new ProviderNCPDPInterfaceRuleVO();
+		fixture.setStoreClosureStrDate("");
+		fixture.setReInstatementStrDate("");
+		fixture.setValidStoreClosureDate(true);
+		fixture.setAlternateID("");
+		fixture.setDeactivationCode("");
+		fixture.setAlternateIDExistsForStoreClosureDate(true);
+		fixture.setReInstatementCode("");
+
+		String result = fixture.getDeactivationCode();
+
+		// add additional test code here
+		assertEquals("", result);
+	}
+
+	/**
+	 * Run the String getReInstatementCode() method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testGetReInstatementCode_1()
+		throws Exception {
+		ProviderNCPDPInterfaceRuleVO fixture = new ProviderNCPDPInterfaceRuleVO();
+		fixture.setStoreClosureStrDate("");
+		fixture.setReInstatementStrDate("");
+		fixture.setValidStoreClosureDate(true);
+		fixture.setAlternateID("");
+		fixture.setDeactivationCode("");
+		fixture.setAlternateIDExistsForStoreClosureDate(true);
+		fixture.setReInstatementCode("");
+
+		String result = fixture.getReInstatementCode();
+
+		// add additional test code here
+		assertEquals("", result);
+	}
+
+	/**
+	 * Run the String getReInstatementStrDate() method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testGetReInstatementStrDate_1()
+		throws Exception {
+		ProviderNCPDPInterfaceRuleVO fixture = new ProviderNCPDPInterfaceRuleVO();
+		fixture.setStoreClosureStrDate("");
+		fixture.setReInstatementStrDate("");
+		fixture.setValidStoreClosureDate(true);
+		fixture.setAlternateID("");
+		fixture.setDeactivationCode("");
+		fixture.setAlternateIDExistsForStoreClosureDate(true);
+		fixture.setReInstatementCode("");
+
+		String result = fixture.getReInstatementStrDate();
+
+		// add additional test code here
+		assertEquals("", result);
+	}
+
+	/**
+	 * Run the String getStoreClosureStrDate() method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testGetStoreClosureStrDate_1()
+		throws Exception {
+		ProviderNCPDPInterfaceRuleVO fixture = new ProviderNCPDPInterfaceRuleVO();
+		fixture.setStoreClosureStrDate("");
+		fixture.setReInstatementStrDate("");
+		fixture.setValidStoreClosureDate(true);
+		fixture.setAlternateID("");
+		fixture.setDeactivationCode("");
+		fixture.setAlternateIDExistsForStoreClosureDate(true);
+		fixture.setReInstatementCode("");
+
+		String result = fixture.getStoreClosureStrDate();
+
+		// add additional test code here
+		assertEquals("", result);
+	}
+
+	/**
+	 * Run the boolean isAlternateIDExistsForStoreClosureDate() method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testIsAlternateIDExistsForStoreClosureDate_1()
+		throws Exception {
+		ProviderNCPDPInterfaceRuleVO fixture = new ProviderNCPDPInterfaceRuleVO();
+		fixture.setStoreClosureStrDate("");
+		fixture.setReInstatementStrDate("");
+		fixture.setValidStoreClosureDate(true);
+		fixture.setAlternateID("");
+		fixture.setDeactivationCode("");
+		fixture.setAlternateIDExistsForStoreClosureDate(true);
+		fixture.setReInstatementCode("");
+
+		boolean result = fixture.isAlternateIDExistsForStoreClosureDate();
+
+		// add additional test code here
+		assertEquals(true, result);
+	}
+
+	/**
+	 * Run the boolean isAlternateIDExistsForStoreClosureDate() method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testIsAlternateIDExistsForStoreClosureDate_2()
+		throws Exception {
+		ProviderNCPDPInterfaceRuleVO fixture = new ProviderNCPDPInterfaceRuleVO();
+		fixture.setStoreClosureStrDate("");
+		fixture.setReInstatementStrDate("");
+		fixture.setValidStoreClosureDate(true);
+		fixture.setAlternateID("");
+		fixture.setDeactivationCode("");
+		fixture.setAlternateIDExistsForStoreClosureDate(false);
+		fixture.setReInstatementCode("");
+
+		boolean result = fixture.isAlternateIDExistsForStoreClosureDate();
+
+		// add additional test code here
+		assertEquals(false, result);
+	}
+
+	/**
+	 * Run the boolean isValidStoreClosureDate() method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testIsValidStoreClosureDate_1()
+		throws Exception {
+		ProviderNCPDPInterfaceRuleVO fixture = new ProviderNCPDPInterfaceRuleVO();
+		fixture.setStoreClosureStrDate("");
+		fixture.setReInstatementStrDate("");
+		fixture.setValidStoreClosureDate(true);
+		fixture.setAlternateID("");
+		fixture.setDeactivationCode("");
+		fixture.setAlternateIDExistsForStoreClosureDate(true);
+		fixture.setReInstatementCode("");
+
+		boolean result = fixture.isValidStoreClosureDate();
+
+		// add additional test code here
+		assertEquals(true, result);
+	}
+
+	/**
+	 * Run the boolean isValidStoreClosureDate() method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testIsValidStoreClosureDate_2()
+		throws Exception {
+		ProviderNCPDPInterfaceRuleVO fixture = new ProviderNCPDPInterfaceRuleVO();
+		fixture.setStoreClosureStrDate("");
+		fixture.setReInstatementStrDate("");
+		fixture.setValidStoreClosureDate(false);
+		fixture.setAlternateID("");
+		fixture.setDeactivationCode("");
+		fixture.setAlternateIDExistsForStoreClosureDate(true);
+		fixture.setReInstatementCode("");
+
+		boolean result = fixture.isValidStoreClosureDate();
+
+		// add additional test code here
+		assertEquals(false, result);
+	}
+
+	/**
+	 * Run the void setAlternateID(String) method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testSetAlternateID_1()
+		throws Exception {
+		ProviderNCPDPInterfaceRuleVO fixture = new ProviderNCPDPInterfaceRuleVO();
+		fixture.setStoreClosureStrDate("");
+		fixture.setReInstatementStrDate("");
+		fixture.setValidStoreClosureDate(true);
+		fixture.setAlternateID("");
+		fixture.setDeactivationCode("");
+		fixture.setAlternateIDExistsForStoreClosureDate(true);
+		fixture.setReInstatementCode("");
+		String alternateID = "";
+
+		fixture.setAlternateID(alternateID);
+
+		// add additional test code here
+	}
+
+	/**
+	 * Run the void setAlternateIDExistsForStoreClosureDate(boolean) method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testSetAlternateIDExistsForStoreClosureDate_1()
+		throws Exception {
+		ProviderNCPDPInterfaceRuleVO fixture = new ProviderNCPDPInterfaceRuleVO();
+		fixture.setStoreClosureStrDate("");
+		fixture.setReInstatementStrDate("");
+		fixture.setValidStoreClosureDate(true);
+		fixture.setAlternateID("");
+		fixture.setDeactivationCode("");
+		fixture.setAlternateIDExistsForStoreClosureDate(true);
+		fixture.setReInstatementCode("");
+		boolean alternateIDExistsForStoreClosureDate = true;
+
+		fixture.setAlternateIDExistsForStoreClosureDate(alternateIDExistsForStoreClosureDate);
+
+		// add additional test code here
+	}
+
+	/**
+	 * Run the void setDeactivationCode(String) method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testSetDeactivationCode_1()
+		throws Exception {
+		ProviderNCPDPInterfaceRuleVO fixture = new ProviderNCPDPInterfaceRuleVO();
+		fixture.setStoreClosureStrDate("");
+		fixture.setReInstatementStrDate("");
+		fixture.setValidStoreClosureDate(true);
+		fixture.setAlternateID("");
+		fixture.setDeactivationCode("");
+		fixture.setAlternateIDExistsForStoreClosureDate(true);
+		fixture.setReInstatementCode("");
+		String deactivationCode = "";
+
+		fixture.setDeactivationCode(deactivationCode);
+
+		// add additional test code here
+	}
+
+	/**
+	 * Run the void setReInstatementCode(String) method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testSetReInstatementCode_1()
+		throws Exception {
+		ProviderNCPDPInterfaceRuleVO fixture = new ProviderNCPDPInterfaceRuleVO();
+		fixture.setStoreClosureStrDate("");
+		fixture.setReInstatementStrDate("");
+		fixture.setValidStoreClosureDate(true);
+		fixture.setAlternateID("");
+		fixture.setDeactivationCode("");
+		fixture.setAlternateIDExistsForStoreClosureDate(true);
+		fixture.setReInstatementCode("");
+		String reInstatementCode = "";
+
+		fixture.setReInstatementCode(reInstatementCode);
+
+		// add additional test code here
+	}
+
+	/**
+	 * Run the void setReInstatementStrDate(String) method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testSetReInstatementStrDate_1()
+		throws Exception {
+		ProviderNCPDPInterfaceRuleVO fixture = new ProviderNCPDPInterfaceRuleVO();
+		fixture.setStoreClosureStrDate("");
+		fixture.setReInstatementStrDate("");
+		fixture.setValidStoreClosureDate(true);
+		fixture.setAlternateID("");
+		fixture.setDeactivationCode("");
+		fixture.setAlternateIDExistsForStoreClosureDate(true);
+		fixture.setReInstatementCode("");
+		String reInstatementStrDate = "";
+
+		fixture.setReInstatementStrDate(reInstatementStrDate);
+
+		// add additional test code here
+	}
+
+	/**
+	 * Run the void setStoreClosureStrDate(String) method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testSetStoreClosureStrDate_1()
+		throws Exception {
+		ProviderNCPDPInterfaceRuleVO fixture = new ProviderNCPDPInterfaceRuleVO();
+		fixture.setStoreClosureStrDate("");
+		fixture.setReInstatementStrDate("");
+		fixture.setValidStoreClosureDate(true);
+		fixture.setAlternateID("");
+		fixture.setDeactivationCode("");
+		fixture.setAlternateIDExistsForStoreClosureDate(true);
+		fixture.setReInstatementCode("");
+		String storeClosureStrDate = "";
+
+		fixture.setStoreClosureStrDate(storeClosureStrDate);
+
+		// add additional test code here
+	}
+
+	/**
+	 * Run the void setValidStoreClosureDate(boolean) method test.
+	 *
+	 * @throws Exception
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Test
+	public void testSetValidStoreClosureDate_1()
+		throws Exception {
+		ProviderNCPDPInterfaceRuleVO fixture = new ProviderNCPDPInterfaceRuleVO();
+		fixture.setStoreClosureStrDate("");
+		fixture.setReInstatementStrDate("");
+		fixture.setValidStoreClosureDate(true);
+		fixture.setAlternateID("");
+		fixture.setDeactivationCode("");
+		fixture.setAlternateIDExistsForStoreClosureDate(true);
+		fixture.setReInstatementCode("");
+		boolean validStoreClosureDate = true;
+
+		fixture.setValidStoreClosureDate(validStoreClosureDate);
+
+		// add additional test code here
+	}
+
+	/**
+	 * Perform pre-test initialization.
+	 *
+	 * @throws Exception
+	 *         if the initialization fails for some reason
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@Before
+	public void setUp()
+		throws Exception {
+		// add additional set up code here
+	}
+
+	/**
+	 * Perform post-test clean-up.
+	 *
+	 * @throws Exception
+	 *         if the clean-up fails for some reason
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	@After
+	public void tearDown()
+		throws Exception {
+		// Add additional tear down code here
+	}
+
+	/**
+	 * Launch the test.
+	 *
+	 * @param args the command line arguments
+	 *
+	 * @generatedBy CodePro at 5/5/14 5:55 PM
+	 */
+	public static void main(String[] args) {
+		new org.junit.runner.JUnitCore().run(ProviderNCPDPInterfaceRuleVOTest.class);
+	}
+}

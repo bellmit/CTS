@@ -1,0 +1,6 @@
+Longest common subsequence
+Longest increasing subsequence
+Longest alternating subsequence
+Heaviest Common Increasing Subsequence
+Longest increasing subsequence with max sum
+Maximum subarray problem

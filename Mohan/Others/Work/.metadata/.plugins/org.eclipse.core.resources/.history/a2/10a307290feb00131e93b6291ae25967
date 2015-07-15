@@ -1,0 +1,27 @@
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<script type="text/javascript" src="../js/jqueryValidation.js"></script>
+<script>
+   $(function() {
+	  alert('test');
+    $( "#tabs" ).tabs();
+  }); 
+  </script>
+<div id=tabs>
+	<ul>
+        <li><a href="#tabs-1">Ajax Call</a></li>
+        <li><a href="#tabs-2">JGrid</a></li>
+        <li><a href="#tabs-3">REST</a></li>
+    </ul>
+    <div id="tabs-1">
+        <p>Content for Tab 1</p>
+    </div>
+    <div id="tabs-2">
+        <p>Content for Tab 2</p>
+    </div>
+    <div id="tabs-3">
+        <p>Content for Tab 3</p>
+    </div>
+</div>

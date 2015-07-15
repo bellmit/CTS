@@ -1,0 +1,620 @@
+/* 
+ * Copyright (c) 2005 Affiliated Computer Services, Inc.
+ */
+package com.acs.enterprise.mmis.provider.enrollment.view.bean;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
+import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
+import javax.faces.model.SelectItem;
+
+import com.acs.enterprise.common.base.view.bean.EnterpriseBaseControllerBean;
+import com.acs.enterprise.common.program.administration.application.exception.SystemParameterNotFoundException;
+import com.acs.enterprise.common.program.administration.common.delegate.SystemParameterDelegate;
+import com.acs.enterprise.common.program.administration.common.domain.SystemParameter;
+import com.acs.enterprise.common.program.administration.common.domain.SystemParameterDetail;
+import com.acs.enterprise.common.program.administration.common.vo.ReferenceDataSearchVO;
+import com.acs.enterprise.common.program.administration.common.vo.SystemParameterInfo;
+import com.acs.enterprise.common.program.administration.util.helper.FunctionalAreaConstants;
+import com.acs.enterprise.common.program.administration.util.helper.ReferenceServiceDataConstants;
+import com.acs.enterprise.common.util.logger.EnterpriseLogFactory;
+import com.acs.enterprise.common.util.logger.EnterpriseLogger;
+import com.acs.enterprise.mmis.provider.common.helper.ProviderDataConstants;
+import com.acs.enterprise.mmis.provider.common.helper.ProviderUtil;
+import com.acs.enterprise.mmis.provider.common.vo.LanguageVO;
+import com.acs.enterprise.mmis.provider.common.vo.NameVO;
+import com.acs.enterprise.mmis.provider.common.vo.PreviousMedicaidVO;
+import com.acs.enterprise.mmis.provider.common.vo.ProviderVO;
+import com.acs.enterprise.mmis.provider.enrollment.view.helper.ProviderEnrollmentHelper;
+import com.xerox.enterprise.ghs.mmis.rif.common.exception.RIFException;
+import com.xerox.enterprise.ghs.mmis.rif.core.RulesContext;
+import com.xerox.enterprise.ghs.mmis.rif.core.RulesResult;
+import com.xerox.enterprise.ghs.mmis.rif.core.api.RulesManager;
+
+/**
+ * This pagebean is used to manage the Individual Information screen of the
+ * Individual Provider Enrollment. This pagebean is responsible for validating
+ * the fields in Individual Information page and loading the valid values and
+ * reset operations.
+ * 
+ * @author Wipro
+ */
+public class IndividualInfoControllerBean extends EnterpriseBaseControllerBean
+{
+    /** Holds Instance of Data Bean */
+    private transient IndividualProviderDataBean indivProvData;
+
+    /** Instance of the logger. */
+    private transient EnterpriseLogger logger = EnterpriseLogFactory
+            .getLogger(IndividualInfoControllerBean.class.getName());
+
+    /**
+     * Holds instance of ServiceInformationControllerBean which holds service
+     * information actions.
+     */
+    private transient ServiceInformationControllerBean serviceInfo = new ServiceInformationControllerBean();
+    
+    /**
+     * Method to check for required and invalid data fields and throw
+     * appropriate error messages based on the parameter passed.
+     * 
+     * @param fromIndicator -
+     *            integer to indicate whether the user has clicked on the
+     *            Continue button or the left navigation links. 1 - Command
+     *            button and 0 - command link.
+     * @param provider -
+     *            ProviderVO object containing identifying information.
+     * @return true if errors are found in the field.
+     */
+    public boolean validateIndividualInfo(int fromIndicator, ProviderVO provider)
+    {
+    	logger.info("inside validateIndividualInfo");
+        boolean dateCheck = false;
+        boolean checkMedicaid = false;
+        boolean checkRadio = false;
+        boolean appmntFields = false;
+        boolean applRecievedDate = false;
+        boolean ageCheck = false;
+        boolean entitValidate=false;
+        boolean appmntDatesComprare = false;
+        boolean applRecievedValidate = false;
+        //Added for ESPRD00457007 
+        boolean applReqEntityId = false;
+        //over
+    	boolean massEnroll = false;
+
+        indivProvData = ProviderEnrollmentHelper.getProviderData();
+        ProviderVO inputPrevPrvNum = indivProvData.getProvider();
+        PreviousMedicaidVO previousMedicaid = inputPrevPrvNum
+                .getPrevMedicaidVO();
+        //  provider.setAvailableLanguageList(indivProvData.getLanguageList());
+        /**Findbugs
+        List availiableList = new ArrayList();*/
+        List availiableList = null;
+        
+  //      Code Commented and added for PRV_ENR_UC_01.2. ESPRD00532328_19OCT2010 : Start
+       // availiableList.addAll(indivProvData.getLanguageList());
+        //provider.setAvailableLanguageList(availiableList);
+        SelectItem langCode = null;
+        
+        List langList = indivProvData.getLanguageList();
+        
+        List formattedList = new ArrayList();
+        if(null != langList && !langList.isEmpty())
+        {
+        	Iterator langIter=langList.iterator();
+        	while(langIter.hasNext())
+        	{
+        		langCode = (SelectItem)langIter.next();
+        		String langLabel=(String)langCode.getLabel();
+        		
+        		int indexValue=langLabel.indexOf("-");
+        		if(indexValue > -1){
+            	String langValue=langLabel.substring(indexValue+1);
+            	langCode.setLabel(langValue);
+        		}
+        		SelectItem selectItem=new SelectItem(langCode.getValue(),langCode.getLabel());
+        		formattedList.add(selectItem);
+        		
+        	}
+        	
+        	
+        }
+       
+        provider.setAvailableLanguageList(formattedList);
+        //AuditTimeStamp Fix For Language
+        List tempList = inputPrevPrvNum.getSelectedLanguageList();
+        if (null != tempList && tempList.isEmpty())
+        {
+            tempList.add(new SelectItem(ProviderDataConstants.PRV_ENR_ENGLISH,
+                    ProviderDataConstants.PRV_ENROLL_DEFAULT_LANGUAGE));
+        }
+        else if(null != tempList && tempList.size()>0)
+        {
+        	if(null!=provider.getNewlanguageList() && provider.getNewlanguageList().size()>0)
+        	{
+	        	Iterator slctdLangItr = provider.getNewlanguageList().iterator();
+	        	while(slctdLangItr.hasNext())
+	        	{
+	        		LanguageVO languageVO = (LanguageVO)slctdLangItr.next();
+	        		serviceInfo.removeFromOriginalList(languageVO.getLangaugeCode(), provider
+	                        .getAvailableLanguageList());
+	        	}
+        	}
+        }
+  //      Code Commented and added for PRV_ENR_UC_01.2. ESPRD00532328_19OCT2010 : End
+        NameVO identifyingName = provider.getIndividualInfo();
+        String tempDateFlag = ProviderEnrollmentHelper.dateFormatValidator(
+                fromIndicator, provider.getDateOfStringBirth(),
+                ProviderDataConstants.PRV_ENR_DOB,
+                ProviderDataConstants.PRV_ENR_MANDATORY_FIELD);
+        if ((ProviderDataConstants.PRV_ENR_INVALID).equals(tempDateFlag))
+        {
+        	
+            switch (fromIndicator)
+            {
+            
+            case 0:
+                ProviderEnrollmentHelper
+                        .errorForInvalidData(ProviderDataConstants.PRV_ENR_DOB);
+                dateCheck = true;
+                break;
+            case 1:
+                dateCheck = true;
+                break;
+            default:
+                dateCheck = false;
+                break;
+            }
+        }
+        else if (ProviderDataConstants.PRV_ENR_NULL.equals(tempDateFlag))
+        {
+        	
+            dateCheck = true;
+        }
+        else
+        {
+        	
+            provider.setDateOfBirth(ProviderUtil.convertStringToDate(provider
+                    .getDateOfStringBirth()));
+            provider.setDateOfStringBirth(ProviderEnrollmentHelper
+                    .splitString(provider.getDateOfStringBirth()));
+            dateCheck = ProviderEnrollmentHelper.dateValidation(fromIndicator,
+                    provider.getDateOfBirth(), new Date(),
+                    ProviderDataConstants.PRV_ENR_DOB);
+        }
+        logger.info("before dateCheck");
+        if(!dateCheck){
+        	
+        	ageCheck =	ProviderEnrollmentHelper.ageValidation(provider.getDateOfBirth(),ProviderDataConstants.PRV_ENR_DOB);
+        }
+        
+        checkRadio = ProviderEnrollmentHelper.errorForNullFields(0,
+                previousMedicaid.getPrevMedicaidInd(),
+                ProviderDataConstants.PRV_ENR_PRVNUM);
+        if (!checkRadio)
+        {
+        
+            if (previousMedicaid.getPrevMedicaidInd().equals(
+                    ProviderDataConstants.PRV_ENR_VALUE_ONE))
+            {
+            	
+                checkMedicaid = ProviderEnrollmentHelper.errorForNullFields(0,
+                        previousMedicaid.getPrevMedicaidAltId(),
+                        ProviderDataConstants.PRV_ENR_PRVNUMBERS)
+                        | (ProviderEnrollmentHelper.medicaidValidation(
+                                ProviderDataConstants.PRV_ENR_PRVNUMBERS,
+                                previousMedicaid.getPrevMedicaidAltId()));
+            }
+            else
+            {
+            	//Added for fixing CR ESPRD00452653
+            	try 
+    			{
+    	        	SystemParameterDelegate delegate = new SystemParameterDelegate();
+    	        	//II Phase FindBugs Issue Fixed
+//    	        	Long paramNum=new Long(8);
+    	        	/*Below Code Commented and added different code for GAI: Performance Tuning : Start
+    	        	Reason is instead of loading Entire System Parameter
+    	        	 Object, we are fetching SystemParamterInfo Value object with only value date.*/
+    	        	//Long paramNum=Long.valueOf(8);
+    	        	//String funcAreaCD=ProviderDataConstants.FUNC_AREA_CD;
+    	        	//Set systmDtlSet=null;
+    	        	Date massEnrollDate = null;
+    				/*SystemParameter systemParameter = delegate.getSystemParameterDetail(paramNum,funcAreaCD);
+    				
+    				if(null != systemParameter)
+    				{
+    					systmDtlSet = systemParameter.getSystemParameterDetail();
+    				}
+    				if(systmDtlSet != null )
+    				{
+    					Iterator systmDtlIter = systmDtlSet.iterator();
+    					while (systmDtlIter.hasNext())
+    					{
+    						SystemParameterDetail systemParameterDetail = (SystemParameterDetail) systmDtlIter.next();
+    							//FindBugs Issues Resolved
+    							//if(null != systemParameterDetail && systemParameterDetail.getValueDate() !=null && (! systemParameterDetail.getValueDate().equals(""))) 
+    							if(null != systemParameterDetail && systemParameterDetail.getValueDate() !=null && (! systemParameterDetail.getValueDate().toString().equals("")))
+    							{
+    								massEnrollDate= systemParameterDetail.getValueDate();
+    							}
+    							 
+    					}
+    				}*/
+    	        	
+    	        	List systemParamInfoList=delegate.getSystemParameterDetailForProvider(Long.valueOf(ProviderDataConstants.SYS_PARAM_EIGHT),ProviderDataConstants.FUNC_AREA_CD);
+    	        	if(null != systemParamInfoList)
+    	        	{
+    	        		Iterator sysIter=systemParamInfoList.iterator();
+    	        		while(sysIter.hasNext())
+    	        		{
+    	        			SystemParameterInfo systemParameterInfo=(SystemParameterInfo)sysIter.next();
+    	        			if(null != systemParameterInfo.getValueDate())
+    	        			{
+    	        			massEnrollDate=systemParameterInfo.getValueDate();
+    	        			}
+    	        		}
+    	        	}
+    	        	//Below Code Commented and added different code for GAI: Performance Tuning : End
+    				if(null!=massEnrollDate)
+    				{
+    					massEnroll = ProviderEnrollmentHelper.checkMassenrollDate(massEnrollDate,ProviderDataConstants.PRV_ENR_PRVNUM);
+    				}
+    			}
+            	catch (SystemParameterNotFoundException e) 
+    			{
+    				// TODO Auto-generated catch block
+    				e.printStackTrace();
+    			}
+            }
+        }
+        logger.info("provider new appMnt==>"+provider.isRenderNewAppMntApplication());
+        if (provider.isRenderNewAppMntApplication())
+        {
+        	//Added by ESPRD00457007 
+        	//changed for fixing  CR ESPRD00503319
+       	 if (!checkRadio && !massEnroll && !indivProvData.isIndivSubpart() && indivProvData.isNewEntityId())
+            {
+       	 	if (previousMedicaid.getPrevMedicaidInd().equals(ProviderDataConstants.PRV_ENR_VALUE_ZERO))
+            	{
+       	 		applReqEntityId = ProviderEnrollmentHelper.errorForNullFields(0,
+            			provider.getApplicationStatus().getEntityID(),"entityID");
+            	}
+            	else
+            	{
+            		applReqEntityId = false;
+            	}
+            }
+       	//over
+       	if(indivProvData.isNewEntityId())
+       	{
+
+            String applDateFlag = ProviderEnrollmentHelper.dateFormatValidator(
+                    fromIndicator, provider.getApplicationStatus()
+                            .getRecievedDate(), "applRecievedDate",
+                    ProviderDataConstants.PRV_ENR_MANDATORY_FIELD);
+            if ((ProviderDataConstants.PRV_ENR_NULL).equals(applDateFlag))
+            {
+            	
+                applRecievedDate = true;
+            }
+            if ((ProviderDataConstants.PRV_ENR_INVALID).equals(applDateFlag))
+            {
+            	
+                ProviderEnrollmentHelper
+                        .errorForInvalidData("applRecievedDate");
+                applRecievedDate = true;
+            }
+       	}
+            //changed for fixing  CR ESPRD00503319
+            /* code changed ESPRD00357775 and CR 352171: start*/
+            if(provider.isAddIndivGrpApplFlag()&& !applReqEntityId && !indivProvData.isIndivSubpart() && indivProvData.isNewEntityId())
+			{
+            	String status="";
+            	//Changed for Defect-ESPRD00352943
+             if(null!=provider.getApplicationStatus().getEntityID() && !provider.getApplicationStatus().getEntityID().equals(""))
+             {
+              appmntFields = ProviderEnrollmentHelper.validateEntityID(
+                    fromIndicator, provider.getApplicationStatus()
+                            .getEntityID(), "entityID");
+					/*| applRecievedDate
+                    | ProviderEnrollmentHelper.dateValidation(fromIndicator,
+                            ProviderUtil.string2Date(provider
+                                    .getApplicationStatus().getRecievedDate()),
+                            new Date(), "applRecievedDate")*/
+          //  logger.info("appmntFields@@@@@@@@@@@@"+appmntFields);
+          //  logger.info("Inside validateIndividualInfo13");
+            if(!appmntFields)
+            {
+             //entitValidate= ProviderEnrollmentHelper.validEntityID( fromIndicator, provider.getApplicationStatus().getEntityID(), "entityID");
+            	status = ProviderEnrollmentHelper.validEntityID( fromIndicator, provider.getApplicationStatus().getEntityID(), "entityID");
+            }
+           //  logger.info("Inside validateIndividualInfo14");
+            if(status.equalsIgnoreCase("noRecord") && !appmntFields){
+             	
+            	ProviderEnrollmentHelper.errorForRequiredFieldAll("entityID",ProviderDataConstants.ENTERPRISE_RESOURSE_BUNDLE,"err-sw-specificEntitySK-notFound");
+             	
+        	 	entitValidate=true;
+            }
+            else if(status.equalsIgnoreCase("duplicate") && !appmntFields){
+                  	
+                 	ProviderEnrollmentHelper.errorForRequiredFieldAll("entityID",ProviderDataConstants.PRV_ENR_RESOURCE_BUNDLE,"err-sw-specificEntitySK-notFound");
+                  	
+             	 	entitValidate=true;
+                 }
+            else{
+            	entitValidate=false;
+            }
+			}
+			}
+            logger.info("before application date validation...");
+            /* code changed ESPRD00357775 and CR 352171: end*/
+            //if(null != provider.getApplicationStatus() && null != provider.getApplicationStatus().getRecievedDate())
+            if(null != provider.getApplicationStatus())
+            {
+	            if(!dateCheck && ! ageCheck)
+	            {	
+		            appmntDatesComprare=ProviderEnrollmentHelper.dateValidation(fromIndicator,
+		                    provider.getDateOfBirth(), ProviderUtil.string2Date(provider
+		                            .getApplicationStatus().getRecievedDate()),"birthDtAppRcvedDt");
+	            	String ruleId = "PRV0002.0001.01";
+	                
+	            	logger.info("Started Rule Execution::::" +ruleId);      
+	
+	            	// Rule Invocation Context object holds object arrays used in rule execution.
+	             
+	            	RulesContext ric = new RulesContext();
+	
+				   // Adding object into rule invocation context.
+				   ric.addObject(fromIndicator);
+				   ric.addObject(provider);
+				
+				   // Invoke RIF with ruleid and rule invocation objects.
+				   RulesResult rulesResult = null;
+				                
+				   try {
+				       RulesManager rulesManager = RulesManager.getRIFInstance();
+				
+				       rulesResult = rulesManager.execute(ruleId, ric);	
+				       appmntDatesComprare = rulesResult.isReturnBooleanValue(); 
+				   } catch (RIFException re) {
+				       logger.info("RIFException::::" + re);
+				   }		
+	               
+					if(appmntDatesComprare && fromIndicator==0){
+						 ProviderEnrollmentHelper.commonErrorMessage("birthDtAppRcvedDt");
+					}
+					logger.info("Rule Execution Ended::::" + ruleId);
+					
+	            }
+            }
+            if(null != provider.getApplicationStatus() && null != provider.getApplicationStatus().getRecievedDate())
+            //if(null!=provider.getApplicationStatus().getRecievedDate())
+            {
+            	applRecievedValidate=ProviderEnrollmentHelper.dateValidation(fromIndicator
+               		 ,ProviderUtil.string2Date(provider.getApplicationStatus().getRecievedDate())
+						 ,new Date(), "applRecievedDate");
+            }
+        } 
+         return (ProviderEnrollmentHelper.nameValidation(fromIndicator,
+                identifyingName.getLastName(),
+                ProviderDataConstants.PRV_ENR_INDIV_LAST_NAME,
+                ProviderDataConstants.PRV_ENR_MANDATORY_FIELD))
+                | (ProviderEnrollmentHelper.nameValidation(fromIndicator,
+                        identifyingName.getFirstName(),
+                        ProviderDataConstants.PRV_ENR_INDIV_FIRST_NAME,
+                        ProviderDataConstants.PRV_ENR_MANDATORY_FIELD))
+                | (ProviderEnrollmentHelper.nameValidation(fromIndicator,
+                        identifyingName.getMiddleName(),
+                        ProviderDataConstants.PRV_ENR_INDIV_MIDDLE_NAME,
+                        ProviderDataConstants.PRV_ENR_NON_MANDATORY_FIELD))
+                  /** Added code as per CR-399629  */
+				|  ProviderEnrollmentHelper.errorForNullFields(
+                        ProviderDataConstants.PR_MED_GEN_MEDICAID,
+                        indivProvData.getProvider()
+                                .getGenderCode(),
+                        ProviderDataConstants.PRV_ENR_GENDER) |
+			     /** commented as per defect ESPRD00304425 */
+				/** uncommented as per CR-399629  */
+	                 (ProviderEnrollmentHelper.errorForNullFields(fromIndicator,
+	                        provider.getAgeGenderPublish(),
+	                        ProviderDataConstants.PRV_ENR_GENDER_INFO))
+	            //    | checkRadio
+                //				| (ProviderEnrollmentHelper.errorForNullFields(fromIndicator,
+                //						provider.getCountryOfBirth(),
+                //						ProviderDataConstants.PRV_ENR_COUNTRY))
+                | (ProviderEnrollmentHelper.nameValidation(fromIndicator,
+                        provider.getCountryOfBirth(),
+                        //ProviderDataConstants.PRV_ENR_COUNTRY
+                        ProviderDataConstants.PRV_ENR_COUNTRY1,
+                        ProviderDataConstants.PRV_ENR_MANDATORY_FIELD))
+                /*| (((ProviderDataConstants.PRV_ENR_COUNTRY_US).equals(provider
+                        .getCountryOfBirth()) && (ProviderEnrollmentHelper
+                        .errorForNullFields(fromIndicator, provider
+                                .getStateOfBirth(),
+                                ProviderDataConstants.PR_STATE_VALUE)))*/
+				| (ProviderEnrollmentHelper
+                        .ssnValidation(fromIndicator, provider.getSsnNumber(),
+                                //ProviderDataConstants.PR_SSN_KEY
+                        		ProviderDataConstants.PR_SSN_KEY1))
+                
+                | applRecievedDate | checkMedicaid | appmntFields | dateCheck 
+				| ageCheck | appmntDatesComprare | entitValidate | applRecievedValidate |checkRadio |applReqEntityId |massEnroll;
+    }
+  /**
+     * This method is used to clears data in the Individual Information screen
+     * in individual provider enrollment
+     */
+    public void resetIndividualInfoPageBean()
+    {
+        indivProvData = ProviderEnrollmentHelper.getProviderData();
+        ProviderVO inputProvider = indivProvData.getProvider();
+        NameVO individualName = indivProvData.getProvider().getIndividualInfo();
+        individualName.setLastName(ProviderDataConstants.PRV_ENR_VALUE_BLANK);
+        individualName.setFirstName(ProviderDataConstants.PRV_ENR_VALUE_BLANK);
+        individualName.setMiddleName(ProviderDataConstants.PRV_ENR_VALUE_BLANK);
+        individualName.setSuffixName(ProviderDataConstants.PRV_ENR_VALUE_BLANK);
+        individualName.setTitleName(ProviderDataConstants.PRV_ENR_VALUE_BLANK);
+        inputProvider
+                .setDateOfStringBirth(ProviderDataConstants.PRV_ENR_VALUE_BLANK);
+        inputProvider.setGenderCode(null);
+        inputProvider.setSsnNumber(ProviderDataConstants.PRV_ENR_VALUE_BLANK);
+        inputProvider
+                .setCountryOfBirth(ProviderDataConstants.PRV_ENR_VALUE_BLANK);
+        //inputProvider
+        //		.setStateOfBirth(ProviderDataConstants.PRV_ENR_VALUE_BLANK);
+        inputProvider
+                .setAgeGenderPublish(ProviderDataConstants.PRV_ENR_VALUE_BLANK);
+        //  indivProvData.getProvider().setRenderIndivStateFlag(false);
+        inputProvider
+                .setIndividualInfoStyleClass(ProviderDataConstants.PRV_ENR_VALUE_BLANK);
+        //inputProvider.getApplicationStatus().setEntityID(ProviderDataConstants.PRV_ENR_VALUE_BLANK);
+        //added for defect ESPRD00707148
+        if(inputProvider.getApplicationStatus()!=null){
+        inputProvider.getApplicationStatus().setRecievedDate(ProviderDataConstants.PRV_ENR_VALUE_BLANK);
+        }
+        if(inputProvider.isRenderNewAppMntApplication())
+        {
+        	/*Added for ESPRD00357775 and CR 352171*/
+        	if(!indivProvData.isDisableEntityId())
+        		inputProvider.getApplicationStatus().setEntityID(ProviderDataConstants.PRV_ENR_VALUE_BLANK);
+        	
+            inputProvider.getApplicationStatus().setRecievedDate(ProviderDataConstants.PRV_ENR_VALUE_BLANK);
+        }
+        inputProvider.getPrevMedicaidVO().setPrevMedicaidInd(
+                ProviderDataConstants.PRV_ENR_VALUE_BLANK);
+        inputProvider.getPrevMedicaidVO().setPrevMedicaidFlag(false);
+        inputProvider.getPrevMedicaidVO().setPrevMedicaidAltId(
+                ProviderDataConstants.PRV_ENR_VALUE_BLANK);
+
+      }
+
+    /**
+     * Method to render State field based on user selection of country.
+     * 
+     * @param ve -
+     *            ValueChangeEvent to get the new value selected by user
+     */
+    public void countryValueChange(ValueChangeEvent ve)
+    {
+        indivProvData = ProviderEnrollmentHelper.getProviderData();
+        if (null != ve.getNewValue()
+                && (ProviderDataConstants.PRV_ENR_COUNTRY_US).equals(ve
+                        .getNewValue()))
+        {
+            ve.getComponent().setRendered(false);
+            indivProvData.getProvider().setRenderIndivStateFlag(true);
+        }
+        else
+        {
+            ve.getComponent().setRendered(false);
+            indivProvData.getProvider().setRenderIndivStateFlag(false);
+        }
+        ve.getComponent().setRendered(true);
+       }
+
+    /**
+     * Value Change Listener to selectively render Previous Provider Number
+     * section based on user selection.
+     * 
+     * @param ve -
+     *            ValueChangeEvent to get the user's selection from the jsp. 1 -
+     *            the user has selected Yes and the section is displayed. 0 -
+     *            the user has selected No and the section is not displayed.
+     */
+    public void prevProviderNumberValueChange(ValueChangeEvent ve)
+    {
+        indivProvData = ProviderEnrollmentHelper.getProviderData();
+        ProviderVO inputPrevPrvNum = indivProvData.getProvider();
+        PreviousMedicaidVO previousMedicaid = inputPrevPrvNum
+                .getPrevMedicaidVO();
+        if (ProviderDataConstants.PRV_ENR_VALUE_ONE.equals(ve.getNewValue()))
+        {
+
+            previousMedicaid.setPrevMedicaidFlag(true);
+
+        }
+        else
+        {
+            previousMedicaid.setPrevMedicaidFlag(false);
+        }
+   
+    }
+    
+    //Commented for GAI Fix Start
+   /* private String indvInfoPageValidValues;
+    
+    HashMap map =null;
+	
+	   public static ProviderValidValuesDataBean getValidValuesDataBean(){
+	   	FacesContext context = FacesContext.getCurrentInstance();
+	   	ProviderValidValuesDataBean validValuesDataBean = (ProviderValidValuesDataBean) context
+	            .getApplication()
+	            .createValueBinding(
+	                    ProviderDataConstants.PRV_GET_DATA_BEAN_FIRST
+	                            + "ValidValuesDataBean"
+	                            + ProviderDataConstants.PRV_GET_DATA_BEAN_SECOND)
+	            .getValue(context);
+	    
+	    return validValuesDataBean;
+	   }
+	*//**
+	 * @return Returns the indvInfoPageValidValues.
+	 *//*
+	public String getIndvInfoPageValidValues() {
+		
+	      if(null == map){
+	      	
+	    	ProviderEnrollmentHelper prvEnrollmentHelper=new ProviderEnrollmentHelper();
+
+	      	ProviderValidValuesDataBean validValuesDataBean =ProviderEnrollmentHelper.getValidValuesDataBean();
+	        List list=new ArrayList();
+	    	ReferenceDataSearchVO criteria = new ReferenceDataSearchVO();
+	        list.add(ProviderEnrollmentHelper.getInputCriteria(ReferenceServiceDataConstants.TITLE,
+	                FunctionalAreaConstants.PROVIDER));
+	        list.add(ProviderEnrollmentHelper.getInputCriteria(ReferenceServiceDataConstants.G_SFX_NAM,
+	                FunctionalAreaConstants.GENERAL));
+	      
+	        list.add(ProviderEnrollmentHelper.getInputCriteria(ReferenceServiceDataConstants.G_EFT_ACCT_TY_CD,
+	        		FunctionalAreaConstants.GENERAL));
+	        criteria.setInputList(list);
+	        try{
+	        	map=(HashMap)prvEnrollmentHelper.getValidValues(criteria);	
+	        	*//**FindBugs issue fixed here*//*
+	        	validValuesDataBean.setTitleList((List) prvEnrollmentHelper.getValidData(map,
+		                ReferenceServiceDataConstants.TITLE,
+		                FunctionalAreaConstants.PROVIDER));
+		        validValuesDataBean.setSuffixNameList((List)prvEnrollmentHelper.getValidData(map,
+		                ReferenceServiceDataConstants.G_SFX_NAM,
+		                FunctionalAreaConstants.GENERAL));
+	        }catch(Exception e){
+	        	*//**FindBugs issue fixed here*//*
+	        	logger.debug(e);
+	        	END
+	        	}
+	        
+	        *//**Findbugs Issue starts here
+	        validValuesDataBean.setTitleList((List) prvEnrollmentHelper.getValidData(map,
+	                ReferenceServiceDataConstants.TITLE,
+	                FunctionalAreaConstants.PROVIDER));
+	        validValuesDataBean.setSuffixNameList((List)prvEnrollmentHelper.getValidData(map,
+	                ReferenceServiceDataConstants.G_SFX_NAM,
+	                FunctionalAreaConstants.GENERAL)); *//*
+	       }
+		return indvInfoPageValidValues;
+	}
+	*//**
+	 * @param indvInfoPageValidValues The indvInfoPageValidValues to set.
+	 *//*
+	public void setIndvInfoPageValidValues(String indvInfoPageValidValues) {
+		this.indvInfoPageValidValues = indvInfoPageValidValues;
+	}*/
+	    //Commented for GAI Fix End
+}

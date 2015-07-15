@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>RIF Tool</title>
+<script src="scripts\jquery-1.11.1.js"></script>
+<link rel="stylesheet"
+	href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+<script type="text/javascript" src="scripts/rif-1.0.0.js"></script>
+<script src="scripts/jquery.form.js" ></script>
+<link rel="stylesheet"
+	href="/RIF/style/table.css">
+
+<script>
+  $(function() {
+    $( "#tabs" ).tabs();
+  });
+  </script>
+<script>
+	function getFolder() {
+		return showModalDialog("pages/folderDialog.html", "",
+				"width:400px;height:400px;resizeable:yes;");
+	}
+	
+	function downloadData(){
+		  if(uiForm1.ruleId.value==""){
+			  alert("Please Enter Rule Id");
+		  }else{
+			  uiForm.action="/RIF/dataDownload";
+			  uiForm.submit();
+		  }
+	}
+</SCRIPT>
+</head>
+<body style="vertical-align: middle;">
+<div id="tabs">
+  <ul>
+    <li><a href="#tabs-1">RIF Identify</a></li>
+    <li><a href="#tabs-2">Search in Archive</a></li>
+    <li><a href="#tabs-3">Semi Automation</a></li>
+  </ul>
+  <div id="tabs-1">
+		<form name="uiForm" id="uiForm" action="/RIF/processInput" method="post">
+	<!--Outter table for center alignment -->
+		
+			<table style="width: 100%; height: 100%; border: 0px;">
+				<tr>
+					<td align="center" valign="middle">
+						<div id="table1" class="CSSTableGenerator" >
+						<table style="" border="1">
+							<tr>
+								<td colspan="3" align="center">Input Details</td>
+							</tr>
+		
+							<tr>
+								<td>Enter RuleID <br>Ex:-[IGB0003.0001.01]
+								</td>
+								<td><font color="red">*</font></td>
+								<td><input name="ruleId" id="ruleId" type="text"></td>
+							</tr>
+		
+							<tr>
+								<td>Enter Message ID <br>Ex:-[34-9999-0003]
+								</td>
+								<td><font color="red"></font></td>
+								<td><input name="messageId" id="messageId" type="text"></td>
+							</tr>
+		
+							<tr>
+								<td>Select Module</td>
+								<td><font color="red"></font></td>
+								<td><select name="module">
+										<option value="All">All</option>
+										<option value="enterprise">enterprise</option>
+										<option value="member">member</option>
+										<option value="operations">operations</option>
+										<option value="operations_comn">operations_comn</option>
+										<option value="program">program</option>
+										<option value="provider">provider</option>
+								</select></td>
+							</tr>
+		
+							<tr>
+								<td>Select Module</td>
+								<td><font color="red"></font></td>
+								<td><input type="text" name="sourcePath"> <input
+									type="button" value="Browse..."
+									onclick="this.form.sourcePath.value=getFolder()"></td>
+							</tr>
+		
+						</table> 
+						</div>
+						<br> <br> <br> <br>
+		
+						<table border="1" style="width: 50%">
+							<tr>
+								<td colspan="2" align="center">Generate Output</td>
+							</tr>
+		
+							<tr>
+		
+		
+								<td align="center" colspan="2"><button id="generate">Generate</button>
+								</td>
+							</tr>
+						</table> <br>
+		
+						<div id="progressbar"
+							style="width: 20%; height: 1em; display: none;"></div>
+						<div id="showDownload" style="display: none;">
+							<table border="1" style="width: 50%">
+								<tr>
+									<td colspan="2" align="center">Download</td>
+								</tr>
+		
+								<tr>
+									<td>Download POJO <br>
+									</td>
+		
+									<td><a href="" id="pojoLink">Click</a></td>
+								</tr>
+								<tr>
+									<td>Download Invocation Code <br>
+									</td>
+		
+									<td><A href="" id="invokeLink"">Click</A></td>
+								</tr>
+		
+								<tr>
+									<td>Download Rule Identified pattern file <br>
+									</td>
+		
+									<td><A href="" id="patternLink">Click</A></td>
+								</tr>
+		
+							</table>
+							<!--Outter table for center alignment -->
+						</div>
+					</td>
+				</tr>
+		
+			</table>
+		
+	</form>
+		
+  </div>
+  <div id="tabs-2">
+   	<form name="uiForm1" action="/DPForXeroxUI/processInput"> 
+	<!--Outer table for center alignment -->
+	<div id="table2" class="CSSTableGenerator" >
+		<table width="100%" height="100%" border="0" >
+		<tr><td align="center" valign="center">
+		
+		<table border="1" width="50%">
+		<tr>
+				<td colspan="3" align="center">Input Details </td>
+		</tr>		
+			
+			<tr>
+				<td>
+				Enter RuleID <br>Ex:-[IGB0003.0001.01]
+				</td> 
+				<td><font color="red">*</font></td>
+				<td>
+					<input name="ruleId" type="text">
+				</td>
+			</tr>
+				
+			</table>
+			
+			<br><br>
+			
+			<br><br>
+			
+				<table border="1" width="50%">
+				<tr>
+				<td colspan="2" align="center">Output </td>
+				</tr>		
+				
+				<tr>
+				<td align="center">
+					<input type="button" value="Download" onclick="javascript:downloadData()">
+				</td>
+						
+				</tr>
+			</table>
+			
+				<br><br>
+				
+				<table border="1" width="50%">
+				<tr>
+				<td colspan="2" align="center">Download</td>
+				</tr>		
+				
+				<tr>
+				<td>
+				Download POJO <br>
+				</td> 
+				
+				<td>
+					<A href="">Click</A>
+				</td>
+			</tr>
+				<tr>
+				<td>
+				Download Invocation Code <br>
+				</td> 
+				
+				<td>
+					<A href="">Click</A>
+				</td>
+			</tr>
+				<tr>
+				<td>
+				Download Rule Identified pattern file  <br>
+				</td> 
+				
+				<td>
+					<A href="">Click</A>
+				</td>
+			</tr>
+				
+			</table>
+			
+			<!--Outter table for center alignment -->
+			</td></tr>
+			
+			</table>
+		</div>
+	</form>
+  </div>
+  <div id="tabs-3">
+	  <form id="UploadForm" action="/RIF/UploadFile" method="post" enctype="multipart/form-data">
+	    <input type="file" size="60" id="myfile" name="myfile"> 
+	     <input type="submit" value="Extract Rule">
+	       <div id="progressbox">
+	         <div id="progressbar"></div>
+	         <div id="percent">0%</div>
+	       </div>
+	 	<br />
+		<div id="message"></div>
+		<div id="showDownload1" style="display: none;">
+			<table border="1" width="50%">
+				<tr>
+					<td colspan="2" align="center">Download</td>
+				</tr>
+				<tr>
+					<td>Download POJO <br>
+					</td>
+
+					<td><a href="" id="pojoLink1">Click</a></td>
+				</tr>
+				<tr>
+					<td>Download Invocation Code <br>
+					</td>
+					<td><A href="" id="invokeLink1">Click</A></td>
+				</tr>
+			</table>
+			</div>
+		</form>
+  </div>
+</div>
+</body>
+
+</html>

@@ -1,0 +1,53 @@
+package com.xerox.enterprise.ghs.mmis.sax;
+
+import java.io.IOException;
+import java.io.InputStream;
+
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.xml.sax.SAXException;
+
+import com.xerox.enterprise.ghs.mmis.rif.common.exception.RIFException;
+import com.xerox.enterprise.ghs.mmis.rif.core.RulesXMLConfigReader;
+
+
+public class SAXParserUtility {
+
+	private static SAXParserFactory saxParserFactory;
+	
+	private static SAXParser saxParser;
+	
+	private static RulesXMLConfigReader configReader;
+	
+	/*Static logger to log a message */
+	private static final Logger LOG = LoggerFactory.getLogger(SAXParserUtility.class);	
+
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		saxParserFactory = SAXParserFactory.newInstance();
+		saxParser = saxParserFactory.newSAXParser();
+		configReader = new RulesXMLConfigReader(rifCache);		
+		loadRulesConfigfromXML();
+	}
+
+	private void loadRulesConfigfromXML()throws RIFException {
+		
+        try {
+        	System.out.println("Xml Path:"+Thread.currentThread().getContextClassLoader().
+        			getResource("Rules-Metadata.xml").getFile());
+        	InputStream is=Thread.currentThread().getContextClassLoader().
+        			getResource("Rules-Metadata.xml").openStream();       	
+        	saxParser.parse(is, configReader);
+		} catch (SAXException e) {			
+			LOG.error("SAX configuration exception occured while parsing Rules Metadata file", e);
+			throw new RIFException(e);
+		} catch (IOException ioe) {			
+			LOG.error("IO exception occured while parsing Rules Metadata file", ioe);
+			throw new RIFException(ioe);
+		}
+	}
+}

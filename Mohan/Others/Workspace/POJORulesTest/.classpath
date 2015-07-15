@@ -1,0 +1,688 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="/POJORules"/>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/log4j/log4j/1.2.17/log4j-1.2.17.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="log4j"/>
+			<attribute name="maven.artifactId" value="log4j"/>
+			<attribute name="maven.version" value="1.2.17"/>
+			<attribute name="maven.scope" value="compile"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/junit/junit/4.8.1/junit-4.8.1.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="junit"/>
+			<attribute name="maven.artifactId" value="junit"/>
+			<attribute name="maven.version" value="4.8.1"/>
+			<attribute name="maven.scope" value="compile"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/commons-lang/commons-lang/2.1/commons-lang-2.1.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="commons-lang"/>
+			<attribute name="maven.artifactId" value="commons-lang"/>
+			<attribute name="maven.version" value="2.1"/>
+			<attribute name="maven.scope" value="compile"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/net/sf/ehcache/ehcache/2.8.3/ehcache-2.8.3.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="net.sf.ehcache"/>
+			<attribute name="maven.artifactId" value="ehcache"/>
+			<attribute name="maven.version" value="2.8.3"/>
+			<attribute name="maven.scope" value="compile"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/org/slf4j/slf4j-api/1.7.7/slf4j-api-1.7.7.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.slf4j"/>
+			<attribute name="maven.artifactId" value="slf4j-api"/>
+			<attribute name="maven.version" value="1.7.7"/>
+			<attribute name="maven.scope" value="compile"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/org/slf4j/slf4j-log4j12/1.7.7/slf4j-log4j12-1.7.7.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.slf4j"/>
+			<attribute name="maven.artifactId" value="slf4j-log4j12"/>
+			<attribute name="maven.version" value="1.7.7"/>
+			<attribute name="maven.scope" value="compile"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/com/xerox/enterprise/ghs/mmis/rif/1.0.0/RIF-1.0.0.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="com.xerox.enterprise.ghs.mmis"/>
+			<attribute name="maven.artifactId" value="RIF"/>
+			<attribute name="maven.version" value="1.0.0"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/org/apache/maven/plugins/maven-jar-plugin/2.4/maven-jar-plugin-2.4.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.apache.maven.plugins"/>
+			<attribute name="maven.artifactId" value="maven-jar-plugin"/>
+			<attribute name="maven.version" value="2.4"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/org/apache/maven/maven-plugin-api/2.0.6/maven-plugin-api-2.0.6.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.apache.maven"/>
+			<attribute name="maven.artifactId" value="maven-plugin-api"/>
+			<attribute name="maven.version" value="2.0.6"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/org/apache/maven/maven-project/2.0.6/maven-project-2.0.6.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.apache.maven"/>
+			<attribute name="maven.artifactId" value="maven-project"/>
+			<attribute name="maven.version" value="2.0.6"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/org/apache/maven/maven-profile/2.0.6/maven-profile-2.0.6.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.apache.maven"/>
+			<attribute name="maven.artifactId" value="maven-profile"/>
+			<attribute name="maven.version" value="2.0.6"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/org/apache/maven/maven-artifact-manager/2.0.6/maven-artifact-manager-2.0.6.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.apache.maven"/>
+			<attribute name="maven.artifactId" value="maven-artifact-manager"/>
+			<attribute name="maven.version" value="2.0.6"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/org/apache/maven/maven-plugin-registry/2.0.6/maven-plugin-registry-2.0.6.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.apache.maven"/>
+			<attribute name="maven.artifactId" value="maven-plugin-registry"/>
+			<attribute name="maven.version" value="2.0.6"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/org/apache/maven/maven-model/2.0.6/maven-model-2.0.6.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.apache.maven"/>
+			<attribute name="maven.artifactId" value="maven-model"/>
+			<attribute name="maven.version" value="2.0.6"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/org/apache/maven/maven-artifact/2.0.6/maven-artifact-2.0.6.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.apache.maven"/>
+			<attribute name="maven.artifactId" value="maven-artifact"/>
+			<attribute name="maven.version" value="2.0.6"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/org/apache/maven/maven-archiver/2.5/maven-archiver-2.5.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.apache.maven"/>
+			<attribute name="maven.artifactId" value="maven-archiver"/>
+			<attribute name="maven.version" value="2.5"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/org/codehaus/plexus/plexus-archiver/2.1/plexus-archiver-2.1.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.codehaus.plexus"/>
+			<attribute name="maven.artifactId" value="plexus-archiver"/>
+			<attribute name="maven.version" value="2.1"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/org/codehaus/plexus/plexus-io/2.0.2/plexus-io-2.0.2.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.codehaus.plexus"/>
+			<attribute name="maven.artifactId" value="plexus-io"/>
+			<attribute name="maven.version" value="2.0.2"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/org/codehaus/plexus/plexus-utils/3.0/plexus-utils-3.0.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.codehaus.plexus"/>
+			<attribute name="maven.artifactId" value="plexus-utils"/>
+			<attribute name="maven.version" value="3.0"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/org/apache/maven/plugins/maven-resources-plugin/2.4.3/maven-resources-plugin-2.4.3.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.apache.maven.plugins"/>
+			<attribute name="maven.artifactId" value="maven-resources-plugin"/>
+			<attribute name="maven.version" value="2.4.3"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/org/apache/maven/maven-core/2.0.6/maven-core-2.0.6.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.apache.maven"/>
+			<attribute name="maven.artifactId" value="maven-core"/>
+			<attribute name="maven.version" value="2.0.6"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/org/apache/maven/wagon/wagon-file/1.0-beta-2/wagon-file-1.0-beta-2.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.apache.maven.wagon"/>
+			<attribute name="maven.artifactId" value="wagon-file"/>
+			<attribute name="maven.version" value="1.0-beta-2"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/org/apache/maven/maven-plugin-parameter-documenter/2.0.6/maven-plugin-parameter-documenter-2.0.6.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.apache.maven"/>
+			<attribute name="maven.artifactId" value="maven-plugin-parameter-documenter"/>
+			<attribute name="maven.version" value="2.0.6"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/org/apache/maven/wagon/wagon-http-lightweight/1.0-beta-2/wagon-http-lightweight-1.0-beta-2.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.apache.maven.wagon"/>
+			<attribute name="maven.artifactId" value="wagon-http-lightweight"/>
+			<attribute name="maven.version" value="1.0-beta-2"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/org/apache/maven/wagon/wagon-http-shared/1.0-beta-2/wagon-http-shared-1.0-beta-2.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.apache.maven.wagon"/>
+			<attribute name="maven.artifactId" value="wagon-http-shared"/>
+			<attribute name="maven.version" value="1.0-beta-2"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/jtidy/jtidy/4aug2000r7-dev/jtidy-4aug2000r7-dev.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="jtidy"/>
+			<attribute name="maven.artifactId" value="jtidy"/>
+			<attribute name="maven.version" value="4aug2000r7-dev"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/xml-apis/xml-apis/1.0.b2/xml-apis-1.0.b2.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="xml-apis"/>
+			<attribute name="maven.artifactId" value="xml-apis"/>
+			<attribute name="maven.version" value="1.0.b2"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/org/apache/maven/reporting/maven-reporting-api/2.0.6/maven-reporting-api-2.0.6.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.apache.maven.reporting"/>
+			<attribute name="maven.artifactId" value="maven-reporting-api"/>
+			<attribute name="maven.version" value="2.0.6"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/org/apache/maven/doxia/doxia-sink-api/1.0-alpha-7/doxia-sink-api-1.0-alpha-7.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.apache.maven.doxia"/>
+			<attribute name="maven.artifactId" value="doxia-sink-api"/>
+			<attribute name="maven.version" value="1.0-alpha-7"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/org/apache/maven/wagon/wagon-provider-api/1.0-beta-2/wagon-provider-api-1.0-beta-2.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.apache.maven.wagon"/>
+			<attribute name="maven.artifactId" value="wagon-provider-api"/>
+			<attribute name="maven.version" value="1.0-beta-2"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/org/apache/maven/maven-repository-metadata/2.0.6/maven-repository-metadata-2.0.6.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.apache.maven"/>
+			<attribute name="maven.artifactId" value="maven-repository-metadata"/>
+			<attribute name="maven.version" value="2.0.6"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/org/apache/maven/maven-error-diagnostics/2.0.6/maven-error-diagnostics-2.0.6.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.apache.maven"/>
+			<attribute name="maven.artifactId" value="maven-error-diagnostics"/>
+			<attribute name="maven.version" value="2.0.6"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/commons-cli/commons-cli/1.0/commons-cli-1.0.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="commons-cli"/>
+			<attribute name="maven.artifactId" value="commons-cli"/>
+			<attribute name="maven.version" value="1.0"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/org/apache/maven/wagon/wagon-ssh-external/1.0-beta-2/wagon-ssh-external-1.0-beta-2.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.apache.maven.wagon"/>
+			<attribute name="maven.artifactId" value="wagon-ssh-external"/>
+			<attribute name="maven.version" value="1.0-beta-2"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/org/apache/maven/wagon/wagon-ssh-common/1.0-beta-2/wagon-ssh-common-1.0-beta-2.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.apache.maven.wagon"/>
+			<attribute name="maven.artifactId" value="wagon-ssh-common"/>
+			<attribute name="maven.version" value="1.0-beta-2"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/org/apache/maven/maven-plugin-descriptor/2.0.6/maven-plugin-descriptor-2.0.6.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.apache.maven"/>
+			<attribute name="maven.artifactId" value="maven-plugin-descriptor"/>
+			<attribute name="maven.version" value="2.0.6"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/org/codehaus/plexus/plexus-interactivity-api/1.0-alpha-4/plexus-interactivity-api-1.0-alpha-4.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.codehaus.plexus"/>
+			<attribute name="maven.artifactId" value="plexus-interactivity-api"/>
+			<attribute name="maven.version" value="1.0-alpha-4"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/org/apache/maven/wagon/wagon-ssh/1.0-beta-2/wagon-ssh-1.0-beta-2.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.apache.maven.wagon"/>
+			<attribute name="maven.artifactId" value="wagon-ssh"/>
+			<attribute name="maven.version" value="1.0-beta-2"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/com/jcraft/jsch/0.1.27/jsch-0.1.27.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="com.jcraft"/>
+			<attribute name="maven.artifactId" value="jsch"/>
+			<attribute name="maven.version" value="0.1.27"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/classworlds/classworlds/1.1/classworlds-1.1.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="classworlds"/>
+			<attribute name="maven.artifactId" value="classworlds"/>
+			<attribute name="maven.version" value="1.1"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/org/apache/maven/maven-settings/2.0.6/maven-settings-2.0.6.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.apache.maven"/>
+			<attribute name="maven.artifactId" value="maven-settings"/>
+			<attribute name="maven.version" value="2.0.6"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/org/apache/maven/maven-monitor/2.0.6/maven-monitor-2.0.6.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.apache.maven"/>
+			<attribute name="maven.artifactId" value="maven-monitor"/>
+			<attribute name="maven.version" value="2.0.6"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/org/codehaus/plexus/plexus-container-default/1.0-alpha-9-stable-1/plexus-container-default-1.0-alpha-9-stable-1.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.codehaus.plexus"/>
+			<attribute name="maven.artifactId" value="plexus-container-default"/>
+			<attribute name="maven.version" value="1.0-alpha-9-stable-1"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/org/apache/maven/shared/maven-filtering/1.0-beta-4/maven-filtering-1.0-beta-4.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.apache.maven.shared"/>
+			<attribute name="maven.artifactId" value="maven-filtering"/>
+			<attribute name="maven.version" value="1.0-beta-4"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/org/sonatype/plexus/plexus-build-api/0.0.4/plexus-build-api-0.0.4.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.sonatype.plexus"/>
+			<attribute name="maven.artifactId" value="plexus-build-api"/>
+			<attribute name="maven.version" value="0.0.4"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/org/codehaus/plexus/plexus-interpolation/1.13/plexus-interpolation-1.13.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.codehaus.plexus"/>
+			<attribute name="maven.artifactId" value="plexus-interpolation"/>
+			<attribute name="maven.version" value="1.13"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/org/apache/maven/plugins/maven-compiler-plugin/3.1/maven-compiler-plugin-3.1.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.apache.maven.plugins"/>
+			<attribute name="maven.artifactId" value="maven-compiler-plugin"/>
+			<attribute name="maven.version" value="3.1"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/org/apache/maven/maven-toolchain/1.0/maven-toolchain-1.0.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.apache.maven"/>
+			<attribute name="maven.artifactId" value="maven-toolchain"/>
+			<attribute name="maven.version" value="1.0"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/org/apache/maven/shared/maven-shared-utils/0.1/maven-shared-utils-0.1.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.apache.maven.shared"/>
+			<attribute name="maven.artifactId" value="maven-shared-utils"/>
+			<attribute name="maven.version" value="0.1"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/com/google/code/findbugs/jsr305/2.0.1/jsr305-2.0.1.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="com.google.code.findbugs"/>
+			<attribute name="maven.artifactId" value="jsr305"/>
+			<attribute name="maven.version" value="2.0.1"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/org/apache/maven/shared/maven-shared-incremental/1.1/maven-shared-incremental-1.1.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.apache.maven.shared"/>
+			<attribute name="maven.artifactId" value="maven-shared-incremental"/>
+			<attribute name="maven.version" value="1.1"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/org/codehaus/plexus/plexus-component-annotations/1.5.5/plexus-component-annotations-1.5.5.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.codehaus.plexus"/>
+			<attribute name="maven.artifactId" value="plexus-component-annotations"/>
+			<attribute name="maven.version" value="1.5.5"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/org/codehaus/plexus/plexus-compiler-api/2.2/plexus-compiler-api-2.2.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.codehaus.plexus"/>
+			<attribute name="maven.artifactId" value="plexus-compiler-api"/>
+			<attribute name="maven.version" value="2.2"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/org/codehaus/plexus/plexus-compiler-manager/2.2/plexus-compiler-manager-2.2.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.codehaus.plexus"/>
+			<attribute name="maven.artifactId" value="plexus-compiler-manager"/>
+			<attribute name="maven.version" value="2.2"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/org/codehaus/plexus/plexus-compiler-javac/2.2/plexus-compiler-javac-2.2.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.codehaus.plexus"/>
+			<attribute name="maven.artifactId" value="plexus-compiler-javac"/>
+			<attribute name="maven.version" value="2.2"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/org/mockito/mockito-all/1.9.5/mockito-all-1.9.5.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.mockito"/>
+			<attribute name="maven.artifactId" value="mockito-all"/>
+			<attribute name="maven.version" value="1.9.5"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/xerces/xercesImpl/2.4.0/xercesImpl-2.4.0.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="xerces"/>
+			<attribute name="maven.artifactId" value="xercesImpl"/>
+			<attribute name="maven.version" value="2.4.0"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/javax/xml/bind/jaxb-api/2.2.11/jaxb-api-2.2.11.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="javax.xml.bind"/>
+			<attribute name="maven.artifactId" value="jaxb-api"/>
+			<attribute name="maven.version" value="2.2.11"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/com/xerox/enterprise/ghs/mmis/EnterpriseDomainObjects/1.0.0/EnterpriseDomainObjects-1.0.0.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="com.xerox.enterprise.ghs.mmis"/>
+			<attribute name="maven.artifactId" value="EnterpriseDomainObjects"/>
+			<attribute name="maven.version" value="1.0.0"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/com/xerox/enterprise/ghs/mmis/ProviderEnrollmentDelegates/1.0.0/ProviderEnrollmentDelegates-1.0.0.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="com.xerox.enterprise.ghs.mmis"/>
+			<attribute name="maven.artifactId" value="ProviderEnrollmentDelegates"/>
+			<attribute name="maven.version" value="1.0.0"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/com/xerox/enterprise/ghs/mmis/EnterpriseCommonUtilities/1.0.0/EnterpriseCommonUtilities-1.0.0.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="com.xerox.enterprise.ghs.mmis"/>
+			<attribute name="maven.artifactId" value="EnterpriseCommonUtilities"/>
+			<attribute name="maven.version" value="1.0.0"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/com/xerox/enterprise/ghs/mmis/BenefitAdministrationComponents/1.0.0/BenefitAdministrationComponents-1.0.0.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="com.xerox.enterprise.ghs.mmis"/>
+			<attribute name="maven.artifactId" value="BenefitAdministrationComponents"/>
+			<attribute name="maven.version" value="1.0.0"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/com/xerox/enterprise/ghs/mmis/ProviderApplicationComponents/1.0.0/ProviderApplicationComponents-1.0.0.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="com.xerox.enterprise.ghs.mmis"/>
+			<attribute name="maven.artifactId" value="ProviderApplicationComponents"/>
+			<attribute name="maven.version" value="1.0.0"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/com/xerox/enterprise/ghs/mmis/EnterpriseApplicationComponents/1.0.0/EnterpriseApplicationComponents-1.0.0.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="com.xerox.enterprise.ghs.mmis"/>
+			<attribute name="maven.artifactId" value="EnterpriseApplicationComponents"/>
+			<attribute name="maven.version" value="1.0.0"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/com/xerox/enterprise/ghs/mmis/ProgramApplicationComponents/1.0.0/ProgramApplicationComponents-1.0.0.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="com.xerox.enterprise.ghs.mmis"/>
+			<attribute name="maven.artifactId" value="ProgramApplicationComponents"/>
+			<attribute name="maven.version" value="1.0.0"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/com/xerox/enterprise/ghs/mmis/TPLAdministrationComponents/1.0.0/TPLAdministrationComponents-1.0.0.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="com.xerox.enterprise.ghs.mmis"/>
+			<attribute name="maven.artifactId" value="TPLAdministrationComponents"/>
+			<attribute name="maven.version" value="1.0.0"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/com/xerox/enterprise/ghs/mmis/OperationsApplicationComponents/1.0.0/OperationsApplicationComponents-1.0.0.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="com.xerox.enterprise.ghs.mmis"/>
+			<attribute name="maven.artifactId" value="OperationsApplicationComponents"/>
+			<attribute name="maven.version" value="1.0.0"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/com/xerox/enterprise/ghs/mmis/TPLAdministrationDelegates/1.0.0/TPLAdministrationDelegates-1.0.0.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="com.xerox.enterprise.ghs.mmis"/>
+			<attribute name="maven.artifactId" value="TPLAdministrationDelegates"/>
+			<attribute name="maven.version" value="1.0.0"/>
+			<attribute name="maven.scope" value="provided"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/396662/.m2/repository/com/xerox/enterprise/ghs/mmis/ProgramAdministrationComponents/1.0.0/ProgramAdministrationComponents-1.0.0.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="com.xerox.enterprise.ghs.mmis"/>
+			<attribute name="maven.artifactId" value="ProgramAdministrationComponents"/>
+			<attribute name="maven.version" value="1.0.0"/>
+			<attribute name="maven.scope" value="system"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="D:/Soft/Environment/XeroxLib/sharedlib/EnterpriseCommonDelegates.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="1"/>
+			<attribute name="maven.artifactId" value="EnterpriseCommonDelegates"/>
+			<attribute name="maven.version" value="1.0.0"/>
+			<attribute name="maven.scope" value="system"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="D:/Soft/Environment/XeroxLib/sharedlib/ContactManagementComponents.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="1"/>
+			<attribute name="maven.artifactId" value="ContactManagementComponents"/>
+			<attribute name="maven.version" value="1.0.0"/>
+			<attribute name="maven.scope" value="system"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="D:/Soft/Environment/XeroxLib/sharedlib/EnterpriseRulesEJBClient.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="com.xerox.enterprise.ghs.mmis"/>
+			<attribute name="maven.artifactId" value="EnterpriseRulesEJBClient"/>
+			<attribute name="maven.version" value="1.0.0"/>
+			<attribute name="maven.scope" value="system"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="D:/Soft/Environment/XeroxLib/sharedlib/EnterpriseRulesComponents.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="com.xerox.enterprise.ghs.mmis"/>
+			<attribute name="maven.artifactId" value="EnterpriseRulesComponents"/>
+			<attribute name="maven.version" value="1.0.0"/>
+			<attribute name="maven.scope" value="system"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="D:/Soft/Environment/XeroxLib/sharedlib/EnterpriseCacheEJBClient.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="com.xerox.enterprise.ghs.mmis"/>
+			<attribute name="maven.artifactId" value="EnterpriseCacheEJBClient"/>
+			<attribute name="maven.version" value="1.0.0"/>
+			<attribute name="maven.scope" value="system"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="D:/Soft/WAS8.5-Runtime/WAS8.5-Runtime/j2ee.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="javax.j2ee"/>
+			<attribute name="maven.artifactId" value="j2ee"/>
+			<attribute name="maven.version" value="1.4"/>
+			<attribute name="maven.scope" value="system"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="src" path="java"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

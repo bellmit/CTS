@@ -1,0 +1,39 @@
+@startuml
+	title <size:20>Sequence Diagram for <u>$SequenceDO.sequenceName</u> transaction</size>
+
+	#set($allLines = $SequenceDO.messageLinesDOList)
+	#if($allLines && $allLines.size() > 0)
+		
+    	#foreach($methodCall in $allLines)
+    		#if($methodCall.forward)
+				#if($methodCall.typeOfFrom == "ActorLine")
+				actor $methodCall.lineFrom
+				#end
+				#if($methodCall.typeOfTo=="ActorLine")
+				actor $methodCall.lineTo
+				#end
+				#if("$!methodCall.lineCommentTo" != "")
+				note over $methodCall.lineTo: $methodCall.lineCommentTo
+				#end
+				
+				#if("$!methodCall.dataObject" != "")
+					
+    			$methodCall.lineFrom -> $methodCall.lineTo : <b>$methodCall.dataObject</b>
+        		activate $methodCall.lineTo #LightGrey
+        		#else
+        		$methodCall.lineFrom -[#Orange]> $methodCall.lineTo : <b></b>
+        		activate $methodCall.lineTo #LightGrey
+        		#end
+    		#else
+    			#if("$!methodCall.dataObject" != "")
+    			$methodCall.lineFrom --> $methodCall.lineTo : <b>$methodCall.dataObject</b>
+            	deactivate $methodCall.lineFrom #LightGrey
+            	#else
+            	$methodCall.lineFrom -[#Orange]-> $methodCall.lineTo : <b></b>
+            	deactivate $methodCall.lineFrom #LightGrey
+            	#end
+    		#end
+    	#end
+	
+	#end
+@enduml

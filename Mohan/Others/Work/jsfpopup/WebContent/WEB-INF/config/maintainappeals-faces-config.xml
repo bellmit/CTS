@@ -1,0 +1,151 @@
+<?xml version="1.0"?>
+<faces-config
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
+   version="2.0">
+	
+		
+	<managed-bean>
+		<managed-bean-name>appealControllerBean</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.bean.AppealControllerBean
+		</managed-bean-class><!--
+		<managed-bean-scope>request</managed-bean-scope>
+		--><managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	
+	<!--<managed-bean>
+		<managed-bean-name>appealDataBean</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.bean.AppealDataBean
+		</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+		<managed-property>
+	  		<property-name>appealVO</property-name>
+	  		<value>#{appealVO}</value>
+	  	</managed-property>
+	  	<managed-property>
+	  		<property-name>tempAppealVO</property-name>
+	  		<value>#{tempAppealVO}</value>
+	  	</managed-property>
+	</managed-bean>-->
+			
+	<managed-bean>
+		<managed-bean-name>appealVO</managed-bean-name>
+		<managed-bean-class>com.acs.enterprise.common.program.contactmanagement.view.vo.AppealVO</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+		<managed-property>
+	  		<property-name>adminHearingVO</property-name>
+	  		<value>#{adminHearingVO}</value> 
+	  	</managed-property>
+	</managed-bean>
+		<managed-bean>
+		<managed-bean-name>tempAppealVO</managed-bean-name>
+		<managed-bean-class>com.acs.enterprise.common.program.contactmanagement.view.vo.AppealVO</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>adminHearingVO</managed-bean-name>
+		<managed-bean-class>com.acs.enterprise.common.program.contactmanagement.view.vo.AdminHearingVO</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>appealDataBean</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.bean.AppealDataBean
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+		<managed-property>
+	  		<property-name>commonCMCaseDetailsVO</property-name>
+	  		<value>#{commonCMCaseDetailsVO}</value>
+	  	</managed-property>
+	  	<managed-property>
+	  		<property-name>commonMemberDetailsVO</property-name>
+	  		<value>#{commonMemberDetailsVO}</value>
+	  	</managed-property>
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>commonCMCaseDetailsVO</managed-bean-name>
+		<managed-bean-class>com.acs.enterprise.common.view.vo.CommonCMCaseDetailsVO</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean><!--
+	
+	<managed-bean>
+		<managed-bean-name>appealDataBean</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.bean.AppealDataBean
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+		
+	</managed-bean>
+		
+	--><managed-bean>
+		<managed-bean-name>commonMemberDetailsVO</managed-bean-name>
+		<managed-bean-class>com.acs.enterprise.common.view.vo.CommonMemberDetailsVO</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean><!--
+	
+	<managed-bean>
+		<managed-bean-name>appealDataBean</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.bean.AppealDataBean
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+		<managed-property>
+	  		<property-name>commonProviderDetailsVO</property-name>
+	  		<value>#{commonProviderDetailsVO}</value>
+	  	</managed-property>
+	</managed-bean>
+		
+	--><managed-bean>
+		<managed-bean-name>commonProviderDetailsVO</managed-bean-name>
+		<managed-bean-class>com.acs.enterprise.common.view.vo.CommonProviderDetailsVO</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<navigation-rule>
+		<from-view-id>/jsp/appeals/appealDetails.jsp</from-view-id>
+		<navigation-case>
+			<from-action>#{commonNotesControllerBean.getNotes}</from-action>
+			<from-outcome>success</from-outcome>
+			<to-view-id>/jsp/commonEntities/commonNotes.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<navigation-case>
+			<from-action>#{logCaseControllerBean.getCMLoCaseDetails}</from-action>
+			<from-outcome>success</from-outcome>
+			<to-view-id>/jsp/LogCase/LogCase.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<navigation-case>
+			<from-action>#{caseSearchControllerBean.getCaseIDFromAppeal}</from-action>
+			<from-outcome>success</from-outcome>
+			<to-view-id>/jsp/casesearch/mainCaseSearch.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<navigation-case>
+			<from-action>#{cs_searchCorrespondenceControllerBean.getEntityIDFromAppeal}</from-action>
+			<from-outcome>success</from-outcome>
+			<to-view-id>/jsp/searchcorrespondence/searchCorrespondence.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<!--For savestate-->
+	<!--<application>
+		
+		<locale-config>
+			<default-locale>en</default-locale>
+			<supported-locale>es</supported-locale> 
+		</locale-config>
+	</application>
+	
+--></faces-config>

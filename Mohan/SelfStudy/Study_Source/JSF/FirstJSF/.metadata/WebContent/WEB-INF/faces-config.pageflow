@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pageflow:Pageflow xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pageflow="http://www.sybase.com/suade/pageflow" id="pf13823435422500" configfile="/FirstJSF/WebContent/WEB-INF/faces-config.xml">
+  <nodes xsi:type="pageflow:PFPage" name="pages/nav2/Page1" x="122" y="754" id="pf13823536726044" referenceLink="//@navigationRule.2/@fromViewId|" outlinks="pf13823536726045 pf13823536726046" path="/pages/nav2/Page1.jsp"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/nav2/Page2" x="338" y="562" id="pf13823536726047" referenceLink="//@navigationRule.2/@navigationCase.0/@toViewId|" inlinks="pf13823536726045" path="/pages/nav2/Page2.jsp"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/nav2/Page3" x="338" y="946" id="pf13823536726048" referenceLink="//@navigationRule.2/@navigationCase.1/@toViewId|" inlinks="pf13823536726046" path="/pages/nav2/Page3.jsp"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/nav/Page1" x="122" y="1906" id="pf13824134211102" referenceLink="//@navigationRule.3/@fromViewId|" outlinks="pf13824135663457 pf13824135663458" path="/pages/nav4/Page1.jsp"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/nav4/Page2" x="338" y="1714" id="pf13824135663459" referenceLink="//@navigationRule.3/@navigationCase.0/@toViewId|" inlinks="pf13824135663457" path="/pages/nav4/Page2.jsp"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/nav4/Page3" x="338" y="2098" id="pf138241356634510" referenceLink="//@navigationRule.3/@navigationCase.1/@toViewId|" inlinks="pf13824135663458" path="/pages/nav4/Page3.jsp"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/login/Page1" x="122" y="2482" id="pf13825121040651" referenceLink="//@navigationRule.4/@navigationCase.1/@toViewId|" outlinks="pf13825121040652 pf13825121040653" inlinks="pf13825121040653" path="/pages/login/Page1.jsp"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/login/Page2" x="338" y="2482" id="pf13825121040654" referenceLink="//@navigationRule.4/@navigationCase.0/@toViewId|" inlinks="pf13825121040652" path="/pages/login/Page2.jsp"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/nav1/Page1" id="pf13825122480268" referenceLink="//@navigationRule.1/@fromViewId|" outlinks="pf13825122480269" path="/pages/nav1/Page1.jsp"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/nav1/Page3" id="pf138251224802610" referenceLink="//@navigationRule.1/@navigationCase.0/@toViewId|" inlinks="pf13825122480269" path="/pages/nav1/Page3.jsp"/>
+  <nodes xsi:type="pageflow:PFPage" name="*" id="pf138251251662711" referenceLink="//@navigationRule.0/@fromViewId|" outlinks="pf138251251662712 pf138251252018415" path="*"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/nav3/Page2" id="pf138251251662714" referenceLink="//@navigationRule.0/@navigationCase.0/@toViewId|" inlinks="pf138251251662712" path="/pages/nav3/Page2.jsp"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/nav3/Pagexsds" id="pf138251252018416" referenceLink="//@navigationRule.0/@navigationCase.1/@toViewId|" inlinks="pf138251252018415" path="/pages/nav3/Pagexsds.jsp"/>
+  <links id="pf13823536726045" target="pf13823536726047" source="pf13823536726044" outcome="success"/>
+  <links id="pf13823536726046" target="pf13823536726048" source="pf13823536726044" outcome="failure"/>
+  <links id="pf13824135663457" target="pf13824135663459" source="pf13824134211102" fromaction="#{navigation4Bean.goToPage2}"/>
+  <links id="pf13824135663458" target="pf138241356634510" source="pf13824134211102" fromaction="#{navigation4Bean.goToPage3}"/>
+  <links id="pf13825121040652" target="pf13825121040654" source="pf13825121040651" outcome="success"/>
+  <links id="pf13825121040653" target="pf13825121040651" source="pf13825121040651" outcome="failure">
+    <bendPoints d1Height="-36" d2Height="-36"/>
+    <bendPoints d1Width="-64" d1Height="-36" d2Width="-64" d2Height="-36"/>
+    <bendPoints d1Width="-64" d2Width="-64"/>
+  </links>
+  <links id="pf13825122480269" target="pf138251224802610" source="pf13825122480268" outcome="nextpage2"/>
+  <links id="pf138251251662712" target="pf138251251662714" source="pf138251251662711" outcome="success"/>
+  <links id="pf138251252018415" target="pf138251252018416" source="pf138251251662711"/>
+</pageflow:Pageflow>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="EntitySearch_Service"
+	targetNamespace="http://enterprise.ipc"
+	xmlns="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:portlet="http://www.ibm.com/wps/c2a"
+	xmlns:tns="http://enterprise.ipc"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<types>
+		<xsd:schema targetNamespace="http://enterprise.ipc">
+			<xsd:simpleType name="CaseEntityDetails">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+			<xsd:simpleType name="AddEntity">
+				<xsd:restriction base="xsd:string"></xsd:restriction>
+			</xsd:simpleType>
+		</xsd:schema>
+	</types>
+	<message name="CaseEntityDetails_Response">
+		<part name="CaseEntityDetails_Output"
+			type="tns:CaseEntityDetails" />
+	</message>
+	<message name="CorrespondenceEntity_Response">
+		<part name="AddEntity_Output"
+			type="tns:AddEntity" />			
+	</message>
+	<portType name="EntitySearch_Service">
+		<operation name="EntitySearch">
+			<output message="tns:CaseEntityDetails_Response" />
+		</operation>
+		<operation name="EntitySearch2">
+			<output message="tns:CorrespondenceEntity_Response" />
+		</operation>
+	</portType>
+	<binding name="EntitySearch_Binding"
+		type="tns:EntitySearch_Service">
+		<portlet:binding />
+		<operation name="EntitySearch">
+			<portlet:action name="SendCaseEntityDetails"
+				actionNameParameter="send.case.entity.details" type="standard" />
+			<output>
+				<portlet:param name="CaseEntityDetails"
+					partname="CaseEntityDetails_Output" boundTo="request-attribute"
+					caption="CaseEntityDetails.Caption" />
+			</output>
+		</operation>
+		<operation name="EntitySearch2">
+			<portlet:action name="sendCorrespondenceEntity"
+				actionNameParameter="send.Correspondence.Entity"
+				caption="send.Correspondence.Entity" type="standard" />
+				
+			<output>
+				<portlet:param name="MaintainEntity"
+					partname="AddEntity_Output" boundTo="request-attribute" />
+			</output>
+		</operation>
+		
+	</binding>
+</definitions>

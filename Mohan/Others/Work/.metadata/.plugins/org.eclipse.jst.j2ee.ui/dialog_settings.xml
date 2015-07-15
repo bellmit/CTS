@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<item value="true" key="J2EE_EXPORT_OVERWRITE"/>
+	<item value="true" key="J2EE_EXPORT_SOURCE"/>
+	<list key="J2EE_IMPORT_null">
+		<item value="C:\Users\396662\Desktop\jsfpopup.war"/>
+		<item value="D:\jsf-popup.war"/>
+		<item value="C:\Users\396662\Desktop\jsf-popup\jsf-popup\build\jsf-popup.war"/>
+		<item value="D:\Montana\HTML5\Xerox-MMIS-Healthcare_04152014.war"/>
+	</list>
+	<list key="J2EE_EXPORT_JST_WEB">
+		<item value="C:\Users\396662\Desktop\jsfpopup.war"/>
+		<item value="D:\jsf-popup.war"/>
+		<item value="C:\Users\396662\Desktop\jsf-popup\jsf-popup\build\jsf-link-examples.war"/>
+		<item value="C:\Users\396662\Desktop\jsf-popup\jsf-popup\build\test.war"/>
+	</list>
+	<list key="MRU_RUNTIME_STORE">
+		<item value="NULL_RUNTIME"/>
+		<item value="Apache Tomcat v7.0"/>
+	</list>
+</section>

@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<faces-config
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
+   version="2.0">
+	
+		
+	<managed-bean>
+		<managed-bean-name>AlertControllerBean</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.bean.AlertControllerBean
+		</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>				
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>AlertDataBean</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.view.bean.AlertDataBean
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+		<managed-property>
+			<property-name>alertVO</property-name>
+			<value>#{AlertVO}</value>
+		</managed-property>				
+	</managed-bean>
+	
+	<managed-bean>
+		<managed-bean-name>AlertVO</managed-bean-name>
+		<managed-bean-class>
+			com.acs.enterprise.common.program.contactmanagement.common.vo.AlertVO
+		</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	<navigation-rule>
+		<from-view-id>/jsp/logcorrespondence/inc_cralerts.jsp</from-view-id>
+		<navigation-case>
+			<from-action>#{AlertControllerBean.addAlert}</from-action>
+			<from-outcome>rendersuccess</from-outcome>
+			<to-view-id>/jsp/logcorrespondence/inc_cralerts.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{AlertControllerBean.saveAlert}</from-action>
+			<from-outcome>rendersuccess</from-outcome>
+			<to-view-id>/jsp/logcorrespondence/inc_cralerts.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{AlertControllerBean.resetAlert}</from-action>
+			<from-outcome>rendersuccess</from-outcome>
+			<to-view-id>/jsp/logcorrespondence/inc_cralerts.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{AlertControllerBean.cancelAlert}</from-action>
+			<from-outcome>rendersuccess</from-outcome>
+			<to-view-id>/jsp/logcorrespondence/inc_cralerts.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{AlertControllerBean.updateAlert}</from-action>
+			<from-outcome>rendersuccess</from-outcome>
+			<to-view-id>/jsp/logcorrespondence/inc_cralerts.jsp</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{AlertControllerBean.getAlertDetails}</from-action>
+			<from-outcome>rendersuccess</from-outcome>
+			<to-view-id>/jsp/logcorrespondence/inc_cralerts.jsp</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<!--<application>
+		
+		<locale-config>
+			<default-locale>en</default-locale>
+			<supported-locale>es</supported-locale>
+		</locale-config>
+	</application>
+
+--></faces-config>

@@ -1,0 +1,106 @@
+package com.xerox.enterprise.ghs.mmis.rif.rules.blaze;
+
+
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import java.util.List;
+import com.xerox.enterprise.ghs.mmis.rif.common.exception.RIFPOJORulesException;
+import com.xerox.enterprise.ghs.mmis.rif.core.Rule;
+import com.xerox.enterprise.ghs.mmis.rif.core.RulesContext;
+import com.xerox.enterprise.ghs.mmis.rif.core.RulesResult;
+
+import com.acs.enterprise.common.rules.service.EnterpriseRuleServiceHome;
+import com.acs.enterprise.common.rules.service.EnterpriseRuleService;
+import com.acs.enterprise.common.util.logger.EnterpriseLogger;
+import com.acs.enterprise.common.util.helper.EnterpriseMessageConstants;
+
+
+/**
+ * POJO for the rule "BlazeRule"
+ * @author $authorName
+ * @source EnterpriseRuleDelegate
+ */
+public class BlazeRuleInvocation extends BlazeRule {
+	
+    /* Static logger to log a message */
+    private static final Logger LOG = Logger.getLogger(BlazeRuleInvocation.class);
+	
+    /**
+     * Execute method of the rule. This holds the rule conditions and actions.
+     * The required objects are initialized through init() method.
+     * return - execution result of rule either SUCCESS or FAILURE
+     */
+    public static RulesResult execute(RulesContext ctx, String ruleId) throws RIFPOJORulesException {
+		
+        // Construct rules result object
+        RulesResult rulesResult;
+
+        rulesResult = new RulesResult(ruleId);
+        EnterpriseRuleServiceHome serverHome = null;
+        Object[] arguments = null;
+        EnterpriseRuleService _server = null;
+        Object returnValue = null;
+        String context = null;
+        int subsystemID = 0;
+        
+        String invocationPoint = null;
+        String RULES_JNDI_REFERENCENAME = null;
+
+        if (ctx != null) {
+				
+            List<Object> inputObjs = ctx.getContextObject();
+
+            serverHome = (EnterpriseRuleServiceHome) inputObjs.get(0);
+            arguments = (Object[]) inputObjs.get(1);
+            _server = (EnterpriseRuleService) inputObjs.get(2);
+            returnValue = (Object) inputObjs.get(3);
+            context = (String) inputObjs.get(4);
+            subsystemID = (Integer) inputObjs.get(5);
+            invocationPoint = (String) inputObjs.get(6);
+            RULES_JNDI_REFERENCENAME = (String) inputObjs.get(7);
+            
+
+        } else {
+            LOG.log(Level.ERROR, "Input Context Object is null during intialization for the rule " + ruleId);
+			
+            throw new RIFPOJORulesException("Unable to initialize the required rules objects for rule " + ruleId);
+        }
+        LOG.log(Level.INFO, "Executing the actions for the rule:" + ruleId);
+		
+        // EXTRACT_START BlazeRule
+        try {
+            // Added comment for Jupiter code review analysis
+            serverHome = (EnterpriseRuleServiceHome) getServiceHome(RULES_JNDI_REFERENCENAME, EnterpriseRuleServiceHome.class);
+            _server = (EnterpriseRuleService) serverHome.create();
+            returnValue = _server.invokeRulesService(arguments, invocationPoint, context, subsystemID);
+        } catch (EnterpriseRulesException e) {
+            LOG.error("Exception in Service creation", e);
+            throw new EnterpriseRulesException(e.getErrorCode(), e.getMessage());
+        } catch (RemoteException e) {
+            LOG.error("Exception in Service creation", e);
+            throw new EnterpriseRulesException(EnterpriseMessageConstants.ERR_SW_SEVERE_FAILURE, e.getMessage());
+        } catch (CreateException e) {
+            LOG.error("Exception in Service creation", e);
+            throw new EnterpriseRulesException(EnterpriseMessageConstants.ERR_SW_SEVERE_FAILURE, e.getMessage());
+        }
+        // EXTRACT_END
+
+		
+        rulesResult.setRuleStatus(true);
+        return rulesResult;
+		
+    }
+	
+    /*
+     * Method to initialize rule
+     */
+    public static void initialize() throws RIFPOJORulesException {// TODO Auto-generated method stub
+    }
+
+    /*
+     * Method to shutdown rule
+     */
+    public static void shutdown() throws RIFPOJORulesException {// TODO Auto-generated method stub
+    }
+	
+}
